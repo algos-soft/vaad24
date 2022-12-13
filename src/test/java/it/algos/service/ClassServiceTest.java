@@ -271,7 +271,6 @@ public class ClassServiceTest extends AlgosTest {
     }
 
 
-
     @ParameterizedTest
     @MethodSource(value = "MODULI")
     @Order(31)
@@ -346,6 +345,131 @@ public class ClassServiceTest extends AlgosTest {
         }
     }
 
+
+    @ParameterizedTest
+    @MethodSource(value = "MODULI")
+    @Order(40)
+    @DisplayName("40 - classi 'backend' && 'reset' nella directory package del modulo")
+        //--moduleName
+    void allModuleBackendResetClass(final String moduleName) {
+        System.out.println("40 - classi 'backend' && 'reset' nella directory package del modulo");
+        System.out.println(VUOTA);
+
+        sorgente = moduleName;
+        listaClazz = service.allModuleBackendResetClass(sorgente);
+
+        if (listaClazz != null && listaClazz.size() > 0) {
+            message = String.format("Ci sono in totale %d classi 'backend' && 'reset' nella directory package del modulo %s", listaClazz.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printClazz(listaClazz);
+        }
+        else {
+            message = String.format("Non esiste il modulo '%s' oppure non esiste la directory 'package' oppure non ci sono subdirectories", sorgente);
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "MODULI")
+    @Order(41)
+    @DisplayName("41 - simpleName 'backend' && 'reset' nella directory package del modulo")
+        //--moduleName
+    void allModuleBackendResetSimpleName(final String moduleName) {
+        System.out.println("41 - simpleName 'backend' && 'reset' nella directory package del modulo");
+        System.out.println(VUOTA);
+
+        sorgente = moduleName;
+        listaStr = service.allModuleBackendResetSimpleName(sorgente);
+
+        if (listaStr != null && listaStr.size() > 0) {
+            message = String.format("Ci sono in totale %d classi 'backend' && 'reset' nella directory package del modulo %s", listaStr.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            print(listaStr);
+        }
+        else {
+            message = String.format("Non esiste il modulo '%s' oppure non esiste la directory 'package' oppure non ci sono subdirectories", sorgente);
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "MODULI")
+    @Order(42)
+    @DisplayName("42 - canonicalName 'backend' && 'reset' nella directory package del modulo")
+        //--moduleName
+    void allModuleBackendResetCanonicalName(final String moduleName) {
+        System.out.println("42 - canonicalName 'backend' && 'reset' nella directory package del modulo");
+        System.out.println(VUOTA);
+
+        sorgente = moduleName;
+        listaStr = service.allModuleBackendResetCanonicalName(sorgente);
+
+        if (listaStr != null && listaStr.size() > 0) {
+            message = String.format("Ci sono in totale %d classi 'backend' && 'reset' nella directory package del modulo %s", listaStr.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            print(listaStr);
+        }
+        else {
+            message = String.format("Non esiste il modulo '%s' oppure non esiste la directory 'package' oppure non ci sono subdirectories", sorgente);
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "MODULI")
+    @Order(43)
+    @DisplayName("43 - dirName 'backend' && 'reset' nella directory package del modulo")
+        //--moduleName
+    void allModuleBackendResetDirName(final String moduleName) {
+        System.out.println("43 - dirName 'backend' && 'reset' nella directory package del modulo");
+        System.out.println(VUOTA);
+
+        sorgente = moduleName;
+        listaStr = service.allModuleBackendResetDirName(sorgente);
+
+        if (listaStr != null && listaStr.size() > 0) {
+            message = String.format("Ci sono in totale %d classi 'backend' && 'reset' nella directory package del modulo %s", listaStr.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            print(listaStr);
+        }
+        else {
+            message = String.format("Non esiste il modulo '%s' oppure non esiste la directory 'package' oppure non ci sono subdirectories", sorgente);
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "MODULI")
+    @Order(80)
+    @DisplayName("80 - classi ordinate 'backend' && 'reset' nella directory package del modulo")
+        //--moduleName
+    void allModuleBackendResetOrderedClass(final String moduleName) {
+        System.out.println("80 - classi ordinate 'backend' && 'reset' nella directory package del modulo");
+        System.out.println(VUOTA);
+
+        sorgente = moduleName;
+        listaClazz = service.allModuleBackendResetOrderedClass(sorgente);
+
+        if (listaClazz != null && listaClazz.size() > 0) {
+            message = String.format("Ci sono in totale %d classi ordinate 'backend' && 'reset' nella directory package del modulo %s", listaClazz.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printClazz(listaClazz);
+        }
+        else {
+            message = String.format("Non esiste il modulo '%s' oppure non esiste la directory 'package' oppure non ci sono subdirectories", sorgente);
+            System.out.println(message);
+        }
+    }
+
     protected void printPackages(List<String> lista) {
         List<String> listaShort = new ArrayList<>();
         String tag = "packages.";
@@ -360,6 +484,7 @@ public class ClassServiceTest extends AlgosTest {
             super.print(listaShort);
         }
     }
+
     protected void printClazz(List<Class> lista) {
         if (lista != null) {
             for (Class clazz : lista) {

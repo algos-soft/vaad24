@@ -336,7 +336,9 @@ public abstract class AlgosTest {
         reflectionService.logger = logService;
         classService.textService = textService;
         classService.fileService = fileService;
+        classService.reflectionService = reflectionService;
         classService.logger = logService;
+        classService.annotationService = annotationService;
     }
 
     /**

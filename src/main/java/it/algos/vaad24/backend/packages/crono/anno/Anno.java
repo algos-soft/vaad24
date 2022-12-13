@@ -25,6 +25,7 @@ import org.springframework.data.mongodb.core.mapping.*;
 @AllArgsConstructor
 @Builder()
 @EqualsAndHashCode(callSuper = false)
+@AIEntity(preReset = "secolo")
 public class Anno extends AEntity {
 
     @Indexed(unique = true, direction = IndexDirection.ASCENDING)

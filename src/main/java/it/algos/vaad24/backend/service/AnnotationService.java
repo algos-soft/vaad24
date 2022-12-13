@@ -202,6 +202,21 @@ public class AnnotationService extends AbstractService {
         return entityViewClazz.getAnnotation(AIView.class);
     }
 
+    /**
+     * Get the annotation Algos AIEntity. <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return the specific annotation
+     */
+    public AIEntity getAIEntity(final Class<? extends AEntity> entityClazz) {
+        //--controllo congruità
+        if (entityClazz == null) {
+            //@todo lanciare un errore nei log/logger
+        }
+
+        return entityClazz.getAnnotation(AIEntity.class);
+    }
 
     /**
      * Get the annotation Algos AIField. <br>
@@ -421,6 +436,29 @@ public class AnnotationService extends AbstractService {
     public String getLineawesomeClassnames(final Class<?> clazz) {
         AIView annotation = this.getAIView(clazz);
         return annotation != null ? annotation.lineawesomeClassnames() : DEFAULT_ICON_NAME;
+    }
+
+
+    //==========================================================================
+    // @AIEntity
+    //==========================================================================
+
+    /**
+     * Get the name of the EntityClass that is a preReset <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return the name of the class that need a reset before
+     */
+    public String getReset(final Class<? extends AEntity> entityClazz) {
+        String entityReset = VUOTA;
+        AIEntity annotation = this.getAIEntity(entityClazz);
+
+        if (annotation != null && annotation.preReset().length() > 0) {
+            entityReset = annotation.preReset();
+        }
+
+        return entityReset;
     }
 
     //==========================================================================

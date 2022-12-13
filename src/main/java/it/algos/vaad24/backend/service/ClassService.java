@@ -408,4 +408,132 @@ public class ClassService extends AbstractService {
                 .collect(Collectors.toList());
     }
 
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
+     *
+     * @return lista di tutte le classi 'backend' && 'reset' del package
+     */
+    public List<Class> allModuleBackendResetClass(final String moduleName) {
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModuleBackendClass(moduleName)
+                .stream()
+                .filter(clazz -> reflectionService.isEsisteMetodo(clazz.getCanonicalName(), TAG_RESET))
+                .collect(Collectors.toList());
+    }
+
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
+     *
+     * @return lista di tutte le classi 'backend' && 'reset' del package
+     */
+    public List<String> allModuleBackendResetSimpleName(final String moduleName) {
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModuleBackendResetClass(moduleName).stream().map(Class::getSimpleName).collect(Collectors.toList());
+    }
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
+     *
+     * @return lista di tutte le classi 'backend' && 'reset' del package
+     */
+    public List<String> allModuleBackendResetCanonicalName(final String moduleName) {
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModuleBackendResetClass(moduleName).stream().map(Class::getCanonicalName).collect(Collectors.toList());
+    }
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi
+     * e che implementano il metodo 'reset'
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
+     *
+     * @return lista di tutte le classi 'backend' && 'reset' del package
+     */
+    public List<String> allModuleBackendResetDirName(final String moduleName) {
+        final String tag = "packages.";
+
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModuleBackendResetClass(moduleName)
+                .stream()
+                .map(clazz -> textService.pointToSlash(textService.levaTestoPrimaDiEscluso(clazz.getCanonicalName(), tag)))
+                .collect(Collectors.toList());
+    }
+
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera in ordine
+     * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
+     *
+     * @return lista ordinata di tutte le classi 'backend' && 'reset' del package
+     */
+    public List<Class> allModuleBackendResetOrderedClass(final String moduleName) {
+        List<Class> allOrderedClazz = null;
+        List<Class> allBackendClazz = null;
+        Class entityClazz = null;
+        Map<String, Class> mappaClazz = new HashMap();
+        Map mappaAncestor = new HashMap();
+        String simpleName;
+        String pathName;
+        String ancestorReset;
+        List<String> keyList;
+
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        allBackendClazz = allModuleBackendResetClass(moduleName);
+        if (allBackendClazz == null||allBackendClazz.size()==0) {
+            return null;
+        }
+
+        for (Class backendClazz : allBackendClazz) {
+            pathName = backendClazz.getCanonicalName();
+            pathName = textService.levaCoda(pathName, SUFFIX_BACKEND);
+            entityClazz = this.getClazzFromCanonicalName(pathName);
+            simpleName = entityClazz.getSimpleName();
+            ancestorReset = annotationService.getReset(entityClazz);
+            mappaClazz.put(simpleName, backendClazz);
+            mappaAncestor.put(simpleName, ancestorReset);
+        }
+
+        keyList = mappaAncestor.keySet().stream().toList();
+        keyList = Arrays.asList("Via", "Continente", "Secolo", "Anno", "Mese", "Giorno");
+
+        if (keyList != null && keyList.size() > 0) {
+            allOrderedClazz = new ArrayList<>();
+        }
+
+        for (String key : keyList) {
+            allOrderedClazz.add(mappaClazz.get(key));
+        }
+
+        return allOrderedClazz;
+    }
+
 }
