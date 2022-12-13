@@ -137,7 +137,7 @@ public class VaadData extends AbstractService {
         //--seleziono solo le classi xxxBackend che implementano il metodo reset
         allBackendClassesResetStartUp = allBackendClasses
                 .stream()
-                .filter(clazzName -> reflectionService.isEsisteMetodo(clazzName.toString(), "reset"))
+                .filter(clazzName -> reflectionService.isEsisteMetodo(clazzName.toString(), TAG_RESET))
                 .collect(Collectors.toList());
 
         if (allBackendClassesResetStartUp != null && allBackendClassesResetStartUp.size() > 0) {

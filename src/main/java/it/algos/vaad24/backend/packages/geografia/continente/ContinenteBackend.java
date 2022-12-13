@@ -27,7 +27,7 @@ import java.util.*;
 @Service
 public class ContinenteBackend extends CrudBackend {
 
-    private ContinenteRepository repository;
+    public ContinenteRepository repository;
 
     /**
      * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>

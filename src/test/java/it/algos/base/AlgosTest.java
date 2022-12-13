@@ -309,6 +309,8 @@ public abstract class AlgosTest {
         loggerBackend.textService = textService;
         resourceService.webService = webService;
         resourceService.logger = logService;
+        reflectionService.textService = textService;
+        reflectionService.logger = logService;
     }
 
     /**
@@ -424,6 +426,47 @@ public abstract class AlgosTest {
                     System.out.print(PARENTESI_TONDA_END);
                     System.out.print(SPAZIO);
                     System.out.println(obj);
+                }
+            }
+            else {
+                System.out.println("Non ci sono elementi nella lista");
+            }
+        }
+        else {
+            System.out.println("Manca la lista");
+        }
+    }
+
+    protected void printSubLista(final List lista) {
+        printSubLista(lista, 10);
+    }
+
+    protected void printSubLista(final List lista, int max) {
+        String message = VUOTA;
+        int cont = 1;
+        int tot;
+        System.out.println(VUOTA);
+
+        if (lista != null) {
+            if (lista.size() > 0) {
+                tot = Math.min(lista.size(), max);
+                message = String.format("La lista contiene %d elementi.", lista.size());
+                if (lista.size() > tot) {
+                    message += String.format(" Mostro i primi %d", tot);
+                }
+                System.out.println(message);
+                for (Object obj : lista.subList(0, tot)) {
+                    System.out.print(cont);
+                    System.out.print(PARENTESI_TONDA_END);
+                    System.out.print(SPAZIO);
+                    System.out.println(obj);
+                    cont++;
+                }
+                if (lista.size() > tot) {
+                    System.out.print(cont);
+                    System.out.print(PARENTESI_TONDA_END);
+                    System.out.print(SPAZIO);
+                    System.out.println(TRE_PUNTI);
                 }
             }
             else {

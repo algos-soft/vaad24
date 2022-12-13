@@ -185,23 +185,26 @@ public class ReflectionService extends AbstractService {
 
     public boolean isEsisteMetodo(String publicClassName, String publicMethodName) {
         Class clazz = null;
-        Method[] methods = null;
-        List<String> nomiMetodi;
 
         if (textService.isEmpty(publicClassName) || textService.isEmpty(publicMethodName)) {
             return false;
         }
         publicClassName = textService.slashToPoint(publicClassName);
-        publicMethodName = textService.primaMinuscola(publicMethodName);
 
         try {
             clazz = Class.forName(publicClassName.toString());
         } catch (Exception unErrore) {
             logger.info(new WrapLog().exception(AlgosException.crea(unErrore)));
         }
-        if (clazz == null) {
-            return false;
-        }
+
+        return clazz != null && isEsisteMetodo(clazz, publicMethodName);
+    }
+
+    public boolean isEsisteMetodo(Class clazz, String publicMethodName) {
+        Method[] methods = null;
+        List<String> nomiMetodi;
+
+        publicMethodName = textService.primaMinuscola(publicMethodName);
 
         try {
             methods = clazz.getDeclaredMethods();

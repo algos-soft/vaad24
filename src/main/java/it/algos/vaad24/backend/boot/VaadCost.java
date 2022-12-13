@@ -375,6 +375,8 @@ public class VaadCost {
 
     public static final String TAG_LOGGER = "logger";
 
+    public static final String TAG_RESET = "reset";
+
 
     public static final String TAG_FLOW_DATA = "flowdata";
 
