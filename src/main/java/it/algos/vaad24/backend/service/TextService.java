@@ -1001,6 +1001,32 @@ public class TextService extends AbstractService {
         return testoOut.trim();
     }
 
+    /**
+     * Elimina il testo prima di tagIniziale. <br>
+     * <p>
+     * Esegue solo se il testo è valido <br>
+     * Se tagIniziale è vuoto, restituisce il testo <br>
+     * Elimina spazi vuoti iniziali e finali <br>
+     *
+     * @param testoIn     ingresso
+     * @param tagIniziale da dove inizia il testo da tenere
+     *
+     * @return testo ridotto in uscita
+     */
+    public String levaTestoPrimaDiEscluso(final String testoIn, final String tagIniziale) {
+        String testoOut = testoIn.trim();
+        String tag;
+
+        if (this.isValid(testoOut) && this.isValid(tagIniziale)) {
+            tag = tagIniziale.equals(CAPO) ? tagIniziale : tagIniziale.trim();
+            if (testoOut.contains(tag)) {
+                testoOut = testoOut.substring(testoOut.indexOf(tag)+tag.length());
+            }
+        }
+
+        return testoOut.trim();
+    }
+
 
     public String estrae(String valueIn, String tagIni, String tagEnd) {
         String valueOut = valueIn;

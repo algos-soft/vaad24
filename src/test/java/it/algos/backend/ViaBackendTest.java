@@ -98,7 +98,6 @@ public class ViaBackendTest extends AlgosTest {
     @DisplayName("1 - count")
     void count() {
         System.out.println("1 - count");
-        String message;
 
         ottenutoIntero = backend.count();
         if (ottenutoIntero > 0) {
@@ -121,7 +120,6 @@ public class ViaBackendTest extends AlgosTest {
     @DisplayName("2 - findAll")
     void findAll() {
         System.out.println("2 - findAll");
-        String message;
 
         listaBeans = backend.findAll();
         assertNotNull(listaBeans);

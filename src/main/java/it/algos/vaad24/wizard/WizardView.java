@@ -77,7 +77,7 @@ public class WizardView extends VerticalLayout {
     /**
      * Qui va tutta la logica iniziale della view principale <br>
      * Per adesso regolo SOLO le costanti base <br>
-     * Per adesso posso solo selezionare se sono in VaadFlow14 oppure no <br>
+     * Per adesso posso solo selezionare se sono in Vaad24 oppure no <br>
      * In base a questo decido quale paragrafo/possibilità mostrare <br>
      */
     protected void initView() {
@@ -103,7 +103,6 @@ public class WizardView extends VerticalLayout {
         if (!projectBaseFlow) {
             paragrafoFeedBackWizard();
         }
-
     }
 
     public boolean isProjectBaseFlow() {

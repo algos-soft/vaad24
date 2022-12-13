@@ -10,6 +10,7 @@ import it.algos.vaad24.backend.packages.utility.nota.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import it.algos.vaad24.backend.packages.utility.versione.*;
 import it.algos.vaad24.backend.service.*;
+import it.algos.vaad24.backend.utility.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.wizard.*;
 import org.springframework.beans.factory.annotation.*;
@@ -243,13 +244,13 @@ public class VaadBoot implements ServletContextListener {
          * Nome identificativo minuscolo del progetto base vaadin23 <br>
          * Deve essere regolato in backend.boot.VaadBoot.fixVariabili() del progetto base <br>
          */
-        VaadVar.projectVaadin23 = PROJECT_VAADIN23;
+        VaadVar.projectVaadin24 = PROJECT_VAADIN24;
 
         /**
          * Nome identificativo minuscolo del modulo base vaad23 <br>
          * Deve essere regolato in backend.boot.VaadBoot.fixVariabili() del progetto base <br>
          */
-        VaadVar.moduloVaadin23 = MODULO_VAADIN23;
+        VaadVar.moduloVaadin24 = MODULO_VAADIN24;
 
         /**
          * Nome identificativo minuscolo del modulo dell' applicazione <br>
@@ -257,7 +258,7 @@ public class VaadBoot implements ServletContextListener {
          * Spesso coincide (non obbligatoriamente) con projectNameIdea <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
-        VaadVar.projectNameModulo = MODULO_VAADIN23;
+        VaadVar.projectNameModulo = MODULO_VAADIN24;
 
         /**
          * Lista dei moduli di menu da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
@@ -323,6 +324,7 @@ public class VaadBoot implements ServletContextListener {
         //        VaadVar.menuRouteList.add(CarrelloFormView.class);
         //        VaadVar.menuRouteList.add(ContinenteView.class);
         VaadVar.menuRouteList.add(WizardView.class);
+        VaadVar.menuRouteList.add(UtilityView.class);
         VaadVar.menuRouteList.add(NotaView.class);
         VaadVar.menuRouteList.add(VersioneView.class);
         VaadVar.menuRouteList.add(LoggerView.class);

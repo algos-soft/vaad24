@@ -6,9 +6,14 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.interfaces.*;
+import it.algos.vaad24.backend.packages.anagrafica.*;
+import it.algos.vaad24.backend.packages.crono.giorno.*;
+import it.algos.vaad24.backend.packages.crono.mese.*;
+import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.packages.utility.log.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
+import it.algos.vaad24.ui.views.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
@@ -136,6 +141,8 @@ public abstract class AlgosTest {
 
     protected List<Field> listaFields;
 
+    protected List<Class> listaClazz;
+
     protected List<String> listaStr;
 
     protected List<Long> listaLong;
@@ -196,6 +203,20 @@ public abstract class AlgosTest {
 
     @InjectMocks
     public RegexService regexService;
+
+
+    //--clazz
+    //--simpleName
+    protected static Stream<Arguments> CLAZZ_FOR_NAME() {
+        return Stream.of(
+                Arguments.of(CrudView.class, CrudView.class.getSimpleName()),
+                Arguments.of(AIType.class, AIType.class.getSimpleName()),
+                Arguments.of(Mese.class, Mese.class.getSimpleName()),
+                Arguments.of(Continente.class, Continente.class.getSimpleName()),
+                Arguments.of(Giorno.class, Giorno.class.getSimpleName()),
+                Arguments.of(Via.class, Via.class.getSimpleName())
+        );
+    }
 
 
     //--tag
@@ -298,7 +319,9 @@ public abstract class AlgosTest {
         logService.loggerBackend = loggerBackend;
         resourceService.fileService = fileService;
         fileService.logger = logService;
+        fileService.reflectionService = reflectionService;
         fileService.textService = textService;
+        fileService.arrayService = arrayService;
         arrayService.logger = logService;
         logService.utilityService = utilityService;
         logService.slf4jLogger = slf4jLogger;
@@ -311,6 +334,9 @@ public abstract class AlgosTest {
         resourceService.logger = logService;
         reflectionService.textService = textService;
         reflectionService.logger = logService;
+        classService.textService = textService;
+        classService.fileService = fileService;
+        classService.logger = logService;
     }
 
     /**
@@ -363,6 +389,7 @@ public abstract class AlgosTest {
         span = null;
         inizio = System.currentTimeMillis();
         message = VUOTA;
+        listaClazz = null;
     }
 
 

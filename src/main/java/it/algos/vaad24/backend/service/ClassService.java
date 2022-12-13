@@ -9,6 +9,9 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
 
+import java.util.*;
+import java.util.stream.*;
+
 
 /**
  * Project vaadin23
@@ -247,6 +250,162 @@ public class ClassService extends AbstractService {
         }
 
         return clazz;
+    }
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi del package
+     *
+     * @return lista di tutte le classi del package
+     */
+    public List<Class> allModulePackagesClass(String moduleName) {
+        List<Class> allClazz = null;
+        String tagFinale = "/backend/packages";
+        List<String> allPath = null;
+
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+        moduleName = textService.primaMinuscola(moduleName);
+        allPath = fileService.getAllSubFilesJava(moduleName + tagFinale);
+
+        if (allPath != null) {
+            allClazz = new ArrayList<>();
+            for (String canonicalName : allPath) {
+                allClazz.add(this.getClazzFromCanonicalName(canonicalName));
+            }
+        }
+
+        return allClazz;
+    }
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi del package
+     *
+     * @return lista di tutte le classi del package
+     */
+    public List<String> allModulePackagesSimpleName(final String moduleName) {
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModulePackagesClass(moduleName).stream().map(Class::getSimpleName).collect(Collectors.toList());
+    }
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi del package
+     *
+     * @return lista di tutte le classi del package
+     */
+    public List<String> allModulePackagesCanonicalName(final String moduleName) {
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModulePackagesClass(moduleName).stream().map(Class::getCanonicalName).collect(Collectors.toList());
+    }
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi del package
+     *
+     * @return lista di tutte le classi del package
+     */
+    public List<String> allModulePackagesDirName(final String moduleName) {
+        final String tag = "packages.";
+
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModulePackagesClass(moduleName)
+                .stream()
+                .map(clazz -> textService.pointToSlash(textService.levaTestoPrimaDiEscluso(clazz.getCanonicalName(), tag)))
+                .collect(Collectors.toList());
+    }
+
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi di tipo 'backend' contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
+     *
+     * @return lista di tutte le classi 'backend' del package
+     */
+    public List<Class> allModuleBackendClass(String moduleName) {
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModulePackagesClass(moduleName)
+                .stream()
+                .filter(clazz -> clazz.getCanonicalName().endsWith(SUFFIX_BACKEND))
+                .collect(Collectors.toList());
+    }
+
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi di tipo 'backend' contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
+     *
+     * @return lista di tutte le classi 'backend' del package
+     */
+    public List<String> allModuleBackendSimpleName(final String moduleName) {
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModuleBackendClass(moduleName).stream().map(Class::getSimpleName).collect(Collectors.toList());
+    }
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi di tipo 'backend' contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
+     *
+     * @return lista di tutte le classi 'backend' del package
+     */
+    public List<String> allModuleBackendCanonicalName(final String moduleName) {
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModuleBackendClass(moduleName).stream().map(Class::getCanonicalName).collect(Collectors.toList());
+    }
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi di tipo 'backend' contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
+     *
+     * @return lista di tutte le classi 'backend' del package
+     */
+    public List<String> allModuleBackendDirName(final String moduleName) {
+        final String tag = "packages.";
+
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModuleBackendClass(moduleName)
+                .stream()
+                .map(clazz -> textService.pointToSlash(textService.levaTestoPrimaDiEscluso(clazz.getCanonicalName(), tag)))
+                .collect(Collectors.toList());
     }
 
 }

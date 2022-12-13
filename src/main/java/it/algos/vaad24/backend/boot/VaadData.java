@@ -87,7 +87,7 @@ public class VaadData extends AbstractService {
         logger.info(new WrapLog().message(message).type(AETypeLog.setup));
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
 
-        resetData(VaadVar.moduloVaadin23);
+        resetData(VaadVar.moduloVaadin24);
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
         resetData(VaadVar.projectCurrent);
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
@@ -155,7 +155,6 @@ public class VaadData extends AbstractService {
         if (allBackendClassesResetStartUp != null) {
             allBackendClassesResetStartUp
                     .stream()
-                    //                    .forEach(bootResetStartUp);
                     .forEach(clazzName -> reflectionService.esegueMetodo(clazzName.toString(), "resetStartUp"));
 
             message = String.format("Controllati i dati iniziali di tutti i packages del modulo %s", moduleName);
