@@ -137,7 +137,8 @@ public class GiornoBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public boolean resetOnlyEmpty() {
+    public AResult resetOnlyEmpty() {
+        AResult result = super.resetOnlyEmpty();
         int ordine;
         List<HashMap> lista;
         String nome;
@@ -150,10 +151,10 @@ public class GiornoBackend extends CrudBackend {
 
         if (meseBackend.count() < 1) {
             logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Mese'")).usaDb());
-            return false;
+            return result;
         }
 
-        if (super.resetOnlyEmpty()) {
+        if (result.isValido()) {
             //costruisce i 366 records
             lista = dateService.getAllGiorni();
             for (HashMap mappaGiorno : lista) {
@@ -177,10 +178,10 @@ public class GiornoBackend extends CrudBackend {
             }
         }
         else {
-            return false;
+            return result;
         }
 
-        return true;
+        return result.intValue(count());
     }
 
 }// end of crud backend class

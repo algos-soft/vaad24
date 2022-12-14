@@ -4,7 +4,6 @@ import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.test.context.junit.jupiter.*;
@@ -74,8 +73,8 @@ public class UtilityTest extends AlgosTest {
 
         if (listaClazz != null && listaClazz.size() > 0) {
             for (Class clazz : listaClazz) {
-                ottenutoBooleano = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY);
-                assertFalse(ottenutoBooleano);
+//                ottenutoBooleano = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY);
+//                assertFalse(ottenutoBooleano);
             }
         }
     }
@@ -116,8 +115,8 @@ public class UtilityTest extends AlgosTest {
         if (listaClazz != null && listaClazz.size() > 0) {
             System.out.println(VUOTA);
             for (Class backendClazz : listaClazz) {
-                ottenutoBooleano = classService.esegueMetodo(backendClazz.getCanonicalName(), TAG_RESET_ONLY);
-                assertTrue(ottenutoBooleano);
+//                ottenutoBooleano = classService.esegueMetodo(backendClazz.getCanonicalName(), TAG_RESET_ONLY);
+//                assertTrue(ottenutoBooleano);
             }
         }
     }

@@ -223,8 +223,23 @@ public abstract class CrudBackend extends AbstractService {
      * La collezione viene svuotata <br>
      * Non deve essere sovrascritto <br>
      */
-    public boolean resetForcing() {
-        return deleteAll() && resetOnlyEmpty();
+    public AResult resetForcing() {
+        AResult result = AResult.build();
+        String message;
+
+        if (mongoService.isCollectionNullOrEmpty(entityClazz)) {
+            return resetOnlyEmpty().method("resetForcing");
+        }
+        else {
+            if (deleteAll()) {
+                message = String.format("La collection [%s] esisteva ma è stata cancellata e i dati sono stati ricreati", entityClazz.getSimpleName().toLowerCase());
+                return resetOnlyEmpty().method("resetForcing").validMessage(message);
+            }
+            else {
+                message = String.format("Non sono riuscito a cancellare la collection [%s]", entityClazz.getSimpleName().toLowerCase());
+                return result.errorMessage(message);
+            }
+        }
     }
 
 
@@ -235,16 +250,17 @@ public abstract class CrudBackend extends AbstractService {
      * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public boolean resetOnlyEmpty() {
+    public AResult resetOnlyEmpty() {
+        AResult result = AResult.build().method("resetOnlyEmpty").target(entityClazz.getSimpleName());
         String message;
 
         if (mongoService.isCollectionNullOrEmpty(entityClazz)) {
-            message = String.format("Creati o ri-creati i dati della collection %s che era vuota", entityClazz.getSimpleName());
-            logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
-            return true;
+            message = String.format("La collection [%s] era vuota e sono stati creati i nuovi dati", entityClazz.getSimpleName().toLowerCase());
+            return result.validMessage(message);
         }
         else {
-            return false;
+            message = String.format("La collection [%s] esisteva già, non era vuota e non è stata toccata", entityClazz.getSimpleName().toLowerCase());
+            return result.errorMessage(message).intValue(count());
         }
     }
 

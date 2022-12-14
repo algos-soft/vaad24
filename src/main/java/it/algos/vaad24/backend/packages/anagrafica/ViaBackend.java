@@ -78,7 +78,6 @@ public class ViaBackend extends CrudBackend {
     }
 
 
-
     /**
      * Creazione di alcuni dati <br>
      * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
@@ -87,14 +86,14 @@ public class ViaBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public boolean resetOnlyEmpty() {
+    public AResult resetOnlyEmpty() {
+        AResult result = super.resetOnlyEmpty();
         String nomeFile = "vie";
         Map<String, List<String>> mappa;
         List<String> riga;
-        String message;
         String nome;
 
-        if (super.resetOnlyEmpty()) {
+        if (result.isValido()) {
             mappa = resourceService.leggeMappa(nomeFile);
             if (mappa != null) {
                 for (String key : mappa.keySet()) {
@@ -103,8 +102,7 @@ public class ViaBackend extends CrudBackend {
                         nome = riga.get(0);
                     }
                     else {
-                        logger.error(new WrapLog().exception(new AlgosException("I dati non sono congruenti")).usaDb());
-                        return false;
+                        return result.errorMessage("I dati non sono congruenti");
                     }
                     if (!crea(nome)) {
                         logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
@@ -112,15 +110,14 @@ public class ViaBackend extends CrudBackend {
                 }
             }
             else {
-                logger.error(new WrapLog().exception(new AlgosException("Non ho trovato il file sul server")).usaDb());
-                return false;
+                return result.errorMessage("Non ho trovato il file sul server");
             }
         }
         else {
-            return false;
+            return result;
         }
 
-        return true;
+        return result.intValue(count());
     }
 
 }// end of crud backend class

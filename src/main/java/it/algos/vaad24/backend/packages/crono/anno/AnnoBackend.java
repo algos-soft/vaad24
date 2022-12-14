@@ -154,13 +154,15 @@ public class AnnoBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public boolean resetOnlyEmpty() {
+    public AResult resetOnlyEmpty() {
+        AResult result = super.resetOnlyEmpty();
+
         if (secoloBackend.count() < 1) {
             logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Secolo'")).usaDb());
-            return false;
+            return result;
         }
 
-        if (super.resetOnlyEmpty()) {
+        if (result.isValido()) {
             //--costruisce gli anni prima di cristo partendo da ANTE_CRISTO_MAX che coincide con DELTA_ANNI
             for (int k = 1; k <= ANTE_CRISTO_MAX; k++) {
                 creaPrima(k);
@@ -172,10 +174,10 @@ public class AnnoBackend extends CrudBackend {
             }
         }
         else {
-            return false;
+            return result;
         }
 
-        return true;
+        return result.intValue(count());
     }
 
     public void creaPrima(int numeroProgressivo) {

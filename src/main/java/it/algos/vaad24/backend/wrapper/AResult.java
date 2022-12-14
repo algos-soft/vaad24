@@ -121,6 +121,11 @@ public class AResult {
         return this;
     }
 
+    public AResult intValue(final int intValue) {
+        this.intValue = intValue;
+        return this;
+    }
+
 
     public static AResult valido(final String validMessage) {
         return new AResult(true, validMessage);

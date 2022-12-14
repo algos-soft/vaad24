@@ -117,6 +117,7 @@ public class MeseBackend extends CrudBackend {
         return mese != null ? mese.ordine : 0;
     }
 
+
     /**
      * Creazione di alcuni dati <br>
      * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
@@ -125,26 +126,10 @@ public class MeseBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public boolean resetOnlyEmpty() {
+    public AResult resetOnlyEmpty() {
+        AResult result = super.resetOnlyEmpty();
         String nomeFile = "mesi";
-        return super.resetOnlyEmpty() ? resetServer(nomeFile) != null : false;
-    }
-
-    public List<Mese> resetConfig(String nomeFile) {
-        Map<String, List<String>> mappa = resourceService.leggeMappaConfig(nomeFile);
-        return reset(mappa);
-    }
-
-    public List<Mese> resetServer(String nomeFile) {
-        Map<String, List<String>> mappa = resourceService.leggeMappaServer(nomeFile);
-        return reset(mappa);
-    }
-
-    /**
-     * Creazione di alcuni dati iniziali <br>
-     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-     */
-    public List<Mese> reset(Map<String, List<String>> mappa) {
+        Map<String, List<String>> mappa;
         List<Mese> mesi = new ArrayList<>();
         Mese mese;
         List<String> riga;
@@ -156,53 +141,58 @@ public class MeseBackend extends CrudBackend {
         int primo = 0;
         int ultimo = 0;
 
-        if (mappa != null) {
-            for (String key : mappa.keySet()) {
-                riga = mappa.get(key);
-                if (riga.size() >= 3) {
-                    try {
-                        giorni = Integer.decode(riga.get(0));
-                    } catch (Exception unErrore) {
-                        logger.error(new WrapLog().exception(unErrore).usaDb());
-                        giorni = 0;
+        if (result.isValido()) {
+            mappa = resourceService.leggeMappa(nomeFile);
+            if (mappa != null) {
+                for (String key : mappa.keySet()) {
+                    riga = mappa.get(key);
+                    if (riga.size() >= 3) {
+                        try {
+                            giorni = Integer.decode(riga.get(0));
+                        } catch (Exception unErrore) {
+                            logger.error(new WrapLog().exception(unErrore).usaDb());
+                            giorni = 0;
+                        }
+                        breve = riga.get(1);
+                        nome = riga.get(2);
                     }
-                    breve = riga.get(1);
-                    nome = riga.get(2);
-                }
-                else {
-                    logger.error(new WrapLog().exception(new AlgosException("I dati non sono congruenti")).usaDb());
-                    return null;
-                }
-                if (riga.size() >= 4) {
-                    primo = Integer.decode(riga.get(3));
-                }
-                if (riga.size() >= 5) {
-                    ultimo = Integer.decode(riga.get(4));
-                }
-
-                if (giorni > 0 && primo > 0 && ultimo > 0) {
-                    if (giorni != (ultimo - primo + 1)) {
-                        message = String.format("Il numero di 'giorni' da 'primo' a 'ultimo' non coincidono per il mese di %s", nome);
-                        logger.error(new WrapLog().exception(new AlgosException(message)));
+                    else {
+                        logger.error(new WrapLog().exception(new AlgosException("I dati non sono congruenti")).usaDb());
                         return null;
                     }
-                }
+                    if (riga.size() >= 4) {
+                        primo = Integer.decode(riga.get(3));
+                    }
+                    if (riga.size() >= 5) {
+                        ultimo = Integer.decode(riga.get(4));
+                    }
 
-                mese = crea(++ordine, breve, nome, giorni, primo, ultimo);
-                if (mese != null) {
-                    mesi.add(mese);
+                    if (giorni > 0 && primo > 0 && ultimo > 0) {
+                        if (giorni != (ultimo - primo + 1)) {
+                            message = String.format("Il numero di 'giorni' da 'primo' a 'ultimo' non coincidono per il mese di %s", nome);
+                            logger.error(new WrapLog().exception(new AlgosException(message)));
+                            return null;
+                        }
+                    }
+
+                    mese = crea(++ordine, breve, nome, giorni, primo, ultimo);
+                    if (mese != null) {
+                        mesi.add(mese);
+                    }
+                    else {
+                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
+                    }
                 }
-                else {
-                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
-                }
+            }
+            else {
+                return result.errorMessage("Non ho trovato il file sul server");
             }
         }
         else {
-            logger.error(new WrapLog().exception(new AlgosException("Non ho trovato il file sul server")).usaDb());
-            return null;
+            return result;
         }
 
-        return mesi;
+        return result.intValue(count());
     }
 
 }// end of crud backend class

@@ -91,7 +91,8 @@ public class ContinenteBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public boolean resetOnlyEmpty() {
+    public AResult resetOnlyEmpty() {
+        AResult result = super.resetOnlyEmpty();
         String nomeFile = "continenti";
         Map<String, List<String>> mappa;
         List<String> riga;
@@ -103,7 +104,7 @@ public class ContinenteBackend extends CrudBackend {
         Continente continenteNew;
         Continente continenteSalvato;
 
-        if (super.resetOnlyEmpty()) {
+        if (result.isValido()) {
             mappa = resourceService.leggeMappa(nomeFile);
             if (mappa != null) {
                 for (String key : mappa.keySet()) {
@@ -122,7 +123,7 @@ public class ContinenteBackend extends CrudBackend {
                     }
                     else {
                         logger.error(new WrapLog().exception(new AlgosException("I dati non sono congruenti")).usaDb());
-                        return false;
+                        return result;
                     }
                     if (repository.existsById(id)) {
                         logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s esiste già", id))).usaDb());
@@ -137,14 +138,14 @@ public class ContinenteBackend extends CrudBackend {
                 }
             }
             else {
-                return false;
+                return result;
             }
         }
         else {
-            return false;
+            return result;
         }
 
-        return true;
+        return result.intValue(count());
     }
 
 }// end of crud backend class

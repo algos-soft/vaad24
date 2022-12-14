@@ -152,7 +152,8 @@ public class SecoloBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public boolean resetOnlyEmpty() {
+    public AResult resetOnlyEmpty() {
+        AResult result = super.resetOnlyEmpty();
         String nomeFile = "secoli";
         Map<String, List<String>> mappa;
         List<String> riga;
@@ -163,7 +164,7 @@ public class SecoloBackend extends CrudBackend {
         boolean anteCristo = false;
         String anteCristoText;
 
-        if (super.resetOnlyEmpty()) {
+        if (result.isValido()) {
             mappa = resourceService.leggeMappa(nomeFile);
             if (mappa != null) {
                 for (String key : mappa.keySet()) {
@@ -193,7 +194,7 @@ public class SecoloBackend extends CrudBackend {
                     }
                     else {
                         logger.error(new WrapLog().exception(new AlgosException("I dati non sono congruenti")).usaDb());
-                        return false;
+                        return result;
                     }
                     nome += anteCristo ? " secolo a.C." : " secolo";
 
@@ -204,14 +205,14 @@ public class SecoloBackend extends CrudBackend {
             }
             else {
                 logger.error(new WrapLog().exception(new AlgosException("Non ho trovato il file sul server")).usaDb());
-                return false;
+                return result;
             }
         }
         else {
-            return false;
+            return result;
         }
 
-        return true;
+        return result.intValue(count());
     }
 
 }// end of crud backend class
