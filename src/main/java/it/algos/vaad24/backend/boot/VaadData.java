@@ -10,7 +10,6 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.*;
 
-import javax.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
@@ -55,19 +54,19 @@ public class VaadData extends AbstractService {
     }// end of constructor not @Autowired
 
 
-    /**
-     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
-     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
-     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
-     * <p>
-     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti <br>
-     * L'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
-     * Se viene implementata una istanza di sottoclasse, passa di qui per ogni istanza <br>
-     */
-    @PostConstruct
-    private void postConstruct() {
-        this.resetData();
-    }
+//    /**
+//     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
+//     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
+//     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+//     * <p>
+//     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti <br>
+//     * L'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
+//     * Se viene implementata una istanza di sottoclasse, passa di qui per ogni istanza <br>
+//     */
+//    @PostConstruct
+//    private void postConstruct() {
+////        this.resetData();
+//    }
 
 
     /**
@@ -106,60 +105,37 @@ public class VaadData extends AbstractService {
      * @param moduleName da controllare
      */
     protected void resetData(final String moduleName) {
-        List<String> allModulePackagesClasses = null;
-        List<Object> allBackendClasses = null;
-        List<Object> allBackendClassesResetStartUp = null;
+        List<Class> allBackendClasses;
+        List<String> nomi;
+        List<Class> allResetOrderedClass;
         String message;
-        String tagFinale = "/backend/packages";
 
-        //--spazzola tutta la directory package del modulo in esame e recupera
-        //--tutte le classi contenute nella directory e nelle sue sottoclassi
-        allModulePackagesClasses = fileService.getAllSubFilesJava(moduleName + tagFinale);
-
-        if (allModulePackagesClasses == null) {
-            return;
-        }
-
-        //--seleziono solo le classi CrudBackend
-        allBackendClasses = allModulePackagesClasses
-                .stream()
-                .filter(n -> n.endsWith(SUFFIX_BACKEND))
-                .collect(Collectors.toList());
-
+        //--seleziono solo le classi di tipo 'backend'
+        allBackendClasses = classService.allModuleBackendClass(moduleName);
         if (allBackendClasses != null && allBackendClasses.size() > 0) {
             message = String.format("Nel modulo %s sono stati trovati %d packages con classi di tipo 'backend'", moduleName, allBackendClasses.size());
         }
         else {
-            message = String.format("Nel modulo %s non è stato trovato nessun package con classi di tipo xxxBackend", moduleName);
+            message = String.format("Nel modulo %s non è stato trovato nessun package con classi di tipo 'backend'", moduleName);
         }
         logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
 
-        //--seleziono solo le classi xxxBackend che implementano il metodo reset
-        allBackendClassesResetStartUp = allBackendClasses
-                .stream()
-                .filter(clazzName -> reflectionService.isEsisteMetodo(clazzName.toString(), TAG_RESET_ONLY))
-                .collect(Collectors.toList());
 
-        if (allBackendClassesResetStartUp != null && allBackendClassesResetStartUp.size() > 0) {
-            message = String.format("Nel modulo %s sono state trovate %d classi 'backend' che implementano il metodo %s():", moduleName, allBackendClassesResetStartUp.size(),TAG_RESET_ONLY);
+        //--seleziono solo le classi di tipo 'backend' che implementano il metodo resetOnlyEmpty()
+        allResetOrderedClass = classService.allModuleBackendResetOrderedClass(moduleName);
+        if (allResetOrderedClass != null && allResetOrderedClass.size() > 0) {
+            message = String.format("Nel modulo %s sono state trovate %d classi di tipo 'backend' che implementano il metodo %s():", moduleName, allResetOrderedClass.size(), TAG_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
-            List<String> nomi = allBackendClassesResetStartUp
-                    .stream()
-                    .map(name -> fileService.estraeClasseFinaleSenzaJava((String) name))
-                    .collect(Collectors.toList()); ;
+            nomi = allResetOrderedClass.stream().map(clazz -> clazz.getSimpleName()).collect(Collectors.toList()); ;
             message = arrayService.toStringaVirgolaSpazio(nomi);
             logger.info(new WrapLog().message(message.trim()).type(AETypeLog.checkData));
         }
 
-        //--esegue il metodo xxxBackend.resetStartUp per tutte le classi che lo implementano
-        if (allBackendClassesResetStartUp != null) {
-            allBackendClassesResetStartUp
-                    .stream()
-                    .forEach(clazzName -> classService.esegueMetodo(clazzName.toString(), TAG_RESET_ONLY));
-
-            message = String.format("Controllati i dati iniziali di tutti i packages del modulo %s", moduleName);
-            logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
+        //--esegue il metodo resetOnlyEmpty() per tutte le classi di tipo 'backend' che lo implementano
+        if (allResetOrderedClass != null) {
+            allResetOrderedClass.stream().forEach(clazz -> classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY));
         }
+
     }
 
 
