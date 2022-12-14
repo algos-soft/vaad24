@@ -688,10 +688,13 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     }
 
     protected void resetEsegue() {
-        if (crudBackend.reset()) {
+        if (crudBackend.resetForcing()) {
             grid.setItems(crudBackend.findAll(sortOrder));
-            Avviso.show("Reset all").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+            Avviso.show("Eseguito reset all").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
             refresh();
+        }
+        else {
+            Avviso.show("Reset non eseguito").addThemeVariants(NotificationVariant.LUMO_ERROR);
         }
     }
 

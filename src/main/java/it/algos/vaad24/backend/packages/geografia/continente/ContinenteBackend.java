@@ -84,14 +84,14 @@ public class ContinenteBackend extends CrudBackend {
 
 
     /**
-     * Creazione di alcuni dati iniziali <br>
-     * Viene invocato alla creazione del programma o dal bottone Reset della lista <br>
-     * La collezione viene svuotata <br>
+     * Creazione di alcuni dati <br>
+     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
+     * Viene invocato alla creazione del programma <br>
      * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public boolean reset() {
+    public boolean resetOnlyEmpty() {
         String nomeFile = "continenti";
         Map<String, List<String>> mappa;
         List<String> riga;
@@ -103,9 +103,7 @@ public class ContinenteBackend extends CrudBackend {
         Continente continenteNew;
         Continente continenteSalvato;
 
-        boolean status = super.reset();
-
-        if (status) {
+        if (super.resetOnlyEmpty()) {
             mappa = resourceService.leggeMappa(nomeFile);
             if (mappa != null) {
                 for (String key : mappa.keySet()) {
@@ -142,8 +140,11 @@ public class ContinenteBackend extends CrudBackend {
                 return false;
             }
         }
+        else {
+            return false;
+        }
 
-        return status;
+        return true;
     }
 
 }// end of crud backend class

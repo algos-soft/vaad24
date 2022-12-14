@@ -127,7 +127,7 @@ public class VaadData extends AbstractService {
                 .collect(Collectors.toList());
 
         if (allBackendClasses != null && allBackendClasses.size() > 0) {
-            message = String.format("Nel modulo %s sono stati trovati %d packages con classi di tipo xxxBackend", moduleName, allBackendClasses.size());
+            message = String.format("Nel modulo %s sono stati trovati %d packages con classi di tipo 'backend'", moduleName, allBackendClasses.size());
         }
         else {
             message = String.format("Nel modulo %s non è stato trovato nessun package con classi di tipo xxxBackend", moduleName);
@@ -137,11 +137,11 @@ public class VaadData extends AbstractService {
         //--seleziono solo le classi xxxBackend che implementano il metodo reset
         allBackendClassesResetStartUp = allBackendClasses
                 .stream()
-                .filter(clazzName -> reflectionService.isEsisteMetodo(clazzName.toString(), TAG_RESET))
+                .filter(clazzName -> reflectionService.isEsisteMetodo(clazzName.toString(), TAG_RESET_ONLY))
                 .collect(Collectors.toList());
 
         if (allBackendClassesResetStartUp != null && allBackendClassesResetStartUp.size() > 0) {
-            message = String.format("Nel modulo %s sono state trovate %d classi xxxBackend che implementano il metodo 'reset'", moduleName, allBackendClassesResetStartUp.size());
+            message = String.format("Nel modulo %s sono state trovate %d classi 'backend' che implementano il metodo %s():", moduleName, allBackendClassesResetStartUp.size(),TAG_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
             List<String> nomi = allBackendClassesResetStartUp
                     .stream()
@@ -155,7 +155,7 @@ public class VaadData extends AbstractService {
         if (allBackendClassesResetStartUp != null) {
             allBackendClassesResetStartUp
                     .stream()
-                    .forEach(clazzName -> reflectionService.esegueMetodo(clazzName.toString(), "resetStartUp"));
+                    .forEach(clazzName -> classService.esegueMetodo(clazzName.toString(), TAG_RESET_ONLY));
 
             message = String.format("Controllati i dati iniziali di tutti i packages del modulo %s", moduleName);
             logger.info(new WrapLog().message(message).type(AETypeLog.checkData));

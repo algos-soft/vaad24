@@ -395,6 +395,9 @@ public class MongoService<capture> extends AbstractService {
         return entities > 0 ? entities.intValue() : 0;
     }
 
+    public void deleteAll(final String collectionName) {
+        mongoOp.dropCollection(collectionName);
+    }
     public void deleteAll(final Class clazz) {
         mongoOp.dropCollection(clazz);
     }

@@ -5,7 +5,9 @@ import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.index.*;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.*;
+import org.springframework.stereotype.*;
 
 import javax.validation.constraints.*;
 
@@ -18,6 +20,7 @@ import javax.validation.constraints.*;
  * <p>
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  */
+@Component
 @Document
 //Lombok
 @Data

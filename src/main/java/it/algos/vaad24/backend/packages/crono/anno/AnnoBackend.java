@@ -147,20 +147,20 @@ public class AnnoBackend extends CrudBackend {
     }
 
     /**
-     * Creazione di alcuni dati iniziali <br>
-     * Viene invocato alla creazione del programma o dal bottone Reset della lista <br>
-     * La collezione viene svuotata <br>
+     * Creazione di alcuni dati <br>
+     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
+     * Viene invocato alla creazione del programma <br>
      * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public boolean reset() {
+    public boolean resetOnlyEmpty() {
         if (secoloBackend.count() < 1) {
             logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Secolo'")).usaDb());
             return false;
         }
 
-        if (super.reset()) {
+        if (super.resetOnlyEmpty()) {
             //--costruisce gli anni prima di cristo partendo da ANTE_CRISTO_MAX che coincide con DELTA_ANNI
             for (int k = 1; k <= ANTE_CRISTO_MAX; k++) {
                 creaPrima(k);
@@ -170,6 +170,9 @@ public class AnnoBackend extends CrudBackend {
             for (int k = 1; k <= DOPO_CRISTO_MAX; k++) {
                 creaDopo(k);
             }
+        }
+        else {
+            return false;
         }
 
         return true;

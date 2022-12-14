@@ -4,6 +4,7 @@ import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.test.context.junit.jupiter.*;
@@ -35,7 +36,6 @@ public class UtilityTest extends AlgosTest {
     @BeforeAll
     protected void setUpAll() {
         super.setUpAll();
-
     }
 
 
@@ -52,27 +52,75 @@ public class UtilityTest extends AlgosTest {
 
     @Test
     @Order(1)
-    @DisplayName("1 - Reset")
-    void costruttoreBase() {
-        System.out.println("1 - Reset di alcune classi backend");
+    @DisplayName("1 - resetOnlyEmpty con collection esistenti")
+    void resetOnlyEmpty() {
+        System.out.println("1 - resetOnlyEmpty (ordinato) di alcune classi backend");
 
         sorgente = "vaad24";
-        message = String.format("Reset di tutte le classi backend del package '%s' che implementano il metodo %s()", sorgente, TAG_RESET);
+        message = String.format("Reset (ordinato) di tutte le classi backend del package '%s' che implementano il metodo %s()", sorgente, TAG_RESET_ONLY);
         System.out.println(message);
 
-        listaStr = classService.allModuleBackendResetDirName(sorgente);
-        if (listaStr != null && listaStr.size() > 0) {
-            message = String.format("Ci sono in totale %d classi nella directory package del modulo %s", listaStr.size(), sorgente);
+        listaClazz = classService.allModuleBackendResetOrderedClass(sorgente);
+        if (listaClazz != null && listaClazz.size() > 0) {
+            message = String.format("Ci sono in totale %d classi nella directory package del modulo %s", listaClazz.size(), sorgente);
             System.out.println(message);
             System.out.println(VUOTA);
-            print(listaStr);
+            printClazz(listaClazz);
         }
         else {
             message = String.format("Non esiste il modulo '%s' oppure non esiste la directory 'package' oppure non ci sono subdirectories", sorgente);
             System.out.println(message);
         }
+
+        if (listaClazz != null && listaClazz.size() > 0) {
+            for (Class clazz : listaClazz) {
+                ottenutoBooleano = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY);
+                assertFalse(ottenutoBooleano);
+            }
+        }
     }
 
+
+    @Test
+    @Order(2)
+    @DisplayName("2 - resetOnlyEmpty con collection NON esistenti")
+    void resetOnlyEmpty2() {
+        System.out.println("2 - resetOnlyEmpty (ordinato) di alcune classi 'backend'");
+
+        sorgente = "vaad24";
+        message = String.format("Reset (ordinato) di tutte le classi 'backend' del package '%s' che implementano il metodo %s()", sorgente, TAG_RESET_ONLY);
+        System.out.println(message);
+
+        listaClazz = classService.allModuleBackendResetOrderedClass(sorgente);
+        if (listaClazz != null && listaClazz.size() > 0) {
+            message = String.format("Ci sono in totale %d classi nella directory package del modulo %s", listaClazz.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printClazz(listaClazz);
+        }
+        else {
+            message = String.format("Non esiste il modulo '%s' oppure non esiste la directory 'package' oppure non ci sono subdirectories", sorgente);
+            System.out.println(message);
+        }
+
+        if (listaClazz != null && listaClazz.size() > 0) {
+            for (Class backendClazz : listaClazz) {
+                clazz = classService.getEntityFromBackendClazz(backendClazz).getClass();
+                mongoService.deleteAll(clazz.getSimpleName().toLowerCase());
+            }
+            System.out.println(VUOTA);
+            message = String.format("Cancellate tutte le %d classi 'backend'", listaClazz.size());
+            System.out.println(message);
+        }
+
+        if (listaClazz != null && listaClazz.size() > 0) {
+            System.out.println(VUOTA);
+            for (Class backendClazz : listaClazz) {
+                ottenutoBooleano = classService.esegueMetodo(backendClazz.getCanonicalName(), TAG_RESET_ONLY);
+                assertTrue(ottenutoBooleano);
+            }
+        }
+    }
 
     /**
      * Qui passa al termine di ogni singolo test <br>

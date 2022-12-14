@@ -4,7 +4,15 @@ import it.algos.*;
 import it.algos.base.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.interfaces.*;
+import it.algos.vaad24.backend.logic.*;
+import it.algos.vaad24.backend.packages.anagrafica.*;
+import it.algos.vaad24.backend.packages.crono.giorno.*;
+import it.algos.vaad24.backend.packages.crono.mese.*;
+import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.service.*;
+import it.algos.vaad24.ui.views.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.*;
@@ -37,6 +45,9 @@ public class ClassServiceTest extends AlgosTest {
      */
     private ClassService service;
 
+    private CrudBackend crudBackend;
+    private AEntity entity;
+
     //--moduleName
     protected static Stream<Arguments> MODULI() {
         return Stream.of(
@@ -46,6 +57,38 @@ public class ClassServiceTest extends AlgosTest {
                 Arguments.of("vaad24"),
                 Arguments.of("vaad24Simple"),
                 Arguments.of("Vaad23")
+        );
+    }
+
+
+    //--entity clazz
+    //--backend clazz
+    //--esiste
+    protected static Stream<Arguments> CLAZZ_ENTITY_BACKEND() {
+        return Stream.of(
+                Arguments.of(AIType.class, CrudView.class, false),
+                Arguments.of(AIType.class, MeseBackend.class, false),
+                Arguments.of(Continente.class, Continente.class, false),
+                Arguments.of(ContinenteBackend.class, GiornoBackend.class, false),
+                Arguments.of(Giorno.class, GiornoBackend.class, true),
+                Arguments.of(ViaBackend.class, Via.class, false),
+                Arguments.of(Via.class, ViaBackend.class, true)
+        );
+    }
+
+
+    //--backend clazz
+    //--entity clazz
+    //--esiste
+    protected static Stream<Arguments> CLAZZ_BACKEND_ENTITY() {
+        return Stream.of(
+                Arguments.of(CrudView.class, AIType.class, false),
+                Arguments.of(MeseBackend.class, AIType.class, false),
+                Arguments.of(Continente.class, Continente.class, false),
+                Arguments.of(ContinenteBackend.class, GiornoBackend.class, false),
+                Arguments.of(GiornoBackend.class, Giorno.class, true),
+                Arguments.of(Via.class, ViaBackend.class, false),
+                Arguments.of(ViaBackend.class, Via.class, true)
         );
     }
 
@@ -71,6 +114,7 @@ public class ClassServiceTest extends AlgosTest {
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();
+        crudBackend = null;
     }
 
 
@@ -447,6 +491,82 @@ public class ClassServiceTest extends AlgosTest {
 
 
     @ParameterizedTest
+    @MethodSource(value = "CLAZZ_ENTITY_BACKEND")
+    @Order(70)
+    @DisplayName("70 - classi 'entity' -> 'backend'")
+        //--entity clazz
+        //--backend clazz
+        //--esiste
+    void getBackendFromEntityClazz(final Class entityClazz, final Class backendClazz, final boolean esiste) {
+        System.out.println("70 - classi 'entity' -> 'backend'");
+        System.out.println(VUOTA);
+
+        crudBackend = service.getBackendFromEntityClazz(entityClazz);
+
+        System.out.println(VUOTA);
+        if (esiste) {
+            assertNotNull(crudBackend);
+            if (crudBackend.getClass().getSimpleName().equals(backendClazz.getSimpleName())) {
+                message = String.format("Partendo da (entity) '%s' trovo (backend) '%s'", entityClazz.getSimpleName(), backendClazz.getSimpleName());
+                System.out.println(message);
+            }
+            else {
+                message = String.format("Partendo da '%s' cerco '%s' e trovo invece %s'%s'", entityClazz.getSimpleName(), backendClazz.getSimpleName(), FORWARD, crudBackend.getClass().getSimpleName());
+                System.out.println(message);
+            }
+        }
+        else {
+            if (crudBackend == null) {
+                message = String.format("Partendo da '%s' cerco '%s' e non trovo nessuna classe (backend)", entityClazz.getSimpleName(), backendClazz.getSimpleName());
+                System.out.println(message);
+            }
+            else {
+                message = String.format("Partendo da '%s' cerco '%s' e trovo invece %s'%s'", entityClazz.getSimpleName(), backendClazz.getSimpleName(), FORWARD, crudBackend.getClass().getSimpleName());
+                System.out.println(message);
+            }
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "CLAZZ_BACKEND_ENTITY")
+    @Order(71)
+    @DisplayName("71 - classi 'backend' -> 'entity'")
+        //--backend clazz
+        //--entity clazz
+        //--esiste
+    void getEntityFromBackendClazz(final Class backendClazz, final Class entityClazz, final boolean esiste) {
+        System.out.println("71 - classi 'backend' -> 'entity'");
+        System.out.println(VUOTA);
+
+        entity = service.getEntityFromBackendClazz(backendClazz);
+
+        System.out.println(VUOTA);
+        if (esiste) {
+            assertNotNull(entity);
+            if (entity.getClass().getSimpleName().equals(entityClazz.getSimpleName())) {
+                message = String.format("Partendo da (backend) '%s' trovo (entity) '%s'", backendClazz.getSimpleName(), entityClazz.getSimpleName());
+                System.out.println(message);
+            }
+            else {
+                message = String.format("Partendo da '%s' cerco '%s' e trovo invece %s'%s'", backendClazz.getSimpleName(), entityClazz.getSimpleName(), FORWARD, entity.getClass().getSimpleName());
+                System.out.println(message);
+            }
+        }
+        else {
+            if (entity == null) {
+                message = String.format("Partendo da '%s' cerco '%s' e non trovo nessuna classe (entity)", backendClazz.getSimpleName(), entityClazz.getSimpleName());
+                System.out.println(message);
+            }
+            else {
+                message = String.format("Partendo da '%s' cerco '%s' e trovo invece %s'%s'", backendClazz.getSimpleName(), entityClazz.getSimpleName(), FORWARD, entity.getClass().getSimpleName());
+                System.out.println(message);
+            }
+        }
+    }
+
+
+    @ParameterizedTest
     @MethodSource(value = "MODULI")
     @Order(80)
     @DisplayName("80 - classi ordinate 'backend' && 'reset' nella directory package del modulo")
@@ -485,13 +605,6 @@ public class ClassServiceTest extends AlgosTest {
         }
     }
 
-    protected void printClazz(List<Class> lista) {
-        if (lista != null) {
-            for (Class clazz : lista) {
-                System.out.println(clazz.getSimpleName());
-            }
-        }
-    }
 
     /**
      * Qui passa al termine di ogni singolo test <br>

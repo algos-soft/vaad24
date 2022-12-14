@@ -9,6 +9,7 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -108,6 +109,41 @@ public class ClassService extends AbstractService {
         }
         return backend;
     }
+
+
+    /**
+     * Istanza di entity associata alla xxxBackend <br>
+     *
+     * @param backendClazz di riferimento
+     *
+     * @return istanza di Entity
+     */
+    public AEntity getEntityFromBackendClazz(Class backendClazz) {
+        return getEntityFromBackendClazz(backendClazz.getCanonicalName());
+    }
+
+    /**
+     * Istanza di entity associata alla xxxBackend <br>
+     *
+     * @param backendClazzCanonicalName the canonical name of class
+     *
+     * @return istanza di Entity
+     */
+    public AEntity getEntityFromBackendClazz(String backendClazzCanonicalName) {
+        AEntity entity = null;
+        String entityClazzCanonicalName;
+
+        if (textService.isValid(backendClazzCanonicalName)) {
+            entityClazzCanonicalName = textService.levaCoda(backendClazzCanonicalName, SUFFIX_BACKEND) + SUFFIX_ENTITY;
+            try {
+                entity = (AEntity) appContext.getBean(Class.forName(entityClazzCanonicalName));
+            } catch (Exception unErrore) {
+                logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            }
+        }
+        return entity;
+    }
+
 
     /**
      * Controlla che esiste una classe xxxLogicForm associata alla Entity inviata  <br>
@@ -424,7 +460,7 @@ public class ClassService extends AbstractService {
 
         return allModuleBackendClass(moduleName)
                 .stream()
-                .filter(clazz -> reflectionService.isEsisteMetodo(clazz.getCanonicalName(), TAG_RESET))
+                .filter(clazz -> reflectionService.isEsisteMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY))
                 .collect(Collectors.toList());
     }
 
@@ -508,7 +544,7 @@ public class ClassService extends AbstractService {
         }
 
         allBackendClazz = allModuleBackendResetClass(moduleName);
-        if (allBackendClazz == null||allBackendClazz.size()==0) {
+        if (allBackendClazz == null || allBackendClazz.size() == 0) {
             return null;
         }
 
@@ -534,6 +570,39 @@ public class ClassService extends AbstractService {
         }
 
         return allOrderedClazz;
+    }
+
+
+    public boolean esegueMetodo(String publicClassName, String publicMethodName) {
+        boolean eseguito = false;
+        Class clazz = null;
+        Method method;
+        Object istanza;
+
+        if (!reflectionService.isEsisteMetodoAncheSovrascritto(publicClassName, publicMethodName)) {
+            return false;
+        }
+        publicClassName = textService.slashToPoint(publicClassName);
+        publicMethodName = textService.primaMinuscola(publicMethodName);
+
+        try {
+            clazz = Class.forName(publicClassName.toString());
+        } catch (Exception unErrore) {
+            logger.info(new WrapLog().exception(AlgosException.crea(unErrore)));
+        }
+        if (clazz == null) {
+            return false;
+        }
+
+        try {
+            method = clazz.getMethod(publicMethodName);
+            istanza = appContext.getBean(clazz);
+            eseguito = (Boolean) method.invoke(istanza);
+        } catch (Exception unErrore) {
+            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+        }
+
+        return eseguito;
     }
 
 }

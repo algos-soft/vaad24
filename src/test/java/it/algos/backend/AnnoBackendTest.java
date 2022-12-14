@@ -115,8 +115,8 @@ public class AnnoBackendTest extends AlgosTest {
             message = String.format("Ci sono in totale %s entities di '%s' nel database mongoDB", textService.format(ottenutoIntero), dbName);
         }
         else {
-            if (reflectionService.isEsisteMetodo(backend.getClass(), TAG_RESET)) {
-                message = String.format("La collection '%s' è ancora vuota. Usa il metodo %s.%s()", dbName, backendName, TAG_RESET);
+            if (reflectionService.isEsisteMetodo(backend.getClass(), TAG_RESET_ONLY)) {
+                message = String.format("La collection '%s' è ancora vuota. Usa il metodo %s.%s()", dbName, backendName, TAG_RESET_ONLY);
             }
             else {
                 message = String.format("Nel database mongoDB la collection '%s' è ancora vuota", dbName);
@@ -148,7 +148,7 @@ public class AnnoBackendTest extends AlgosTest {
         System.out.println("90 - reset");
         String message;
 
-        ottenutoBooleano = backend.reset();
+        ottenutoBooleano = backend.resetForcing();
         if (ottenutoBooleano) {
             message = String.format("Reset effettuato correttamente");
             System.out.println(message);

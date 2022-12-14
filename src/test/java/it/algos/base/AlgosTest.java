@@ -19,6 +19,8 @@ import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
 import org.slf4j.Logger;
 import org.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.context.*;
 
 import java.lang.reflect.*;
 import java.time.*;
@@ -159,6 +161,14 @@ public abstract class AlgosTest {
 
     protected long inizio;
 
+    /**
+     * Istanza di una interfaccia <br>
+     * Iniettata automaticamente dal framework SpringBoot con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    public ApplicationContext appContext;
+
     @InjectMocks
     protected TextService textService;
 
@@ -204,6 +214,8 @@ public abstract class AlgosTest {
     @InjectMocks
     public RegexService regexService;
 
+    @Autowired
+    protected MongoService mongoService;
 
     //--clazz
     //--simpleName
@@ -284,6 +296,7 @@ public abstract class AlgosTest {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void initMocks() {
+        assertNotNull(appContext);
         assertNotNull(textService);
         assertNotNull(slf4jLogger);
         assertNotNull(logService);
@@ -300,6 +313,7 @@ public abstract class AlgosTest {
         assertNotNull(webService);
         assertNotNull(loggerBackend);
         assertNotNull(regexService);
+        assertNotNull(mongoService);
     }
 
 
@@ -310,6 +324,7 @@ public abstract class AlgosTest {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixRiferimentiIncrociati() {
+        classService.appContext = appContext;
         mailService.textService = textService;
         dateService.textService = textService;
         arrayService.textService = textService;
@@ -625,5 +640,12 @@ public abstract class AlgosTest {
         System.out.println(dateService.deltaTextEsatto(inizio));
     }
 
+    protected void printClazz(List<Class> lista) {
+        if (lista != null) {
+            for (Class clazz : lista) {
+                System.out.println(clazz.getSimpleName());
+            }
+        }
+    }
 
 }
