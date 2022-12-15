@@ -25,7 +25,7 @@ import java.util.*;
 @Tag("backend")
 @DisplayName("Secolo Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SecoloBackendTest extends AlgosTest {
+public class SecoloBackendTest extends AlgosUnitTest {
 
     /**
      * The Service.

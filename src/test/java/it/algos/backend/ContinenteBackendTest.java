@@ -25,7 +25,7 @@ import java.util.*;
 @Tag("backend")
 @DisplayName("Continente Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ContinenteBackendTest extends AlgosTest {
+public class ContinenteBackendTest extends AlgosUnitTest {
 
     @InjectMocks
     private ContinenteBackend backend;

@@ -26,7 +26,7 @@ import java.util.*;
 @Tag("backend")
 @DisplayName("Giorno Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class GiornoBackendTest extends AlgosTest {
+public class GiornoBackendTest extends AlgosUnitTest {
 
     /**
      * The Service.

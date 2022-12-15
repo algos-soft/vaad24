@@ -26,7 +26,7 @@ import java.util.*;
 @Tag("backend")
 @DisplayName("Anno Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AnnoBackendTest extends AlgosTest {
+public class AnnoBackendTest extends AlgosUnitTest {
 
     @InjectMocks
     private AnnoBackend backend;

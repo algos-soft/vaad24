@@ -1,14 +1,12 @@
 package it.algos.enumeration;
 
 import static com.vaadin.flow.server.frontend.FrontendUtils.*;
-import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
-import org.springframework.boot.test.context.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -24,13 +22,12 @@ import java.util.stream.*;
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
  * Nella superclasse AlgosTest vengono regolati tutti i link incrociati tra le varie classi singleton di service <br>
  */
-@SpringBootTest(classes = {Vaad24SimpleApplication.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("quickly")
 @Tag("enums")
 @DisplayName("Enumeration AELogLevel")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AELogLevelTest extends AlgosTest {
+public class AELogLevelTest extends AlgosUnitTest {
 
     private AELogLevel type;
     private AELogLevel[] matrice;

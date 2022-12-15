@@ -24,7 +24,7 @@ import org.springframework.test.context.junit.jupiter.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Class Utility")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UtilityTest extends AlgosTest {
+public class UtilityTest extends AlgosUnitTest {
 
 
     /**
@@ -120,6 +120,7 @@ public class UtilityTest extends AlgosTest {
             }
         }
     }
+//    keyList = Arrays.asList("Via", "Continente", "Secolo", "Anno", "Mese", "Giorno");
 
     /**
      * Qui passa al termine di ogni singolo test <br>

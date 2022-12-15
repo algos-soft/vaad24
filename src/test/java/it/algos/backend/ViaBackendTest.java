@@ -25,7 +25,7 @@ import java.util.*;
 @Tag("backend")
 @DisplayName("Via Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ViaBackendTest extends AlgosTest {
+public class ViaBackendTest extends AlgosUnitTest {
 
     @InjectMocks
     private ViaBackend backend;

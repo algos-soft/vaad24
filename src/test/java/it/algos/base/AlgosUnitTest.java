@@ -20,7 +20,6 @@ import org.mockito.*;
 import org.slf4j.Logger;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.context.*;
 
 import java.lang.reflect.*;
 import java.time.*;
@@ -37,7 +36,7 @@ import java.util.stream.*;
  *
  * @see <a href="https://www.baeldung.com/parameterized-tests-junit-5">...</a>
  */
-public abstract class AlgosTest {
+public abstract class AlgosUnitTest {
 
     public static final String SEP_RIGA = "====================";
 
@@ -161,13 +160,13 @@ public abstract class AlgosTest {
 
     protected long inizio;
 
-    /**
-     * Istanza di una interfaccia <br>
-     * Iniettata automaticamente dal framework SpringBoot con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
-    public ApplicationContext appContext;
+//    /**
+//     * Istanza di una interfaccia <br>
+//     * Iniettata automaticamente dal framework SpringBoot con l'Annotation @Autowired <br>
+//     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+//     */
+//    @Autowired
+//    public ApplicationContext appContext;
 
     @InjectMocks
     protected TextService textService;
@@ -296,7 +295,7 @@ public abstract class AlgosTest {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void initMocks() {
-        assertNotNull(appContext);
+//        assertNotNull(appContext);
         assertNotNull(textService);
         assertNotNull(slf4jLogger);
         assertNotNull(logService);
@@ -313,7 +312,7 @@ public abstract class AlgosTest {
         assertNotNull(webService);
         assertNotNull(loggerBackend);
         assertNotNull(regexService);
-        assertNotNull(mongoService);
+//        assertNotNull(mongoService);
     }
 
 
@@ -324,7 +323,7 @@ public abstract class AlgosTest {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixRiferimentiIncrociati() {
-        classService.appContext = appContext;
+//        classService.appContext = appContext;
         mailService.textService = textService;
         dateService.textService = textService;
         arrayService.textService = textService;

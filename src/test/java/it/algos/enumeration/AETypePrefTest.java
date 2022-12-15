@@ -1,12 +1,10 @@
 package it.algos.enumeration;
 
-import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-import org.springframework.boot.test.context.*;
 
 import java.util.*;
 
@@ -21,13 +19,12 @@ import java.util.*;
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
  * Nella superclasse AlgosTest vengono regolati tutti i link incrociati tra le varie classi singleton di service <br>
  */
-@SpringBootTest(classes = {Vaad24SimpleApplication.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("quickly")
 @Tag("enums")
 @DisplayName("Enumeration AETypePref")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AETypePrefTest extends AlgosTest {
+public class AETypePrefTest extends AlgosUnitTest {
 
 
     private AETypePref type;

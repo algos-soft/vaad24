@@ -25,7 +25,7 @@ import java.util.*;
 @Tag("backend")
 @DisplayName("Mese Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MeseBackendTest extends AlgosTest {
+public class MeseBackendTest extends AlgosUnitTest {
 
     /**
      * The Service.
