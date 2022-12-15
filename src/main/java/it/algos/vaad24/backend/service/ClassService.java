@@ -447,11 +447,11 @@ public class ClassService extends AbstractService {
 
     /**
      * Spazzola tutta la directory package del modulo in esame e recupera
-     * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi
+     * tutte le classi di tipo 'backend' && 'resetOnlyEmpty' contenute nella directory e nelle sue sottoclassi
      *
      * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
      *
-     * @return lista di tutte le classi 'backend' && 'reset' del package
+     * @return lista di tutte le classi 'backend' && 'resetOnlyEmpty' del package
      */
     public List<Class> allModuleBackendResetClass(final String moduleName) {
         if (textService.isEmpty(moduleName)) {
@@ -467,11 +467,11 @@ public class ClassService extends AbstractService {
 
     /**
      * Spazzola tutta la directory package del modulo in esame e recupera
-     * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi
+     * tutte le classi di tipo 'backend' && 'resetOnlyEmpty' contenute nella directory e nelle sue sottoclassi
      *
      * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
      *
-     * @return lista di tutte le classi 'backend' && 'reset' del package
+     * @return lista di tutte le classi 'backend' && 'resetOnlyEmpty' del package
      */
     public List<String> allModuleBackendResetSimpleName(final String moduleName) {
         if (textService.isEmpty(moduleName)) {
@@ -483,11 +483,11 @@ public class ClassService extends AbstractService {
 
     /**
      * Spazzola tutta la directory package del modulo in esame e recupera
-     * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi
+     * tutte le classi di tipo 'backend' && 'resetOnlyEmpty' contenute nella directory e nelle sue sottoclassi
      *
      * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
      *
-     * @return lista di tutte le classi 'backend' && 'reset' del package
+     * @return lista di tutte le classi 'backend' && 'resetOnlyEmpty' del package
      */
     public List<String> allModuleBackendResetCanonicalName(final String moduleName) {
         if (textService.isEmpty(moduleName)) {
@@ -499,12 +499,12 @@ public class ClassService extends AbstractService {
 
     /**
      * Spazzola tutta la directory package del modulo in esame e recupera
-     * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi
+     * tutte le classi di tipo 'backend' && 'resetOnlyEmpty' contenute nella directory e nelle sue sottoclassi
      * e che implementano il metodo 'reset'
      *
      * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
      *
-     * @return lista di tutte le classi 'backend' && 'reset' del package
+     * @return lista di tutte le classi 'backend' && 'resetOnlyEmpty' del package
      */
     public List<String> allModuleBackendResetDirName(final String moduleName) {
         final String tag = "packages.";
@@ -516,6 +516,48 @@ public class ClassService extends AbstractService {
         return allModuleBackendResetClass(moduleName)
                 .stream()
                 .map(clazz -> textService.pointToSlash(textService.levaTestoPrimaDiEscluso(clazz.getCanonicalName(), tag)))
+                .collect(Collectors.toList());
+    }
+
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi di tipo 'entity' che implementano 'resetOnlyEmpty'
+     * nella classe xxxBackend contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'resetOnlyEmpty' che usano reset
+     *
+     * @return lista di tutte le classi 'entity' che implementano 'resetOnlyEmpty' nella classe xxxBackend del package
+     */
+    public List<Class> allModuleEntityResetClass(final String moduleName) {
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModuleBackendResetClass(moduleName)
+                .stream()
+                .map(backendClazz -> getEntityFromBackendClazz(backendClazz).getClass())
+                .collect(Collectors.toList());
+    }
+
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi di tipo 'entity' che implementano 'resetOnlyEmpty'
+     * nella classe xxxBackend contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'resetOnlyEmpty' che usano reset
+     *
+     * @return lista del nome di tutte le classi 'entity' che implementano 'resetOnlyEmpty' nella classe xxxBackend del package
+     */
+    public List<String> allModuleEntityResetName(final String moduleName) {
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModuleEntityResetClass(moduleName)
+                .stream()
+                .map(entityClazz -> annotationService.getReset(entityClazz))
                 .collect(Collectors.toList());
     }
 
@@ -533,11 +575,10 @@ public class ClassService extends AbstractService {
         List<Class> allBackendClazz = null;
         Class entityClazz = null;
         Map<String, Class> mappaClazz = new HashMap();
-        Map mappaAncestor = new HashMap();
         String simpleName;
         String pathName;
-        String ancestorReset;
-        List<String> keyList;
+        List<String> keyCollectionList;
+        String backendName;
 
         if (textService.isEmpty(moduleName)) {
             return null;
@@ -553,20 +594,19 @@ public class ClassService extends AbstractService {
             pathName = textService.levaCoda(pathName, SUFFIX_BACKEND);
             entityClazz = this.getClazzFromCanonicalName(pathName);
             simpleName = entityClazz.getSimpleName();
-            ancestorReset = annotationService.getReset(entityClazz);
             mappaClazz.put(simpleName, backendClazz);
-            mappaAncestor.put(simpleName, ancestorReset);
         }
 
-        keyList = mappaAncestor.keySet().stream().toList();
-        keyList = Arrays.asList("Via", "Continente", "Secolo", "Anno", "Mese", "Giorno");
+        keyCollectionList = this.allModuleEntityResetName(moduleName);
+        keyCollectionList = arrayService.orderTree(keyCollectionList);
 
-        if (keyList != null && keyList.size() > 0) {
+        if (keyCollectionList != null && keyCollectionList.size() > 0) {
             allOrderedClazz = new ArrayList<>();
         }
 
-        for (String key : keyList) {
-            allOrderedClazz.add(mappaClazz.get(key));
+        for (String key : keyCollectionList) {
+            backendName = textService.primaMaiuscola(key);
+            allOrderedClazz.add(mappaClazz.get(backendName));
         }
 
         return allOrderedClazz;

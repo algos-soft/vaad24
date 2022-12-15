@@ -403,4 +403,50 @@ public class ArrayService extends AbstractService {
         return lista;
     }
 
+
+    public List<String> orderTree(List<String> listaDisordinata) {
+        List<String> listaOrdinata = new ArrayList<>();
+        List<String> listaSingoli = new ArrayList<>();
+        List<String> listaDoppi = new ArrayList<>();
+        String[] parti;
+        String base;
+        String ancestor;
+        int posBase;
+        int posAncestor;
+
+        for (String token : listaDisordinata) {
+            if (token.contains(VIRGOLA)) {
+                if (!listaDoppi.contains(token)) {
+                    listaDoppi.add(token);
+                }
+            }
+            else {
+                if (!listaSingoli.contains(token)) {
+                    listaSingoli.add(token);
+                }
+            }
+        }
+        System.out.println(listaSingoli);
+        System.out.println(listaDoppi);
+
+        listaOrdinata.addAll(listaSingoli);
+
+        for (String tokenDoppio : listaDoppi) {
+            parti = tokenDoppio.split(VIRGOLA);
+            base = parti[0];
+            ancestor = parti[1];
+
+            if (listaOrdinata.contains(ancestor)) {
+                posAncestor = listaOrdinata.indexOf(ancestor);
+                posBase = posAncestor +1;
+                listaOrdinata.add(posBase, base);
+            }
+            else {
+                listaOrdinata.add(ancestor);
+            }
+        }
+
+        return listaOrdinata;
+    }
+
 }

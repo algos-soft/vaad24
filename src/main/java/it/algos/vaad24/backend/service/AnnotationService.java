@@ -438,10 +438,33 @@ public class AnnotationService extends AbstractService {
         return annotation != null ? annotation.lineawesomeClassnames() : DEFAULT_ICON_NAME;
     }
 
-
     //==========================================================================
     // @AIEntity
     //==========================================================================
+
+    /**
+     * Get the name (lowerCase) of the collection on mongoDB  <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return the name of the collection
+     */
+    public String getCollectionName(final Class<? extends AEntity> entityClazz) {
+        String collectionName = VUOTA;
+        AIEntity annotation = this.getAIEntity(entityClazz);
+
+        if (annotation != null && annotation.collectionName().length() > 0) {
+            collectionName = annotation.collectionName();
+        }
+        else {
+            collectionName = entityClazz.getSimpleName();
+            collectionName = textService.levaCoda(collectionName, SUFFIX_ENTITY);
+            collectionName = textService.primaMinuscola(collectionName);
+        }
+
+        return collectionName;
+    }
+
 
     /**
      * Get the name of the EntityClass that is a preReset <br>
@@ -451,14 +474,20 @@ public class AnnotationService extends AbstractService {
      * @return the name of the class that need a reset before
      */
     public String getReset(final Class<? extends AEntity> entityClazz) {
-        String entityReset = VUOTA;
+        String ancestorReset = VUOTA;
         AIEntity annotation = this.getAIEntity(entityClazz);
+        String collectionName = getCollectionName(entityClazz);
 
         if (annotation != null && annotation.preReset().length() > 0) {
-            entityReset = annotation.preReset();
+            ancestorReset = annotation.preReset();
         }
 
-        return entityReset;
+        if (textService.isValid(ancestorReset)) {
+            collectionName += VIRGOLA;
+            collectionName += ancestorReset;
+        }
+
+        return collectionName;
     }
 
     //==========================================================================

@@ -16,7 +16,13 @@ import java.lang.annotation.*;
 public @interface AIEntity {
 
     /**
-     * (Optional) entity indispensabile per il reset
+     * (Optional) nome della collection (minuscolo) solo se diverso dal nome della EntityClass
+     */
+    String collectionName() default VUOTA;
+
+
+    /**
+     * (Optional) entity 'ancestor' indispensabile per il reset
      */
     String preReset() default VUOTA;
 

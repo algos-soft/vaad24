@@ -28,7 +28,7 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder()
 @EqualsAndHashCode(callSuper = false)
-@AIEntity(preReset = "secolo")
+@AIEntity(collectionName = "anno", preReset = "secolo")
 public class Anno extends AEntity {
 
     @Indexed(unique = true, direction = IndexDirection.ASCENDING)
