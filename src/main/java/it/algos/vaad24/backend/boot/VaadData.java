@@ -53,20 +53,19 @@ public class VaadData extends AbstractService {
     public VaadData() {
     }// end of constructor not @Autowired
 
-
-//    /**
-//     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
-//     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
-//     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
-//     * <p>
-//     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti <br>
-//     * L'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
-//     * Se viene implementata una istanza di sottoclasse, passa di qui per ogni istanza <br>
-//     */
-//    @PostConstruct
-//    private void postConstruct() {
-////        this.resetData();
-//    }
+    //    /**
+    //     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
+    //     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
+    //     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+    //     * <p>
+    //     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti <br>
+    //     * L'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
+    //     * Se viene implementata una istanza di sottoclasse, passa di qui per ogni istanza <br>
+    //     */
+    //    @PostConstruct
+    //    private void postConstruct() {
+    ////        this.resetData();
+    //    }
 
 
     /**
@@ -108,6 +107,7 @@ public class VaadData extends AbstractService {
         List<Class> allBackendClasses;
         List<String> nomi;
         List<Class> allResetOrderedClass;
+        AResult result;
         String message;
 
         //--seleziono solo le classi di tipo 'backend'
@@ -119,7 +119,6 @@ public class VaadData extends AbstractService {
             message = String.format("Nel modulo %s non è stato trovato nessun package con classi di tipo 'backend'", moduleName);
         }
         logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
-
 
         //--seleziono solo le classi di tipo 'backend' che implementano il metodo resetOnlyEmpty()
         allResetOrderedClass = classService.allModuleBackendResetOrderedClass(moduleName);
@@ -133,7 +132,12 @@ public class VaadData extends AbstractService {
 
         //--esegue il metodo resetOnlyEmpty() per tutte le classi di tipo 'backend' che lo implementano
         if (allResetOrderedClass != null) {
-            allResetOrderedClass.stream().forEach(clazz -> classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY));
+            for (Class clazz : allResetOrderedClass) {
+                result = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY);
+                if (result.isValido()) {
+                    logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.checkData));
+                }
+            }
         }
 
     }

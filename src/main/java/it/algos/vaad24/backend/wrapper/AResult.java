@@ -106,6 +106,18 @@ public class AResult {
         return this;
     }
 
+    public AResult addValidMessage(final String validMessage) {
+        this.valido = true;
+        this.validMessage += validMessage;
+        return this;
+    }
+
+    public AResult addErrorMessage(final String errorMessage) {
+        this.valido = false;
+        this.errorMessage += errorMessage;
+        return this;
+    }
+
     public AResult method(final String method) {
         this.method = method;
         return this;

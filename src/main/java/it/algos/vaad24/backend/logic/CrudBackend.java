@@ -232,8 +232,9 @@ public abstract class CrudBackend extends AbstractService {
         }
         else {
             if (deleteAll()) {
-                message = String.format("La collection [%s] esisteva ma è stata cancellata e i dati sono stati ricreati", entityClazz.getSimpleName().toLowerCase());
-                return resetOnlyEmpty().method("resetForcing").validMessage(message);
+                message = String.format("La collection [%s] esisteva ma è stata cancellata e i dati sono stati ricreati.", entityClazz.getSimpleName().toLowerCase());
+                result = resetOnlyEmpty().method("resetForcing").validMessage(message).addValidMessage(String.format(" %d elementi.", count()));
+                return result;
             }
             else {
                 message = String.format("Non sono riuscito a cancellare la collection [%s]", entityClazz.getSimpleName().toLowerCase());
@@ -255,13 +256,19 @@ public abstract class CrudBackend extends AbstractService {
         String message;
 
         if (mongoService.isCollectionNullOrEmpty(entityClazz)) {
-            message = String.format("La collection [%s] era vuota e sono stati creati i nuovi dati", entityClazz.getSimpleName().toLowerCase());
+            message = String.format("La collection [%s] era vuota e sono stati creati i nuovi dati.", entityClazz.getSimpleName().toLowerCase());
             return result.validMessage(message);
         }
         else {
-            message = String.format("La collection [%s] esisteva già, non era vuota e non è stata toccata", entityClazz.getSimpleName().toLowerCase());
+            message = String.format("La collection [%s] esisteva già, non era vuota e non è stata toccata.", entityClazz.getSimpleName().toLowerCase());
             return result.errorMessage(message).intValue(count());
         }
+    }
+
+
+    public AResult fixResult(AResult result) {
+        String message = String.format(" %d elementi.", count());
+        return result.addValidMessage(message).intValue(count());
     }
 
     /**

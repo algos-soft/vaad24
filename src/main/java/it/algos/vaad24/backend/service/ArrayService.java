@@ -426,9 +426,6 @@ public class ArrayService extends AbstractService {
                 }
             }
         }
-        System.out.println(listaSingoli);
-        System.out.println(listaDoppi);
-
         listaOrdinata.addAll(listaSingoli);
 
         for (String tokenDoppio : listaDoppi) {

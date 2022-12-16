@@ -177,7 +177,7 @@ public class AnnoBackend extends CrudBackend {
             return result;
         }
 
-        return result.intValue(count());
+        return fixResult(result);
     }
 
     public void creaPrima(int numeroProgressivo) {

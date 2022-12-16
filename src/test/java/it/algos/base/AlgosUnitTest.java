@@ -342,6 +342,7 @@ public abstract class AlgosUnitTest {
         classService.reflectionService = reflectionService;
         classService.logger = logService;
         classService.annotationService = annotationService;
+        classService.arrayService = arrayService;
         annotationService.textService = textService;
     }
 
@@ -597,11 +598,6 @@ public abstract class AlgosUnitTest {
         //        System.out.println(String.format("Title: %s", result.getWikiTitle()));
         System.out.println(String.format("Target: %s", result.getTarget()));
         System.out.println(String.format("Type: %s", result.getType()));
-        //        System.out.println(String.format("Preliminary url: %s", result.getUrlPreliminary()));
-        //        System.out.println(String.format("Secondary url: %s", result.getUrlRequest()));
-        //        System.out.println(String.format("Preliminary response: %s", result.getPreliminaryResponse()));
-        //        System.out.println(String.format("Token: %s", result.getToken()));
-        //        System.out.println(String.format("Secondary response: %s", result.getResponse()));
         System.out.println(String.format("Message code: %s", result.getCodeMessage()));
         System.out.println(String.format("Message: %s", result.getMessage()));
         System.out.println(String.format("Error code: %s", result.getErrorCode()));

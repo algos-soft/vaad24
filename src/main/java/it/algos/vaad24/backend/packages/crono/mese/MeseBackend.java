@@ -192,7 +192,7 @@ public class MeseBackend extends CrudBackend {
             return result;
         }
 
-        return result.intValue(count());
+        return fixResult(result);
     }
 
 }// end of crud backend class

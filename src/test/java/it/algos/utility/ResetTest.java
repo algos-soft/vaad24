@@ -74,8 +74,8 @@ public class ResetTest extends AlgosIntegrationTest {
 
         if (listaClazz != null && listaClazz.size() > 0) {
             for (Class clazz : listaClazz) {
-                //                ottenutoBooleano = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY);
-                //                assertFalse(ottenutoBooleano);
+                ottenutoRisultato = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY);
+                printRisultato(ottenutoRisultato);
             }
         }
     }
@@ -114,14 +114,86 @@ public class ResetTest extends AlgosIntegrationTest {
         }
 
         if (listaClazz != null && listaClazz.size() > 0) {
-            System.out.println(VUOTA);
             for (Class backendClazz : listaClazz) {
-                //                ottenutoBooleano = classService.esegueMetodo(backendClazz.getCanonicalName(), TAG_RESET_ONLY);
-                //                assertTrue(ottenutoBooleano);
+                ottenutoRisultato = classService.esegueMetodo(backendClazz.getCanonicalName(), TAG_RESET_ONLY);
+                printRisultato(ottenutoRisultato);
             }
         }
     }
-    //    keyList = Arrays.asList("Via", "Continente", "Secolo", "Anno", "Mese", "Giorno");
+
+
+    @Test
+    @Order(3)
+    @DisplayName("3 - resetForcing con collection NON esistenti")
+    void resetForcing() {
+        System.out.println("3 - resetForcing (ordinato) di alcune classi backend");
+
+        sorgente = "vaad24";
+        message = String.format("Reset (ordinato) di tutte le classi backend del package '%s' che implementano il metodo %s()", sorgente, TAG_RESET_ONLY);
+        System.out.println(message);
+
+        listaClazz = classService.allModuleBackendResetOrderedClass(sorgente);
+        if (listaClazz != null && listaClazz.size() > 0) {
+            message = String.format("Ci sono in totale %d classi nella directory package del modulo %s", listaClazz.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printClazz(listaClazz);
+        }
+        else {
+            message = String.format("Non esiste il modulo '%s' oppure non esiste la directory 'package' oppure non ci sono subdirectories", sorgente);
+            System.out.println(message);
+        }
+
+
+        if (listaClazz != null && listaClazz.size() > 0) {
+            for (Class backendClazz : listaClazz) {
+                clazz = classService.getEntityFromBackendClazz(backendClazz).getClass();
+                mongoService.deleteAll(clazz.getSimpleName().toLowerCase());
+            }
+            System.out.println(VUOTA);
+            message = String.format("Cancellate tutte le %d classi 'backend'", listaClazz.size());
+            System.out.println(message);
+        }
+
+
+        if (listaClazz != null && listaClazz.size() > 0) {
+            for (Class clazz : listaClazz) {
+                ottenutoRisultato = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_FORCING);
+                printRisultato(ottenutoRisultato);
+            }
+        }
+    }
+
+
+    @Test
+    @Order(4)
+    @DisplayName("4 - resetForcing con collection esistenti")
+    void resetForcing2() {
+        System.out.println("4 - resetForcing (ordinato) di alcune classi backend");
+
+        sorgente = "vaad24";
+        message = String.format("Reset (ordinato) di tutte le classi backend del package '%s' che implementano il metodo %s()", sorgente, TAG_RESET_ONLY);
+        System.out.println(message);
+
+        listaClazz = classService.allModuleBackendResetOrderedClass(sorgente);
+        if (listaClazz != null && listaClazz.size() > 0) {
+            message = String.format("Ci sono in totale %d classi nella directory package del modulo %s", listaClazz.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printClazz(listaClazz);
+        }
+        else {
+            message = String.format("Non esiste il modulo '%s' oppure non esiste la directory 'package' oppure non ci sono subdirectories", sorgente);
+            System.out.println(message);
+        }
+
+        if (listaClazz != null && listaClazz.size() > 0) {
+            for (Class clazz : listaClazz) {
+                ottenutoRisultato = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_FORCING);
+                printRisultato(ottenutoRisultato);
+            }
+        }
+    }
 
     /**
      * Qui passa al termine di ogni singolo test <br>
