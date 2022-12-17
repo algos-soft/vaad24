@@ -1,0 +1,23 @@
+{
+  "properties": [
+    {
+      "name": "algos.vaad24.version.date",
+      "type": "java.lang.String",
+      "description": "Description for algos.vaad24.version.date."
+    },
+    {
+      "name": "algos.vaad24.version.date.anno",
+      "type": "java.lang.String",
+      "description": "Description for algos.vaad24.version.date.anno."
+    },
+    {
+      "name": "algos.vaad24.version.date.mese",
+      "type": "java.lang.String",
+      "description": "Description for algos.vaad24.version.date.mese."
+    },
+    {
+      "name": "algos.vaad24.version.date.giorno",
+      "type": "java.lang.String",
+      "description": "Description for algos.vaad24.version.date.giorno."
+    }
+  ] }

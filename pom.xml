@@ -136,12 +136,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
-            <version>5.1.1</version>
-            <scope>test</scope>
-        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>io.github.bonigarcia</groupId>-->
+<!--            <artifactId>webdrivermanager</artifactId>-->
+<!--            <version>5.1.1</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
 
 
         <!-- Spring MongoDB -->
@@ -251,6 +252,13 @@
             <groupId>org.vaadin.crudui</groupId>
             <artifactId>crudui</artifactId>
             <version>6.2.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <version>2.7.6</version>
         </dependency>
 
     </dependencies>
