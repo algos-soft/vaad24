@@ -45,13 +45,20 @@ public class WizElaboraFeedBack extends it.algos.vaad24.wizard.scripts.WizElabor
         if (esisteSrc && esisteDest) {
             result = fileService.copyDirectory(AECopy.dirFilesModifica, srcWizard, destWizard);
             if (result.isValido()) {
-                mostraRisultato(result, AECopy.dirFilesModifica, destWizard, "Rollback");
-                Avviso.show("Feedback di wizard").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                if (result.getTagCode().equals(KEY_DIR_INTEGRATA)) {
+                    mostraRisultato(result, AECopy.dirFilesModifica, destWizard, "Rollback");
+                    Avviso.show("Feedback di wizard").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                }
+                if (result.getTagCode().equals(KEY_DIR_ESISTENTE)) {
+                    message = "La directory 'wizard' non è stata modificata";
+                    logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
+                    Avviso.show("Feedback di wizard").addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+                }
             }
             else {
-                message = "La directory 'wizard' non è stata aggiornata";
+                message = "La directory 'wizard' ha dei problemi";
                 logger.warn(new WrapLog().type(AETypeLog.wizard).exception(new AlgosException(message)));
-                Avviso.show("Feedback di wizard").addThemeVariants(NotificationVariant.LUMO_PRIMARY);
+                Avviso.show("Feedback non riuscito").addThemeVariants(NotificationVariant.LUMO_ERROR);
             }
         }
         else {
@@ -63,7 +70,7 @@ public class WizElaboraFeedBack extends it.algos.vaad24.wizard.scripts.WizElabor
                 message = String.format("Il path destinazione %s è errato", destWizard);
                 logger.warn(new WrapLog().type(AETypeLog.wizard).message(message));
             }
-            Avviso.show("Feedback non riuscito").addThemeVariants(NotificationVariant.LUMO_ERROR);
+            Avviso.show("Feedback non riuscito").addThemeVariants(NotificationVariant.LUMO_PRIMARY);
         }
 
     }

@@ -183,7 +183,7 @@ public class WizardView extends VerticalLayout {
         H3 paragrafo = new H3(it.algos.vaad24.wizard.scripts.WizCost.TITOLO_MODIFICA_QUESTO_PROGETTO);
         paragrafo.getElement().getStyle().set("color", "blue");
 
-        layout.add(new Label("Aggiorna il modulo base 'vaad23' di questo progetto"));
+        layout.add(new Label("Aggiorna il modulo base 'vaad24' di questo progetto"));
 
         Button bottone = new Button("Update project");
         bottone.getElement().setAttribute("theme", "primary");
@@ -211,9 +211,9 @@ public class WizardView extends VerticalLayout {
         paragrafo.getElement().getStyle().set("color", "blue");
         this.add(paragrafo);
 
-        layout.add(new Label("Ricopia su Vaadin23 la directory 'wizard' di questo progetto"));
+        layout.add(new Label("Ricopia su Vaad24 la directory 'wizard' di questo progetto"));
 
-        Button bottone = new Button(String.format("Send back to %s", PROJECT_VAADIN23));
+        Button bottone = new Button(String.format("Send back to %s", PROJECT_VAADIN24));
         bottone.getElement().setAttribute("theme", "primary");
         bottone.addClickListener(event -> openFeedBack());
 
