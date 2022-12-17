@@ -21,11 +21,8 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class WizElaboraUpdateProject extends WizElabora {
 
-    private String updateProject;
-
-    public WizElaboraUpdateProject(String updateProject) {
+    public WizElaboraUpdateProject() {
         super();
-        this.updateProject = updateProject;
     }// end of constructor
 
     public void esegue(final LinkedHashMap<String, Checkbox> mappaCheckbox) {
@@ -33,10 +30,10 @@ public class WizElaboraUpdateProject extends WizElabora {
         AEWizProject wiz;
         destNewProject = System.getProperty("user.dir");
         newUpdateProject = fileService.estraeClasseFinaleSenzaJava(destNewProject).toLowerCase();
-        srcVaadin23 = textService.levaCoda(destNewProject, newUpdateProject);
-        srcVaadin23 += VAADIN_PROJECT + SLASH;
-        if (srcVaadin23.contains("tutorial")) {
-            srcVaadin23 = "/Users/gac/Documents/IdeaProjects/operativi/vaadin23/";
+        srcVaad24 = textService.levaCoda(destNewProject, newUpdateProject);
+        srcVaad24 += VAADIN_PROJECT + SLASH;
+        if (srcVaad24.contains("tutorial")) {
+            srcVaad24 = "/Users/gac/Documents/IdeaProjects/operativi/vaadin23/";
         }
 
         destNewProject += SLASH;
@@ -46,13 +43,11 @@ public class WizElaboraUpdateProject extends WizElabora {
         for (String key : mappaCheckbox.keySet()) {
             if (mappaCheckbox.get(key).getValue()) {
                 wiz = AEWizProject.valueOf(key);
-                if (wiz != null) {
-                    switch (wiz.getCopy().getType()) {
-                        case directory -> directory(wiz);
-                        case file -> file(wiz);
-                        case source -> source(wiz);
-                        case elabora -> elabora(wiz);
-                    }
+                switch (wiz.getCopy().getType()) {
+                    case directory -> directory(wiz);
+                    case file -> file(wiz);
+                    case source -> source(wiz);
+                    case elabora -> elabora(wiz);
                 }
             }
         }

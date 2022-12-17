@@ -1,10 +1,10 @@
 package it.algos.vaad24.wizard.scripts;
 
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.vaad24.wizard.scripts.WizCost.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
-import static it.algos.vaad24.wizard.scripts.WizCost.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 

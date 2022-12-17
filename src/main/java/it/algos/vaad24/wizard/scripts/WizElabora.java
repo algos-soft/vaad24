@@ -1,12 +1,12 @@
 package it.algos.vaad24.wizard.scripts;
 
+import it.algos.vaad24.wizard.enumeration.*;
+import static it.algos.vaad24.wizard.scripts.WizCost.TXT_SUFFIX;
+import static it.algos.vaad24.wizard.scripts.WizCost.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
-import it.algos.vaad24.wizard.enumeration.*;
-import static it.algos.vaad24.wizard.scripts.WizCost.TXT_SUFFIX;
-import static it.algos.vaad24.wizard.scripts.WizCost.*;
 import static it.algos.vaad24.wizard.scripts.WizElaboraNewProject.*;
 import org.springframework.beans.factory.annotation.*;
 
@@ -45,7 +45,7 @@ public abstract class WizElabora {
     @Autowired
     public FileService fileService;
 
-    protected String srcVaadin23;
+    protected String srcVaad24;
 
     protected String destNewProject;
 
@@ -65,17 +65,17 @@ public abstract class WizElabora {
         }
         logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
 
-        AEToken.reset();
-        AEToken.setCrono();
-        AEToken.targetProject.set(newUpdateProject);
-        AEToken.targetProjectUpper.set(textService.primaMaiuscola(newUpdateProject));
-        AEToken.targetProjectAllUpper.set(newUpdateProject.toUpperCase());
-        AEToken.firstProject.set(newUpdateProject.substring(0, 1).toUpperCase());
+        it.algos.vaad24.wizard.enumeration.AEToken.reset();
+        it.algos.vaad24.wizard.enumeration.AEToken.setCrono();
+        it.algos.vaad24.wizard.enumeration.AEToken.targetProject.set(newUpdateProject);
+        it.algos.vaad24.wizard.enumeration.AEToken.targetProjectUpper.set(textService.primaMaiuscola(newUpdateProject));
+        it.algos.vaad24.wizard.enumeration.AEToken.targetProjectAllUpper.set(newUpdateProject.toUpperCase());
+        it.algos.vaad24.wizard.enumeration.AEToken.firstProject.set(newUpdateProject.substring(0, 1).toUpperCase());
     }
 
-    public void directory(final AEWizProject wiz) {
+    public void directory(final it.algos.vaad24.wizard.enumeration.AEWizProject wiz) {
         AResult result;
-        String srcPath = srcVaadin23 + wiz.getCopyDest() + SLASH;
+        String srcPath = srcVaad24 + wiz.getCopyDest() + SLASH;
         String destPath = destNewProject + wiz.getCopyDest() + SLASH;
         String dir = fileService.lastDirectory(destPath).toLowerCase();
         String tag = progettoEsistente ? "Update" : "New";
@@ -85,9 +85,9 @@ public abstract class WizElabora {
     }
 
 
-    public void elabora(final AEWizProject wiz) {
+    public void elabora(final it.algos.vaad24.wizard.enumeration.AEWizProject wiz) {
         AResult result;
-        String srcPath = srcVaadin23 + wiz.getCopyDest() + SLASH;
+        String srcPath = srcVaad24 + wiz.getCopyDest() + SLASH;
         String destPath = destNewProject + wiz.getCopyDest() + SLASH;
         String dir = fileService.lastDirectory(destPath).toLowerCase();
         String oldToken = "SimpleApplication";
@@ -121,7 +121,7 @@ public abstract class WizElabora {
     public void mostraRisultato(AResult result, AECopy copy, String dir, String tag) {
         String message;
         String messageType = VUOTA;
-        Map resultMap = null;
+        Map<String, List> resultMap;
         List<String> filesSorgenti = null;
         List<String> filesDestinazioneAnte = null;
         List<String> filesDestinazionePost = null;
@@ -131,11 +131,11 @@ public abstract class WizElabora {
         if (result.isValido()) {
             resultMap = result.getMappa();
             if (resultMap != null) {
-                filesSorgenti = (List) resultMap.get(KEY_MAPPA_SORGENTI);
-                filesDestinazioneAnte = (List) resultMap.get(KEY_MAPPA_DESTINAZIONE_ANTE);
-                filesDestinazionePost = (List) resultMap.get(KEY_MAPPA_DESTINAZIONE_POST);
-                filesAggiunti = (List) resultMap.get(KEY_MAPPA_AGGIUNTI);
-                filesModificati = (List) resultMap.get(KEY_MAPPA_MODIFICATI);
+                filesSorgenti = resultMap.get(KEY_MAPPA_SORGENTI);
+                filesDestinazioneAnte = resultMap.get(KEY_MAPPA_DESTINAZIONE_ANTE);
+                filesDestinazionePost = resultMap.get(KEY_MAPPA_DESTINAZIONE_POST);
+                filesAggiunti = resultMap.get(KEY_MAPPA_AGGIUNTI);
+                filesModificati = resultMap.get(KEY_MAPPA_MODIFICATI);
             }
             filesSorgenti = filesSorgenti != null ? filesSorgenti : new ArrayList<>();
             filesDestinazioneAnte = filesDestinazioneAnte != null ? filesDestinazioneAnte : new ArrayList<>();
@@ -220,21 +220,22 @@ public abstract class WizElabora {
     }
 
 
-    public void file(final AEWizProject wiz) {
+    public void file(AEWizProject wiz) {
+        wiz = null;
     }
 
 
-    public void source(final AEWizProject wiz) {
+    public void source(final it.algos.vaad24.wizard.enumeration.AEWizProject wiz) {
         String message;
         AResult result;
         String dest = wiz.getCopyDest();
         String nomeFile = wiz.getFileSource();
-        String sorcePath = srcVaadin23 + SOURCE_PREFIX + VAADIN_MODULE + SOURCE_SUFFFIX + nomeFile;
+        String sorcePath = srcVaad24 + SOURCE_PREFIX + VAADIN_MODULE + SOURCE_SUFFFIX + nomeFile;
         sorcePath += sorcePath.endsWith(TXT_SUFFIX) ? VUOTA : TXT_SUFFIX;
         String sourceText = fileService.leggeFile(sorcePath);
-        sourceText = AEToken.replaceAll(sourceText);
+        sourceText = it.algos.vaad24.wizard.enumeration.AEToken.replaceAll(sourceText);
         String destPath = destNewProject + dest;
-        destPath = AEToken.replaceAll(destPath);
+        destPath = it.algos.vaad24.wizard.enumeration.AEToken.replaceAll(destPath);
         String tag = progettoEsistente ? "Update" : "New";
 
         result = fileService.scriveFile(wiz.getCopy(), destPath, sourceText);

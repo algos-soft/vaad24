@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.*;
 
 import javax.annotation.*;
 import java.io.*;
-import java.util.function.*;
 
 
 /**
@@ -76,7 +75,7 @@ public abstract class WizDialog extends Dialog {
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
-    public WizService wizService;
+    public it.algos.vaad24.wizard.scripts.WizService wizService;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -118,7 +117,6 @@ public abstract class WizDialog extends Dialog {
     protected Button cancelButton;
 
 
-    protected Consumer annullaHandler;
 
     //    protected Button buttonForzaDirectory;
     //
@@ -214,8 +212,6 @@ public abstract class WizDialog extends Dialog {
      * Controlla che il dialogo possa usare alcuni flag compatibili (tra di loro) <br>
      */
     protected boolean check() {
-        boolean valido = true;
-
         //        //--Deve essere o un progetto o un package
         //        valido = valido && (AEFlag.isProject.is() || AEFlag.isPackage.is());
         //
@@ -234,7 +230,7 @@ public abstract class WizDialog extends Dialog {
         //            logger.warn("Il dialogo non è stato aperto perché alcuni flags non sono validi per operare correttamente");
         //        }
 
-        return valido;
+        return true;
     }
 
 
@@ -308,129 +304,129 @@ public abstract class WizDialog extends Dialog {
     }
 
 
-    /**
-     * Aggiunge al layout i checkbox di controllo <br>
-     */
-    protected void addCheckBoxMap() {
-        //        checkBoxLayout.removeAll();
-        //        for (String key : mappaWizBox.keySet()) {
-        //            checkBoxLayout.add(mappaWizBox.get(key));
-        //        }
-    }
+//    /**
+//     * Aggiunge al layout i checkbox di controllo <br>
+//     */
+//    protected void addCheckBoxMap() {
+//        //        checkBoxLayout.removeAll();
+//        //        for (String key : mappaWizBox.keySet()) {
+//        //            checkBoxLayout.add(mappaWizBox.get(key));
+//        //        }
+//    }
 
 
-    /**
-     * Chiamato alla dismissione del dialogo <br>
-     * Regola tutti i valori delle enumeration AEDir, AECheck e EAToken che saranno usati da: <br>
-     * WizElaboraNewProject, WizElaboraUpdateProject,WizElaboraNewPackage, WizElaboraUpdatePackage <br>
-     */
-    protected boolean regolazioniFinali() {
-        boolean status = true;
+//    /**
+//     * Chiamato alla dismissione del dialogo <br>
+//     * Regola tutti i valori delle enumeration AEDir, AECheck e EAToken che saranno usati da: <br>
+//     * WizElaboraNewProject, WizElaboraUpdateProject,WizElaboraNewPackage, WizElaboraUpdatePackage <br>
+//     */
+//    protected boolean regolazioniFinali() {
+//        boolean status = true;
+//
+//        //        status = status && this.regolaAEWizCost();
+//        //
+//        //        //        status = status && this.regolaAEDir();
+//        //        status = status && this.regolaAECheck();
+//        //        status = status && this.regolaAEPackage();
+//        //        status = status && this.regolaAEToken();
+//        //        AEModulo.fixValues(AEWizCost.pathTargetProjectModulo.get(), AEWizCost.nameTargetProjectUpper.get());
+//        //
+//        //        wizService.printInfoCheck();
+//        return status;
+//    }
 
-        //        status = status && this.regolaAEWizCost();
-        //
-        //        //        status = status && this.regolaAEDir();
-        //        status = status && this.regolaAECheck();
-        //        status = status && this.regolaAEPackage();
-        //        status = status && this.regolaAEToken();
-        //        AEModulo.fixValues(AEWizCost.pathTargetProjectModulo.get(), AEWizCost.nameTargetProjectUpper.get());
-        //
-        //        wizService.printInfoCheck();
-        return status;
-    }
-
-    /**
-     * Chiamato alla dismissione del dialogo <br>
-     * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
-     */
-    protected boolean regolaAEWizCost() {
-        return true;
-    }
-
-
-    /**
-     * Chiamato alla dismissione del dialogo <br>
-     * Resetta i valori regolabili della Enumeration AEDir <br>
-     * Elabora tutti i valori della Enumeration AEDir dipendenti dal nome del progetto <br>
-     * Verranno usati da: <br>
-     * WizElaboraNewProject, WizElaboraUpdateProject,WizElaboraNewPackage, WizElaboraUpdatePackage <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    protected boolean regolaAEDir() {
-        return true;
-    }
+//    /**
+//     * Chiamato alla dismissione del dialogo <br>
+//     * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
+//     */
+//    protected boolean regolaAEWizCost() {
+//        return true;
+//    }
 
 
-    /**
-     * Chiamato alla dismissione del dialogo <br>
-     * Elabora tutti i valori della Enumeration AECheck dipendenti dal nome del progetto <br>
-     * Verranno usati da: <br>
-     * WizElaboraNewProject, WizElaboraUpdateProject, WizElaboraNewPackage, WizElaboraUpdatePackage <br>
-     */
-    protected boolean regolaAECheck() {
-        //        for (AECheck check : AECheck.values()) {
-        //            if (mappaWizBox != null && mappaWizBox.get(check.name()) != null) {
-        //                check.setAcceso(mappaWizBox.get(check.name()).is());
-        //                if (check.isFieldAssociato()) {
-        //                    WizBox alfa = mappaWizBox.get(check.name());
-        //                    String beta = alfa.getValue();
-        //                    check.setFieldName(beta.toLowerCase());
-        //                }
-        //            }
-        //        }
-
-        return true;
-    }
+//    /**
+//     * Chiamato alla dismissione del dialogo <br>
+//     * Resetta i valori regolabili della Enumeration AEDir <br>
+//     * Elabora tutti i valori della Enumeration AEDir dipendenti dal nome del progetto <br>
+//     * Verranno usati da: <br>
+//     * WizElaboraNewProject, WizElaboraUpdateProject,WizElaboraNewPackage, WizElaboraUpdatePackage <br>
+//     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+//     */
+//    protected boolean regolaAEDir() {
+//        return true;
+//    }
 
 
-    /**
-     * Chiamato alla dismissione del dialogo <br>
-     * Regola alcuni valori della Enumeration EAToken che saranno usati da WizElaboraNewProject e WizElaboraUpdateProject <br>
-     */
-    protected boolean regolaAEToken() {
-        //        String projectNameUpper;
-        //        String projectModuloLower;
-        //        String packageName;
-        //        String fileName;
-        //        AEToken.reset();
-        //
-        //        projectNameUpper = AEWizCost.nameTargetProjectUpper.isValida() ? AEWizCost.nameTargetProjectUpper.get() : VUOTA;
-        //        projectModuloLower = AEWizCost.nameTargetProjectModulo.isValida() ? AEWizCost.nameTargetProjectModulo.get() : VUOTA;
-        //        packageName = AEWizCost.nameTargetPackage.isValida() ? AEWizCost.nameTargetPackage.get() : VUOTA;
-        //        fileName = AEWizCost.nameTargetFileUpper.get();
-        //        return wizService.regolaAEToken(projectNameUpper, projectModuloLower, packageName, fileName);
+//    /**
+//     * Chiamato alla dismissione del dialogo <br>
+//     * Elabora tutti i valori della Enumeration AECheck dipendenti dal nome del progetto <br>
+//     * Verranno usati da: <br>
+//     * WizElaboraNewProject, WizElaboraUpdateProject, WizElaboraNewPackage, WizElaboraUpdatePackage <br>
+//     */
+//    protected boolean regolaAECheck() {
+//        //        for (AECheck check : AECheck.values()) {
+//        //            if (mappaWizBox != null && mappaWizBox.get(check.name()) != null) {
+//        //                check.setAcceso(mappaWizBox.get(check.name()).is());
+//        //                if (check.isFieldAssociato()) {
+//        //                    WizBox alfa = mappaWizBox.get(check.name());
+//        //                    String beta = alfa.getValue();
+//        //                    check.setFieldName(beta.toLowerCase());
+//        //                }
+//        //            }
+//        //        }
+//
+//        return true;
+//    }
 
-        return false;
-    }
 
-    /**
-     * Chiamato alla dismissione del dialogo <br>
-     * Elabora tutti i valori della Enumeration AEPackage dipendenti dalla classe del package <br>
-     * Verranno usati da: <br>
-     * WizElaboraNewProject, WizElaboraUpdateProject, WizElaboraNewPackage, WizElaboraUpdatePackage <br>
-     */
-    protected boolean regolaAEPackage() {
-        //        WizBox wizBox;
-        //        String fieldName;
-        //
-        //        if (mappaWizBox == null) {
-        //            return false;
-        //        }
-        //
-        //        for (AEPackage pack : AEPackage.values()) {
-        //            wizBox = mappaWizBox.get(pack.name());
-        //            if (wizBox != null) {
-        //                pack.setAcceso(wizBox.is());
-        //                if (pack.isProperty()) {
-        //                    fieldName = wizBox.getValue();
-        //                    if (text.isValid(fieldName)) {
-        //                        pack.setFieldName(fieldName);
-        //                    }
-        //                }
-        //            }
-        //        }
-        return true;
-    }
+//    /**
+//     * Chiamato alla dismissione del dialogo <br>
+//     * Regola alcuni valori della Enumeration EAToken che saranno usati da WizElaboraNewProject e WizElaboraUpdateProject <br>
+//     */
+//    protected boolean regolaAEToken() {
+//        //        String projectNameUpper;
+//        //        String projectModuloLower;
+//        //        String packageName;
+//        //        String fileName;
+//        //        AEToken.reset();
+//        //
+//        //        projectNameUpper = AEWizCost.nameTargetProjectUpper.isValida() ? AEWizCost.nameTargetProjectUpper.get() : VUOTA;
+//        //        projectModuloLower = AEWizCost.nameTargetProjectModulo.isValida() ? AEWizCost.nameTargetProjectModulo.get() : VUOTA;
+//        //        packageName = AEWizCost.nameTargetPackage.isValida() ? AEWizCost.nameTargetPackage.get() : VUOTA;
+//        //        fileName = AEWizCost.nameTargetFileUpper.get();
+//        //        return wizService.regolaAEToken(projectNameUpper, projectModuloLower, packageName, fileName);
+//
+//        return false;
+//    }
+
+//    /**
+//     * Chiamato alla dismissione del dialogo <br>
+//     * Elabora tutti i valori della Enumeration AEPackage dipendenti dalla classe del package <br>
+//     * Verranno usati da: <br>
+//     * WizElaboraNewProject, WizElaboraUpdateProject, WizElaboraNewPackage, WizElaboraUpdatePackage <br>
+//     */
+//    protected boolean regolaAEPackage() {
+//        //        WizBox wizBox;
+//        //        String fieldName;
+//        //
+//        //        if (mappaWizBox == null) {
+//        //            return false;
+//        //        }
+//        //
+//        //        for (AEPackage pack : AEPackage.values()) {
+//        //            wizBox = mappaWizBox.get(pack.name());
+//        //            if (wizBox != null) {
+//        //                pack.setAcceso(wizBox.is());
+//        //                if (pack.isProperty()) {
+//        //                    fieldName = wizBox.getValue();
+//        //                    if (text.isValid(fieldName)) {
+//        //                        pack.setFieldName(fieldName);
+//        //                    }
+//        //                }
+//        //            }
+//        //        }
+//        return true;
+//    }
 
     protected VerticalLayout fixSezione(String titolo) {
         return fixSezione(titolo, "black");
@@ -462,12 +458,11 @@ public abstract class WizDialog extends Dialog {
      *
      * @param pathProject            (obbligatorio) path completo del progetto target. Da cui si ricava nameTargetProjectModulo (file.estraeClasseFinale).
      * @param nameTargetProjectUpper (obbligatorio) nome maiuscolo del progetto. Può essere diverso da nameTargetProjectModulo (Es. vaadwiki e Wiki)
-     * @param packageName            (facoltativo) nome del package da creare/modificare. Eventualmente con sub-directory (separatore slash)
      *
      * @return false se manca uno dei due parametri obbligatori
      */
     @Deprecated
-    protected boolean fixValoriInseriti(final String pathProject, final String nameTargetProjectUpper, final String packageName) {
+    protected boolean fixValoriInseriti(final String pathProject, final String nameTargetProjectUpper) {
 
         if (textService.isEmpty(pathProject) || textService.isEmpty(nameTargetProjectUpper)) {
             return false;

@@ -51,21 +51,35 @@ public class SimpleBoot extends VaadBoot {
     protected void fixVariabili() {
         super.fixVariabili();
 
-        /**
+        /*
          * Nome identificativo minuscolo del progetto corrente <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
-        VaadVar.projectCurrent = "simple";
+        try {
+            property = "algos.simple.name";
+            VaadVar.projectCurrent = Objects.requireNonNull(environment.getProperty(property)).toLowerCase();
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+            VaadVar.projectCurrent = "simple";
+        }
 
-        /**
+        /*
          * Nome identificativo maiuscolo dell' applicazione <br>
          * Usato (eventualmente) nella barra di menu in testa pagina <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
-        VaadVar.projectNameUpper = "Simple";
+        try {
+            property = "algos.simple.name";
+            VaadVar.projectNameUpper = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+            VaadVar.projectNameUpper = "Simple";
+        }
 
-        /**
+        /*
          * Versione dell' applicazione <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
@@ -78,7 +92,7 @@ public class SimpleBoot extends VaadBoot {
             logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
         }
 
-        /**
+        /*
          * Data di rilascio della versione <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
@@ -91,7 +105,7 @@ public class SimpleBoot extends VaadBoot {
             logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
         }
 
-        /**
+        /*
          * Note di rilascio della versione <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
@@ -115,14 +129,14 @@ public class SimpleBoot extends VaadBoot {
      */
     @Override
     protected void fixVariabiliRiferimentoIstanzeGenerali() {
-        /**
+        /*
          * Classe da usare per lo startup del programma <br>
          * Di default FlowData oppure possibile sottoclasse del progetto <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabiliRiferimentoIstanzeGenerali() del progetto corrente <br>
          */
         VaadVar.istanzaData = appContext.getBean(SimpleData.class);
 
-        /**
+        /*
          * Classe da usare per gestire le versioni <br>
          * Di default FlowVers oppure possibile sottoclasse del progetto <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
@@ -144,7 +158,7 @@ public class SimpleBoot extends VaadBoot {
         this.versInstance = versInstance;
     }
 
-    //    /**
+    //    /*
     //     * Set con @Autowired di una property chiamata dal costruttore <br>
     //     * Istanza di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
     //     * Chiamata dal costruttore di questa classe con valore nullo <br>
@@ -156,7 +170,7 @@ public class SimpleBoot extends VaadBoot {
     //        this.dataInstance = dataInstance;
     //    }
 
-    /**
+    /*
      * Set con @Autowired di una property chiamata dal costruttore <br>
      * Istanza di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
      * Chiamata dal costruttore di questa classe con valore nullo <br>

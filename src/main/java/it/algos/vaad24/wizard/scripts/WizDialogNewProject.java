@@ -4,10 +4,10 @@ import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.vaad24.wizard.scripts.WizCost.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
-import static it.algos.vaad24.wizard.scripts.WizCost.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
@@ -25,7 +25,7 @@ import java.util.function.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class WizDialogNewProject extends WizDialog {
+public class WizDialogNewProject extends it.algos.vaad24.wizard.scripts.WizDialog {
 
     private static final String LABEL_COMBO_UNO = "Progetti vuoti esistenti (directory IdeaProjects.operativi)";
 

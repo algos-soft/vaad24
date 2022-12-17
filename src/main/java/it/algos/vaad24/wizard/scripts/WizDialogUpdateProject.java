@@ -3,10 +3,10 @@ package it.algos.vaad24.wizard.scripts;
 import com.vaadin.flow.component.checkbox.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.vaad24.wizard.scripts.WizCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.wizard.enumeration.*;
-import static it.algos.vaad24.wizard.scripts.WizCost.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
@@ -28,7 +28,7 @@ public class WizDialogUpdateProject extends WizDialog {
 
     private Consumer<LinkedHashMap<String, Checkbox>> confirmHandler;
 
-    private String updateProject;
+    private final String updateProject;
 
     public WizDialogUpdateProject(String updateProject) {
         super();
@@ -65,12 +65,12 @@ public class WizDialogUpdateProject extends WizDialog {
         String caption;
         checkBoxLayout = fixSezione("Flags di regolazione");
         mappaCheckbox = new LinkedHashMap<>();
-        AEToken.targetProjectUpper.set(textService.primaMaiuscola(updateProject));
-        AEToken.firstProject.set(updateProject.substring(0, 1).toUpperCase());
+        it.algos.vaad24.wizard.enumeration.AEToken.targetProjectUpper.set(textService.primaMaiuscola(updateProject));
+        it.algos.vaad24.wizard.enumeration.AEToken.firstProject.set(updateProject.substring(0, 1).toUpperCase());
 
         for (AEWizProject wiz : AEWizProject.getAllEnums()) {
             caption = wiz.getCaption();
-            caption = AEToken.replaceAll(caption);
+            caption = it.algos.vaad24.wizard.enumeration.AEToken.replaceAll(caption);
             check = new Checkbox(caption);
             check.setValue(wiz.isUpdate());
             mappaCheckbox.put(wiz.name(), check);
@@ -93,7 +93,7 @@ public class WizDialogUpdateProject extends WizDialog {
         cancelButton.getElement().setAttribute("theme", "secondary");
         confirmButton.getElement().setAttribute("theme", "primary");
         confirmButton.setEnabled(true);
-        message = String.format("Confermando vengono aggiornati i files selezionati");
+        message = "Confermando vengono aggiornati i files selezionati";
         spanConferma = new HorizontalLayout();
         spanConferma.add(htmlService.getSpan(new WrapSpan().message(message).color(AETypeColor.rosso)));
     }
