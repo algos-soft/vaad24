@@ -7,7 +7,6 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.*;
-import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.ui.views.*;
@@ -24,12 +23,13 @@ import java.util.*;
  * User: gac
  * Date: gio, 07-apr-2022
  * Time: 21:27
- * Utilizzato da Vaadin23 direttamente, per creare/aggiornare un nuovo progetto esterno <br>
+ * Utilizzato da Vaadin24 direttamente, per creare/aggiornare un nuovo progetto esterno <br>
  * Utilizzato dal progetto corrente, per importare/aggiornare il codice da Vaadin23 <br>
  * Utilizzato dal progetto corrente, per creare/aggiornare nuovi packages forse <br>
  */
 @SpringComponent
-@Route(value = VaadCost.TAG_WIZ, layout = MainLayout.class)
+@Route(value = TAG_WIZ, layout = MainLayout.class)
+@RouteAlias(value = TAG_ROUTE_ALIAS_PARTE_PER_PRIMA, layout = MainLayout.class)
 @CssImport("./styles/shared-styles.css")
 public class WizardView extends VerticalLayout {
 
@@ -106,8 +106,8 @@ public class WizardView extends VerticalLayout {
     }
 
     public boolean isProjectBaseFlow() {
-        String srcVaadin23 = System.getProperty("user.dir");
-        updateProject = fileService.estraeClasseFinaleSenzaJava(srcVaadin23).toLowerCase();
+        String srcVaadin24 = System.getProperty("user.dir");
+        updateProject = fileService.estraeClasseFinaleSenzaJava(srcVaadin24).toLowerCase();
 
         return updateProject.equals(PROJECT_VAADIN23);
     }

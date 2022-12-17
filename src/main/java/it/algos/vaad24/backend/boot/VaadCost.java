@@ -58,6 +58,7 @@ public class VaadCost {
     public static final String MODULO_VAADIN24 = "vaad24";
 
     public static final String TAG_WIZ = "wizard";
+    public static final String TAG_ROUTE_ALIAS_PARTE_PER_PRIMA = "";
 
     public static final String TAG_UTILITY = "utility";
 
