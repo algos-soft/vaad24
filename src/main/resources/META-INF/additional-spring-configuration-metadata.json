@@ -19,5 +19,25 @@
       "name": "algos.vaad24.version.date.giorno",
       "type": "java.lang.String",
       "description": "Description for algos.vaad24.version.date.giorno."
+    },
+    {
+      "name": "algos.simple.version.date.anno",
+      "type": "java.lang.String",
+      "description": "Description for algos.simple.version.date.anno."
+    },
+    {
+      "name": "algos.simple.version.date.mese",
+      "type": "java.lang.String",
+      "description": "Description for algos.simple.version.date.mese."
+    },
+    {
+      "name": "algos.simple.version.date.giorno",
+      "type": "java.lang.String",
+      "description": "Description for algos.simple.version.date.giorno."
+    },
+    {
+      "name": "algos.simple.version.note",
+      "type": "java.lang.String",
+      "description": "Description for algos.simple.version.note."
     }
   ] }
