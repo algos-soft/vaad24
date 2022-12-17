@@ -25,6 +25,10 @@ public class WizElaboraUpdateProject extends WizElabora {
         super();
     }// end of constructor
 
+    public WizElaboraUpdateProject(String updateProject) {
+        super();
+    }// end of constructor
+
     public void esegue(final LinkedHashMap<String, Checkbox> mappaCheckbox) {
         super.progettoEsistente = true;
         AEWizProject wiz;

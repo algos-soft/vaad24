@@ -9,9 +9,7 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.service.*;
-import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.views.*;
 import it.algos.vaad24.wizard.scripts.*;
 import org.springframework.beans.factory.annotation.*;
@@ -22,7 +20,7 @@ import javax.annotation.*;
 import java.util.*;
 
 /**
- * Project vaadin23
+ * Project vaadin23 pippoz
  * Created by Algos
  * User: gac
  * Date: gio, 07-apr-2022
@@ -266,23 +264,23 @@ public class WizardView extends VerticalLayout {
         String data;
         String note;
 
-        property = "algos.simple.name";
-        nome = Objects.requireNonNull(environment.getProperty(property));
-
-        property = "algos.simple.version";
-        doppio = Double.parseDouble(Objects.requireNonNull(environment.getProperty(property)));
-
-        property = "algos.simple.version.date";
-        data = Objects.requireNonNull(environment.getProperty(property));
-
-        property = "algos.simple.version.note";
-        note = Objects.requireNonNull(environment.getProperty(property));
-
-        note = textService.isValid(note) ? SLASH_SPACE + note : VUOTA;
-
-        //--Locale.US per forzare la visualizzazione grafica di un punto anziché una virgola
-        message = String.format(Locale.US, "Algos® - %s %2.1f di %s%s", nome, doppio, data, note);
-        this.add(htmlService.getSpan(new WrapSpan(message).color(AETypeColor.blu).weight(AEFontWeight.bold).fontHeight(AEFontHeight.em7)));
+//        property = "algos.simple.name";
+//        nome = Objects.requireNonNull(environment.getProperty(property));
+//
+//        property = "algos.simple.version";
+//        doppio = Double.parseDouble(Objects.requireNonNull(environment.getProperty(property)));
+//
+//        property = "algos.simple.version.date";
+//        data = Objects.requireNonNull(environment.getProperty(property));
+//
+//        property = "algos.simple.version.note";
+//        note = Objects.requireNonNull(environment.getProperty(property));
+//
+//        note = textService.isValid(note) ? SLASH_SPACE + note : VUOTA;
+//
+//        //--Locale.US per forzare la visualizzazione grafica di un punto anziché una virgola
+//        message = String.format(Locale.US, "Algos® - %s %2.1f di %s%s", nome, doppio, data, note);
+//        this.add(htmlService.getSpan(new WrapSpan(message).color(AETypeColor.blu).weight(AEFontWeight.bold).fontHeight(AEFontHeight.em7)));
     }
 
 }

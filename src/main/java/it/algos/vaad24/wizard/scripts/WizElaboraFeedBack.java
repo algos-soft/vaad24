@@ -1,6 +1,8 @@
 package it.algos.vaad24.wizard.scripts;
 
+import com.vaadin.flow.component.notification.*;
 import com.vaadin.flow.spring.annotation.*;
+import it.algos.vaad24.ui.dialog.*;
 import static it.algos.vaad24.wizard.scripts.WizCost.*;
 import static it.algos.vaad24.wizard.scripts.WizElaboraNewProject.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
@@ -37,9 +39,6 @@ public class WizElaboraFeedBack extends it.algos.vaad24.wizard.scripts.WizElabor
         String srcWizard = String.format("%s%s%s%s%s%s", srcWizardProject, SLASH, SOURCE_PREFIX, VAADIN_MODULE, SLASH, DIR_WIZARD);
         String destWizard = String.format("%s%s%s%s%s", destBaseVaad24, SOURCE_PREFIX, VAADIN_MODULE, SLASH, DIR_WIZARD);
 
-        //@todo patch
-        srcWizard= srcWizard.replace("24","23");
-        //@todo patch
         esisteSrc = fileService.isEsisteDirectory(srcWizard);
         esisteDest = fileService.isEsisteDirectory(destWizard);
 
@@ -47,10 +46,12 @@ public class WizElaboraFeedBack extends it.algos.vaad24.wizard.scripts.WizElabor
             result = fileService.copyDirectory(AECopy.dirFilesModifica, srcWizard, destWizard);
             if (result.isValido()) {
                 mostraRisultato(result, AECopy.dirFilesModifica, destWizard, "Rollback");
+                Avviso.show("Feedback di wizard").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
             }
             else {
                 message = "La directory 'wizard' non è stata aggiornata";
                 logger.warn(new WrapLog().type(AETypeLog.wizard).exception(new AlgosException(message)));
+                Avviso.show("Feedback di wizard").addThemeVariants(NotificationVariant.LUMO_PRIMARY);
             }
         }
         else {
@@ -62,7 +63,8 @@ public class WizElaboraFeedBack extends it.algos.vaad24.wizard.scripts.WizElabor
                 message = String.format("Il path destinazione %s è errato", destWizard);
                 logger.warn(new WrapLog().type(AETypeLog.wizard).message(message));
             }
+            Avviso.show("Feedback non riuscito").addThemeVariants(NotificationVariant.LUMO_ERROR);
         }
-    }
 
+    }
 }
