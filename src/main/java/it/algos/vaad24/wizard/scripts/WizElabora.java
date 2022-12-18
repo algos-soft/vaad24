@@ -111,7 +111,7 @@ public abstract class WizElabora {
         String path;
         String destPath = result.getTarget();
         Map<String, List> resultMap = result.getMappa();
-        List<String> files = resultMap.get(KEY_MAPPA_MODIFICATI);
+        List<String> files = resultMap.get(AEKeyMapFile.modificati);
 
         for (String nomeFile : files) {
             path = destPath + nomeFile;
@@ -133,41 +133,41 @@ public abstract class WizElabora {
         List<String> filesSorgenti = null;
         List<String> filesDestinazioneAnte = null;
         List<String> filesDestinazionePost = null;
-        List<String> filesAggiunti = null;
+        List<String> filesCreati = null;
         List<String> filesModificati = null;
 
         if (result.isValido()) {
             resultMap = result.getMappa();
             if (resultMap != null) {
-                filesSorgenti = resultMap.get(KEY_MAPPA_SORGENTI);
-                filesDestinazioneAnte = resultMap.get(KEY_MAPPA_DESTINAZIONE_ANTE);
-                filesDestinazionePost = resultMap.get(KEY_MAPPA_DESTINAZIONE_POST);
-                filesAggiunti = resultMap.get(KEY_MAPPA_AGGIUNTI);
-                filesModificati = resultMap.get(KEY_MAPPA_MODIFICATI);
+                filesSorgenti = resultMap.get(AEKeyMapFile.sorgenti);
+                filesDestinazioneAnte = resultMap.get(AEKeyMapFile.destinazioneAnte);
+                filesDestinazionePost = resultMap.get(AEKeyMapFile.destinazionePost);
+                filesCreati = resultMap.get(AEKeyMapFile.creati);
+                filesModificati = resultMap.get(AEKeyMapFile.modificati);
             }
             filesSorgenti = filesSorgenti != null ? filesSorgenti : new ArrayList<>();
             filesDestinazioneAnte = filesDestinazioneAnte != null ? filesDestinazioneAnte : new ArrayList<>();
             filesDestinazionePost = filesDestinazionePost != null ? filesDestinazionePost : new ArrayList<>();
-            filesAggiunti = filesAggiunti != null ? filesAggiunti : new ArrayList<>();
+            filesCreati = filesCreati != null ? filesCreati : new ArrayList<>();
             filesModificati = filesModificati != null ? filesModificati : new ArrayList<>();
 
             switch (copy) {
                 case dirOnly -> {}
                 case dirDelete -> {}
                 case dirFilesAddOnly -> {
-                    if (result.getTagCode().equals(KEY_DIR_CREATA_NON_ESISTENTE)) {
+                    if (result.getTagCode().equals(AEKeyDir.creataNuova.describeConstable())) {
                         messageType = "DirFilesAddOnly - Directory creata ex novo";
                         message = String.format("%s: %s (%s)", tag, textService.primaMinuscola(result.getMessage()), copy);
                         logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
                         message = String.format("Files creati: %s", filesDestinazionePost);
                         logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
                     }
-                    if (result.getTagCode().equals(KEY_DIR_ESISTENTE)) {
+                    if (result.getTagCode().equals(AEKeyDir.esistente)) {
                         messageType = "DirFilesAddOnly - Directory già esistente";
                         message = String.format("%s: %s (%s)", tag, textService.primaMinuscola(result.getMessage()), copy);
                         logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
                     }
-                    if (result.getTagCode().equals(KEY_DIR_INTEGRATA)) {
+                    if (result.getTagCode().equals(AEKeyDir.integrata)) {
                         messageType = "DirFilesAddOnly - Directory esistente ma integrata";
                         message = String.format("%s: %s (%s)", tag, textService.primaMinuscola(result.getMessage()), copy);
                         logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
@@ -178,7 +178,7 @@ public abstract class WizElabora {
                         System.out.println(message);
                         message = String.format("Files destinazione preesistenti e rimasti (%s): %s", filesDestinazioneAnte.size(), filesDestinazioneAnte);
                         System.out.println(message);
-                        message = String.format("Files aggiunti (%s): %s", filesAggiunti.size(), filesAggiunti);
+                        message = String.format("Files creati (%s): %s", filesCreati.size(), filesCreati);
                         System.out.println(message);
                         message = String.format("Files modificati (%s): %s", filesModificati.size(), filesModificati);
                         System.out.println(message);
@@ -187,19 +187,19 @@ public abstract class WizElabora {
                     }
                 }
                 case dirFilesModifica -> {
-                    if (result.getTagCode().equals(KEY_DIR_CREATA_NON_ESISTENTE)) {
+                    if (result.getTagCode().equals(AEKeyDir.creataNuova)) {
                         messageType = "DirFilesModifica - Directory creata ex novo";
                         message = String.format("%s: %s (%s)", tag, textService.primaMinuscola(result.getMessage()), copy);
                         logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
                         message = String.format("Files creati: %s", filesDestinazionePost);
                         logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
                     }
-                    if (result.getTagCode().equals(KEY_DIR_ESISTENTE)) {
+                    if (result.getTagCode().equals(AEKeyDir.esistente)) {
                         messageType = "DirFilesModifica - Directory esistente";
                         message = String.format("%s: %s (%s)", tag, textService.primaMinuscola(result.getMessage()), copy);
                         logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
                     }
-                    if (result.getTagCode().equals(KEY_DIR_INTEGRATA)) {
+                    if (result.getTagCode().equals(AEKeyDir.integrata)) {
                         messageType = "DirFilesModifica - Directory integrata";
                         message = String.format("%s: %s (%s)", tag, textService.primaMinuscola(result.getMessage()), copy);
                         logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
@@ -210,7 +210,7 @@ public abstract class WizElabora {
                         System.out.println(message);
                         message = String.format("Files destinazione preesistenti e rimasti (%s): %s", filesDestinazioneAnte.size(), filesDestinazioneAnte);
                         System.out.println(message);
-                        message = String.format("Files aggiunti (%s): %s", filesAggiunti.size(), filesAggiunti);
+                        message = String.format("Files aggiunti (%s): %s", filesCreati.size(), filesCreati);
                         System.out.println(message);
                         message = String.format("Files modificati (%s): %s", filesModificati.size(), filesModificati);
                         System.out.println(message);

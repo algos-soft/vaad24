@@ -37,6 +37,7 @@ import java.util.stream.*;
 public class FileServiceTest extends AlgosIntegrationTest {
 
     private static String NOME_FILE_UNO = "Mantova.txt";
+    private static String NOME_FILE_DUE = "Enrico.txt";
 
     private static String PATH_DIRECTORY_TEST = "/Users/gac/Desktop/fileServiceTest/";
 
@@ -130,22 +131,26 @@ public class FileServiceTest extends AlgosIntegrationTest {
     //--pathDir sorgente
     //--pathDir destinazione
     //--directory copiata
+    //--src token (opzionale)
+    //--dest token (opzionale)
     protected static Stream<Arguments> COPY_DIRECTORY() {
         return Stream.of(
-                Arguments.of(null, VUOTA, VUOTA, false),
-                Arguments.of(AECopy.fileOnly, VUOTA, VUOTA, false),
-                Arguments.of(AECopy.dirOnly, VUOTA, VUOTA, false),
-                Arguments.of(AECopy.dirOnly, VUOTA, DEST, false),
-                Arguments.of(AECopy.dirOnly, SOURCE, VUOTA, false),
-                Arguments.of(AECopy.dirOnly, PATH_DIRECTORY_MANCANTE, DEST, false),
-                Arguments.of(AECopy.dirOnly, SOURCE, DEST, true),
-                Arguments.of(AECopy.dirOnly, SOURCE, PATH_DIRECTORY_DUE, true),
-                Arguments.of(AECopy.dirDelete, SOURCE, PATH_DIRECTORY_DUE, true),
-                Arguments.of(AECopy.dirDelete, SOURCE, DEST, true),
-                Arguments.of(AECopy.dirFilesAddOnly, SOURCE, PATH_DIRECTORY_TRE, true),
-                Arguments.of(AECopy.dirFilesAddOnly, SOURCE, DEST, true),
-                Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_DUE, true),
-                Arguments.of(AECopy.dirFilesModifica, SOURCE, DEST, true)
+                Arguments.of(null, VUOTA, VUOTA, false, VUOTA, VUOTA),
+                Arguments.of(AECopy.fileOnly, VUOTA, VUOTA, false, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirOnly, VUOTA, VUOTA, false, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirOnly, VUOTA, DEST, false, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirOnly, SOURCE, VUOTA, false, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirOnly, PATH_DIRECTORY_MANCANTE, DEST, false, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirOnly, SOURCE, DEST, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirOnly, SOURCE, PATH_DIRECTORY_DUE, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirDelete, SOURCE, PATH_DIRECTORY_DUE, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirDelete, SOURCE, DEST, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirFilesAddOnly, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirFilesAddOnly, SOURCE, DEST, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_DUE, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirFilesModifica, SOURCE, DEST, true, VUOTA, VUOTA)
+//                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_DUE, true, "alfa", "beta"),
+//                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, DEST, true, "xyz", "forse")
         );
     }
 
@@ -168,6 +173,7 @@ public class FileServiceTest extends AlgosIntegrationTest {
         service.creaDirectory(PATH_DIRECTORY_UNO);
         service.creaDirectory(PATH_DIRECTORY_DUE);
         service.creaDirectory(PATH_DIRECTORY_TRE);
+        service.creaFile(PATH_DIRECTORY_DUE + NOME_FILE_DUE);
         service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_UNO);
     }
 
@@ -745,7 +751,9 @@ public class FileServiceTest extends AlgosIntegrationTest {
         //--pathDir sorgente
         //--pathDir destinazione
         //--directory copiata
-    void copyDirectory(final AECopy typeCopy, final String srcPathDir, final String destPathDir, final boolean copiato) {
+        //--src token (opzionale)
+        //--dest token (opzionale)
+    void copyDirectory(final AECopy typeCopy, final String srcPathDir, final String destPathDir, final boolean copiato, String srcToken, String destToken) {
         System.out.println("16 - Copia la directory");
         System.out.println(VUOTA);
 

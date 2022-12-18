@@ -65,7 +65,7 @@ public class AResult {
 
     private List lista = null;
 
-    private Map mappa = null;
+    private LinkedHashMap mappa = null;
 
     protected AResult() {
         this(true, VUOTA);
@@ -328,7 +328,7 @@ public class AResult {
         return mappa;
     }
 
-    public void setMappa(Map mappa) {
+    public void setMappa(LinkedHashMap mappa) {
         this.mappa = mappa;
     }
 

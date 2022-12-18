@@ -45,11 +45,11 @@ public class WizElaboraFeedBack extends it.algos.vaad24.wizard.scripts.WizElabor
         if (esisteSrc && esisteDest) {
             result = fileService.copyDirectory(AECopy.dirFilesModifica, srcWizard, destWizard);
             if (result.isValido()) {
-                if (result.getTagCode().equals(KEY_DIR_INTEGRATA)) {
+                if (result.getTagCode().equals(AEKeyDir.integrata.name())) {
                     mostraRisultato(result, AECopy.dirFilesModifica, destWizard, "Rollback");
                     Avviso.show("Feedback di wizard").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                 }
-                if (result.getTagCode().equals(KEY_DIR_ESISTENTE)) {
+                if (result.getTagCode().equals(AEKeyDir.esistente.name())) {
                     message = "La directory 'wizard' non è stata modificata";
                     logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
                     Avviso.show("Feedback di wizard").addThemeVariants(NotificationVariant.LUMO_PRIMARY);
