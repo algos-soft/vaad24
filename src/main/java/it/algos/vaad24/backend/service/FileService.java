@@ -759,33 +759,41 @@ public class FileService extends AbstractService {
      *
      * @return wrapper di informazioni risultanti
      */
-    public AResult copyDirectory(final AECopy typeCopy, final String srcPath, String destPath) {
+    public AResult copyDirectory(final AECopy typeCopy, String srcPath, String destPath) {
         AResult result = AResult.build().method("copyDirectory").target(destPath);
         String message;
         String tag;
         String path = this.findPathBreve(destPath);
         File dirSrc = new File(srcPath);
         File dirDest = new File(destPath);
-        List<String> filesSorgenti = new ArrayList<>();
+        List<String> filesSorgenti;
         List<String> filesDestinazioneAnte = new ArrayList<>();
-        List<String> filesDestinazionePost = new ArrayList<>();
+        List<String> filesDestinazionePost;
         List<String> filesCreati = new ArrayList<>();
         List<String> filesModificati = new ArrayList<>();
-        List<String> filesRimossi = new ArrayList<>();
+        List<String> filesRimossi;
         LinkedHashMap resultMap = new LinkedHashMap();
+
+        if (typeCopy == null) {
+            result.setType(NULL);
+            message = "Manca il type AECopy";
+            return result.errorMessage(message);
+        }
+
+        if (typeCopy.getType() == AECopyType.file || typeCopy.getType() == AECopyType.source) {
+            result.setType(typeCopy.name());
+            message = "Il type AECopy non è adatto ad una directory";
+            return result.errorMessage(message);
+        }
 
         if (textService.isEmpty(srcPath) || textService.isEmpty(destPath)) {
             tag = textService.isEmpty(srcPath) ? "srcPath" : "destPath";
             message = String.format("Manca il '%s' della directory da copiare.", tag);
             return result.setErrorMessage(message);
         }
+        srcPath = srcPath.endsWith(SLASH) ? srcPath : srcPath + SLASH;
         destPath = destPath.endsWith(SLASH) ? destPath : destPath + SLASH;
 
-        if (typeCopy == null) {
-            message = "Manca il type AECopy";
-            logger.warn(AETypeLog.file, new AlgosException(message));
-            return result.errorMessage(message);
-        }
         result = result.type(typeCopy + FORWARD + typeCopy.getDescrizione());
 
         if (typeCopy.getType() != AECopyType.directory) {
@@ -803,6 +811,7 @@ public class FileService extends AbstractService {
         resultMap.put(AEKeyMapFile.sorgenti.name(), filesSorgenti);
         result.setMappa(resultMap);
 
+        //--recupero i files esistenti nella destinazione
         if (dirDest.exists()) {
             filesDestinazioneAnte = getFilesName(destPath);
             resultMap.put(AEKeyMapFile.destinazioneAnte.name(), filesDestinazioneAnte);
@@ -840,7 +849,7 @@ public class FileService extends AbstractService {
                     resultMap.put(AEKeyMapFile.eliminati.name(), filesRimossi);
 
                     filesCreati = getFilesName(destPath);
-                    resultMap.put(AEKeyMapFile.creati.name(), filesCreati);
+                    resultMap.put(AEKeyMapFile.aggiunti.name(), filesCreati);
 
                     filesDestinazionePost = getFilesName(destPath);
                     resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
@@ -855,21 +864,17 @@ public class FileService extends AbstractService {
 
             case dirFilesAddOnly:
                 if (dirDest.exists()) {
-                    //--recupero i files esistenti nella destinazione
                     //--copio SOLO i sorgenti NON presenti nella destinazione
-
                     for (String nomeFile : filesSorgenti) {
                         if (!filesDestinazioneAnte.contains(nomeFile)) {
                             copyFile(AECopy.fileOnly, srcPath, destPath, nomeFile);
                             filesCreati.add(nomeFile);
                         }
                     }
-                    resultMap.put(AEKeyMapFile.creati.name(), filesCreati);
+                    resultMap.put(AEKeyMapFile.aggiunti.name(), filesCreati);
 
                     filesDestinazionePost = getFilesName(destPath);
                     resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
-
-                    result.setMappa(resultMap);
 
                     if (filesCreati.size() > 0) {
                         message = String.format("La directory '%s' esisteva già ma è stata integrata con nuovi files.", path);
@@ -888,9 +893,7 @@ public class FileService extends AbstractService {
 
             case dirFilesModifica:
                 if (dirDest.exists()) {
-                    //--recupero i files esistenti nella destinazione
                     //--copio SOLO i sorgenti NON presenti nella destinazione
-
                     for (String nomeFile : filesSorgenti) {
                         if (filesDestinazioneAnte.contains(nomeFile)) {
                             if (!isUguale(srcPath, destPath, nomeFile)) {
@@ -903,7 +906,7 @@ public class FileService extends AbstractService {
                             filesCreati.add(nomeFile);
                         }
                     }
-                    resultMap.put(AEKeyMapFile.creati.name(), filesCreati);
+                    resultMap.put(AEKeyMapFile.aggiunti.name(), filesCreati);
                     resultMap.put(AEKeyMapFile.modificati.name(), filesModificati);
                     filesDestinazionePost = getFilesName(destPath);
                     resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
@@ -951,7 +954,7 @@ public class FileService extends AbstractService {
         resultMap.put(AEKeyMapFile.destinazioneAnte.name(), new ArrayList<>());
 
         filesCreatiDestinazionePost = getFilesName(dirDest.getAbsolutePath());
-        resultMap.put(AEKeyMapFile.creati.name(), filesCreatiDestinazionePost);
+        resultMap.put(AEKeyMapFile.aggiunti.name(), filesCreatiDestinazionePost);
         resultMap.put(AEKeyMapFile.destinazionePost.name(), filesCreatiDestinazionePost);
 
         return result;

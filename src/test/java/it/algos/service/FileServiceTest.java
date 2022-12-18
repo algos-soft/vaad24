@@ -150,7 +150,7 @@ public class FileServiceTest extends AlgosIntegrationTest {
                 Arguments.of(AECopy.dirDelete, SOURCE, DEST, true, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirFilesAddOnly, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirFilesAddOnly, SOURCE, DEST, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_DUE, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirFilesModifica, SOURCE, DEST, true, VUOTA, VUOTA)
                 //                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_DUE, true, "alfa", "beta"),
                 //                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, DEST, true, "xyz", "forse")
@@ -169,21 +169,8 @@ public class FileServiceTest extends AlgosIntegrationTest {
 
         //--reindirizzo l'istanza della superclasse
         service = fileService;
-        this.creaCartelle();
     }
 
-    private void creaCartelle() {
-        service.creaDirectory(PATH_DIRECTORY_UNO);
-        service.creaDirectory(PATH_DIRECTORY_DUE);
-        service.creaDirectory(PATH_DIRECTORY_TRE);
-        service.creaFile(PATH_DIRECTORY_DUE + NOME_FILE_DUE);
-        service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_UNO);
-        service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_TRE);
-    }
-
-    private void cancellaCartelle() {
-        service.deleteDirectory(PATH_DIRECTORY_TEST);
-    }
 
     /**
      * Qui passa prima di ogni test <br>
@@ -195,8 +182,25 @@ public class FileServiceTest extends AlgosIntegrationTest {
         super.setUpEach();
 
         unFile = null;
+        this.creaCartelle();
     }
 
+    private void creaCartelle() {
+        service.deleteDirectory(PATH_DIRECTORY_UNO);
+        service.deleteDirectory(PATH_DIRECTORY_DUE);
+        service.deleteDirectory(PATH_DIRECTORY_TRE);
+        service.creaDirectory(PATH_DIRECTORY_UNO);
+        service.creaDirectory(PATH_DIRECTORY_DUE);
+        service.creaDirectory(PATH_DIRECTORY_TRE);
+        service.creaFile(PATH_DIRECTORY_DUE + NOME_FILE_DUE);
+        service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_UNO);
+        service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_TRE);
+        service.sovraScriveFile(PATH_DIRECTORY_TRE + NOME_FILE_TRE, "Pippoz");
+    }
+
+    private void cancellaCartelle() {
+        service.deleteDirectory(PATH_DIRECTORY_TEST);
+    }
 
     @ParameterizedTest
     @MethodSource(value = "DIRECTORY")
