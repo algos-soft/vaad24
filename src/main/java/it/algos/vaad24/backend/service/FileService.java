@@ -115,6 +115,9 @@ public class FileService extends AbstractService {
 
         if (directoryToBeChecked.exists()) {
             if (directoryToBeChecked.isDirectory()) {
+                Object alfa = getSubDirName(directoryToBeChecked.getAbsolutePath());
+                Object beta = getFilesPath(directoryToBeChecked.getAbsolutePath());
+                Object gamma = getFilesName(directoryToBeChecked.getAbsolutePath());
                 message = String.format("Trovata la directory %s", directoryToBeChecked.getAbsolutePath());
                 //                logger.info(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
                 return result.validMessage(message);
@@ -759,7 +762,7 @@ public class FileService extends AbstractService {
     public AResult copyDirectory(final AECopy typeCopy, final String srcPath, String destPath) {
         AResult result = AResult.build().method("copyDirectory").target(destPath);
         String message;
-        destPath = destPath.endsWith(SLASH) ? destPath : destPath + SLASH;
+        String tag;
         String path = this.findPathBreve(destPath);
         File dirSrc = new File(srcPath);
         File dirDest = new File(destPath);
@@ -771,6 +774,13 @@ public class FileService extends AbstractService {
         List<String> filesRimossi;
         Map resultMap = new HashMap();
 
+        if (textService.isEmpty(srcPath) || textService.isEmpty(destPath)) {
+            tag = textService.isEmpty(srcPath) ? "srcPath" : "destPath";
+            message = String.format("Manca il '%s' della directory da copiare.", tag);
+            return result.setErrorMessage(message);
+        }
+        destPath = destPath.endsWith(SLASH) ? destPath : destPath + SLASH;
+
         if (typeCopy == null) {
             message = "Manca il type AECopy";
             logger.warn(AETypeLog.file, new AlgosException(message));
@@ -778,18 +788,10 @@ public class FileService extends AbstractService {
         }
         result = result.type(typeCopy + FORWARD + typeCopy.getDescrizione());
 
-        String tag;
-
         if (typeCopy.getType() != AECopyType.directory) {
             message = String.format("Il type.%s previsto non è compatibile col metodo %s", typeCopy, result.getMethod());
             logger.warn(AETypeLog.file, new AlgosException(message));
             return result.errorMessage(message);
-        }
-
-        if (textService.isEmpty(srcPath) || textService.isEmpty(destPath)) {
-            tag = textService.isEmpty(srcPath) ? "srcPath" : "destPath";
-            message = String.format("Manca il '%s' della directory da copiare.", tag);
-            return result.setErrorMessage(message);
         }
 
         if (!dirSrc.isDirectory()) {
@@ -1271,6 +1273,30 @@ public class FileService extends AbstractService {
         return subDirectoryName;
     }
 
+    /**
+     * Estrae le sub-directories da una directory <br>
+     *
+     * @param pathDirectoryToBeScanned nome completo della directory
+     */
+    public List<String> getSubDirPath(final String pathDirectoryToBeScanned) {
+        return getSubDirectories(pathDirectoryToBeScanned)
+                .stream()
+                .map(entry -> entry.getAbsolutePath())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Estrae le sub-directories da una directory <br>
+     *
+     * @param pathDirectoryToBeScanned nome completo della directory
+     */
+    public List<String> getSubDirName(final String pathDirectoryToBeScanned) {
+        return getSubDirectories(pathDirectoryToBeScanned)
+                .stream()
+                .map(entry -> entry.getName())
+                .collect(Collectors.toList());
+    }
+
 
     /**
      * Estrae le sub-directories da una directory <br>
@@ -1542,7 +1568,7 @@ public class FileService extends AbstractService {
      * Se la directory indicata non esiste nel path, restituisce tutto il path completo <br>
      * Elimina spazi vuoti iniziali e finali
      *
-     * @param pathIn    in ingresso
+     * @param pathIn in ingresso
      *
      * @return path parziale da una directory
      */
@@ -2120,7 +2146,8 @@ public class FileService extends AbstractService {
             walk = Files.walk(Paths.get(pathDirectory));
             lista = walk
                     .filter(Files::isRegularFile)
-                    .map(x -> x.toString())
+                    .filter(path -> !path.endsWith(TAG_STORE))
+                    .map(path -> path.toString())
                     .collect(Collectors.toList());
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
@@ -2139,13 +2166,13 @@ public class FileService extends AbstractService {
     public List<String> getFilesName(String pathDirectory) {
         List<String> lista = new ArrayList();
         Stream<Path> walk;
-        final String path = pathDirectory.endsWith(SLASH) ? pathDirectory : pathDirectory + SLASH;
+        final String dir = pathDirectory.endsWith(SLASH) ? pathDirectory : pathDirectory + SLASH;
 
         try {
             walk = Files.walk(Paths.get(pathDirectory));
             lista = walk
                     .filter(Files::isRegularFile)
-                    .map(x -> textService.levaTesta(x.toString(), path))
+                    .map(path -> textService.levaTesta(path.toString(), dir))
                     .collect(Collectors.toList());
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());

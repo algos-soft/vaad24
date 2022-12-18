@@ -19,6 +19,8 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class VaadCost {
 
+    public static final String TAG_STORE = ".DS_Store";
+
     public static final String ENCODE = "UTF-8";
 
     public static final String JAR_FILE_PREFIX = "jar:file:";
@@ -52,6 +54,7 @@ public class VaadCost {
     public static final String PROJECT_VAADIN23 = "vaadin23";
 
     public static final String PROJECT_VAADIN24 = "vaad24";
+
     public static final String APPLICATION_VAADIN24 = "Vaad24SimpleApplication";
 
     public static final String MODULO_VAADIN23 = "vaad23";
@@ -59,6 +62,7 @@ public class VaadCost {
     public static final String MODULO_VAADIN24 = "vaad24";
 
     public static final String TAG_WIZ = "wizard";
+
     public static final String TAG_ROUTE_ALIAS_PARTE_PER_PRIMA = "";
 
     public static final String TAG_UTILITY = "utility";
