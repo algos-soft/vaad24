@@ -98,23 +98,29 @@ public abstract class WizElabora {
         switch (wiz) {
             case testService, testBackend -> {
                 result = fileService.copyDirectory(AECopy.dirFilesModifica, srcPath, destPath);
-                result = fixToken(result, destPath, oldToken, newToken);
+                result = fixToken(result, oldToken, newToken);
                 mostraRisultato(result, AECopy.dirFilesModifica, dir, tag);
             }
             default -> {}
         }
     }
 
-    public AResult fixToken(AResult result, String destPath, String oldToken, String newToken) {
-        String testo;
+    public AResult fixToken(AResult result, String oldToken, String newToken) {
+        String testoBase;
+        String testoSostituito;
         String path;
-        List<String> files = fileService.getFilesName(destPath);
+        String destPath = result.getTarget();
+        Map<String, List> resultMap = result.getMappa();
+        List<String> files = resultMap.get(KEY_MAPPA_MODIFICATI);
 
         for (String nomeFile : files) {
             path = destPath + nomeFile;
-            testo = fileService.leggeFile(path);
-            testo = textService.sostituisce(testo, oldToken, newToken);
-            fileService.sovraScriveFile(path, testo);
+            testoBase = fileService.leggeFile(path);
+            testoSostituito = textService.sostituisce(testoBase, oldToken, newToken);
+            fileService.sovraScriveFile(path, testoSostituito);
+            if (testoSostituito.equals(testoBase)) {
+                int a = 87;
+            }
         }
 
         return result;
