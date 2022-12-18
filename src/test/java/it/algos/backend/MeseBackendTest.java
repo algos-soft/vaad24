@@ -130,11 +130,29 @@ public class MeseBackendTest extends AlgosUnitTest {
         assertNotNull(listaBeans);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
         System.out.println(message);
-        printSubLista(listaBeans,12);
+
+        printBeans(listaBeans);
     }
 
 
-//    @Test
+    @Test
+    @Order(3)
+    @DisplayName("3 - findNomi (nome)")
+    void findNomi() {
+        System.out.println("3 - findNomi (nome)");
+        System.out.println(VUOTA);
+        String message;
+
+        listaStr = backend.findNomi();
+        assertNotNull(listaStr);
+        message = String.format("Ci sono in totale %s mesi (nomi)", textService.format(listaStr.size()));
+        System.out.println(message);
+        System.out.println(VUOTA);
+        printNomiMesi(listaStr);
+    }
+
+
+    //    @Test
     @Order(91)
     @DisplayName("91 - resetOnlyEmpty pieno")
     void resetOnlyEmptyPieno() {
@@ -210,6 +228,17 @@ public class MeseBackendTest extends AlgosUnitTest {
         printSubLista(listaBeans);
     }
 
+    void printNomiMesi(List<String> listaMesi) {
+        int k = 0;
+
+        for (String mese : listaMesi) {
+            System.out.print(++k);
+            System.out.print(PARENTESI_TONDA_END);
+            System.out.print(SPAZIO);
+            System.out.println(mese);
+        }
+    }
+
     /**
      * Qui passa al termine di ogni singolo test <br>
      */
@@ -229,11 +258,22 @@ public class MeseBackendTest extends AlgosUnitTest {
         System.out.println(VUOTA);
         int k = 0;
 
+        System.out.println("Nome, breve, giorni, primo, ultimo");
+        System.out.println(VUOTA);
+
         for (Mese bean : listaBeans) {
             System.out.print(++k);
             System.out.print(PARENTESI_TONDA_END);
             System.out.print(SPAZIO);
-            System.out.println(bean);
+            System.out.print(bean.nome);
+            System.out.print(SPAZIO);
+            System.out.print(bean.breve);
+            System.out.print(SPAZIO);
+            System.out.print(bean.giorni);
+            System.out.print(SPAZIO);
+            System.out.print(bean.primo);
+            System.out.print(SPAZIO);
+            System.out.println(bean.ultimo);
         }
     }
 
