@@ -37,7 +37,10 @@ import java.util.stream.*;
 public class FileServiceTest extends AlgosIntegrationTest {
 
     private static String NOME_FILE_UNO = "Mantova.txt";
+
     private static String NOME_FILE_DUE = "Enrico.txt";
+
+    private static String NOME_FILE_TRE = "Beta.txt";
 
     private static String PATH_DIRECTORY_TEST = "/Users/gac/Desktop/fileServiceTest/";
 
@@ -149,8 +152,8 @@ public class FileServiceTest extends AlgosIntegrationTest {
                 Arguments.of(AECopy.dirFilesAddOnly, SOURCE, DEST, true, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_DUE, true, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirFilesModifica, SOURCE, DEST, true, VUOTA, VUOTA)
-//                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_DUE, true, "alfa", "beta"),
-//                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, DEST, true, "xyz", "forse")
+                //                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_DUE, true, "alfa", "beta"),
+                //                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, DEST, true, "xyz", "forse")
         );
     }
 
@@ -175,6 +178,7 @@ public class FileServiceTest extends AlgosIntegrationTest {
         service.creaDirectory(PATH_DIRECTORY_TRE);
         service.creaFile(PATH_DIRECTORY_DUE + NOME_FILE_DUE);
         service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_UNO);
+        service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_TRE);
     }
 
     private void cancellaCartelle() {
@@ -846,7 +850,7 @@ public class FileServiceTest extends AlgosIntegrationTest {
         String destDir = PATH_DIRECTORY_TEST + "Destinazione";
         String srcDirSub1 = srcDir + SLASH + "Sub1";
         String file1 = "Alfa.txt";
-        String file2 = "Beta.txt";
+        String file2 = NOME_FILE_TRE;
         String file3 = "Gamma.txt";
         File src = new File(srcDir);
         File dest = new File(destDir);

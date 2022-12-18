@@ -766,12 +766,12 @@ public class FileService extends AbstractService {
         String path = this.findPathBreve(destPath);
         File dirSrc = new File(srcPath);
         File dirDest = new File(destPath);
-        List<String> filesSorgenti=new ArrayList<>();
-        List<String> filesDestinazioneAnte=new ArrayList<>();
-        List<String> filesDestinazionePost=new ArrayList<>();
-        List<String> filesCreati=new ArrayList<>();
-        List<String> filesModificati=new ArrayList<>();
-        List<String> filesRimossi=new ArrayList<>();
+        List<String> filesSorgenti = new ArrayList<>();
+        List<String> filesDestinazioneAnte = new ArrayList<>();
+        List<String> filesDestinazionePost = new ArrayList<>();
+        List<String> filesCreati = new ArrayList<>();
+        List<String> filesModificati = new ArrayList<>();
+        List<String> filesRimossi = new ArrayList<>();
         LinkedHashMap resultMap = new LinkedHashMap();
 
         if (textService.isEmpty(srcPath) || textService.isEmpty(destPath)) {
@@ -869,8 +869,15 @@ public class FileService extends AbstractService {
                         return result.setErrorMessage(unErrore.getMessage());
                     }
                     result.setTagCode(AEKeyDir.creataNuova.name());
+
+                    resultMap.put(AEKeyMapFile.destinazioneAnte.name(), filesDestinazioneAnte);
+
+                    filesCreati = getFilesName(destPath);
+                    resultMap.put(AEKeyMapFile.creati.name(), filesCreati);
+
                     filesDestinazionePost = getFilesName(destPath);
                     resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
+
                     result.setMappa(resultMap);
                     message = String.format("La directory '%s' non esisteva ed è stata copiata.", path);
                     return result.setValidMessage(message);
@@ -882,16 +889,17 @@ public class FileService extends AbstractService {
                     filesDestinazioneAnte = getFilesName(destPath);
                     resultMap.put(AEKeyMapFile.destinazioneAnte.name(), filesDestinazioneAnte);
 
-                    for (String nomeFile : filesCreati) {
+                    for (String nomeFile : filesSorgenti) {
                         if (!filesDestinazioneAnte.contains(nomeFile)) {
                             copyFile(AECopy.fileOnly, srcPath, destPath, nomeFile);
                             filesCreati.add(nomeFile);
                         }
                     }
                     resultMap.put(AEKeyMapFile.creati.name(), filesCreati);
-                    resultMap.put(AEKeyMapFile.modificati.name(), new ArrayList());
+
                     filesDestinazionePost = getFilesName(destPath);
                     resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
+
                     result.setMappa(resultMap);
 
                     if (filesCreati.size() > 0) {
@@ -913,15 +921,19 @@ public class FileService extends AbstractService {
                         return result.setErrorMessage(unErrore.getMessage());
                     }
                     result.setTagCode(AEKeyDir.creataNuova.name());
-                    filesDestinazionePost = getFilesName(destPath);
-                    resultMap.put(AEKeyMapFile.creati.name(), filesDestinazionePost);
-                    resultMap.put(AEKeyMapFile.modificati.name(), new ArrayList());
-                    resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
-                    result.setMappa(resultMap);
-                    message = String.format("La directory '%s' non esisteva ed è stata creata.", path);
-                }
-                return result.setValidMessage(message);
 
+                    resultMap.put(AEKeyMapFile.destinazioneAnte.name(), filesDestinazioneAnte);
+
+                    filesCreati = getFilesName(destPath);
+                    resultMap.put(AEKeyMapFile.creati.name(), filesCreati);
+
+                    filesDestinazionePost = getFilesName(destPath);
+                    resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
+
+                    result.setMappa(resultMap);
+                    message = String.format("La directory '%s' non esisteva ed è stata copiata.", path);
+                    return result.setValidMessage(message);
+                }
             case dirFilesModifica:
                 if (dirDest.exists()) {
                     //--recupero i files esistenti nella destinazione
@@ -983,6 +995,41 @@ public class FileService extends AbstractService {
 
         return result;
     }
+
+
+    public AResult creaNuova(AResult result,String srcPath, String destPath) {
+        File dirSrc = new File(srcPath);
+        File dirDest = new File(destPath);
+        LinkedHashMap resultMap = new LinkedHashMap();
+        List<String> filesDestinazioneAnte = new ArrayList<>();
+        List<String> filesDestinazionePost = new ArrayList<>();
+        List<String> filesCreati = new ArrayList<>();
+        String message;
+        String path = this.findPathBreve(destPath);
+
+        try {
+            FileUtils.copyDirectory(dirSrc, dirDest);
+        } catch (Exception unErrore) {
+            logger.error(new WrapLog().exception(unErrore).usaDb());
+            return result.setErrorMessage(unErrore.getMessage());
+        }
+        result.setTagCode(AEKeyDir.creataNuova.name());
+
+        resultMap.put(AEKeyMapFile.destinazioneAnte.name(), filesDestinazioneAnte);
+
+        filesCreati = getFilesName(destPath);
+        resultMap.put(AEKeyMapFile.creati.name(), filesCreati);
+
+        filesDestinazionePost = getFilesName(destPath);
+        resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
+
+        result.setMappa(resultMap);
+        message = String.format("La directory '%s' non esisteva ed è stata copiata.", path);
+
+        return result.setValidMessage(message);
+    }
+
+
 
     public boolean isUguale(String srcPath, String destPath, String nomeFile) {
         return leggeFile(srcPath + nomeFile).equals(leggeFile(destPath + nomeFile));
