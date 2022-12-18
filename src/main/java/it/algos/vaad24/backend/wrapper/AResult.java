@@ -180,6 +180,12 @@ public class AResult {
         return result;
     }
 
+
+    public AResult mappa(LinkedHashMap mappa) {
+        this.mappa = mappa;
+        return this;
+    }
+
     public boolean isValido() {
         return valido;
     }
@@ -324,7 +330,7 @@ public class AResult {
     //        this.urlRequest = urlRequest;
     //    }
 
-    public Map getMappa() {
+    public LinkedHashMap getMappa() {
         return mappa;
     }
 
