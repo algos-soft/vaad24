@@ -62,6 +62,12 @@ public class FileServiceTest extends AlgosIntegrationTest {
 
     private static String DEST = PATH_DIRECTORY_TEST + "Destinazione";
 
+    private static String TESTO_TOKEN_ANTE = "Vaad24Application";
+
+    private static String TESTO_TOKEN_POST = "Wiki23";
+
+    private static String TESTO = " Un qualsiasi testo oltre il token";
+
     /**
      * Classe principale di riferimento <br>
      * Gia 'costruita' nella superclasse <br>
@@ -151,9 +157,9 @@ public class FileServiceTest extends AlgosIntegrationTest {
                 Arguments.of(AECopy.dirFilesAddOnly, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirFilesAddOnly, SOURCE, DEST, true, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirFilesModifica, SOURCE, DEST, true, VUOTA, VUOTA)
-                //                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_DUE, true, "alfa", "beta"),
-                //                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, DEST, true, "xyz", "forse")
+                Arguments.of(AECopy.dirFilesModifica, SOURCE, DEST, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_DUE, true, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST),
+                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_TRE, true, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST)
         );
     }
 
@@ -169,6 +175,7 @@ public class FileServiceTest extends AlgosIntegrationTest {
 
         //--reindirizzo l'istanza della superclasse
         service = fileService;
+        this.creaCartelle();
     }
 
 
@@ -182,7 +189,6 @@ public class FileServiceTest extends AlgosIntegrationTest {
         super.setUpEach();
 
         unFile = null;
-        this.creaCartelle();
     }
 
     private void creaCartelle() {
@@ -195,7 +201,9 @@ public class FileServiceTest extends AlgosIntegrationTest {
         service.creaFile(PATH_DIRECTORY_DUE + NOME_FILE_DUE);
         service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_UNO);
         service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_TRE);
-        service.sovraScriveFile(PATH_DIRECTORY_TRE + NOME_FILE_TRE, "Pippoz");
+        service.sovraScriveFile(PATH_DIRECTORY_DUE + NOME_FILE_DUE, TESTO_TOKEN_POST + TESTO);
+        service.sovraScriveFile(PATH_DIRECTORY_TRE + NOME_FILE_UNO, TESTO_TOKEN_POST + TESTO);
+        service.sovraScriveFile(PATH_DIRECTORY_TRE + NOME_FILE_TRE, TESTO_TOKEN_POST + TESTO);
     }
 
     private void cancellaCartelle() {
@@ -765,10 +773,11 @@ public class FileServiceTest extends AlgosIntegrationTest {
         System.out.println("16 - Copia la directory");
         System.out.println(VUOTA);
 
+        this.creaCartelle();
         //--prepare due cartella regolate nelle condizioni iniziali
         fixCartelle(true);
 
-        ottenutoRisultato = service.copyDirectory(typeCopy, srcPathDir, destPathDir);
+        ottenutoRisultato = service.copyDirectory(typeCopy, srcPathDir, destPathDir, srcToken, destToken);
         assertNotNull(ottenutoRisultato);
         printRisultato(ottenutoRisultato);
         assertEquals(copiato, ottenutoRisultato.isValido());
