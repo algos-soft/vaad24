@@ -26,7 +26,6 @@ import java.util.stream.*;
  * Estende la classe astratta ATest che contiene le regolazioni essenziali <br>
  * Nella superclasse ATest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
  * Nella superclasse ATest vengono regolati tutti i link incrociati tra le varie classi singleton di service <br>
- * Pippoz
  */
 @SpringBootTest(classes = {Vaad24SimpleApplication.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
