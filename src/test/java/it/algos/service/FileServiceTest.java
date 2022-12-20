@@ -179,6 +179,9 @@ public class FileServiceTest extends AlgosIntegrationTest {
                 Arguments.of(AECopy.dirFilesAddOnly, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirFilesModifica, SOURCE, DEST, true, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_TRE, false, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_TRE, false, VUOTA, TESTO_TOKEN_POST),
+                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_TRE, false, TESTO_TOKEN_ANTE, VUOTA),
                 Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_TRE, true, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST),
                 Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_TRE, true, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST)
         );

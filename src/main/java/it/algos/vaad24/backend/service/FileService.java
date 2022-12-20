@@ -741,7 +741,7 @@ public class FileService extends AbstractService {
     }
 
     public AResult copyDirectory(final AECopy typeCopy, String srcPath, String destPath) {
-        return copyDirectory(typeCopy, srcPath, destPath);
+        return copyDirectory(typeCopy, srcPath, destPath, VUOTA, VUOTA);
     }
 
     /**
@@ -812,6 +812,17 @@ public class FileService extends AbstractService {
         if (!dirSrc.isDirectory()) {
             message = String.format("Non esiste la directory sorgente '%s' da copiare.", srcPath);
             return result.setErrorMessage(message);
+        }
+
+        if (typeCopy == AECopy.dirFilesModificaToken) {
+            if (textService.isEmpty(srcToken)) {
+                message = "Manca il token sorgente";
+                return result.errorMessage(message);
+            }
+            if (textService.isEmpty(destToken)) {
+                message = "Manca il token destinazione";
+                return result.errorMessage(message);
+            }
         }
 
         filesSorgenti = getFilesName(srcPath);
