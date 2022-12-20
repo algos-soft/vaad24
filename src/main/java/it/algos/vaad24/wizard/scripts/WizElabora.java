@@ -142,7 +142,7 @@ public abstract class WizElabora {
                 filesSorgenti = resultMap.get(AEKeyMapFile.sorgenti);
                 filesDestinazioneAnte = resultMap.get(AEKeyMapFile.destinazioneAnte);
                 filesDestinazionePost = resultMap.get(AEKeyMapFile.destinazionePost);
-                filesCreati = resultMap.get(AEKeyMapFile.aggiunti);
+                filesCreati = resultMap.get(AEKeyMapFile.aggiuntiNuovi);
                 filesModificati = resultMap.get(AEKeyMapFile.modificati);
             }
             filesSorgenti = filesSorgenti != null ? filesSorgenti : new ArrayList<>();

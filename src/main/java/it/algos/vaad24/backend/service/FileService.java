@@ -772,8 +772,9 @@ public class FileService extends AbstractService {
         List<String> filesSorgenti;
         List<String> filesDestinazioneAnte = new ArrayList<>();
         List<String> filesDestinazionePost;
-        List<String> filesCreati = new ArrayList<>();
+        List<String> filesAggiunti = new ArrayList<>();
         List<String> filesModificati = new ArrayList<>();
+        List<String> filesUguali = new ArrayList<>();
         List<String> filesTokenModificati = new ArrayList<>();
         List<String> filesTokenUguali = new ArrayList<>();
         List<String> filesRimossi;
@@ -828,6 +829,9 @@ public class FileService extends AbstractService {
                 if (dirDest.exists()) {
                     result.setTagCode(AEKeyDir.esistente.name());
 
+                    filesUguali = getFilesName(destPath);
+                    resultMap.put(AEKeyMapFile.uguali.name(), filesUguali);
+
                     filesDestinazionePost = getFilesName(destPath);
                     resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
 
@@ -854,8 +858,8 @@ public class FileService extends AbstractService {
                     filesRimossi = filesDestinazioneAnte;
                     resultMap.put(AEKeyMapFile.eliminati.name(), filesRimossi);
 
-                    filesCreati = getFilesName(destPath);
-                    resultMap.put(AEKeyMapFile.aggiunti.name(), filesCreati);
+                    filesAggiunti = getFilesName(destPath);
+                    resultMap.put(AEKeyMapFile.aggiuntiNuovi.name(), filesAggiunti);
 
                     filesDestinazionePost = getFilesName(destPath);
                     resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
@@ -874,15 +878,16 @@ public class FileService extends AbstractService {
                     for (String nomeFile : filesSorgenti) {
                         if (!filesDestinazioneAnte.contains(nomeFile)) {
                             copyFile(AECopy.fileOnly, srcPath, destPath, nomeFile);
-                            filesCreati.add(nomeFile);
+                            filesAggiunti.add(nomeFile);
                         }
                     }
-                    resultMap.put(AEKeyMapFile.aggiunti.name(), filesCreati);
+                    resultMap.put(AEKeyMapFile.aggiuntiNuovi.name(), filesAggiunti);
+                    resultMap.put(AEKeyMapFile.uguali.name(), filesDestinazioneAnte);
 
                     filesDestinazionePost = getFilesName(destPath);
                     resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
 
-                    if (filesCreati.size() > 0) {
+                    if (filesAggiunti.size() > 0) {
                         message = String.format("La directory '%s' esisteva già ma è stata integrata con nuovi files.", path);
                         result.setTagCode(AEKeyDir.integrata.name());
                     }
@@ -910,14 +915,12 @@ public class FileService extends AbstractService {
                                     //--file uguali a parte il token
                                     if (!isUgualeToken(srcPath, destPath, nomeFile, srcToken, destToken)) {
                                         copyFile(AECopy.fileDelete, srcPath, destPath, nomeFile);
-                                        filesTokenUguali.add(nomeFile);
+                                        filesTokenModificati.add(nomeFile);
                                     }
                                     else {
                                         copyFile(AECopy.fileDelete, srcPath, destPath, nomeFile);
-                                        filesTokenModificati.add(nomeFile);
+                                        filesTokenUguali.add(nomeFile);
                                     }
-                                    resultMap.put(AEKeyMapFile.tokenUguali.name(), filesTokenUguali);
-                                    resultMap.put(AEKeyMapFile.tokenModificati.name(), filesTokenModificati);
                                 }
                                 //--diversi e non controlla le differenze del token
                                 else {
@@ -925,25 +928,47 @@ public class FileService extends AbstractService {
                                     filesModificati.add(nomeFile);
                                 }
                             }
+                            else {
+                                if (typeCopy == AECopy.dirFilesModificaToken) {
+                                    filesTokenUguali.add(nomeFile);
+                                }
+                                else {
+                                    filesUguali.add(nomeFile);
+                                }
+                            }
                         }
                         //--se manca, lo aggiunge
                         else {
                             copyFile(AECopy.fileOnly, srcPath, destPath, nomeFile);
-                            filesCreati.add(nomeFile);
+                            filesAggiunti.add(nomeFile);
                         }
                     }
-                    resultMap.put(AEKeyMapFile.aggiunti.name(), filesCreati);
-                    resultMap.put(AEKeyMapFile.modificati.name(), filesModificati);
+
+                    for (String nomeFile : filesDestinazioneAnte) {
+                        if (!filesAggiunti.contains(nomeFile) && !filesTokenUguali.contains(nomeFile)) {
+                            filesUguali.add(nomeFile);
+                        }
+                    }
+                    resultMap.put(AEKeyMapFile.aggiuntiNuovi.name(), filesAggiunti);
+                    if (typeCopy == AECopy.dirFilesModificaToken) {
+                        resultMap.put(AEKeyMapFile.tokenUguali.name(), filesTokenUguali);
+                        resultMap.put(AEKeyMapFile.tokenModificati.name(), filesTokenModificati);
+                    }
+                    else {
+                        resultMap.put(AEKeyMapFile.uguali.name(), filesUguali);
+                        resultMap.put(AEKeyMapFile.modificati.name(), filesModificati);
+                    }
+
                     filesDestinazionePost = getFilesName(destPath);
                     resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
 
-                    if (filesCreati.size() == 0 && filesModificati.size() == 0) {
+                    if (filesAggiunti.size() == 0 && filesModificati.size() == 0) {
                         result.setTagCode(AEKeyDir.esistente.name());
                         message = String.format("La directory '%s' esisteva già e non è stato aggiunto/modificato nessun file.", path);
                     }
                     else {
                         result.setTagCode(AEKeyDir.integrata.name());
-                        message = String.format("La directory '%s' esisteva già; aggiunti: %s; modificati: %s", path, filesCreati, filesModificati);
+                        message = String.format("La directory '%s' esisteva già; aggiunti: %s; modificati: %s", path, filesAggiunti, filesModificati);
                     }
                     result.setValidMessage(message);
                 }
@@ -978,7 +1003,7 @@ public class FileService extends AbstractService {
         resultMap.put(AEKeyMapFile.destinazioneAnte.name(), new ArrayList<>());
 
         filesCreatiDestinazionePost = getFilesName(dirDest.getAbsolutePath());
-        resultMap.put(AEKeyMapFile.aggiunti.name(), filesCreatiDestinazionePost);
+        resultMap.put(AEKeyMapFile.aggiuntiNuovi.name(), filesCreatiDestinazionePost);
         resultMap.put(AEKeyMapFile.destinazionePost.name(), filesCreatiDestinazionePost);
 
         message = String.format("La directory '%s' non esisteva ed è stata creata.", path);
@@ -994,8 +1019,8 @@ public class FileService extends AbstractService {
     public boolean isUgualeToken(String srcPath, String destPath, String nomeFile, String srcToken, String destToken) {
         String sorgente = leggeFile(srcPath + nomeFile);
         String destinazione = leggeFile(destPath + nomeFile);
-
-        return false;
+        sorgente = textService.sostituisce(sorgente, srcToken, destToken);
+        return sorgente.equals(destinazione);
     }
 
     /**
@@ -1085,6 +1110,9 @@ public class FileService extends AbstractService {
         return result;
     }
 
+    public boolean sovraScriveFile(File fileToBeWritten, String text) {
+        return sovraScriveFile(fileToBeWritten.getAbsolutePath(), text);
+    }
 
     /**
      * Sovrascrive un file

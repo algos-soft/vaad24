@@ -36,21 +36,40 @@ import java.util.stream.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FileServiceTest extends AlgosIntegrationTest {
 
-    private static String NOME_FILE_UNO = "Mantova.txt";
 
-    private static String NOME_FILE_DUE = "Enrico.txt";
+    private static String NOME_FILE_UNO = "Alfa.txt";
 
-    private static String NOME_FILE_TRE = "Beta.txt";
+    private static String NOME_FILE_UNO_POST = "Alfa.txt";
+
+    private static String NOME_FILE_DUE = "Beta.txt";
+
+    private static String NOME_FILE_DUE_POST = "Beta.txt";
+
+    private static String NOME_FILE_TRE = "Gamma.txt";
+
+    private static String NOME_FILE_TRE_POST = "Gamma.txt";
+
+    private static String NOME_FILE_QUATTRO = "Delta.txt";
+
+    private static String NOME_FILE_CINQUE = "Mantova.txt";
+
+    private static String NOME_FILE_SEI = "Omega.txt";
+
+    private static String NOME_FILE_SETTE = "Omicron.txt";
+
+    private static String NOME_FILE_OTTO = "Css.css";
 
     private static String PATH_DIRECTORY_TEST = "/Users/gac/Desktop/fileServiceTest/";
 
     private static String PATH_DIRECTORY_TEST_NO = "/Users/gac/Desktop/test/";
 
-    private static String PATH_DIRECTORY_UNO = PATH_DIRECTORY_TEST + "Pippo/";
+    private static String PATH_DIRECTORY_UNO = PATH_DIRECTORY_TEST + "Prima/";
 
     private static String PATH_DIRECTORY_DUE = PATH_DIRECTORY_TEST + "Possibile/";
 
     private static String PATH_DIRECTORY_TRE = PATH_DIRECTORY_TEST + "Mantova/";
+
+    private static String NOME_DIR_SUB = "Sotto/";
 
     private static String PATH_DIRECTORY_NON_ESISTENTE = PATH_DIRECTORY_TEST + "Genova/";
 
@@ -66,7 +85,9 @@ public class FileServiceTest extends AlgosIntegrationTest {
 
     private static String TESTO_TOKEN_POST = "Wiki23";
 
-    private static String TESTO = " Un qualsiasi testo oltre il token";
+    private static String TESTO_SENZA = "Un qualsiasi testo senza token";
+
+    private static String TESTO_CON = " Un qualsiasi testo oltre il token";
 
     /**
      * Classe principale di riferimento <br>
@@ -89,10 +110,10 @@ public class FileServiceTest extends AlgosIntegrationTest {
                 Arguments.of(String.format("%sMantova", PATH_DIRECTORY_TEST), true, false),
                 Arguments.of(String.format("%sMantova/Mantova.txt", PATH_DIRECTORY_TEST_NO), false, false),
                 Arguments.of(String.format("%sMantova/Mantova.txt", PATH_DIRECTORY_TEST), false, false),
+                Arguments.of(String.format("%sMantova/Sotto", PATH_DIRECTORY_TEST_NO), false, false),
+                Arguments.of(String.format("%sMantova/Sotto", PATH_DIRECTORY_TEST), true, false),
                 Arguments.of("Users/gac/Documents/IdeaProjects/operativi/vaad24/src/", false, true),
-                Arguments.of("/Users/gac/Documents/IdeaProjects/operativi/vaad24/src/", true, false),
-                Arguments.of(String.format("%sPippo/", PATH_DIRECTORY_TEST_NO), false, false),
-                Arguments.of(String.format("%sPippo/", PATH_DIRECTORY_TEST), true, false)
+                Arguments.of("/Users/gac/Documents/IdeaProjects/operativi/vaad24/src/", true, false)
         );
     }
 
@@ -150,15 +171,15 @@ public class FileServiceTest extends AlgosIntegrationTest {
                 Arguments.of(AECopy.dirOnly, VUOTA, DEST, false, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirOnly, SOURCE, VUOTA, false, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirOnly, PATH_DIRECTORY_MANCANTE, DEST, false, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirOnly, SOURCE, DEST, true, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirOnly, SOURCE, PATH_DIRECTORY_DUE, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirOnly, SOURCE, DEST, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirDelete, SOURCE, PATH_DIRECTORY_MANCANTE, true, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirDelete, SOURCE, PATH_DIRECTORY_DUE, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirDelete, SOURCE, DEST, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirFilesAddOnly, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirFilesAddOnly, SOURCE, DEST, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirFilesAddOnly, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA),
                 Arguments.of(AECopy.dirFilesModifica, SOURCE, DEST, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_DUE, true, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST),
+                Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA),
+                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_TRE, true, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST),
                 Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_TRE, true, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST)
         );
     }
@@ -191,24 +212,6 @@ public class FileServiceTest extends AlgosIntegrationTest {
         unFile = null;
     }
 
-    private void creaCartelle() {
-        service.deleteDirectory(PATH_DIRECTORY_UNO);
-        service.deleteDirectory(PATH_DIRECTORY_DUE);
-        service.deleteDirectory(PATH_DIRECTORY_TRE);
-        service.creaDirectory(PATH_DIRECTORY_UNO);
-        service.creaDirectory(PATH_DIRECTORY_DUE);
-        service.creaDirectory(PATH_DIRECTORY_TRE);
-        service.creaFile(PATH_DIRECTORY_DUE + NOME_FILE_DUE);
-        service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_UNO);
-        service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_TRE);
-        service.sovraScriveFile(PATH_DIRECTORY_DUE + NOME_FILE_DUE, TESTO_TOKEN_POST + TESTO);
-        service.sovraScriveFile(PATH_DIRECTORY_TRE + NOME_FILE_UNO, TESTO_TOKEN_POST + TESTO);
-        service.sovraScriveFile(PATH_DIRECTORY_TRE + NOME_FILE_TRE, TESTO_TOKEN_POST + TESTO);
-    }
-
-    private void cancellaCartelle() {
-        service.deleteDirectory(PATH_DIRECTORY_TEST);
-    }
 
     @ParameterizedTest
     @MethodSource(value = "DIRECTORY")
@@ -775,7 +778,7 @@ public class FileServiceTest extends AlgosIntegrationTest {
 
         this.creaCartelle();
         //--prepare due cartella regolate nelle condizioni iniziali
-        fixCartelle(true);
+        fixSorgente(true);
 
         ottenutoRisultato = service.copyDirectory(typeCopy, srcPathDir, destPathDir, srcToken, destToken);
         assertNotNull(ottenutoRisultato);
@@ -783,7 +786,7 @@ public class FileServiceTest extends AlgosIntegrationTest {
         assertEquals(copiato, ottenutoRisultato.isValido());
 
         //--cancella le due cartella
-        fixCartelle(false);
+        fixSorgente(false);
     }
 
 
@@ -858,35 +861,74 @@ public class FileServiceTest extends AlgosIntegrationTest {
         print(listaStr);
     }
 
-    void fixCartelle(boolean inizio) {
-        String srcDir = PATH_DIRECTORY_TEST + "Sorgente";
-        String destDir = PATH_DIRECTORY_TEST + "Destinazione";
-        String srcDirSub1 = srcDir + SLASH + "Sub1";
-        String file1 = "Alfa.txt";
-        String file2 = NOME_FILE_TRE;
-        String file3 = "Gamma.txt";
+
+    private void creaCartelle() {
+        service.deleteDirectory(PATH_DIRECTORY_UNO);
+        service.deleteDirectory(PATH_DIRECTORY_DUE);
+        service.deleteDirectory(PATH_DIRECTORY_TRE);
+        service.deleteDirectory(PATH_DIRECTORY_TRE + NOME_DIR_SUB);
+
+        service.creaDirectory(PATH_DIRECTORY_UNO);
+        service.creaDirectory(PATH_DIRECTORY_DUE);
+        service.creaDirectory(PATH_DIRECTORY_TRE);
+        service.creaDirectory(PATH_DIRECTORY_TRE + NOME_DIR_SUB);
+
+        service.creaFile(PATH_DIRECTORY_UNO+NOME_FILE_SETTE);
+        service.creaFile(PATH_DIRECTORY_DUE + NOME_FILE_UNO);
+        service.creaFile(PATH_DIRECTORY_DUE + NOME_FILE_DUE);
+        service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_UNO);
+        service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_DUE);
+        service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_TRE);
+        service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_QUATTRO);
+        service.creaFile(PATH_DIRECTORY_TRE + NOME_DIR_SUB + NOME_FILE_CINQUE);
+        service.creaFile(PATH_DIRECTORY_TRE + NOME_DIR_SUB + NOME_FILE_SEI);
+        service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_SETTE);
+        service.creaFile(PATH_DIRECTORY_TRE + NOME_FILE_OTTO);
+
+        service.sovraScriveFile(PATH_DIRECTORY_TRE + NOME_FILE_UNO, TESTO_TOKEN_POST + TESTO_CON);
+        service.sovraScriveFile(PATH_DIRECTORY_DUE + NOME_FILE_DUE, TESTO_TOKEN_POST + TESTO_CON);
+        service.sovraScriveFile(PATH_DIRECTORY_TRE + NOME_FILE_DUE, TESTO_TOKEN_POST+"diverso");
+        service.sovraScriveFile(PATH_DIRECTORY_TRE + NOME_FILE_TRE, TESTO_SENZA);
+    }
+
+    private void cancellaCartelle() {
+        service.deleteDirectory(PATH_DIRECTORY_TEST);
+    }
+
+    void fixSorgente(boolean inizio) {
+        String srcDir = SOURCE;
+        String srcSub1 = SOURCE + SLASH + NOME_DIR_SUB;
+        String file1 = NOME_FILE_UNO;
+        String file2 = NOME_FILE_DUE;
+        String file3 = NOME_FILE_TRE;
+        String file4 = NOME_FILE_QUATTRO;
+
         File src = new File(srcDir);
-        File dest = new File(destDir);
-        File sub1 = new File(srcDirSub1);
+        File sub1 = new File(srcSub1);
+
         File fileUno = new File(srcDir + SLASH + file1);
         File fileDue = new File(srcDir + SLASH + file2);
-        File fileTre = new File(sub1 + SLASH + file3);
+        File fileTre = new File(srcDir + SLASH + file3);
+        File fileQuattro = new File(sub1 + SLASH + file4);
 
         if (inizio) {
             try {
                 src.mkdirs();
-                //                dest.mkdirs();
                 sub1.mkdirs();
                 fileUno.createNewFile();
                 fileDue.createNewFile();
                 fileTre.createNewFile();
+                fileQuattro.createNewFile();
             } catch (Exception unErrore) {
             }
+            service.sovraScriveFile(fileUno, TESTO_TOKEN_ANTE + TESTO_CON);
+            service.sovraScriveFile(fileDue, TESTO_TOKEN_ANTE + TESTO_CON);
+            service.sovraScriveFile(fileTre, TESTO_SENZA);
+            service.sovraScriveFile(fileQuattro, TESTO_SENZA);
         }
         else {
             try {
                 FileUtils.deleteDirectory(src);
-                FileUtils.deleteDirectory(dest);
             } catch (Exception unErrore) {
             }
         }

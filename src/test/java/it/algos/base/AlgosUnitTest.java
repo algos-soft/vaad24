@@ -590,7 +590,7 @@ public abstract class AlgosUnitTest {
     protected void printRisultato(AResult result) {
         List lista = result.getLista();
         lista = lista != null && lista.size() > 20 ? lista.subList(0, 10) : lista;
-        Map<String, String> mappa = result.getMappa();
+        Map<String, Object> mappa = result.getMappa();
 
         System.out.println(VUOTA);
         System.out.println("Risultato");
@@ -609,7 +609,7 @@ public abstract class AlgosUnitTest {
         System.out.println("Map value: ");
         if (mappa != null) {
             for (String key : mappa.keySet()) {
-                System.out.println(String.format("%s%s: %s", TAB, key, mappa.get(key)));
+                System.out.println(String.format("%s%s (%d): %s", TAB, key, ((List<String>)mappa.get(key)).size(),mappa.get(key)));
             }
         }
         System.out.println(String.format("Risultato ottenuto in %s", dateService.deltaText(inizio)));

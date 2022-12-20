@@ -8,6 +8,6 @@ package it.algos.vaad24.backend.enumeration;
  * Time: 13:45
  */
 public enum AEKeyMapFile {
-    sorgenti, destinazioneAnte, destinazionePost, aggiunti, eliminati, modificati, tokenModificati, tokenUguali
+    sorgenti, destinazioneAnte, aggiuntiNuovi, eliminati, modificati, uguali, tokenModificati, tokenUguali, destinazionePost
 
 }
