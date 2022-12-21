@@ -130,30 +130,29 @@ public class UtilityView extends VerticalLayout {
     }
 
     private void resetEsegue() {
+        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
         resetSingoloModulo(VaadVar.moduloVaadin24);
-        resetSingoloModulo(VaadVar.projectCurrent);
+        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
+        resetSingoloModulo(VaadVar.projectNameModulo);
+        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
     }
 
-    private void resetSingoloModulo(String moduleName) {
+    private void resetSingoloModulo(String nomeModulo) {
         AResult risultato;
+        boolean esiste;
         String message;
         List<Class> listaClazz;
-        String tagFinale = "/backend/packages";
-//        List<String> allPath = null;
 
-//        moduleName = textService.primaMinuscola(moduleName);
-//        allPath = fileService.getAllSubFilesJava(moduleName + tagFinale);
-
-        risultato = fileService.checkDirectory(moduleName);
-        if (risultato.isErrato()) {
-            logger.warn(new WrapLog().message(risultato.getErrorMessage()).type(AETypeLog.reset));
+        esiste = fileService.isEsisteModulo(nomeModulo);
+        if (!esiste) {
+            message = String.format("Non esiste il modulo '%s'",nomeModulo);
+            logger.warn(new WrapLog().message(message).type(AETypeLog.reset));
             return;
         }
 
-        listaClazz = classService.allModuleBackendResetOrderedClass(moduleName);
+        listaClazz = classService.allModuleBackendResetOrderedClass(nomeModulo);
         if (listaClazz != null && listaClazz.size() > 0) {
-            logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
-            message = String.format("Nel modulo %s ci sono %d classi che implementano il metodo %s", moduleName, listaClazz.size(), TAG_RESET_ONLY);
+            message = String.format("Nel modulo %s ci sono %d classi che implementano il metodo %s", nomeModulo, listaClazz.size(), TAG_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.reset));
             for (Class clazz : listaClazz) {
                 risultato = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_FORCING);
@@ -161,7 +160,7 @@ public class UtilityView extends VerticalLayout {
             }
         }
         else {
-            message = String.format("Nel modulo %s non ci sono classi che implementino il metodo %s", moduleName, TAG_RESET_ONLY);
+            message = String.format("Nel modulo %s non ci sono classi che implementino il metodo %s", nomeModulo, TAG_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.reset));
         }
     }
