@@ -1,7 +1,6 @@
 package it.algos.vaad24simple.backend.boot;
 
 import com.vaadin.flow.spring.annotation.*;
-import static it.algos.vaad24simple.backend.boot.SimpleCost.*;
 import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
@@ -11,10 +10,14 @@ import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.wrapper.*;
+import static it.algos.vaad24simple.backend.boot.SimpleCost.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.event.*;
+import org.springframework.context.event.EventListener;
 
+import javax.servlet.*;
 import java.util.*;
 
 /**
@@ -36,9 +39,18 @@ import java.util.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class SimpleBoot extends VaadBoot {
+public class SimpleBoot extends VaadBoot implements ServletContextListener {
 
     private String property;
+
+    /**
+     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
+     * event, the application is ready to service Vaadin requests <br>
+     */
+    @EventListener(ContextRefreshedEvent.class)
+    public void onContextRefreshEvent() {
+        this.inizia();
+    }
 
 
     /**
@@ -80,6 +92,19 @@ public class SimpleBoot extends VaadBoot {
         }
 
         /*
+         * Nome identificativo minuscolo del progetto corrente <br>
+         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         */
+        try {
+            property = "algos.simple.nameModulo";
+            VaadVar.projectNameModulo = Objects.requireNonNull(environment.getProperty(property)).toLowerCase();
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+            VaadVar.projectCurrent = "simple";
+        }
+
+        /*
          * Versione dell' applicazione <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
@@ -117,6 +142,13 @@ public class SimpleBoot extends VaadBoot {
             String message = String.format("Non ho trovato la property %s nelle risorse", property);
             logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
         }
+
+        /**
+         * Nome della classe di partenza col metodo 'main' <br>
+         * Spesso coincide (non obbligatoriamente) con projectCurrent + Application <br>
+         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         */
+        VaadVar.projectCurrentMainApplication = "Vaad24SimpleApplication";
     }
 
     /**

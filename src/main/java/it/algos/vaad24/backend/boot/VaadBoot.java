@@ -17,8 +17,6 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.*;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.event.EventListener;
-import org.springframework.context.event.*;
 import org.springframework.core.env.*;
 
 import javax.servlet.*;
@@ -125,14 +123,14 @@ public class VaadBoot implements ServletContextListener {
         this.setPrefInstance(prefInstance);
     }// end of constructor with @Autowired on setter
 
-    /**
-     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
-     * event, the application is ready to service Vaadin requests <br>
-     */
-    @EventListener(ContextRefreshedEvent.class)
-    public void onContextRefreshEvent() {
-        this.inizia();
-    }
+//    /**
+//     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
+//     * event, the application is ready to service Vaadin requests <br>
+//     */
+//    @EventListener(ContextRefreshedEvent.class)
+//    public void onContextRefreshEvent() {
+//        this.inizia();
+//    }
 
     /**
      * Primo ingresso nel programma <br>
