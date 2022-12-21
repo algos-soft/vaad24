@@ -224,6 +224,7 @@
         <!-- Spring security-->
 
 
+        <!-- https://mvnrepository.com/artifact/ch.carnet.kasparscherrer/indeterminate-checkbox -->
         <dependency>
             <groupId>ch.carnet.kasparscherrer</groupId>
             <artifactId>indeterminate-checkbox</artifactId>
