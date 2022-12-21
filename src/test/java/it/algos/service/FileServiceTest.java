@@ -196,7 +196,6 @@ public class FileServiceTest extends AlgosIntegrationTest {
                 Arguments.of(null, false, VUOTA),
                 Arguments.of(VUOTA, false, VUOTA),
                 Arguments.of(VaadVar.moduloVaadin24, true, "VaadVar.moduloVaadin24"),
-                Arguments.of(VaadVar.projectCurrent, false, "VaadVar.projectCurrent"),
                 Arguments.of(VaadVar.projectNameUpper, false, "VaadVar.projectNameUpper"),
                 Arguments.of(VaadVar.projectNameModulo, true, "VaadVar.projectNameModulo"),
                 Arguments.of(VaadVar.projectVaadin24, true, "VaadVar.projectVaadin24"),
@@ -894,7 +893,7 @@ public class FileServiceTest extends AlgosIntegrationTest {
         //--nomeModulo
         //--esiste modulo
         //--variabile di sistema (opzionale)
-    void sss(final String nomeModulo, boolean esiste, String nomeVariabile) {
+    void isEsisteModulo(final String nomeModulo, boolean esiste, String nomeVariabile) {
         System.out.println("40 - lastDirectory");
         System.out.println(VUOTA);
 

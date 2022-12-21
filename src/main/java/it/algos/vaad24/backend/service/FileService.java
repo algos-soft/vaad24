@@ -191,6 +191,13 @@ public class FileService extends AbstractService {
      * @return true se il modulo esiste, false se non sono rispettate le condizioni della richiesta
      */
     public boolean isEsisteModulo(final String nomeModulo) {
+        if (textService.isEmpty(nomeModulo)) {
+            return false;
+        }
+        if (nomeModulo.equals(textService.primaMaiuscola(nomeModulo))) {
+            return false;
+        }
+
         String absolutePathDirectoryToBeChecked = getPathDir(nomeModulo);
         return isEsisteDirectory(absolutePathDirectoryToBeChecked);
     }
