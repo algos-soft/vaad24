@@ -1,6 +1,16 @@
-                          _  ____   _  _   
+ ${AnsiColor.GREEN}
+                          _  ____   _  _
 __   __  __ _   __ _   __| ||___ \ | || |  
 \ \ / / / _` | / _` | / _` |  __) || || |_ 
  \ V / | (_| || (_| || (_| | / __/ |__   _|
   \_/   \__,_| \__,_| \__,_||_____|   |_|  
-                                           
+
+${AnsiColor.RED}
+Vaad24 FrameWork  (c)Algos
+Java ver: ${AnsiColor.GREEN}${java.version}${AnsiColor.RED}
+SpringBoot ver: ${AnsiColor.GREEN}${spring-boot.formatted-version}${AnsiColor.RED}
+Vaadin ver: ${AnsiColor.GREEN}${vaadin.version}${AnsiColor.RED}
+Vaad24 ver: ${AnsiColor.GREEN}${algos.vaad24.version}${AnsiColor.RED} di ${AnsiColor.GREEN}${algos.vaad24.version.date}${AnsiColor.RED}
+Simple ver: ${AnsiColor.GREEN}${algos.simple.version}${AnsiColor.RED} di ${AnsiColor.GREEN}${algos.simple.version.date}${AnsiColor.RED}
+Tomcat port: ${AnsiColor.GREEN}${server.port}${AnsiColor.RED}
+${AnsiColor.DEFAULT}
