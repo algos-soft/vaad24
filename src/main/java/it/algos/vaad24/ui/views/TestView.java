@@ -1,6 +1,5 @@
 package it.algos.vaad24.ui.views;
 
-import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.confirmdialog.*;
 import com.vaadin.flow.component.html.*;
@@ -40,6 +39,7 @@ public class TestView extends VerticalLayout {
         this.setSpacing(false);
 
         this.titolo();
+        this.paragrafoNota();
         this.paragrafoAvviso();
         this.paragrafoConferma();
     }
@@ -50,6 +50,33 @@ public class TestView extends VerticalLayout {
         this.add(titolo);
     }
 
+    public void paragrafoNota() {
+        VerticalLayout layout = new VerticalLayout();
+        HorizontalLayout barra = new HorizontalLayout();
+        layout.setMargin(false);
+        layout.setPadding(false);
+        layout.setSpacing(false);
+        H3 paragrafo = new H3("Nota");
+        paragrafo.getElement().getStyle().set("color", "blue");
+        Span span;
+        String message;
+
+        layout.add(new Label("Label di testo semplice (vert)"));
+        layout.add(new Span("Span di testo semplice (vert)"));
+
+        span = ASpan.getSpan("Prova iniziale span con <b>grassetto</b>");
+        barra.add(span);
+        barra.add(new Span("Span di testo semplice (oriz)"));
+
+        //        message="Prova iniziale span con <b>grassetto</b>";
+        //        span.getElement().setProperty("innerHTML", message);
+        //        barra.add(span);
+
+        this.add(paragrafo);
+        this.add(layout);
+        this.add(barra);
+    }
+
     public void paragrafoAvviso() {
         VerticalLayout layout = new VerticalLayout();
         HorizontalLayout barra = new HorizontalLayout();
@@ -58,15 +85,8 @@ public class TestView extends VerticalLayout {
         layout.setSpacing(false);
         H3 paragrafo = new H3("Avviso");
         paragrafo.getElement().getStyle().set("color", "blue");
-        Span span=new Span();
 
-        layout.add(new Label("Visualizzazione di un avviso. Usa la classe Avviso con metodi statici. Posizione di default in basso a sinistra. Tempo di default di 2 secondi."));
-        span.getElement().setProperty("innerHTML", "<b>hello</b>");
-        layout.add( new Html("Metodi statici per visualizzazione primary, success ed <b>error</b>. Metodi per durata maggiore/minore dei 2 secondi."));
-        layout.add( new Span("Metodi statici per visualizzazione primary, success ed <red>error</red>. Metodi per durata maggiore/minore dei 2 secondi."));
-        span.getElement().setProperty("innerHTML", "Fortse <b>hello</b>");
-Html html=new Html("Forse <b>hello</b>");
-        layout.add(span);
+        layout.add(new Label("Visualizzazione un dialogo di un avviso. Usa la classe Avviso con metodi statici. Posizione di default in basso a sinistra. Tempo di default di 2 secondi."));
 
         Button bottone = new Button("Base");
         bottone.addClickListener(event -> avviso());
@@ -127,45 +147,47 @@ Html html=new Html("Forse <b>hello</b>");
     }
 
     public void avviso() {
-        Avviso.build().text("Avviso semplice").open();
+        Avviso.open("Avviso semplice");
     }
 
     public void avvisoPrimary() {
-        Avviso.build().text("Avviso primario").primary().open();
+        Avviso.text("Avviso primario").primary().open();
     }
 
     public void avvisoSuccess() {
-        Avviso.build().text("Avviso positivo").success().open();
+        Avviso.text("Avviso positivo").success().open();
     }
 
     public void avvisoContrasto() {
-        Avviso.build().text("Avviso di contrasto").contrast().open();
+        Avviso.text("Avviso di contrasto").contrast().open();
     }
+
     public void avvisoError() {
-        Avviso.build().text("Avviso di errore").error().open();
+        Avviso.text("Avviso di errore").error().open();
     }
 
     public void avvisoLungo() {
-        Avviso.build().text("Avviso lungo (3 secondi invece di 2)").durata(3).open();
+        Avviso.text("Avviso lungo (3 secondi invece di 2)").durata(3).open();
     }
 
     public void avvisoCentrato() {
-        Avviso.build().text("Posizione centrale base").middle().open();
+        Avviso.text("Posizione centrale base").middle().open();
     }
 
     public void avvisoCentratoPrimary() {
-        Avviso.build().text("Posizione centrale primary").primary().middle().open();
+        Avviso.text("Posizione centrale primary").primary().middle().open();
     }
 
     public void avvisoCentratoSuccess() {
-        Avviso.build().text("Posizione centrale successo").success().middle().open();
+        Avviso.text("Posizione centrale successo").success().middle().open();
     }
 
     public void avvisoCentratoContrasto() {
-        Avviso.build().text("Posizione centrale contrasto").contrast().middle().open();
+        Avviso.text("Posizione centrale contrasto").contrast().middle().open();
     }
+
     public void avvisoCentratoErrore() {
-        Avviso.build().text("Posizione centrale errore").error().middle().open();
+        Avviso.text("Posizione centrale errore").error().middle().open();
     }
 
 
@@ -196,21 +218,22 @@ Html html=new Html("Forse <b>hello</b>");
     }
 
     public void conferma() {
-        ConfirmDialog dialog= new ConfirmDialog();
+        ConfirmDialog dialog = new ConfirmDialog();
         dialog.setText("Prova");
         dialog.open();
     }
+
     public void confermaAnnulla() {
-        ConfirmDialog dialog= new ConfirmDialog();
+        ConfirmDialog dialog = new ConfirmDialog();
         dialog.setHeader("Delete \"Report Q4\"?");
         dialog.setText("Are you sure you want to permanently delete this item");
 
         dialog.setCancelable(true);
-//        dialog.addCancelListener(event -> setStatus("Canceled"));
+        //        dialog.addCancelListener(event -> setStatus("Canceled"));
 
         dialog.setConfirmText("Delete");
         dialog.setConfirmButtonTheme("error primary");
-//        dialog.addConfirmListener(event -> setStatus("Deleted"));
+        //        dialog.addConfirmListener(event -> setStatus("Deleted"));
         dialog.open();
     }
 

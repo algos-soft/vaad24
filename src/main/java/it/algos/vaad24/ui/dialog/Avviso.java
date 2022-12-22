@@ -14,47 +14,32 @@ public class Avviso {
 
     public static final int DURATA = 2000;
 
+    public static final Notification.Position POSIZIONE = Notification.Position.BOTTOM_START;
+
     private String text;
 
-    private Notification.Position posizione = Notification.Position.BOTTOM_START;
+    private Notification.Position posizione = POSIZIONE;
 
     private NotificationVariant themeVariant = null;
 
-    private int durata;
+    private int durata = DURATA;
 
-    public static Notification show(String text) {
-        return Notification.show(text, 2000, Notification.Position.BOTTOM_START);
+    public static void show(String text) {
+         Notification.show(text, DURATA, POSIZIONE);
     }
 
-    //    public static Notification showPrimary(String text) {
-    //        Notification notification = Notification.show(text, durata(), Notification.Position.BOTTOM_START);
-    //        notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
-    //        return notification;
-    //    }
-    //
-    //    public static Notification showSuccess(String text) {
-    //        Notification notification = Notification.show(text, durata(), Notification.Position.BOTTOM_START);
-    //        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-    //        return notification;
-    //    }
 
-    //    public static Notification showError(String text) {
-    //        Notification notification = Notification.show(text, durata(), Notification.Position.BOTTOM_START);
-    //        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-    //        return notification;
-    //    }
-
-    public static Notification show1000(String text) {
-        return Notification.show(text, 1000, Notification.Position.BOTTOM_START);
-    }
-
-    public static Notification show2000(String text) {
-        return Notification.show(text, 2000, Notification.Position.BOTTOM_START);
-    }
-
-    public static Notification show3000(String text) {
-        return Notification.show(text, 3000, Notification.Position.BOTTOM_START);
-    }
+//    public static Notification show1000(String text) {
+//        return Notification.show(text, 1000, Notification.Position.BOTTOM_START);
+//    }
+//
+//    public static Notification show2000(String text) {
+//        return Notification.show(text, 2000, Notification.Position.BOTTOM_START);
+//    }
+//
+//    public static Notification show3000(String text) {
+//        return Notification.show(text, 3000, Notification.Position.BOTTOM_START);
+//    }
 
     //    public static Notification center(String text) {
     //        return Notification.show(text, durata(), Notification.Position.MIDDLE);
@@ -78,13 +63,16 @@ public class Avviso {
     //        return notification;
     //    }
 
-    public static Avviso build() {
-        return new Avviso();
+
+    public static void open(String text) {
+         Notification.show(text, DURATA, POSIZIONE);
     }
 
-    public Avviso text(String text) {
-        this.text = text;
-        return this;
+    public static Avviso text(String text) {
+        Avviso avviso = new Avviso();
+
+        avviso.text = text;
+        return avviso;
     }
 
     public Avviso primary() {

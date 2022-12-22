@@ -1,16 +1,14 @@
 package it.algos.vaad24.wizard.scripts;
 
 import com.vaadin.flow.component.checkbox.*;
-import com.vaadin.flow.component.notification.*;
 import com.vaadin.flow.spring.annotation.*;
-import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.wizard.enumeration.*;
-import static it.algos.vaad24.wizard.scripts.WizCost.*;
 import static it.algos.vaad24.wizard.scripts.WizElaboraNewProject.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -62,7 +60,7 @@ public class WizElaboraUpdateProject extends WizElabora {
                 }
             }
         }
-        Avviso.show("Update project").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        Avviso.text("Update project").success().open();
 
         super.eliminaSources();
     }
