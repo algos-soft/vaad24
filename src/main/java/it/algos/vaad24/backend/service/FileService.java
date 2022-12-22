@@ -1864,7 +1864,14 @@ public class FileService extends AbstractService {
      * @return lista dei path completi
      */
     public List<String> getPathModuloPackageFiles() {
-        return getPathModuloPackageFiles(VaadVar.projectNameModulo);
+        List<String> filesAll = new ArrayList<>();
+        List<String> filesVaad24 = getPathModuloPackageFiles(VaadVar.moduloVaadin24);
+        List<String> filesCurrent = getPathModuloPackageFiles(VaadVar.projectNameModulo);
+
+        filesAll.addAll(filesVaad24);
+        filesAll.addAll(filesCurrent);
+
+        return filesAll;
     }
 
 

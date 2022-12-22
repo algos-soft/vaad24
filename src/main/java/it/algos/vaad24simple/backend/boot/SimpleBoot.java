@@ -10,6 +10,7 @@ import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.wrapper.*;
+import it.algos.vaad24.ui.views.*;
 import static it.algos.vaad24simple.backend.boot.SimpleCost.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
@@ -218,6 +219,7 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
 
     @Override
     protected void fixMenuRoutes() {
+        VaadVar.menuRouteList.add(TestView.class);
         super.fixMenuRoutes();
 
         VaadVar.menuRouteList.add(ContinenteView.class); VaadVar.menuRouteList.add(MeseView.class);

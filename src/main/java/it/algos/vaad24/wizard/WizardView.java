@@ -9,9 +9,7 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.service.*;
-import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.views.*;
 import it.algos.vaad24.wizard.scripts.*;
 import org.springframework.beans.factory.annotation.*;
@@ -33,7 +31,7 @@ import java.util.*;
  */
 @SpringComponent
 @Route(value = VaadCost.TAG_WIZ, layout = MainLayout.class)
-@RouteAlias(value = TAG_ROUTE_ALIAS_PARTE_PER_PRIMA, layout = MainLayout.class)
+//@RouteAlias(value = TAG_ROUTE_ALIAS_PARTE_PER_PRIMA, layout = MainLayout.class)
 @CssImport("./styles/shared-styles.css")
 public class WizardView extends VerticalLayout {
 
