@@ -2,8 +2,8 @@ package it.algos.vaad24.wizard.scripts;
 
 import com.vaadin.flow.component.checkbox.*;
 import com.vaadin.flow.spring.annotation.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -60,7 +60,7 @@ public class WizElaboraUpdateProject extends WizElabora {
                 }
             }
         }
-        Avviso.text("Update project").success().open();
+        Avviso.message("Update project").success().open();
 
         super.eliminaSources();
     }

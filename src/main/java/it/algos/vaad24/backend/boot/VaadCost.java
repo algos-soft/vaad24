@@ -63,6 +63,7 @@ public class VaadCost {
 
     public static final String TAG_WIZ = "wizard";
     public static final String TAG_TEST = "test";
+    public static final String TAG_HTML_COLOR = "color";
 
     public static final String TAG_ROUTE_ALIAS_PARTE_PER_PRIMA = "";
 

@@ -689,18 +689,18 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     protected void resetEsegue() {
         if (crudBackend.resetForcing().isValido()) {
             grid.setItems(crudBackend.findAll(sortOrder));
-            Avviso.text("Eseguito reset all").success().open();
+            Avviso.message("Eseguito reset all").success().open();
             refresh();
         }
         else {
-            Avviso.text("Reset non eseguito").error().open();
+            Avviso.message("Reset non eseguito").error().open();
         }
     }
 
     protected void deleteEsegue() {
         crudBackend.deleteAll();
         grid.setItems(crudBackend.findAll(sortOrder));
-        Avviso.text("Delete all").success().open();
+        Avviso.message("Delete all").success().open();
     }
 
     /**
@@ -772,7 +772,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     public void deleteHandler(final AEntity entityBean) {
         crudBackend.delete(entityBean);
         grid.setItems(crudBackend.findAll(sortOrder));
-        Avviso.text(String.format("%s successfully deleted", entityBean)).success().open();
+        Avviso.message(String.format("%s successfully deleted", entityBean)).success().open();
     }
 
     public void annullaHandler(final AEntity entityBean) {

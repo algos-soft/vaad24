@@ -413,7 +413,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         enumPref.inizia();
         //        vaadBoot.fixPreferenze();
         grid.setItems(backend.findAll());
-        Avviso.text("Refreshed view").primary().open();
+        Avviso.message("Refreshed view").primary().open();
     }
 
     /**
@@ -426,7 +426,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
     public void deleteHandler(final Preferenza entityBean) {
         backend.delete(entityBean);
         grid.setItems(backend.findAll());
-        Avviso.text(String.format("%s successfully deleted", entityBean.code)).success().open();
+        Avviso.message(String.format("%s successfully deleted", entityBean.code)).success().open();
     }
 
     public void annullaHandler(final Preferenza entityBean) {
