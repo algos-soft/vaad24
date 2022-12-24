@@ -42,10 +42,13 @@ public class TestView extends VerticalLayout {
         this.paragrafoSpan();
         this.paragrafoAvviso();
         this.paragrafoConferma();
+        //        this.paragrafoConfermaAnnulla();
+        //        this.paragrafoConfermaAnnullaCancella();
     }
 
+
     public void titolo() {
-        H1 titolo = new H1("Pagina di test");
+        H2 titolo = new H2("Pagina di test");
         titolo.getElement().getStyle().set("color", "green");
         this.add(titolo);
     }
@@ -56,15 +59,25 @@ public class TestView extends VerticalLayout {
         layout.setMargin(false);
         layout.setPadding(false);
         layout.setSpacing(false);
-        H3 paragrafo = new H3("Nota");
+        barra.setMargin(false);
+        barra.setPadding(false);
+        barra.setSpacing(true);
+        H3 paragrafo = new H3("ASpan");
         paragrafo.getElement().getStyle().set("color", "blue");
 
-        layout.add(new Label("Label di testo semplice (vert)"));
-        layout.add(ASpan.text("ASpan di testo semplice (vert)"));
-
+        layout.add(new Label("Label di testo semplice (non modificabile). Specifico per componenti e non per testi"));
+        layout.add(ASpan.text("ASpan di testo semplice. -> ASpan.text(\"Un testo\")"));
+        layout.add(ASpan.text("Testo html con inserti <span style=\"color:red;\">rosso</span> di sera e <span style=\"color:green;font-weight:bold\">verde</span> di mattina"));
+        barra.add(ASpan.text("-> ASpan.text(\"Un testo\").verde().bold().small().italic():"));
+        barra.add(ASpan.text("Verde").verde().bold().small().italic());
+        barra.add(ASpan.text("Altri ->"));
         barra.add(ASpan.text("Verde").verde());
         barra.add(ASpan.text("Blue").blue());
         barra.add(ASpan.text("Rosso").rosso());
+        barra.add(ASpan.text("Italic").rosso().bold().italic());
+        barra.add(ASpan.text("Small").blue().bold().small());
+        barra.add(ASpan.text("Normale").blue().bold());
+        barra.add(ASpan.text("Big").blue().bold().big());
 
         this.add(paragrafo);
         this.add(layout);
@@ -80,7 +93,7 @@ public class TestView extends VerticalLayout {
         H3 paragrafo = new H3("Avviso");
         paragrafo.getElement().getStyle().set("color", "blue");
 
-        layout.add(new Label("Visualizzazione un dialogo di un avviso. Usa la classe Avviso con metodi statici. Posizione di default in basso a sinistra. Tempo di default di 2 secondi."));
+        layout.add(new Label("Visualizzazione un dialogo di un avviso a tempo e senza bottoni. Usa la classe Avviso con metodi statici. Posizione di default in basso a sinistra. Tempo di default di 2 secondi."));
 
         Button bottone = new Button("Base");
         bottone.addClickListener(event -> Avviso.show("Avviso semplice"));
@@ -122,7 +135,7 @@ public class TestView extends VerticalLayout {
 
         Button bottone9 = new Button("Centrato successo");
         bottone9.getElement().setAttribute("theme", "success");
-        bottone9.addClickListener(event ->  Avviso.message("Posizione centrale successo").success().middle().open());
+        bottone9.addClickListener(event -> Avviso.message("Posizione centrale successo").success().middle().open());
         barra.add(bottone9);
 
         Button bottone10 = new Button("Centrato contrasto");
@@ -141,50 +154,150 @@ public class TestView extends VerticalLayout {
     }
 
 
-
     public void paragrafoConferma() {
         VerticalLayout layout = new VerticalLayout();
+        VerticalLayout layout2 = new VerticalLayout();
+        VerticalLayout layout3 = new VerticalLayout();
         HorizontalLayout barra = new HorizontalLayout();
+        HorizontalLayout barra2 = new HorizontalLayout();
+        HorizontalLayout barra3 = new HorizontalLayout();
         layout.setMargin(false);
         layout.setPadding(false);
         layout.setSpacing(false);
+        layout2.setMargin(false);
+        layout2.setPadding(false);
+        layout2.setSpacing(false);
+        layout3.setMargin(false);
+        layout3.setPadding(false);
+        layout3.setSpacing(false);
         H3 paragrafo = new H3("Conferma");
         paragrafo.getElement().getStyle().set("color", "blue");
 
-        layout.add(new Label("Visualizzazione di un dialogo di conferma"));
+        layout.add(new Label("Visualizzazione di un dialogo di conferma con titolo, messaggio e un bottone"));
 
         Button bottone = new Button("Conferma");
         bottone.getElement().setAttribute("theme", "primary");
         bottone.addClickListener(event -> conferma());
         barra.add(bottone);
 
-        Button bottone2 = new Button("Conferma+Annulla");
+        Button bottone2 = new Button("Conferma");
         bottone2.getElement().setAttribute("theme", "primary");
-        bottone2.addClickListener(event -> confermaAnnulla());
+        bottone2.addClickListener(event -> conferma2());
         barra.add(bottone2);
 
-        this.add(paragrafo);
+        Button bottone3 = new Button("Conferma");
+        bottone3.getElement().setAttribute("theme", "primary");
+        bottone3.addClickListener(event -> conferma3());
+        barra.add(bottone3);
+
+        Button bottone4 = new Button("Conferma");
+        bottone4.getElement().setAttribute("theme", "primary");
+        bottone4.addClickListener(event -> conferma4());
+        barra.add(bottone4);
+
+        Button bottone5 = new Button("Conferma");
+        bottone5.getElement().setAttribute("theme", "primary");
+        bottone5.addClickListener(event -> conferma5());
+        barra.add(bottone5);
         layout.add(barra);
+
+        layout2.add(new Label("Visualizzazione di un dialogo di conferma con titolo, messaggio e due bottoni. Conferma e annulla"));
+        Button bottone6 = new Button("Conferma");
+        bottone6.getElement().setAttribute("theme", "primary");
+        bottone6.addClickListener(event -> conferma6());
+        barra2.add(bottone6);
+        layout2.add(barra2);
+
+        Button bottone7 = new Button("Reset");
+        bottone7.getElement().setAttribute("theme", "error primary");
+        bottone7.addClickListener(event -> AConfirm.reset());
+        barra2.add(bottone7);
+        layout2.add(barra2);
+
+        layout3.add(new Label("Visualizzazione di un dialogo di conferma con titolo, messaggio e tre bottoni. Conferma, annulla e rifiuta"));
+        Button bottone10 = new Button("Conferma");
+        bottone10.getElement().setAttribute("theme", "primary");
+        bottone10.addClickListener(event -> conferma8());
+        barra3.add(bottone10);
+        layout3.add(barra3);
+
+        this.add(paragrafo);
         this.add(layout);
+        this.add(layout2);
+        this.add(layout3);
     }
 
+
     public void conferma() {
-        ConfirmDialog dialog = new ConfirmDialog();
-        dialog.setText("Prova");
-        dialog.open();
+        String message = "Solo testo senza titolo.</br>Con show(Questo testo) si apre subito.</br>Oppure con html(Questo testo).</br>Testo sempre in formato html coi vari tag disponibili.";
+        AConfirm.html(message);
+    }
+
+    public void conferma2() {
+        String message = "Solo titolo. Dopo title(\"Un titolo\") si apre con open(). No html.";
+        AConfirm.title(message).open();
+    }
+
+    public void conferma3() {
+        String message = "Dopo title(\"Titolo\"),</br>message(\"Questo testo\")</br>si apre con open().";
+        AConfirm.title("Titolo").message(message).open();
+    }
+
+    public void conferma4() {
+        String message = "Dopo title(\"Salva\"),</br>message(\"Questo testo\")</br>confirm(\"Salva\")</br>si apre con open().";
+        AConfirm.title("Salva").message(message).confirm("Salva").open();
+    }
+
+    public void conferma5() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("Diverse righe formattate in html");
+        buffer.append("</br>");
+
+        buffer.append(ASpan.text("Ogni riga resa diversamente").rosso().get());
+        buffer.append("</br>");
+        buffer.append(ASpan.text("Con diversi stili").verde().bold().get());
+        buffer.append("</br>");
+        buffer.append("Per ogni riga");
+        buffer.append("</br>");
+        buffer.append("O anche <span style=\"color:green;\">misti</span> nella <span style=\"color:blue;font-weight:bold\">stessa</span> riga.");
+        AConfirm.title("Salva").message(buffer.toString()).confirm("Salva").open();
+    }
+
+    public void conferma6() {
+        String message = "Secondo bottone 'cancel'";
+        AConfirm.title("Titolo").message(message).annulla().open();
+    }
+
+    public void conferma7() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("Ripristina nel database i valori di default annullando le eventuali modifiche apportate successivamente");
+        buffer.append("</br>");
+        buffer.append(ASpan.text("Sei sicuro di volerli cancellare tutti?").rosso().bold().get());
+        buffer.append("</br>");
+        buffer.append(ASpan.text("L'operazione è irreversibile").blue().bold().get());
+        AConfirm.title("Reset").message(buffer.toString()).confirmError("Reset").annullaPrimary().open();
+    }
+
+    public void conferma8() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("Secondo bottone 'cancel' -> annulla");
+        buffer.append("</br>");
+        buffer.append("Terzo bottone 'reject' -> rifiuta");
+        buffer.append("</br>");
+        buffer.append("Se si usa rifiuta() per il terzo bottone, il secondo è automatico.");
+        AConfirm.title("Titolo").message(buffer.toString()).rifiuta().open();
     }
 
     public void confermaAnnulla() {
+        //        ConfirmDialog dialog = new ConfirmDialog();
+        //        dialog.setText("Due bottoni");
+        //        dialog.open();
+        //        AConfirm.header("Header").open();
+    }
+
+    public void confermaAnnullaCancella() {
         ConfirmDialog dialog = new ConfirmDialog();
-        dialog.setHeader("Delete \"Report Q4\"?");
-        dialog.setText("Are you sure you want to permanently delete this item");
-
-        dialog.setCancelable(true);
-        //        dialog.addCancelListener(event -> setStatus("Canceled"));
-
-        dialog.setConfirmText("Delete");
-        dialog.setConfirmButtonTheme("error primary");
-        //        dialog.addConfirmListener(event -> setStatus("Deleted"));
+        dialog.setText("Tre bottoni");
         dialog.open();
     }
 

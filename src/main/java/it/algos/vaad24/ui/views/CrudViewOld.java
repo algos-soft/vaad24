@@ -288,7 +288,7 @@ public abstract class CrudViewOld extends VerticalLayout implements AfterNavigat
     }
 
     public void spanBlue(final String message) {
-        span(new WrapSpan(message).color(AETypeColor.blu));
+        span(new WrapSpan(message).color(AETypeColor.blue));
     }
 
     public void spanRosso(final String message) {
@@ -310,10 +310,10 @@ public abstract class CrudViewOld extends VerticalLayout implements AfterNavigat
         }
         if (wrap.getFontHeight() == null) {
             if (width == 0 || width > 500) {
-                wrap.fontHeight(AEFontHeight.em9);
+                wrap.fontHeight(AEFontSize.em9);
             }
             else {
-                wrap.fontHeight(AEFontHeight.em7);
+                wrap.fontHeight(AEFontSize.em7);
             }
         }
         if (wrap.getLineHeight() == null) {

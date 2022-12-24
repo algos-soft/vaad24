@@ -614,7 +614,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         if (bottomPlaceHolder != null) {
             bottomPlaceHolder.removeAll();
             if (usaBottomTotale) {
-                bottomPlaceHolder.add(htmlService.getSpan(new WrapSpan(message).color(AETypeColor.verde).weight(AEFontWeight.bold).fontHeight(AEFontHeight.em7)));
+                bottomPlaceHolder.add(htmlService.getSpan(new WrapSpan(message).color(AETypeColor.verde).weight(AEFontWeight.bold).fontHeight(AEFontSize.em7)));
             }
 
             if (usaBottomInfo) {
@@ -625,7 +625,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
                 //--Locale.US per forzare la visualizzazione grafica di un punto anziché una virgola
                 message = String.format(Locale.US, "Algos® - %s %2.1f di %s%s", nome, doppio, data, note);
-                bottomPlaceHolder.add(htmlService.getSpan(new WrapSpan(message).color(AETypeColor.blu).weight(AEFontWeight.bold).fontHeight(AEFontHeight.em7)));
+                bottomPlaceHolder.add(htmlService.getSpan(new WrapSpan(message).color(AETypeColor.blue).weight(AEFontWeight.bold).fontHeight(AEFontSize.em7)));
             }
         }
     }
@@ -819,7 +819,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     }
 
     public void addSpanBlue(final String message) {
-        alertPlaceHolder.add(getSpan(new WrapSpan(message).color(AETypeColor.blu)));
+        alertPlaceHolder.add(getSpan(new WrapSpan(message).color(AETypeColor.blue)));
     }
 
     public void addSpanRosso(final String message) {
@@ -839,10 +839,10 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         }
         if (wrap.getFontHeight() == null) {
             if (browserWidth == 0 || browserWidth > 500) {
-                wrap.fontHeight(AEFontHeight.em9);
+                wrap.fontHeight(AEFontSize.em9);
             }
             else {
-                wrap.fontHeight(AEFontHeight.em7);
+                wrap.fontHeight(AEFontSize.em7);
             }
         }
         if (wrap.getLineHeight() == null) {

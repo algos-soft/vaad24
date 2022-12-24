@@ -62,8 +62,20 @@ public class VaadCost {
     public static final String MODULO_VAADIN24 = "vaad24";
 
     public static final String TAG_WIZ = "wizard";
+
     public static final String TAG_TEST = "test";
+
+    public static final String TAG_INNER_HTML = "innerHTML";
+
     public static final String TAG_HTML_COLOR = "color";
+
+    public static final String TAG_HTML_FONT_WEIGHT = "font-weight";
+
+    public static final String TAG_HTML_FONT_SIZE = "font-size";
+
+    public static final String TAG_HTML_LINE_HEIGHT = "line-height";
+
+    public static final String TAG_HTML_FONT_STYLE = "font-style";
 
     public static final String TAG_ROUTE_ALIAS_PARTE_PER_PRIMA = "";
 
@@ -535,5 +547,10 @@ public class VaadCost {
     public static final String REFLECTION_FILE = "file:";
 
     public static final String REFLECTION_JAR = "jar:";
+
+    public static final String BUTTON_CONFERMA = "Conferma";
+
+    public static final String BUTTON_CANCELLA = "Annulla";
+    public static final String BUTTON_REJECT = "Cancella";
 
 }
