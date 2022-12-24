@@ -377,7 +377,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
             if (AREntity.class.isAssignableFrom(entityClazz) || usaReset) {
                 buttonDeleteReset.getElement().setProperty("title", "Reset: ripristina nel database i valori di default annullando le " +
                         "eventuali modifiche apportate successivamente\nShortcut SHIFT+R");
-                buttonDeleteReset.addClickListener(event -> resetDialog());
+                buttonDeleteReset.addClickListener(event -> AReset.reset(this::reset));
                 buttonDeleteReset.addClickShortcut(Key.KEY_R, KeyModifier.SHIFT);
             }
             else {
@@ -678,18 +678,18 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         grid.setItems(crudBackend.findAll(sortOrder));
     }
 
-    protected void resetDialog() {
-        appContext.getBean(DialogReset.class).open(this::resetEsegue);
-    }
+//    protected void resetDialog() {
+//        appContext.getBean(DialogReset.class).open(this::resetEsegue);
+//    }
 
     protected void deleteAll() {
         appContext.getBean(DialogDeleteAll.class).open(this::deleteEsegue);
     }
 
-    protected void resetEsegue() {
+    protected void reset() {
         if (crudBackend.resetForcing().isValido()) {
             grid.setItems(crudBackend.findAll(sortOrder));
-            Avviso.message("Eseguito reset all").success().open();
+            Avviso.message("Eseguito reset completo").success().open();
             refresh();
         }
         else {

@@ -42,7 +42,7 @@ public class TestView extends VerticalLayout {
         this.paragrafoSpan();
         this.paragrafoAvviso();
         this.paragrafoConferma();
-        //        this.paragrafoConfermaAnnulla();
+                this.paragrafoDelete();
         //        this.paragrafoConfermaAnnullaCancella();
     }
 
@@ -208,12 +208,6 @@ public class TestView extends VerticalLayout {
         barra2.add(bottone6);
         layout2.add(barra2);
 
-        Button bottone7 = new Button("Reset");
-        bottone7.getElement().setAttribute("theme", "error primary");
-        bottone7.addClickListener(event -> AConfirm.reset());
-        barra2.add(bottone7);
-        layout2.add(barra2);
-
         layout3.add(new Label("Visualizzazione di un dialogo di conferma con titolo, messaggio e tre bottoni. Conferma, annulla e rifiuta"));
         Button bottone10 = new Button("Conferma");
         bottone10.getElement().setAttribute("theme", "primary");
@@ -251,14 +245,14 @@ public class TestView extends VerticalLayout {
     public void conferma5() {
         StringBuffer buffer = new StringBuffer();
         buffer.append("Diverse righe formattate in html");
-        buffer.append("</br>");
+        buffer.append(CAPO_HTML);
 
         buffer.append(ASpan.text("Ogni riga resa diversamente").rosso().get());
-        buffer.append("</br>");
+        buffer.append(CAPO_HTML);
         buffer.append(ASpan.text("Con diversi stili").verde().bold().get());
-        buffer.append("</br>");
+        buffer.append(CAPO_HTML);
         buffer.append("Per ogni riga");
-        buffer.append("</br>");
+        buffer.append(CAPO_HTML);
         buffer.append("O anche <span style=\"color:green;\">misti</span> nella <span style=\"color:blue;font-weight:bold\">stessa</span> riga.");
         AConfirm.title("Salva").message(buffer.toString()).confirm("Salva").open();
     }
@@ -271,9 +265,9 @@ public class TestView extends VerticalLayout {
     public void conferma7() {
         StringBuffer buffer = new StringBuffer();
         buffer.append("Ripristina nel database i valori di default annullando le eventuali modifiche apportate successivamente");
-        buffer.append("</br>");
+        buffer.append(CAPO_HTML);
         buffer.append(ASpan.text("Sei sicuro di volerli cancellare tutti?").rosso().bold().get());
-        buffer.append("</br>");
+        buffer.append(CAPO_HTML);
         buffer.append(ASpan.text("L'operazione è irreversibile").blue().bold().get());
         AConfirm.title("Reset").message(buffer.toString()).confirmError("Reset").annullaPrimary().open();
     }
@@ -281,18 +275,50 @@ public class TestView extends VerticalLayout {
     public void conferma8() {
         StringBuffer buffer = new StringBuffer();
         buffer.append("Secondo bottone 'cancel' -> annulla");
-        buffer.append("</br>");
+        buffer.append(CAPO_HTML);
         buffer.append("Terzo bottone 'reject' -> rifiuta");
-        buffer.append("</br>");
+        buffer.append(CAPO_HTML);
         buffer.append("Se si usa rifiuta() per il terzo bottone, il secondo è automatico.");
         AConfirm.title("Titolo").message(buffer.toString()).rifiuta().open();
     }
 
-    public void confermaAnnulla() {
-        //        ConfirmDialog dialog = new ConfirmDialog();
-        //        dialog.setText("Due bottoni");
-        //        dialog.open();
-        //        AConfirm.header("Header").open();
+    public void paragrafoDelete() {
+        VerticalLayout layout = new VerticalLayout();
+        HorizontalLayout barra = new HorizontalLayout();
+        layout.setMargin(false);
+        layout.setPadding(false);
+        layout.setSpacing(false);
+        H3 paragrafo = new H3("Reset, Delete, DeleteAll");
+        paragrafo.getElement().getStyle().set("color", "blue");
+
+        layout.add(new Label("Visualizzazione di un dialogo di conferma per le operazioni di Reset, di Delete di una singola entity e di DeleteAll per tutta la collazione"));
+
+        Button bottone7 = new Button("Reset");
+        bottone7.getElement().setAttribute("theme", "error primary");
+        bottone7.addClickListener(event -> AReset.reset(null));
+        barra.add(bottone7);
+        layout.add(barra);
+
+        Button bottone8 = new Button("Delete");
+        bottone8.getElement().setAttribute("theme", "error primary");
+        bottone8.addClickListener(event -> ADelete.delete(null));
+        barra.add(bottone8);
+        layout.add(barra);
+
+        Button bottone6 = new Button("Delete");
+        bottone6.getElement().setAttribute("theme", "error primary");
+        bottone6.addClickListener(event -> ADelete.delete("entityName",null));
+        barra.add(bottone6);
+        layout.add(barra);
+
+        Button bottone9 = new Button("Delete all");
+        bottone9.getElement().setAttribute("theme", "error primary");
+        bottone9.addClickListener(event -> ADelete.deleteAll(null));
+        barra.add(bottone9);
+        layout.add(barra);
+
+        this.add(paragrafo);
+        this.add(layout);
     }
 
     public void confermaAnnullaCancella() {

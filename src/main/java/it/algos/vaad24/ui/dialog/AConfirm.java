@@ -13,6 +13,10 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
  */
 public class AConfirm extends ConfirmDialog {
 
+    protected Runnable confermaHandler;
+
+    protected Runnable annullaHandler;
+
 
     public AConfirm() {
         this.setConfirmText(BUTTON_CONFERMA);
@@ -35,7 +39,6 @@ public class AConfirm extends ConfirmDialog {
     public static AConfirm title(String title) {
         AConfirm dialog = new AConfirm();
         dialog.setHeader(title);
-        //        dialog.setHeader(new Html("<p>" + title + "</p>"));
         return dialog;
     }
 
@@ -48,10 +51,12 @@ public class AConfirm extends ConfirmDialog {
         this.setConfirmText(confirmButtonText);
         return this;
     }
+
     public AConfirm confirmError() {
         this.setConfirmButtonTheme("error primary");
         return this;
     }
+
     public AConfirm confirmError(String confirmButtonText) {
         this.setConfirmButtonTheme("error primary");
         this.setConfirmText(confirmButtonText);
@@ -62,10 +67,10 @@ public class AConfirm extends ConfirmDialog {
         this.setCancelable(true);
         return this;
     }
+
     public AConfirm annullaPrimary() {
         this.setCancelButtonTheme("primary");
-        this.setCancelable(true);
-        return this;
+        return annulla();
     }
 
 
@@ -74,14 +79,38 @@ public class AConfirm extends ConfirmDialog {
         this.setRejectable(true);
         return this;
     }
-    public static void reset() {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("Ripristina nel database i valori di default annullando le eventuali modifiche apportate successivamente");
-        buffer.append("</br>");
-        buffer.append(ASpan.text("Sei sicuro di volerli cancellare tutti?").rosso().bold().get());
-        buffer.append("</br>");
-        buffer.append(ASpan.text("L'operazione è irreversibile").blue().bold().get());
-        AConfirm.title("Reset").message(buffer.toString()).confirmError("Reset").annullaPrimary().open();
+
+    public AConfirm open(final Runnable confermaHandler) {
+        this.confermaHandler = confermaHandler;
+        this.addConfirmListener(event -> confermaHandler());
+        this.addCancelListener(event -> Avviso.message("Annullato").primary().open());
+        super.open();
+        return this;
+    }
+
+    public AConfirm open(final Runnable confermaHandler,final Runnable annullaHandler) {
+        this.confermaHandler = confermaHandler;
+        this.annullaHandler = annullaHandler;
+        this.addConfirmListener(event -> confermaHandler());
+        this.addCancelListener(event -> annullaHandler());
+        super.open();
+        return this;
+    }
+
+    public void confermaHandler() {
+        if (confermaHandler != null) {
+            confermaHandler.run();
+        }
+        close();
+    }
+
+
+    public void annullaHandler() {
+        if (annullaHandler != null) {
+            annullaHandler.run();
+        }
+        close();
+        Avviso.message("Annullato").open();
     }
 
 }

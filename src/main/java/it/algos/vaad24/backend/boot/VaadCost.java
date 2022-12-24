@@ -84,6 +84,7 @@ public class VaadCost {
     public static final String VUOTA = "";
 
     public static final String CAPO = "\n";
+    public static final String CAPO_HTML = "</br>";
 
     public static final String TAB = "\t";
 
