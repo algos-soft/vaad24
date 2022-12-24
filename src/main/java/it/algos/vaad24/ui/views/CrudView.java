@@ -382,7 +382,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
             }
             else {
                 buttonDeleteReset.getElement().setProperty("title", "Delete: cancella tutta la collection\nShortcut SHIFT+D");
-                buttonDeleteReset.addClickListener(event -> deleteAll());
+                buttonDeleteReset.addClickListener(event -> ADelete.deleteAll(this::deleteAll));
                 buttonDeleteReset.addClickShortcut(Key.KEY_D, KeyModifier.SHIFT);
             }
             buttonDeleteReset.setIcon(new Icon(VaadinIcon.REFRESH));
@@ -682,9 +682,9 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 //        appContext.getBean(DialogReset.class).open(this::resetEsegue);
 //    }
 
-    protected void deleteAll() {
-        appContext.getBean(DialogDeleteAll.class).open(this::deleteEsegue);
-    }
+//    protected void deleteAll() {
+//        appContext.getBean(DialogDeleteAll.class).open(this::deleteEsegue);
+//    }
 
     protected void reset() {
         if (crudBackend.resetForcing().isValido()) {
@@ -697,7 +697,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         }
     }
 
-    protected void deleteEsegue() {
+    protected void deleteAll() {
         crudBackend.deleteAll();
         grid.setItems(crudBackend.findAll(sortOrder));
         Avviso.message("Delete all").success().open();
