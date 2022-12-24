@@ -678,13 +678,13 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         grid.setItems(crudBackend.findAll(sortOrder));
     }
 
-//    protected void resetDialog() {
-//        appContext.getBean(DialogReset.class).open(this::resetEsegue);
-//    }
+    //    protected void resetDialog() {
+    //        appContext.getBean(DialogReset.class).open(this::resetEsegue);
+    //    }
 
-//    protected void deleteAll() {
-//        appContext.getBean(DialogDeleteAll.class).open(this::deleteEsegue);
-//    }
+    //    protected void deleteAll() {
+    //        appContext.getBean(DialogDeleteAll.class).open(this::deleteEsegue);
+    //    }
 
     protected void reset() {
         if (crudBackend.resetForcing().isValido()) {
@@ -698,6 +698,12 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     }
 
     protected void deleteAll() {
+        int totaleEsistente = crudBackend.count();
+        if (totaleEsistente == 0) {
+            Avviso.message("Non ci sono entities da cancellare").primary().open();
+            return;
+        }
+
         crudBackend.deleteAll();
         grid.setItems(crudBackend.findAll(sortOrder));
         Avviso.message("Delete all").success().open();
