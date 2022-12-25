@@ -6,6 +6,7 @@ import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.dialog.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.*;
+import com.vaadin.flow.component.notification.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.ui.dialog.*;

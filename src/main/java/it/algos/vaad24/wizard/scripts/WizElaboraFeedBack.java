@@ -1,5 +1,6 @@
 package it.algos.vaad24.wizard.scripts;
 
+import com.vaadin.flow.component.notification.*;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.ui.dialog.*;
 import static it.algos.vaad24.wizard.scripts.WizCost.*;
