@@ -2,6 +2,7 @@ package it.algos.vaad24simple.backend.boot;
 
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.boot.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
@@ -15,8 +16,8 @@ import static it.algos.vaad24simple.backend.boot.SimpleCost.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.event.*;
 import org.springframework.context.event.EventListener;
+import org.springframework.context.event.*;
 
 import javax.servlet.*;
 import java.util.*;
@@ -216,6 +217,18 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
         this.prefInstance = prefInstance;
     }
 
+    /**
+     * Eventuali task <br>
+     * Sviluppato nelle sottoclassi <br>
+     */
+    @Override
+    public void fixSchedule() {
+        super.fixSchedule();
+        String message;
+
+        message = String.format("Nel modulo %s non ci sono 'task'", VaadVar.projectNameUpper);
+        logger.info(new WrapLog().message(message).type(AETypeLog.schedule));
+    }
 
     @Override
     protected void fixMenuRoutes() {
