@@ -18,9 +18,11 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TaskProva extends VaadTask {
 
+
     public TaskProva() {
-        super.descrizione = "Task di prova che non fa nulla";
+        super.descrizioneTask = "Task di prova che non fa nulla";
         super.typeSchedule = AESchedule.minuto;
+        super.flagAttivazione = null;
     }
 
     @Override
@@ -31,9 +33,6 @@ public class TaskProva extends VaadTask {
 
         super.loggerTask();
     }
-
-
-
 
 
 }
