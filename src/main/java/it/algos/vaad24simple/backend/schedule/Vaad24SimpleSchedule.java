@@ -16,7 +16,7 @@ import javax.annotation.*;
  * Time: 17:47
  */
 @SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class Vaad24SimpleSchedule extends VaadSchedule {
 
 

@@ -12,6 +12,7 @@ import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.vaad24simple.backend.boot.SimpleCost.*;
+import it.algos.vaad24simple.backend.schedule.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -214,6 +215,18 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
     @Qualifier(QUALIFIER_PREFERENCES_SIMPLE)
     public void setPrefInstance(final AIEnumPref prefInstance) {
         this.prefInstance = prefInstance;
+    }
+
+
+    /**
+     * Eventuali task <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    public void fixSchedule() {
+        appContext.getBean(Vaad24SimpleSchedule.class);
+
+        super.fixSchedule();
     }
 
 
