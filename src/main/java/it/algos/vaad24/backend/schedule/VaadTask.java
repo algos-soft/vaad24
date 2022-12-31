@@ -12,6 +12,8 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.*;
 import org.springframework.context.annotation.Scope;
 
+import java.time.*;
+
 /**
  * Project vaad24
  * Created by Algos
@@ -30,6 +32,8 @@ public class VaadTask extends Task {
     protected String descrizioneTask;
 
     protected AIGenPref flagAttivazione;
+
+    protected AIGenPref flagPrevisione;
 
     /**
      * Istanza di una interfaccia <br>
@@ -53,7 +57,29 @@ public class VaadTask extends Task {
      */
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
+    }
+
+
+    public boolean execute() {
         inizio = System.currentTimeMillis();
+
+        if (flagAttivazione == null || flagAttivazione.is()) {
+            this.fixNext();
+            return true;
+        }
+        else {
+            this.loggerNoTask();
+            return false;
+        }
+    }
+
+
+    protected void fixNext() {
+        LocalDateTime adesso = LocalDateTime.now();
+        LocalDateTime prossimo = adesso.plusDays(1);
+        if (flagPrevisione != null) {
+            flagPrevisione.setValue(prossimo);
+        }
     }
 
     public String getPattern() {

@@ -27,11 +27,10 @@ public class TaskProva extends VaadTask {
 
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
-        super.execute(taskExecutionContext);
-
-        // qui esegue la task specifica
-
-        super.loggerTask();
+        if (execute()) {
+            // qui esegue la task specifica
+            super.loggerTask();
+        }
     }
 
 

@@ -1,6 +1,7 @@
 package it.algos.vaad24simple.backend.schedule;
 
 import com.vaadin.flow.spring.annotation.*;
+import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.schedule.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -33,7 +34,7 @@ public class Vaad24SimpleSchedule extends VaadSchedule {
     @Override
     public void startSchedule() throws IllegalStateException {
 
-//        VaadVar.taskList.add(appContext.getBean(TaskProva.class));
+        VaadVar.taskList.add(appContext.getBean(TaskProva.class));
 
         super.startSchedule();
     }
