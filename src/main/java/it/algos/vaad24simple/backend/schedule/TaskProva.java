@@ -24,7 +24,6 @@ public class TaskProva extends VaadTask {
         super.typeSchedule = AESchedule.minuto;
         super.flagAttivazione = null;
         super.flagPrevisione = null;
-        super.nextDays = 1;
     }
 
     @Override
