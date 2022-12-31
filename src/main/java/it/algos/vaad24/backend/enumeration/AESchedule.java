@@ -130,8 +130,9 @@ public enum AESchedule {
      * @param nota    esplicativa da inserire nei log
      */
     AESchedule(String pattern, String nota, int giorniNext) {
-        this.setPattern(pattern);
-        this.setNota(nota);
+        this.pattern = pattern;
+        this.nota = nota;
+        this.giorniNext = giorniNext;
     }
 
     public static List<AESchedule> getAllEnums() {
