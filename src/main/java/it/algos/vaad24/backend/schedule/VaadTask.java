@@ -27,6 +27,8 @@ public class VaadTask extends Task {
 
     protected long inizio;
 
+    protected int nextDays = 7;
+
     protected AESchedule typeSchedule;
 
     protected String descrizioneTask;
@@ -76,7 +78,7 @@ public class VaadTask extends Task {
 
     protected void fixNext() {
         LocalDateTime adesso = LocalDateTime.now();
-        LocalDateTime prossimo = adesso.plusDays(1);
+        LocalDateTime prossimo = adesso.plusDays(nextDays);
         if (flagPrevisione != null) {
             flagPrevisione.setValue(prossimo);
         }
