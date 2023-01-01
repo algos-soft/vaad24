@@ -5,6 +5,7 @@ import com.vaadin.flow.component.page.*;
 import com.vaadin.flow.server.*;
 import com.vaadin.flow.spring.annotation.*;
 import com.vaadin.flow.theme.*;
+import it.algos.vaad24simple.backend.boot.*;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.autoconfigure.domain.*;
@@ -12,7 +13,7 @@ import org.springframework.boot.autoconfigure.security.servlet.*;
 
 /**
  * The entry point of the Spring Boot application.
- *
+ * <p>
  * Use the @PWA annotation make the application installable on phones, tablets and some desktop browsers.
  * Questa classe contiene il metodo 'main' che è il punto di ingresso unico di una applicazione Java <br>
  * Nel JAR finale (runtime) si può avere una sola classe col metodo 'main' <br>
@@ -30,7 +31,6 @@ import org.springframework.boot.autoconfigure.security.servlet.*;
  * Spring Boot introduces the @SpringBootApplication annotation. <br>
  * This single annotation is equivalent to using @Configuration, @EnableAutoConfiguration, and @ComponentScan. <br>
  * Se l'applicazione NON usa la security, aggiungere exclude = {SecurityAutoConfiguration.class} a @SpringBootApplication <br>
- *
  */
 @SpringBootApplication(scanBasePackages = {"it.algos"}, exclude = {SecurityAutoConfiguration.class})
 @EnableVaadin({"it.algos"})
@@ -45,5 +45,7 @@ public class Vaad24SimpleApplication implements AppShellConfigurator {
 
     public static void main(String[] args) {
         SpringApplication.run(Vaad24SimpleApplication.class, args);
+        SimpleBoot.start();
     }
+
 }

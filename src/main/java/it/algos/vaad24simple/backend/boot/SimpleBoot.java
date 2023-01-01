@@ -16,8 +16,6 @@ import it.algos.vaad24simple.backend.schedule.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.event.EventListener;
-import org.springframework.context.event.*;
 
 import javax.servlet.*;
 import java.util.*;
@@ -45,14 +43,18 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
 
     private String property;
 
-    /**
-     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
-     * event, the application is ready to service Vaadin requests <br>
-     */
-    @EventListener(ContextRefreshedEvent.class)
-    public void onContextRefreshEvent() {
-        this.inizia();
+    public static void start() {
+        new SimpleBoot();
     }
+
+    //    /**
+    //     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
+    //     * event, the application is ready to service Vaadin requests <br>
+    //     */
+    //    @EventListener(ContextRefreshedEvent.class)
+    //    public void onContextRefreshEvent() {
+    ////        this.inizia();
+    //    }
 
 
     /**
