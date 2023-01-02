@@ -1,0 +1,8 @@
+Due to its influence on injection precedence, it may seem like it might influence the singleton startup order also. But in contrast, the
+dependency relationships and @DependsOn declarations determine the singleton startup order.
+
+Only static initialisers are called when the class is loaded. A static initialiser looks like this:
+static
+{
+    //code here
+}

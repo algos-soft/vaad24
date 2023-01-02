@@ -9,7 +9,7 @@ import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
-import it.algos.vaad24.backend.wrapper.*;
+import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.vaad24simple.backend.boot.SimpleCost.*;
 import it.algos.vaad24simple.backend.schedule.*;
@@ -18,7 +18,6 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
 import javax.servlet.*;
-import java.util.*;
 
 /**
  * Project vaadin23
@@ -41,7 +40,6 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class SimpleBoot extends VaadBoot implements ServletContextListener {
 
-    private String property;
 
     public static void start() {
         new SimpleBoot();
@@ -67,85 +65,7 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
     protected void fixVariabili() {
         super.fixVariabili();
 
-        /*
-         * Nome identificativo minuscolo del progetto corrente <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-         */
-        try {
-            property = "algos.simple.name";
-            VaadVar.projectCurrent = Objects.requireNonNull(environment.getProperty(property)).toLowerCase();
-        } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato la property %s nelle risorse", property);
-            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-            VaadVar.projectCurrent = "simple";
-        }
-
-        /*
-         * Nome identificativo maiuscolo dell' applicazione <br>
-         * Usato (eventualmente) nella barra di menu in testa pagina <br>
-         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-         */
-        try {
-            property = "algos.simple.name";
-            VaadVar.projectNameUpper = Objects.requireNonNull(environment.getProperty(property));
-        } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato la property %s nelle risorse", property);
-            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-            VaadVar.projectNameUpper = "Simple";
-        }
-
-        /*
-         * Nome identificativo minuscolo del progetto corrente <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-         */
-        try {
-            property = "algos.simple.nameModulo";
-            VaadVar.projectNameModulo = Objects.requireNonNull(environment.getProperty(property)).toLowerCase();
-        } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato la property %s nelle risorse", property);
-            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-            VaadVar.projectCurrent = "simple";
-        }
-
-        /*
-         * Versione dell' applicazione <br>
-         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-         */
-        try {
-            property = "algos.simple.version";
-            VaadVar.projectVersion = Double.parseDouble(Objects.requireNonNull(environment.getProperty(property)));
-        } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato la property %s nelle risorse", property);
-            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-        }
-
-        /*
-         * Data di rilascio della versione <br>
-         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-         */
-        try {
-            property = "algos.simple.version.date";
-            VaadVar.projectDate = Objects.requireNonNull(environment.getProperty(property));
-        } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato la property %s nelle risorse", property);
-            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-        }
-
-        /*
-         * Note di rilascio della versione <br>
-         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-         */
-        try {
-            property = "algos.simple.version.note";
-            VaadVar.projectNote = Objects.requireNonNull(environment.getProperty(property));
-        } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato la property %s nelle risorse", property);
-            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-        }
+        LogService.debug(": [flow     ] - SimpleBoot.fixVariabili()");
 
         /**
          * Nome della classe di partenza col metodo 'main' <br>

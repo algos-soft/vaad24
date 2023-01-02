@@ -5,7 +5,7 @@ import com.vaadin.flow.component.page.*;
 import com.vaadin.flow.server.*;
 import com.vaadin.flow.spring.annotation.*;
 import com.vaadin.flow.theme.*;
-import it.algos.vaad24simple.backend.boot.*;
+import it.algos.vaad24.backend.service.*;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.autoconfigure.domain.*;
@@ -44,8 +44,10 @@ import org.springframework.boot.autoconfigure.security.servlet.*;
 public class Vaad24SimpleApplication implements AppShellConfigurator {
 
     public static void main(String[] args) {
+        LogService.debug(": [flow     ] - Vaad24SimpleApplication.main(), prima di run()");
         SpringApplication.run(Vaad24SimpleApplication.class, args);
-        SimpleBoot.start();
+        LogService.debug(": [flow     ] - Vaad24SimpleApplication.main(), dopo run()");
+//        SimpleBoot.start();
     }
 
 }
