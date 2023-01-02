@@ -20,7 +20,7 @@
 
     <variable name="VAAD24_LOG_FILE" value="log/vaad24.log"/>
     <appender name="rollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${VAAD23_LOG_FILE}</file>
+        <file>${VAAD24_LOG_FILE}</file>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p --- ${PID:-} [%t] %C.%M:%L --- %m %n</pattern>
         </encoder>
@@ -75,7 +75,7 @@
         <appender-ref ref="springContextAppender"/>
     </logger>
 
-    <logger name="vaad23.admin" level="INFO" additivity="true">
+    <logger name="vaad24.admin" level="INFO" additivity="true">
         <appender-ref ref="adminAppender"/>
     </logger>
 

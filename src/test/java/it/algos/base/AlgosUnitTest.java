@@ -275,7 +275,7 @@ public abstract class AlgosUnitTest {
     protected void setUpAll() {
         MockitoAnnotations.openMocks(this);
 
-        slf4jLogger = LoggerFactory.getLogger("vaad23.admin");
+        slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
 
         initMocks();
         fixRiferimentiIncrociati();
