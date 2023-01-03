@@ -22,7 +22,7 @@ public class TaskProva extends VaadTask {
     public TaskProva() {
         super.descrizioneTask = "Task di prova che non fa nulla";
         super.typeSchedule = AESchedule.minuto;
-        super.flagAttivazione = null;
+        super.flagAttivazione = Pref.debug;
         super.flagPrevisione = null;
     }
 

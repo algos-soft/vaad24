@@ -148,8 +148,8 @@ public class UtilityView extends VerticalLayout {
             LogService.debug(": [flow     ] - UtilityView.getListaReset() - nullo");
         }
 
-        //        lista.addAll(classService.allModuleEntityResetName(VaadVar.moduloVaadin24));
-        //        lista.addAll(classService.allModuleEntityResetName(VaadVar.projectNameModulo));
+                lista.addAll(classService.allModuleEntityResetName(VaadVar.moduloVaadin24));
+                lista.addAll(classService.allModuleEntityResetName(VaadVar.projectNameModulo));
         return lista;
     }
 

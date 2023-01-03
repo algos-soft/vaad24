@@ -51,7 +51,7 @@ import java.util.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public abstract class VaadBoot implements ServletContextListener {
+public  class VaadBoot implements ServletContextListener {
 
     protected boolean allDebugSetup;
     private String property;
@@ -535,6 +535,7 @@ public abstract class VaadBoot implements ServletContextListener {
                     flagText = TASK_NO_FLAG + TASK_FLAG_SEMPRE_ATTIVA;
                 }
                 else {
+                    flagTask.setPreferenceService(preferenceService);
                     if (flagTask.is()) {
                         flagText = flagTask.getKeyCode() + TASK_FLAG_ATTIVA;
                     }
