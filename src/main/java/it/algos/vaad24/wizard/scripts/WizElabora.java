@@ -57,13 +57,13 @@ public abstract class WizElabora {
         String message;
         logger.info(new WrapLog().type(AETypeLog.spazio));
 
-//        if (progettoEsistente) {
-//            message = String.format("Aggiornato il progetto esistente: '%s'", newUpdateProject);
-//        }
-//        else {
-//            message = String.format("Creato il nuovo project: '%s'", newUpdateProject);
-//        }
-//        logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
+        //        if (progettoEsistente) {
+        //            message = String.format("Aggiornato il progetto esistente: '%s'", newUpdateProject);
+        //        }
+        //        else {
+        //            message = String.format("Creato il nuovo project: '%s'", newUpdateProject);
+        //        }
+        //        logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
 
         AEToken.reset();
         AEToken.setCrono();
@@ -206,7 +206,29 @@ public abstract class WizElabora {
 
 
     public void file(AEWizProject wiz) {
-        wiz = null;
+        AECopy copy = wiz.getCopy();
+        String textFile;
+        String srcPath = srcVaad24 + wiz.getCopyDest();
+        String destPath = destNewProject + wiz.getCopyDest();
+        String dir = fileService.lastDirectory(destPath).toLowerCase();
+        String tag = progettoEsistente ? "Update" : "New";
+
+        switch (copy) {
+            case fileOnly -> {
+                if (fileService.isEsisteFile(destPath)) {
+                    int a=87;
+                    //
+                }
+                else {
+                    textFile = fileService.leggeFile(srcPath);
+                    fileService.sovraScriveFile(destPath, textFile);
+                }
+            }
+            case fileDelete -> {}
+            case fileCheck -> {}
+            default -> {}
+        }
+
     }
 
 
@@ -230,7 +252,7 @@ public abstract class WizElabora {
         }
         else {
             message = String.format("%s: il file %s non ha funzionato", tag, nomeFile);
-            logger.warn(new WrapLog().message(message).type(AETypeLog.wizard));
+            logger.warn(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.wizard));
         }
     }
 

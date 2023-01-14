@@ -11,8 +11,8 @@ import java.util.*;
  */
 public enum AECopy {
 
-    fileDelete("Sovrascrive sempre il file anche se esiste", AECopyType.file),
     fileOnly("Copia il file solo se non esisteva", AECopyType.file),
+    fileDelete("Sovrascrive sempre il file anche se esiste", AECopyType.file),
     fileCheck("Controlla un flag iniziale", AECopyType.file),
     elaboraFile("Elaborazione specifica del file", AECopyType.elaboraFile),
 

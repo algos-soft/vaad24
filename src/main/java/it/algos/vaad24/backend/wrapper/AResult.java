@@ -19,7 +19,10 @@ import java.util.*;
 @Component
 public class AResult {
 
+    @Deprecated
     private boolean valido;
+    private boolean errato;
+    private boolean esaeguito;
 
     //    private String webTitle = VUOTA;
     //
