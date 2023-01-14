@@ -26,6 +26,13 @@ public enum AETypeResult implements AIType {
         return Arrays.stream(values()).toList();
     }
 
+    public static List<String> getAllTags() {
+        List<String> listaTags = new ArrayList<>();
+
+        getAllEnums().forEach(type -> listaTags.add(type.getTag()));
+        return listaTags;
+    }
+
     @Override
     public List<AETypeResult> getAll() {
         return Arrays.stream(values()).toList();
