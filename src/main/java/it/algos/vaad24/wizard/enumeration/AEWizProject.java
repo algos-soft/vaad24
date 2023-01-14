@@ -17,15 +17,15 @@ public enum AEWizProject {
 
     config("Directory CONFIG di risorse on-line esterne al JAR (vaad24)", true, false, "config", AECopy.dirFilesModifica),
 
-    documentation("Directory DOC di documentazione (vaad24)", true, true, "doc", AECopy.dirFilesModifica),
+    documentation("Directory DOC di documentazione (vaad24)", true, false, "doc", AECopy.dirFilesModifica),
 
     frontend("Directory FRONTEND del Client (vaad24) [need riavvio]", true, false, "frontend", AECopy.dirFilesAddOnly),
 
-    links("Directory LINKS a siti web utili (vaad24)", true, true, "links", AECopy.dirFilesModifica),
+    links("Directory LINKS a siti web utili (vaad24)", true, false, "links", AECopy.dirFilesModifica),
 
-    snippets("Directory SNIPPETS di codice suggerito (vaad24)", true, true, "snippets", AECopy.dirFilesModifica),
+    snippets("Directory SNIPPETS di codice suggerito (vaad24)", true, false, "snippets", AECopy.dirFilesModifica),
 
-    flow("Directory BASE Vaad24 (Wizard compreso)", true, true, "src/main/java/it/algos/vaad24", AECopy.dirDelete),
+    flow("Directory BASE Vaad24 (Wizard compreso)", true, false, "src/main/java/it/algos/vaad24", AECopy.dirDelete),
 
     //    projectNew("Directory modulo del nuovo progetto (...)", false, VUOTA, AECopy.dirAddingOnly),
 
@@ -35,21 +35,21 @@ public enum AEWizProject {
             AECopy.sourceSovrascriveSempreAncheSeEsiste, "properties"
     ),
 
-    banner("File BANNER di SpringBoot (sources) [need riavvio]", true, false, "src/main/resources/banner.txt", AECopy.sourceSoloSeNonEsiste,
+    banner("File BANNER di SpringBoot (sources) [need riavvio]", true, true, "src/main/resources/banner.txt", AECopy.sourceSoloSeNonEsiste,
             "banner"
     ),
 
     git("File GIT di esclusione (sources)", true, false, ".gitignore", AECopy.sourceSoloSeNonEsiste, "git"),
 
-    pomVaad24("File POM.xml di Maven (vaad24)", true, true, "pom.xml", AECopy.elaboraFile),
+    pomVaad24("File POM.xml di Maven (vaad24)", true, false, "pom.xml", AECopy.elaboraFile),
     pomSources("File POM.xml di Maven (sources)", true, false, "pom.xml", AECopy.sourceSovrascriveSempreAncheSeEsiste, "pom"),
 
     read("File README con note di testo (sources)", true, false, "README.md", AECopy.sourceSoloSeNonEsiste, "readme"),
 
     testBase("Directory TEST /base (vaad24)", false, false, "src/test/java/it/algos/base", AECopy.dirFilesModifica),
-    testEnum("Directory TEST /enum (vaad24)", false, true, "src/test/java/it/algos/enumeration", AECopy.dirFilesModifica),
-    testService("Directory TEST /service (vaad24)", false, true, "src/test/java/it/algos/service", AECopy.elaboraDir),
-    testBackend("Directory TEST /backend (vaad24)", false, true, "src/test/java/it/algos/backend", AECopy.elaboraDir),
+    testEnum("Directory TEST /enum (vaad24)", false, false, "src/test/java/it/algos/enumeration", AECopy.dirFilesModifica),
+    testService("Directory TEST /service (vaad24)", false, false, "src/test/java/it/algos/service", AECopy.elaboraDir),
+    testBackend("Directory TEST /backend (vaad24)", false, false, "src/test/java/it/algos/backend", AECopy.elaboraDir),
     application("Main class java", true, false, "src/main/java/it/algos/@PROJECTUPPER@Application.java",
             AECopy.sourceSovrascriveSempreAncheSeEsiste, "application"
     ),
@@ -73,19 +73,19 @@ public enum AEWizProject {
     ;
 
 
-    private String caption;
+    private final String caption;
 
     //    private boolean accesoInizialmente;
 
-    private String copyDest;
+    private final String copyDest;
 
-    private String fileSource;
+    private final String fileSource;
 
-    private AECopy copy;
+    private final AECopy copy;
 
-    private boolean accesoNew;
+    private final boolean accesoNew;
 
-    private boolean accesoUpdate;
+    private final boolean accesoUpdate;
 
 
     AEWizProject(final String caption, final boolean accesoNew, final boolean accesoUpdate, final String copyDest, final AECopy copy) {

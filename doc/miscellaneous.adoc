@@ -1,0 +1,25 @@
+:doctype: book
+:toc: left
+:toclevels: 4
+
+= Miscellaneous
+
+== AsciiDoc
+Baeldung [https://www.baeldung.com/asciidoctor]
+
+AsciiDoc reference [https://docs.netapp.com/us-en/contribute/asciidoc_syntax.html#labeled-lists]
+
+Quick reference [https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/#ex-urls]
+
+== Banner
+Baeldung color [https://www.baeldung.com/spring-boot-color-banner]
+
+OnLine [https://devops.datenkollektiv.de/banner.txt/index.html]
+
+Create [https://devops.datenkollektiv.de/create-your-own-spring-boot-banner.html]
+
+
+
+
+
+
