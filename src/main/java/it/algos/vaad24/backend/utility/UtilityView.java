@@ -1,7 +1,6 @@
 package it.algos.vaad24.backend.utility;
 
 import com.vaadin.flow.component.button.*;
-import com.vaadin.flow.component.dependency.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
@@ -29,7 +28,7 @@ import java.util.*;
 @SpringComponent
 @Route(value = VaadCost.TAG_UTILITY, layout = MainLayout.class)
 @RouteAlias(value = TAG_ROUTE_ALIAS_PARTE_PER_PRIMA, layout = MainLayout.class)
-@CssImport("./styles/shared-styles.css")
+//@CssImport("./styles/shared-styles.css")
 public class UtilityView extends VerticalLayout {
 
     /**

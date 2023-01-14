@@ -9,9 +9,7 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.service.*;
-import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import it.algos.vaad24.wizard.scripts.*;
@@ -36,7 +34,7 @@ import java.util.*;
 @SpringComponent
 @Route(value = VaadCost.TAG_WIZ, layout = MainLayout.class)
 //@RouteAlias(value = TAG_ROUTE_ALIAS_PARTE_PER_PRIMA, layout = MainLayout.class)
-@CssImport("./styles/shared-styles.css")
+//@CssImport("./styles/shared-styles.css")
 public class WizardView extends VerticalLayout {
 
     /**
@@ -156,7 +154,7 @@ public class WizardView extends VerticalLayout {
         layout.setMargin(false);
         layout.setPadding(false);
         layout.setSpacing(false);
-        H3 paragrafo = new H3(String.format("%s%s%s", it.algos.vaad24.wizard.scripts.WizCost.TITOLO_NUOVO_PROGETTO, SLASH, it.algos.vaad24.wizard.scripts.WizCost.TITOLO_MODIFICA_PROGETTO));
+        H3 paragrafo = new H3(String.format("%s%s%s", WizCost.TITOLO_NUOVO_PROGETTO, SLASH, WizCost.TITOLO_MODIFICA_PROGETTO));
         paragrafo.getElement().getStyle().set("color", "blue");
 
         layout.add(new Label("Crea un nuovo project IntelliJIdea, nella directory 'IdeaProjects'."));
@@ -184,7 +182,7 @@ public class WizardView extends VerticalLayout {
         layout.setMargin(false);
         layout.setPadding(false);
         layout.setSpacing(false);
-        H3 paragrafo = new H3(it.algos.vaad24.wizard.scripts.WizCost.TITOLO_MODIFICA_QUESTO_PROGETTO);
+        H3 paragrafo = new H3(WizCost.TITOLO_MODIFICA_QUESTO_PROGETTO);
         paragrafo.getElement().getStyle().set("color", "blue");
 
         layout.add(new Label("Aggiorna il modulo base 'vaad24' di questo progetto"));
@@ -203,6 +201,7 @@ public class WizardView extends VerticalLayout {
     }
 
     private void elaboraUpdateProject(final LinkedHashMap<String, Checkbox> mappaCheckbox) {
+        elaboraFeedBack();
         appContext.getBean(WizElaboraUpdateProject.class, updateProject).esegue(mappaCheckbox);
     }
 

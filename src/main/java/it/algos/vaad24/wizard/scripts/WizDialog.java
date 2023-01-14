@@ -6,7 +6,6 @@ import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.dialog.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.*;
-import com.vaadin.flow.component.notification.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.ui.dialog.*;
@@ -75,7 +74,7 @@ public abstract class WizDialog extends Dialog {
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
-    public it.algos.vaad24.wizard.scripts.WizService wizService;
+    public WizService wizService;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -154,7 +153,7 @@ public abstract class WizDialog extends Dialog {
     //    protected ComboBox<String> fieldComboPackages;
     //
     //    protected String nomeModulo;
-    protected HorizontalLayout spanConferma;
+    protected VerticalLayout spanConferma;
 
     /**
      * Regolazioni grafiche

@@ -3,11 +3,13 @@ package it.algos.vaad24.wizard.scripts;
 import com.vaadin.flow.component.checkbox.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
-import it.algos.vaad24.ui.dialog.*;
-import static it.algos.vaad24.wizard.scripts.WizCost.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
+import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.wizard.enumeration.*;
+import static it.algos.vaad24.wizard.scripts.WizCost.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
@@ -46,7 +48,7 @@ public class WizDialogUpdateProject extends WizDialog {
         topLayout = fixSezione(TITOLO_MODIFICA_PROGETTO, "green");
         this.add(topLayout);
 
-        message = "Aggiorna il modulo 'vaad23' di questo progetto";
+        message = "Aggiorna il modulo 'vaad24' di questo progetto";
         topLayout.add(htmlService.getSpan(new WrapSpan().message(message).weight(AEFontWeight.bold)));
     }
 
@@ -94,8 +96,13 @@ public class WizDialogUpdateProject extends WizDialog {
         cancelButton.getElement().setAttribute("theme", "secondary");
         confirmButton.getElement().setAttribute("theme", "primary");
         confirmButton.setEnabled(true);
-        message = "Confermando vengono aggiornati i files selezionati";
-        spanConferma = new HorizontalLayout();
+        message = String.format("Confermando vengono aggiornati i files selezionati su [%s]", VaadVar.projectCurrent);
+        spanConferma = new VerticalLayout();
+        spanConferma.setPadding(false);
+        spanConferma.setSpacing(false);
+        spanConferma.setMargin(false);
+        spanConferma.add(ASpan.text(message).rosso().bold());
+        message = String.format("Confermando viene aggiornata la directory 'wizard' su [%s]", PROJECT_VAADIN24);
         spanConferma.add(ASpan.text(message).rosso().bold());
     }
 

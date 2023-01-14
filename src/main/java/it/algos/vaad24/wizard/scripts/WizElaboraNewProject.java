@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Scope;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class WizElaboraNewProject extends it.algos.vaad24.wizard.scripts.WizElabora {
+public class WizElaboraNewProject extends WizElabora {
 
     public static final String SOURCE_PREFIX = "src/main/java/it/algos/";
 

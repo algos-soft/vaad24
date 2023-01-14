@@ -1,12 +1,12 @@
 package it.algos.vaad24.wizard.scripts;
 
-import it.algos.vaad24.wizard.enumeration.*;
-import static it.algos.vaad24.wizard.scripts.WizCost.TXT_SUFFIX;
-import static it.algos.vaad24.wizard.scripts.WizCost.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
+import it.algos.vaad24.wizard.enumeration.*;
+import static it.algos.vaad24.wizard.scripts.WizCost.TXT_SUFFIX;
+import static it.algos.vaad24.wizard.scripts.WizCost.*;
 import static it.algos.vaad24.wizard.scripts.WizElaboraNewProject.*;
 import org.springframework.beans.factory.annotation.*;
 
@@ -210,7 +210,7 @@ public abstract class WizElabora {
     }
 
 
-    public void source(final it.algos.vaad24.wizard.enumeration.AEWizProject wiz) {
+    public void source(final AEWizProject wiz) {
         String message;
         AResult result;
         String dest = wiz.getCopyDest();
@@ -218,9 +218,9 @@ public abstract class WizElabora {
         String sorcePath = srcVaad24 + SOURCE_PREFIX + VAADIN_MODULE + SOURCE_SUFFFIX + nomeFile;
         sorcePath += sorcePath.endsWith(TXT_SUFFIX) ? VUOTA : TXT_SUFFIX;
         String sourceText = fileService.leggeFile(sorcePath);
-        sourceText = it.algos.vaad24.wizard.enumeration.AEToken.replaceAll(sourceText);
+        sourceText = AEToken.replaceAll(sourceText);
         String destPath = destNewProject + dest;
-        destPath = it.algos.vaad24.wizard.enumeration.AEToken.replaceAll(destPath);
+        destPath = AEToken.replaceAll(destPath);
         String tag = progettoEsistente ? "Update" : "New";
 
         result = fileService.scriveFile(wiz.getCopy(), destPath, sourceText);

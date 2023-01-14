@@ -214,16 +214,6 @@
         <!-- Spring mail-->
 
 
-        <!-- Spring security-->
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-            <version>2.7.6</version>
-        </dependency>
-        <!-- Spring security-->
-
-
         <!-- https://mvnrepository.com/artifact/ch.carnet.kasparscherrer/indeterminate-checkbox -->
         <dependency>
             <groupId>ch.carnet.kasparscherrer</groupId>
@@ -275,6 +265,15 @@
             <artifactId>javax.persistence-api</artifactId>
             <version>2.2</version>
         </dependency>
+
+        <!-- Spring security-->
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>2.7.6</version>
+        </dependency>
+        <!-- Spring security-->
 
     </dependencies>
 

@@ -5,17 +5,19 @@
 = Progetto
 
 == Progetto Vaadin
-1. Creare una nuova app -> https://start.vaadin.com/app
+1. Creare una nuova app -> https://start.vaadin.com/app già col nome definitivo del modulo/applicazione
 2. Scaricare e unzippare nella directory -> /Users/gac/Documents/IdeaProjects/operativi
-3. Aprirlo da IntelliJ IDEA
+3. Aprirlo da IntelliJ IDEA (con **Open** e non con **New**)
 4. Controllare che File -> Project structure -> Project -> SDK sia selezionato su '17 version 17'. Se manca, crearlo -> **New**
 5. Controllare che File -> Project structure -> Project -> Language level sia selezionato su LTS Version -> 17 - Sealed types
-6. Eseguire (opzionale) da terminale interno -> ./mvnw
-7. Eseguire (meglio) Maven (bordo destro) -> Lifecycle -> clean && install (insieme con melaClick)
-8. Per lancio normale aprire Run/Debug Configurations -> + Add New Configurations -> Spring Boot
-9. Cliccare su Build and run -> Modify options -> Spring Boot e confermare la **main class** col nome dell'applicazione
-10. Cambiare name **Unnamed** -> Nome dell'applicazione e cliccare su **OK**
-11. Aprire il file **pom.xml** e modificare **<version>1.0-SNAPSHOT</version>** in **<version>1.0</version>**
+6. Nel riquadro in basso a destra cliccare su **LOAD MAVEN PROJECT**
+7. Eseguire (opzionale) da terminale interno -> ./mvnw
+8. Eseguire (meglio) Maven (bordo destro) -> Lifecycle -> clean && install (insieme con melaClick)
+9. Per lancio normale aprire Run/Debug Configurations -> + Add New Configurations -> Spring Boot
+10. Cliccare su Build and run -> Modify options -> Spring Boot e confermare la **main class** col nome dell'applicazione
+11. Cambiare name **Unnamed** -> Nome dell'applicazione e cliccare su **OK**
+12. I punti 9-10-11 possono essere sostituiti dal menu **All Configurations** in alto a destra
+13. Aprire il file **pom.xml** e modificare **<version>1.0-SNAPSHOT</version>** in **<version>1.0</version>**
 
 
 == Git
@@ -25,10 +27,11 @@
 - Controllare che esista il file (nascosto) **.gitignore**
 - Se manca recuperarlo
 
-=== Aggiunti da Alkgos
-- build/
-- out/
-- log/
+=== Aggiunti da Algos
+ # Aggiunti da Algos
+ build/
+ out/
+ log/
 
 
 == GitHub
@@ -38,12 +41,12 @@
 
 == POM
 
-== Vaadin
+=== Vaadin
 
 - Replace artifactId with vaadin-core to use only free components
 - Aggiungere <exclusions>: Webjars are only needed when running in Vaadin 13 compatibility mode
 
-== Dependency
+=== Dependency
 
 - Spring MongoDB
 - Lombok
@@ -53,3 +56,16 @@
 - On terminal run: **npm install**
 - Aggiungere (obbligatorio) resources -> application.properties
 - Aggiungere (facoltativo) resources -> banner.txt
+
+== JAR
+ mvn clean package -Pproduction -Dmaven.test.skip=true
+
+- oppure
+- ./mvnw clean package -Pproduction
+- per lanciare (nome=wiki24) (directory=Desktop/wiki)
+
+ cd Desktop/
+ cd wiki/
+ java -jar -Dserver.port=8090 wiki24.jar
+
+
