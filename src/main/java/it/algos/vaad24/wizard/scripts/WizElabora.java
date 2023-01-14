@@ -57,13 +57,13 @@ public abstract class WizElabora {
         String message;
         logger.info(new WrapLog().type(AETypeLog.spazio));
 
-        if (progettoEsistente) {
-            message = String.format("Aggiornato il progetto esistente: '%s'", newUpdateProject);
-        }
-        else {
-            message = String.format("Creato il nuovo project: '%s'", newUpdateProject);
-        }
-        logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
+//        if (progettoEsistente) {
+//            message = String.format("Aggiornato il progetto esistente: '%s'", newUpdateProject);
+//        }
+//        else {
+//            message = String.format("Creato il nuovo project: '%s'", newUpdateProject);
+//        }
+//        logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
 
         AEToken.reset();
         AEToken.setCrono();

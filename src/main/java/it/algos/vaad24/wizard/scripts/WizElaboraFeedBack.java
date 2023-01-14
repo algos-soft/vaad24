@@ -73,7 +73,6 @@ public class WizElaboraFeedBack extends WizElabora {
             }
             Avviso.message("Feedback non riuscito").primary().open();
         }
-
     }
 
 }

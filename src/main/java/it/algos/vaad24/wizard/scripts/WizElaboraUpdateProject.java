@@ -61,6 +61,9 @@ public class WizElaboraUpdateProject extends WizElabora {
             }
         }
         Avviso.message("Update project").success().open();
+           String  message = String.format("Aggiornato il progetto esistente: '%s'", newUpdateProject);
+
+        logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
 
         super.eliminaSources();
     }
