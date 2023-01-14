@@ -594,11 +594,13 @@ public abstract class AlgosUnitTest {
 
         System.out.println(VUOTA);
         System.out.println("Risultato");
-        System.out.println(String.format("Status: %s", result.isValido() ? "true" : "false"));
+        System.out.println(String.format("Valido: %s", result.isValido() ? "true" : "false"));
+        System.out.println(String.format("Eseguito: %s", result.isEseguito() ? "true" : "false"));
         System.out.println(String.format("Method: %s", result.getMethod()));
         //        System.out.println(String.format("Title: %s", result.getWikiTitle()));
         System.out.println(String.format("Target: %s", result.getTarget()));
-        System.out.println(String.format("Type: %s", result.getType()));
+        System.out.println(String.format("TypeResult: %s", result.getTypeResult().getTag()));
+        System.out.println(String.format("TypeText: %s", result.getType()));
         System.out.println(String.format("Message code: %s", result.getCodeMessage()));
         System.out.println(String.format("Message: %s", result.getMessage()));
         System.out.println(String.format("Error code: %s", result.getErrorCode()));

@@ -141,19 +141,20 @@ public class FileServiceTest extends AlgosIntegrationTest {
     //--pathDir sorgente
     //--pathDir destinazione
     //--nome file
-    //--flag copiato
+    //--flag valido
+    //--flag eseguito
     protected static Stream<Arguments> COPY_FILE() {
         return Stream.of(
-                Arguments.of(null, VUOTA, VUOTA, VUOTA, false),
-                Arguments.of(AECopy.sourceSoloSeNonEsiste, VUOTA, VUOTA, NOME_FILE_UNO, false),
-                Arguments.of(AECopy.fileDelete, VUOTA, VUOTA, VUOTA, false),
-                Arguments.of(AECopy.sourceSoloSeNonEsiste, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, false),
-                Arguments.of(AECopy.fileOnly, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, VUOTA, false),
-                Arguments.of(AECopy.fileDelete, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, VUOTA, false),
-                Arguments.of(AECopy.fileOnly, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, true),
-                Arguments.of(AECopy.fileDelete, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, true),
-                Arguments.of(AECopy.fileOnly, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false),
-                Arguments.of(AECopy.fileDelete, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false)
+                Arguments.of(null, VUOTA, VUOTA, VUOTA, false, false),
+                Arguments.of(AECopy.sourceSoloSeNonEsiste, VUOTA, VUOTA, NOME_FILE_UNO, false, false),
+                Arguments.of(AECopy.fileDelete, VUOTA, VUOTA, VUOTA, false, false),
+                Arguments.of(AECopy.sourceSoloSeNonEsiste, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, false, false),
+                Arguments.of(AECopy.fileOnly, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, VUOTA, false, false),
+                Arguments.of(AECopy.fileDelete, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, VUOTA, false, false),
+                Arguments.of(AECopy.fileOnly, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, true, false),
+                Arguments.of(AECopy.fileDelete, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, true, true),
+                Arguments.of(AECopy.fileOnly, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false, false),
+                Arguments.of(AECopy.fileDelete, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false, false)
         );
     }
 
@@ -479,14 +480,16 @@ public class FileServiceTest extends AlgosIntegrationTest {
         //--pathDir sorgente
         //--pathDir destinazione
         //--nome file
-        //--flag copiato
-    void copyFile(final AECopy typeCopy, final String srcPathDir, final String destPathDir, final String nomeFile, final boolean copiato) {
+        //--flag valido
+        //--flag eseguito
+    void copyFile(final AECopy typeCopy, final String srcPathDir, final String destPathDir, final String nomeFile, final boolean valido, final boolean eseguito) {
         System.out.println("9 - Copia il file");
         System.out.println(VUOTA);
 
         ottenutoRisultato = service.copyFile(typeCopy, srcPathDir, destPathDir, nomeFile);
         assertNotNull(ottenutoRisultato);
-        assertEquals(copiato, ottenutoRisultato.isValido());
+        assertEquals(valido, ottenutoRisultato.isValido());
+        assertEquals(eseguito, ottenutoRisultato.isEseguito());
         printRisultato(ottenutoRisultato);
     }
 

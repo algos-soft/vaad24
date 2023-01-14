@@ -12,6 +12,11 @@ import java.util.*;
  * Time: 15:46
  */
 public enum AETypeResult implements AIType {
+    indeterminato("Indeterminato"),
+    noAECopy("Manca il type AECopy"),
+    typeNonCompatibile("Il type previsto non è compatibile col metodo"),
+    noFileName("Manca il nome del file"),
+
     fileEsistente("Il file esisteva già"),
     fileCreato("Il file è stato creato"),
     fileSovrascritto("Il file è stato sovrascritto");

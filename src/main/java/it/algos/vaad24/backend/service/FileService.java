@@ -664,22 +664,21 @@ public class FileService extends AbstractService {
         String destText;
 
         if (typeCopy == null) {
-            message = "Manca il type AECopy";
-            logger.warn(AETypeLog.file, new AlgosException(message));
-            return result.errorMessage(message);
+            logger.warn(AETypeLog.file, new AlgosException(AETypeResult.noAECopy.getTag()));
+            return result.nonValido().type(AETypeResult.noAECopy);
         }
         result = result.type(typeCopy.getDescrizione());
 
         if (typeCopy.getType() != AECopyType.file) {
             message = String.format("Il type.%s previsto non è compatibile col metodo %s", typeCopy, result.getMethod());
             logger.warn(AETypeLog.file, new AlgosException(message));
-            return result.errorMessage(message);
+            return result.nonValido().type(AETypeResult.typeNonCompatibile).errorMessage(message);
         }
 
         if (textService.isEmpty(nomeFile)) {
-            message = "Manca il nome del file";
+            message = AETypeResult.noFileName.getTag();
             logger.warn(AETypeLog.file, new AlgosException(message));
-            return result.errorMessage(message);
+            return result.nonValido().type(AETypeResult.noFileName).type(VUOTA).errorMessage(message);
         }
 
         if (textService.isEmpty(destPathDir)) {
@@ -688,7 +687,7 @@ public class FileService extends AbstractService {
             return result.errorMessage(message);
         }
 
-        result = checkPath("copyFile", destPath).target(nomeFile).type(typeCopy.getDescrizione());
+        result = checkPath(result, destPath);
         if (result.isErrato()) {
             return result;
         }
@@ -710,14 +709,14 @@ public class FileService extends AbstractService {
                     if (destText.equals(srcText)) {
                         result.setTagCode(AEKeyFile.esistente.name());
                         message = "Il file: " + path + " esisteva già e non è stato modificato.";
-                        return result.validMessage(message);
+                        return result.validMessage(message).nonEseguito();
                     }
                     else {
                         try {
                             FileUtils.copyFile(fileSrc, fileDest);
                             result.setTagCode(AEKeyFile.modificato.name());
                             message = "Il file: " + path + " esisteva già ma è stato modificato.";
-                            return result.validMessage(message);
+                            return result.validMessage(message).eseguito();
                         } catch (Exception unErrore) {
                             logger.error(new WrapLog().exception(unErrore).usaDb());
                             return result.errorMessage(unErrore.getMessage());
@@ -740,7 +739,7 @@ public class FileService extends AbstractService {
                 if (fileDest.exists()) {
                     result.setTagCode(AEKeyFile.esistente.name());
                     message = String.format("Il file: %s esisteva già e non è stato modificato.", nomeFile);
-                    return result.validMessage(message);
+                    return result.type(AETypeResult.fileEsistente).validMessage(message);
                 }
                 else {
                     try {
@@ -2204,7 +2203,11 @@ public class FileService extends AbstractService {
     }
 
     public AResult checkPath(final String methodName, final String absolutePathToBeChecked) {
-        AResult result = AResult.build().method(methodName).target(absolutePathToBeChecked);
+        return checkPath(AResult.build().method(methodName), absolutePathToBeChecked);
+    }
+
+    public AResult checkPath(final AResult result, final String absolutePathToBeChecked) {
+        //        AResult result = AResult.build().method(methodName).target(absolutePathToBeChecked);
 
         if (absolutePathToBeChecked == null) {
             logger.error(new WrapLog().exception(new AlgosException(PATH_NULLO)).usaDb().type(AETypeLog.file));

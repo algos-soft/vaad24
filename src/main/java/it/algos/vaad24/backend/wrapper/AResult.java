@@ -21,8 +21,10 @@ public class AResult {
 
     @Deprecated
     private boolean valido;
-    private boolean errato;
-    private boolean esaeguito;
+
+    private boolean eseguito;
+
+    private AETypeResult typeResult;
 
     //    private String webTitle = VUOTA;
     //
@@ -90,7 +92,7 @@ public class AResult {
     }
 
     public static AResult build() {
-        return new AResult();
+        return new AResult().type(AETypeResult.indeterminato);
     }
 
     public static AResult valido() {
@@ -121,6 +123,14 @@ public class AResult {
         return this;
     }
 
+    public AResult nonValido() {
+        return valido(false);
+    }
+    public AResult valido(boolean valido) {
+        this.valido = valido;
+        return this;
+    }
+
     public AResult method(final String method) {
         this.method = method;
         return this;
@@ -133,6 +143,24 @@ public class AResult {
 
     public AResult type(final String type) {
         this.type = type;
+        return this;
+    }
+
+    public AResult type(final AETypeResult typeResult) {
+        this.typeResult = typeResult;
+        return this;
+    }
+
+    public AResult eseguito() {
+        return eseguito(true);
+    }
+
+    public AResult nonEseguito() {
+        return eseguito(false);
+    }
+
+    public AResult eseguito(final boolean eseguito) {
+        this.eseguito = eseguito;
         return this;
     }
 
@@ -251,6 +279,13 @@ public class AResult {
         return validMessage;
     }
 
+    public boolean isEseguito() {
+        return eseguito;
+    }
+
+    public AETypeResult getTypeResult() {
+        return typeResult;
+    }
     //    public String getWebTitle() {
     //        return webTitle;
     //    }
