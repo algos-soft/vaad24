@@ -16,8 +16,11 @@ public enum AETypeResult implements AIType {
     noAECopy("Manca il type AECopy"),
     typeNonCompatibile("Il type previsto non è compatibile col metodo"),
     noFileName("Manca il nome del file"),
+    noSourceFile("Manca il file sorgente"),
 
     fileEsistente("Il file esisteva già"),
+    fileEsistenteUguale("Il file esisteva già e non è stato modificato"),
+    fileEsistenteModificato("Il file esisteva già ma è stato modificato"),
     fileCreato("Il file è stato creato"),
     fileSovrascritto("Il file è stato sovrascritto");
 

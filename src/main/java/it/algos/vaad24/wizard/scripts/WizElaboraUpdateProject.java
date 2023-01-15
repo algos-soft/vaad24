@@ -35,8 +35,13 @@ public class WizElaboraUpdateProject extends WizElabora {
     }// end of constructor
 
     public void esegue(final LinkedHashMap<String, Checkbox> mappaCheckbox) {
+        AResult result = null;
         super.progettoEsistente = true;
         AEWizProject wiz;
+        String path;
+        String desc;
+        AETypeResult type;
+        String message;
         destNewProject = System.getProperty("user.dir");
         newUpdateProject = fileService.estraeClasseFinaleSenzaJava(destNewProject).toLowerCase();
         srcVaad24 = textService.levaCoda(destNewProject, newUpdateProject);
@@ -54,23 +59,38 @@ public class WizElaboraUpdateProject extends WizElabora {
                 wiz = AEWizProject.valueOf(key);
                 switch (wiz.getCopy().getType()) {
                     case directory -> directory(wiz);
-                    case file -> file(wiz);
+                    case file -> {
+                        result = file(wiz);
+                        if (result != null) {
+                            path = fileService.findPathBreve(wiz.name());
+                            desc = wiz.getCopy().getDescrizione();
+                            type = result.getTypeResult();
+                            message = String.format("File [%s] (%s)%s%s", path, desc, FORWARD, type.getTag());
+                            if (result.isErrato()) {
+                                logger.warn(new WrapLog().message(message).type(AETypeLog.wizard));
+                            }
+                            else {
+                                logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
+                            }
+                        }
+                    }
                     case source -> source(wiz);
                     case elaboraFile, elaboraDir -> elabora(wiz);
-                }
+                } ;
             }
-        }
-//        Avviso.message("Update project").success().open();
 
-        String message = String.format("Aggiornato il progetto esistente [%s]", newUpdateProject);
+        }
+        //        Avviso.message("Update project").success().open();
+
+         message = String.format("Aggiornato il progetto esistente [%s]", newUpdateProject);
         logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
 
         super.eliminaSources();
     }
 
 
-    public void elabora(final AEWizProject wiz) {
-        AResult result;
+    public AResult elabora(final AEWizProject wiz) {
+        AResult result = null;
         String srcPath = srcVaad24 + wiz.getCopyDest() + SLASH;
         String destPath = destNewProject + wiz.getCopyDest() + SLASH;
         String dir = fileService.lastDirectory(destPath).toLowerCase();
@@ -93,6 +113,8 @@ public class WizElaboraUpdateProject extends WizElabora {
             }
             default -> {}
         }
+
+        return result;
     }
 
     public AResult fixToken(AResult result, AEWizProject wiz, String oldToken, String newToken) {

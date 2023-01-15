@@ -73,7 +73,7 @@ public abstract class WizElabora {
         AEToken.firstProject.set(newUpdateProject.substring(0, 1).toUpperCase());
     }
 
-    public void directory(final AEWizProject wiz) {
+    public AResult directory(final AEWizProject wiz) {
         AResult result;
         String srcPath = srcVaad24 + wiz.getCopyDest() + SLASH;
         String destPath = destNewProject + wiz.getCopyDest() + SLASH;
@@ -82,6 +82,8 @@ public abstract class WizElabora {
 
         result = fileService.copyDirectory(wiz.getCopy(), srcPath, destPath);
         mostraRisultato(result, wiz.getCopy(), dir, tag);
+
+        return result;
     }
 
 
@@ -205,34 +207,59 @@ public abstract class WizElabora {
     }
 
 
-    public void file(AEWizProject wiz) {
+    public AResult file(AEWizProject wiz) {
+        AResult result = AResult.build().target(wiz.getNomeFile()).method("copyFile");
         AECopy copy = wiz.getCopy();
-        String textFile;
+//        String textFile;
         String srcPath = srcVaad24 + wiz.getCopyDest();
-        String destPath = destNewProject + wiz.getCopyDest();
-        String dir = fileService.lastDirectory(destPath).toLowerCase();
-        String tag = progettoEsistente ? "Update" : "New";
+//        String destPath = destNewProject + wiz.getCopyDest();
+        //        String dir = fileService.lastDirectory(destPath).toLowerCase();
+        //        String tag = progettoEsistente ? "Update" : "New";
 
-        switch (copy) {
-            case fileOnly -> {
-                if (fileService.isEsisteFile(destPath)) {
-                    int a=87;
-                    //
-                }
-                else {
-                    textFile = fileService.leggeFile(srcPath);
-                    fileService.sovraScriveFile(destPath, textFile);
-                }
-            }
-            case fileDelete -> {}
-            case fileCheck -> {}
-            default -> {}
+        //check esiste nome file
+        if (textService.isEmpty(wiz.getNomeFile())) {
+            return result.type(AETypeResult.noFileName).type(copy.name()).eseguito(false).nonValido();
         }
 
+        //check esiste file sorgente
+        if (!fileService.isEsisteFile(srcPath)) {
+            return result.type(AETypeResult.noSourceFile).type(copy.name()).eseguito(false).nonValido();
+        }
+
+        result = fileService.copyFile(copy, srcVaad24, destNewProject, wiz.getCopyDest());
+
+        //        switch (copy) {
+        //            case fileOnly -> {
+        //                if (fileService.isEsisteFile(destPath)) {
+        //                    result.type(AETypeResult.fileEsistente).type(copy.name());
+        //                }
+        //                else {
+        //                    textFile = fileService.leggeFile(srcPath);
+        //                    fileService.sovraScriveFile(destPath, textFile);
+        //                    result.type(AETypeResult.fileCreato).type(copy.name());
+        //                }
+        //            }
+        //            case fileDelete -> {
+        //                if (fileService.isEsisteFile(destPath)) {
+        //                    textFile = fileService.leggeFile(srcPath);
+        //                    fileService.sovraScriveFile(destPath, textFile);
+        //                    result.type(AETypeResult.fileSovrascritto).type(copy.name());
+        //                }
+        //                else {
+        //                    textFile = fileService.leggeFile(srcPath);
+        //                    fileService.sovraScriveFile(destPath, textFile);
+        //                    result.type(AETypeResult.fileCreato).type(copy.name());
+        //                }
+        //            }
+        //            case fileCheck -> {}
+        //            default -> {}
+        //        }
+
+        return result;
     }
 
 
-    public void source(final AEWizProject wiz) {
+    public AResult source(final AEWizProject wiz) {
         String message;
         AResult result;
         String dest = wiz.getCopyDest();
@@ -254,6 +281,8 @@ public abstract class WizElabora {
             message = String.format("%s: il file %s non ha funzionato", tag, nomeFile);
             logger.warn(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.wizard));
         }
+
+        return result;
     }
 
     public void eliminaSources() {

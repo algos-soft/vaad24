@@ -251,7 +251,7 @@ public class FileService extends AbstractService {
 
             if (!fileToBeChecked.exists()) {
                 message = String.format("%s%s%s", NON_ESISTE_FILE, FORWARD, fileToBeChecked.getAbsolutePath());
-                logger.info(new WrapLog().exception(new AlgosException(message)).usaDb().type(AETypeLog.file));
+                //                logger.info(new WrapLog().exception(new AlgosException(message)).usaDb().type(AETypeLog.file));
                 return result.errorMessage(message);
             }
 
@@ -707,9 +707,12 @@ public class FileService extends AbstractService {
                     srcText = leggeFile(srcPath);
                     destText = leggeFile(destPath);
                     if (destText.equals(srcText)) {
-                        result.setTagCode(AEKeyFile.esistente.name());
-                        message = "Il file: " + path + " esisteva già e non è stato modificato.";
-                        return result.validMessage(message).nonEseguito();
+                        //                        result.setTagCode(AEKeyFile.esistente.name());
+
+                        return result.type(AETypeResult.fileEsistenteUguale).eseguito(false).valido();
+
+                        //                        message = "Il file: " + path + " esisteva già e non è stato modificato.";
+                        //                        return result.validMessage(message).nonEseguito();
                     }
                     else {
                         try {
@@ -737,9 +740,10 @@ public class FileService extends AbstractService {
 
             case fileOnly:
                 if (fileDest.exists()) {
-                    result.setTagCode(AEKeyFile.esistente.name());
-                    message = String.format("Il file: %s esisteva già e non è stato modificato.", nomeFile);
-                    return result.type(AETypeResult.fileEsistente).validMessage(message);
+                    //                    result.setTagCode(AEKeyFile.esistente.name());
+                    //                    message = String.format("Il file: %s esisteva già e non è stato modificato.", nomeFile);
+                    //                    return result.type(AETypeResult.fileEsistente).validMessage(message);
+                    return result.type(AETypeResult.fileEsistente).eseguito(false).valido();
                 }
                 else {
                     try {
@@ -1693,8 +1697,10 @@ public class FileService extends AbstractService {
 
         String pathOut = pathIn.trim();
 
-        if (textService.isValid(pathOut) && pathOut.endsWith(SLASH)) {
-            pathOut = textService.levaCoda(pathOut, SLASH);
+        if (textService.isValid(pathOut)) {
+            if (pathOut.endsWith(SLASH)) {
+                pathOut = textService.levaCoda(pathOut, SLASH);
+            }
             pathOut = pathOut.substring(pathOut.lastIndexOf(SLASH) + 1);
             pathOut = prefix + pathOut;
         }

@@ -35,7 +35,7 @@ public enum AEWizProject {
             AECopy.sourceSovrascriveSempreAncheSeEsiste, "properties"
     ),
 
-    banner("File BANNER di SpringBoot (vaad24) [need riavvio]", true, true, "src/main/resources/banner.txt", AECopy.fileOnly),
+    banner("File BANNER di SpringBoot (vaad24) [need riavvio]", true, true, "src/main/resources/banner.txt", AECopy.fileDelete),
 
     git("File GIT di esclusione (sources)", true, false, ".gitignore", AECopy.sourceSoloSeNonEsiste, "git"),
 
@@ -131,7 +131,7 @@ public enum AEWizProject {
     }
 
     public boolean isUpdate() {
-        return accesoUpdate && copyDest != null && copyDest.length() > 0;
+        return accesoUpdate;
     }
 
 
