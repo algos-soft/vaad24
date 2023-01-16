@@ -519,6 +519,7 @@ public class LogService extends AbstractService {
     private String logBase(final AELogLevel level, final WrapLog wrap) {
         String typeText;
         String message;
+        String errorMessage;
         AETypeLog type = wrap.getType();
         boolean flagUsaDB = wrap.isUsaDB();
         boolean flagUsaMail = wrap.isUsaMail();
@@ -545,8 +546,9 @@ public class LogService extends AbstractService {
             message = DUE_PUNTI_SPAZIO + message;
             //--Se forzo con WrapLog().message() un messaggio diverso da quello generato dall'errore, li mostra entrambi
             //--Quello forzato in testa e quello generato dall'errore in coda
-            if (wrap.getMessage() != null && !wrap.getMessage().equals(wrap.getException().getMessage())) {
-                message += SPAZIO + wrap.getException().getMessage();
+            errorMessage = wrap.getException() != null ? wrap.getException().getMessage() : VUOTA;
+            if (wrap.getMessage() != null && !wrap.getMessage().equals(errorMessage)) {
+                message += SPAZIO + errorMessage;
             }
         }
         else {

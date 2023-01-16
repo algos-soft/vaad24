@@ -61,6 +61,7 @@ public class WizElaboraUpdateProject extends WizElabora {
                     case directory -> directory(wiz);
                     case file -> {
                         result = file(wiz);
+                        logger.copy(result);
                         if (result != null) {
                             path = fileService.findPathBreve(wiz.name());
                             desc = wiz.getCopy().getDescrizione();

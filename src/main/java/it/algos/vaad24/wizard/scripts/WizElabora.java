@@ -225,7 +225,6 @@ public abstract class WizElabora {
         if (!fileService.isEsisteFile(srcPath)) {
             return result.type(AETypeResult.noSourceFile).type(copy.name()).eseguito(false).nonValido();
         }
-
         result = fileService.copyFile(copy, srcVaad24, destNewProject, wiz.getCopyDest());
 
         //        switch (copy) {

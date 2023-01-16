@@ -42,6 +42,10 @@ public class UtilityService extends AbstractService {
         int padMethod = PAD_METHOD;
         int padLine = PAD_LINE;
 
+        if (exception == null) {
+            return VUOTA;
+        }
+
         message = exception.getCause() != null ? exception.getCause().getMessage() : exception.getMessage();
 
         classe = exception.getClazz();
