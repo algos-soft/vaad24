@@ -208,6 +208,9 @@ public abstract class AlgosUnitTest {
     @Autowired
     protected MongoService mongoService;
 
+    @Autowired
+    public LogService logger;
+
     //--clazz
     //--simpleName
     protected static Stream<Arguments> CLAZZ_FOR_NAME() {

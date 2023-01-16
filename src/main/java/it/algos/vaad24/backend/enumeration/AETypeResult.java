@@ -17,12 +17,16 @@ public enum AETypeResult implements AIType {
     typeNonCompatibile("Il type previsto non è compatibile col metodo"),
     noFileName("Manca il nome del file"),
     noSourceFile("Manca il file sorgente"),
+    noSrcDir("Manca la directory sorgente"),
+    noDestDir("Manca la directory destinazione"),
 
     fileEsistente("Il file esisteva già"),
     fileEsistenteUguale("Il file esisteva già e non è stato modificato"),
     fileEsistenteModificato("Il file esisteva già ma è stato modificato"),
     fileCreato("Il file è stato creato"),
-    fileSovrascritto("Il file è stato sovrascritto");
+    fileSovrascritto("Il file è stato sovrascritto"),
+    mancaResult("Manca il Result"),
+    mancaTypeLog("Manca il typeLog");
 
     private String tag;
 

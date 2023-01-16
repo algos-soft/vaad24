@@ -475,6 +475,29 @@ public class LogService extends AbstractService {
         return logBase(AELogLevel.debug, wrap);
     }
 
+    public void copy(final AResult result) {
+        String message;
+        AETypeLog log;
+        AECopy copy;
+        String typeCopy;
+        String path;
+        String typeResult;
+
+        if (result == null) {
+            info(WrapLog.build().type(AETypeLog.error).message(AETypeResult.mancaResult.getTag()));
+            return;
+        }
+
+        log = result.getTypeLog() != null ? result.getTypeLog() : AETypeLog.error;
+        copy = result.getTypeCopy() != null ? result.getTypeCopy() : AECopy.indeterminato;
+        typeCopy = textService.primaMaiuscola(copy.getType().toString());
+        path = fileService.findPathBreve(result.getTarget());
+        typeResult = result.getTypeResult() != null ? result.getTypeResult().getTag() : AETypeResult.indeterminato.getTag();
+        message = String.format("%s [%s] (%s)%s%s", typeCopy, path, copy.getDescrizione(), FORWARD, typeResult);
+        info(WrapLog.build().type(log).message(message));
+    }
+
+
     /**
      * Gestisce tutti i log <br>
      * <p>

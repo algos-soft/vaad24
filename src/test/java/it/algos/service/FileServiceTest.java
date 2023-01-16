@@ -2,8 +2,8 @@ package it.algos.service;
 
 import it.algos.*;
 import it.algos.base.*;
-import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.service.*;
 import org.apache.commons.io.*;
@@ -490,6 +490,8 @@ public class FileServiceTest extends AlgosIntegrationTest {
         assertNotNull(ottenutoRisultato);
         assertEquals(valido, ottenutoRisultato.isValido());
         assertEquals(eseguito, ottenutoRisultato.isEseguito());
+
+        logger.copy(ottenutoRisultato.typeLog(AETypeLog.test).typeCopy(typeCopy));
         printRisultato(ottenutoRisultato);
     }
 

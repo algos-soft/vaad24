@@ -1,5 +1,7 @@
 package it.algos.vaad24.backend.enumeration;
 
+import static it.algos.vaad24.backend.boot.VaadCost.*;
+
 import java.util.*;
 
 /**
@@ -26,7 +28,8 @@ public enum AECopy {
     sourceSovrascriveSempreAncheSeEsiste("", AECopyType.source),
     sourceSoloSeNonEsiste("", AECopyType.source),
     sourceCheckFlagSeEsiste("", AECopyType.source),
-    ;
+
+    indeterminato(VUOTA, AECopyType.indeterminato);;
 
     private String descrizione;
 

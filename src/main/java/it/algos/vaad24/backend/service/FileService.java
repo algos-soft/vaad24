@@ -652,8 +652,6 @@ public class FileService extends AbstractService {
     public AResult copyFile(final AECopy typeCopy, String srcPathDir, String destPathDir, final String nomeFile) {
         AResult result = AResult.build().method("copyFile").target(nomeFile);
         String message;
-        srcPathDir = srcPathDir.endsWith(SLASH) ? srcPathDir : srcPathDir + SLASH;
-        destPathDir = destPathDir.endsWith(SLASH) ? destPathDir : destPathDir + SLASH;
         String srcPath = srcPathDir + nomeFile;
         String destPath = destPathDir + nomeFile;
         String path = this.findPathBreve(destPathDir);
@@ -668,6 +666,19 @@ public class FileService extends AbstractService {
             return result.nonValido().type(AETypeResult.noAECopy);
         }
         result = result.type(typeCopy.getDescrizione());
+
+
+        if (textService.isEmpty(srcPathDir)) {
+            return result.nonValido().type(AETypeResult.noSrcDir);
+        }
+        srcPathDir = srcPathDir.endsWith(SLASH) ? srcPathDir : srcPathDir + SLASH;
+
+
+        if (textService.isEmpty(destPathDir)) {
+            return result.nonValido().type(AETypeResult.noDestDir);
+        }
+        destPathDir = destPathDir.endsWith(SLASH) ? destPathDir : destPathDir + SLASH;
+
 
         if (typeCopy.getType() != AECopyType.file) {
             message = String.format("Il type.%s previsto non è compatibile col metodo %s", typeCopy, result.getMethod());
@@ -709,7 +720,7 @@ public class FileService extends AbstractService {
                     if (destText.equals(srcText)) {
                         //                        result.setTagCode(AEKeyFile.esistente.name());
 
-                        return result.type(AETypeResult.fileEsistenteUguale).eseguito(false).valido();
+                        return result.type(AETypeResult.fileEsistenteUguale).eseguito(false).valido(true);
 
                         //                        message = "Il file: " + path + " esisteva già e non è stato modificato.";
                         //                        return result.validMessage(message).nonEseguito();
@@ -719,7 +730,7 @@ public class FileService extends AbstractService {
                             FileUtils.copyFile(fileSrc, fileDest);
                             result.setTagCode(AEKeyFile.modificato.name());
                             message = "Il file: " + path + " esisteva già ma è stato modificato.";
-                            return result.validMessage(message).eseguito();
+                            return result.validMessage(message).type(AETypeResult.fileEsistenteModificato).eseguito(true).valido(true);
                         } catch (Exception unErrore) {
                             logger.error(new WrapLog().exception(unErrore).usaDb());
                             return result.errorMessage(unErrore.getMessage());
@@ -731,7 +742,7 @@ public class FileService extends AbstractService {
                         FileUtils.copyFile(fileSrc, fileDest);
                         result.setTagCode(AEKeyFile.creato.name());
                         message = "Il file: " + path + " non esisteva ed è stato copiato.";
-                        return result.validMessage(message);
+                        return result.validMessage(message).type(AETypeResult.fileCreato).eseguito(true).valido(true);
                     } catch (Exception unErrore) {
                         logger.error(new WrapLog().exception(unErrore).usaDb());
                         return result.errorMessage(unErrore.getMessage());
@@ -740,10 +751,7 @@ public class FileService extends AbstractService {
 
             case fileOnly:
                 if (fileDest.exists()) {
-                    //                    result.setTagCode(AEKeyFile.esistente.name());
-                    //                    message = String.format("Il file: %s esisteva già e non è stato modificato.", nomeFile);
-                    //                    return result.type(AETypeResult.fileEsistente).validMessage(message);
-                    return result.type(AETypeResult.fileEsistente).eseguito(false).valido();
+                    return result.type(AETypeResult.fileEsistente).eseguito(false).valido(true);
                 }
                 else {
                     try {
