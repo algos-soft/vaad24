@@ -93,6 +93,7 @@ public class VaadCost {
     public static final String TAB = "\t";
 
     public static final String ASTERISCO = "*";
+    public static final String CAPO_ASTERISCO = "\n*";
 
     public static final String PIENA = "Piena";
 

@@ -599,13 +599,18 @@ public abstract class AlgosUnitTest {
         System.out.println("Risultato");
         System.out.println(String.format("Valido: %s", result.isValido() ? "true" : "false"));
         System.out.println(String.format("Eseguito: %s", result.isEseguito() ? "true" : "false"));
+        System.out.println(String.format("Result: %s", result.getTypeResult().name()));
         System.out.println(String.format("Method: %s", result.getMethod()));
+        System.out.println(String.format("TypeLog: %s", result.getTypeLog()));
+        System.out.println(String.format("TypeCopy: %s", result.getTypeCopy()));
+        System.out.println(String.format("CopyType: %s", result.getTypeCopy() != null ? result.getTypeCopy().getType() : VUOTA));
         //        System.out.println(String.format("Title: %s", result.getWikiTitle()));
         System.out.println(String.format("Target: %s", result.getTarget()));
-        System.out.println(String.format("TypeResult: %s", result.getTypeResult().getTag()));
-        System.out.println(String.format("TypeText: %s", result.getType()));
+        System.out.println(String.format("TypeResultText: %s", result.getTypeResult().getTag()));
+        System.out.println(String.format("TypeText: %s", result.getTypeTxt()));
         System.out.println(String.format("Message code: %s", result.getCodeMessage()));
         System.out.println(String.format("Message: %s", result.getMessage()));
+        System.out.println(String.format("Exception: %s", result.getException() != null ? result.getException().getMessage():VUOTA));
         System.out.println(String.format("Error code: %s", result.getErrorCode()));
         System.out.println(String.format("Error message: %s", result.getErrorMessage()));
         System.out.println(String.format("Valid message: %s", result.getValidMessage()));
@@ -614,7 +619,7 @@ public abstract class AlgosUnitTest {
         System.out.println("Map value: ");
         if (mappa != null) {
             for (String key : mappa.keySet()) {
-                System.out.println(String.format("%s%s (%d): %s", TAB, key, ((List<String>)mappa.get(key)).size(),mappa.get(key)));
+                System.out.println(String.format("%s%s (%d): %s", TAB, key, ((List<String>) mappa.get(key)).size(), mappa.get(key)));
             }
         }
         System.out.println(String.format("Risultato ottenuto in %s", dateService.deltaText(inizio)));

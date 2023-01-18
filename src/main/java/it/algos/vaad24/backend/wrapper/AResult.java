@@ -2,6 +2,7 @@ package it.algos.vaad24.backend.wrapper;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.service.*;
 import org.springframework.stereotype.*;
 
@@ -30,6 +31,7 @@ public class AResult {
 
     private AECopy typeCopy;
 
+    private AlgosException exception;
     //    private String webTitle = VUOTA;
     //
     //    private String wikiTitle = VUOTA;
@@ -40,7 +42,7 @@ public class AResult {
 
     private String target = VUOTA;
 
-    private String type = VUOTA;
+    private String typeTxt = VUOTA;
 
     private String tagCode = VUOTA;
 
@@ -97,7 +99,7 @@ public class AResult {
     }
 
     public static AResult build() {
-        return new AResult().type(AETypeResult.indeterminato);
+        return new AResult().nonEseguito().typeResult(AETypeResult.indeterminato);
     }
 
     public static AResult valido() {
@@ -147,12 +149,12 @@ public class AResult {
         return this;
     }
 
-    public AResult type(final String type) {
-        this.type = type;
+    public AResult typeTxt(final String typeTxt) {
+        this.typeTxt = typeTxt;
         return this;
     }
 
-    public AResult type(final AETypeResult typeResult) {
+    public AResult typeResult(final AETypeResult typeResult) {
         this.typeResult = typeResult;
         return this;
     }
@@ -281,6 +283,10 @@ public class AResult {
         this.setValido(false);
         return this;
     }
+    public AResult exception(final AlgosException exception) {
+        this.exception = exception;
+        return this;
+    }
 
     public AResult setValidMessage(final String message) {
         validMessage = message;
@@ -357,6 +363,14 @@ public class AResult {
 
     public void setLista(List lista) {
         this.lista = lista;
+    }
+
+    public AlgosException getException() {
+        return exception;
+    }
+
+    public void setException(AlgosException exception) {
+        this.exception = exception;
     }
 
     public List add(Object elementoLista) {
@@ -449,12 +463,12 @@ public class AResult {
         this.method = method;
     }
 
-    public String getType() {
-        return type;
+    public String getTypeTxt() {
+        return typeTxt;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTypeTxt(String typeTxt) {
+        this.typeTxt = typeTxt;
     }
 
     public AETypeLog getTypeLog() {

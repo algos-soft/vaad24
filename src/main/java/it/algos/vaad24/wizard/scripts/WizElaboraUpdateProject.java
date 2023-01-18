@@ -7,7 +7,6 @@ import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
-import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.wizard.enumeration.*;
 import static it.algos.vaad24.wizard.scripts.WizElaboraNewProject.*;
 import org.springframework.beans.factory.config.*;
@@ -62,18 +61,6 @@ public class WizElaboraUpdateProject extends WizElabora {
                     case file -> {
                         result = file(wiz);
                         logger.copy(result);
-                        if (result != null) {
-                            path = fileService.findPathBreve(wiz.name());
-                            desc = wiz.getCopy().getDescrizione();
-                            type = result.getTypeResult();
-                            message = String.format("File [%s] (%s)%s%s", path, desc, FORWARD, type.getTag());
-                            if (result.isErrato()) {
-                                logger.warn(new WrapLog().message(message).type(AETypeLog.wizard));
-                            }
-                            else {
-                                logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
-                            }
-                        }
                     }
                     case source -> source(wiz);
                     case elaboraFile, elaboraDir -> elabora(wiz);
@@ -101,7 +88,7 @@ public class WizElaboraUpdateProject extends WizElabora {
 
         switch (wiz) {
             case pomVaad24 -> {
-                result = fileService.copyFile(AECopy.fileDelete, srcVaad24, destNewProject, wiz.getNomeFile());
+                result = fileService.copyFile(AECopy.fileModifyEver, srcVaad24, destNewProject, wiz.getNomeFile());
                 oldToken = PROJECT_VAADIN24;
                 newToken = VaadVar.projectCurrent;
                 result = fixToken(result, wiz, oldToken, newToken);

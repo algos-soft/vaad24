@@ -12,6 +12,7 @@ import java.util.*;
  * Time: 15:46
  */
 public enum AETypeResult implements AIType {
+
     indeterminato("Indeterminato"),
     noAECopy("Manca il type AECopy"),
     typeNonCompatibile("Il type previsto non è compatibile col metodo"),
@@ -20,11 +21,27 @@ public enum AETypeResult implements AIType {
     noSrcDir("Manca la directory sorgente"),
     noDestDir("Manca la directory destinazione"),
 
-    fileEsistente("Il file esisteva già"),
-    fileEsistenteUguale("Il file esisteva già e non è stato modificato"),
-    fileEsistenteModificato("Il file esisteva già ma è stato modificato"),
-    fileCreato("Il file è stato creato"),
+
+    fileEsistente("Il file esisteva già"), //dopo fileCreaOnlyNotExist
+    fileCreato("Il file è stato creato"), //dopo fileCreaOnlyNotExist, fileModifyEver, fileModifyToken
+    fileEsistenteUguale("Il file esisteva già e non è stato modificato"), //dopo fileModifyEver
+    fileEsistenteModificato("Il file esisteva già ma è stato modificato"), //dopo fileModifyEver
+
+    fileTokenCreatoUguale("Il file è stato creato senza modifiche al token"), //dopo fileModifyToken
+    fileTokenCreatoDiverso("Il file è stato creato e il token adeguato"), //dopo fileModifyToken
+    fileTokenModificatoNoToken("Il file è stato modificato ma il token no"), //dopo fileModifyToken
+    fileTokenModificatoSiToken("Il file è stato modificato e anche il token"), //dopo fileModifyToken
+    fileTokenUgualeNoToken("Il file non è stato modificato e neanche il token"), //dopo fileModifyToken
+    fileTokenUgualeSiToken("Il file non è stato modificato ma il token si"), //dopo fileModifyToken
+
     fileSovrascritto("Il file è stato sovrascritto"),
+
+
+    dirEsistente("La directory esisteva già e non è stata toccata"),
+    dirCreata("La directory è stata creata"),
+
+
+    error("Errore"),
     mancaResult("Manca il Result"),
     mancaTypeLog("Manca il typeLog");
 

@@ -1,7 +1,5 @@
 package it.algos.vaad24.backend.enumeration;
 
-import static it.algos.vaad24.backend.boot.VaadCost.*;
-
 import java.util.*;
 
 /**
@@ -13,10 +11,12 @@ import java.util.*;
  */
 public enum AECopy {
 
-    fileOnly("Copia il file solo se non esisteva", AECopyType.file),
-    fileDelete("Sovrascrive sempre il file anche se esiste", AECopyType.file),
+    fileCreaOnlyNotExist("Crea il file solo se manca", AECopyType.file),
+    fileModifyEver("Sovrascrive sempre il file", AECopyType.file),
+    fileModifyToken("Sovrascrive il file e modifica il token", AECopyType.file),
     fileCheck("Controlla un flag iniziale", AECopyType.file),
     elaboraFile("Elaborazione specifica del file", AECopyType.elaboraFile),
+
 
     dirDelete("Cancella sempre la vecchia cartella e poi ricopia tutto.", AECopyType.directory),
     dirOnly("Se esiste già, non fa nulla. Se non esiste, crea la cartella e il suo contenuto.", AECopyType.directory),
@@ -29,7 +29,7 @@ public enum AECopy {
     sourceSoloSeNonEsiste("", AECopyType.source),
     sourceCheckFlagSeEsiste("", AECopyType.source),
 
-    indeterminato(VUOTA, AECopyType.indeterminato);;
+    noCopy("Manca il type AECopy", AECopyType.indeterminato);;
 
     private String descrizione;
 

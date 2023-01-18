@@ -489,12 +489,18 @@ public class LogService extends AbstractService {
         }
 
         log = result.getTypeLog() != null ? result.getTypeLog() : AETypeLog.error;
-        copy = result.getTypeCopy() != null ? result.getTypeCopy() : AECopy.indeterminato;
+        copy = result.getTypeCopy() != null ? result.getTypeCopy() : AECopy.noCopy;
         typeCopy = textService.primaMaiuscola(copy.getType().toString());
         path = fileService.findPathBreve(result.getTarget());
         typeResult = result.getTypeResult() != null ? result.getTypeResult().getTag() : AETypeResult.indeterminato.getTag();
+        typeResult += result.getValidMessage();
         message = String.format("%s [%s] (%s)%s%s", typeCopy, path, copy.getDescrizione(), FORWARD, typeResult);
-        info(WrapLog.build().type(log).message(message));
+        if (result.isValido()) {
+            info(WrapLog.build().type(log).message(message));
+        }
+        else {
+            warn(WrapLog.build().type(log).message(message).exception(result.getException()));
+        }
     }
 
 

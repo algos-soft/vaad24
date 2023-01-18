@@ -351,18 +351,18 @@ public class FileService extends AbstractService {
 
         if (!this.isNotSuffix(directoryToBeCreated.getAbsolutePath())) {
             message = String.format("%s%s%s", NON_E_DIRECTORY, FORWARD, directoryToBeCreated.getAbsolutePath());
-            logger.error(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
+            //            logger.error(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
             return result.errorMessage(message);
         }
 
         try {
             directoryToBeCreated.mkdirs();
             message = String.format("%s%s%s", CREATA_DIRECTORY, FORWARD, directoryToBeCreated.getAbsolutePath());
-            logger.info(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
+            //            logger.info(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
             return result.validMessage(message);
         } catch (Exception unErrore) {
             message = String.format("%s%s%s", NON_CREATA_DIRECTORY, FORWARD, directoryToBeCreated.getAbsolutePath());
-            logger.error(new WrapLog().exception(unErrore).usaDb().message(message));
+            //            logger.error(new WrapLog().exception(unErrore).usaDb().message(message));
             return result.errorMessage(message);
         }
     }
@@ -516,25 +516,25 @@ public class FileService extends AbstractService {
 
         if (!directoryToBeDeleted.exists()) {
             message = String.format("%s%s%s", NON_ESISTE_DIRECTORY, FORWARD, directoryToBeDeleted.getAbsolutePath());
-            logger.warn(AETypeLog.file, new AlgosException(message));
+            //            logger.warn(AETypeLog.file, new AlgosException(message));
             return result.errorMessage(message);
         }
 
         if (directoryToBeDeleted.delete()) {
             message = String.format("%s%s%s", CANCELLATA_DIRECTORY, FORWARD, directoryToBeDeleted.getAbsolutePath());
-            logger.info(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
+            //            logger.info(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
             return result.validMessage(message);
         }
         else {
             try {
                 FileUtils.deleteDirectory(directoryToBeDeleted);
                 message = String.format("%s%s%s", CANCELLATA_DIRECTORY, FORWARD, directoryToBeDeleted.getAbsolutePath());
-                logger.info(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
+                //                logger.info(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
                 return result.validMessage(message);
             } catch (Exception unErrore) {
                 message = String.format("%s%s%s", NON_CANCELLATA_DIRECTORY, FORWARD, directoryToBeDeleted.getAbsolutePath());
-                logger.info(new WrapLog().message(message).type(AETypeLog.file));
-                logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb().type(AETypeLog.file));
+                //                logger.info(new WrapLog().message(message).type(AETypeLog.file));
+                //                logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb().type(AETypeLog.file));
                 return result.errorMessage(unErrore.getMessage());
             }
         }
@@ -631,6 +631,10 @@ public class FileService extends AbstractService {
     }
 
 
+    public AResult copyFile(final AECopy typeCopy, String srcPathDir, String destPathDir, final String nomeFile) {
+        return copyFile(typeCopy, srcPathDir, destPathDir, nomeFile, VUOTA, VUOTA);
+    }
+
     /**
      * Copia un file <br>
      * <p>
@@ -646,130 +650,200 @@ public class FileService extends AbstractService {
      * @param srcPathDir  path della directory sorgente
      * @param destPathDir path della directory destinazione
      * @param nomeFile    nome del file completo di suffisso
+     * @param srcToken    (opzionale) token originario da sostituire
+     * @param destToken   (opzionale) token definitivo da inserire
      *
      * @return wrapper di informazioni risultanti
      */
-    public AResult copyFile(final AECopy typeCopy, String srcPathDir, String destPathDir, final String nomeFile) {
+    public AResult copyFile(final AECopy typeCopy, String srcPathDir, String destPathDir, final String nomeFile, String srcToken, String destToken) {
         AResult result = AResult.build().method("copyFile").target(nomeFile);
         String message;
-        String srcPath = srcPathDir + nomeFile;
-        String destPath = destPathDir + nomeFile;
-        String path = this.findPathBreve(destPathDir);
-        File fileSrc = new File(srcPath);
-        File fileDest = new File(destPath);
-        String filePath = path + SLASH + nomeFile;
+        String srcPath;
+        String destPath;
+        File fileSrc;
+        File fileDest;
         String srcText;
         String destText;
+        String fileText;
+        String tokens;
 
+        //errore grave - traccia l'eccezione
         if (typeCopy == null) {
-            logger.warn(AETypeLog.file, new AlgosException(AETypeResult.noAECopy.getTag()));
-            return result.nonValido().type(AETypeResult.noAECopy);
+            return result
+                    .nonValido()
+                    .typeResult(AETypeResult.noAECopy)
+                    .typeTxt(VUOTA)
+                    .exception(new AlgosException(AETypeResult.noAECopy.getTag()));
         }
-        result = result.type(typeCopy.getDescrizione());
+        result.typeCopy(typeCopy).typeTxt(typeCopy.getDescrizione());
 
+        //errore grave - traccia l'eccezione
+        if (typeCopy.getType() != AECopyType.file) {
+            message = String.format("Il type [%s] previsto non è compatibile col metodo [%s]", typeCopy, result.getMethod());
+            return result
+                    .nonValido()
+                    .typeResult(AETypeResult.typeNonCompatibile)
+                    .typeTxt(VUOTA)
+                    .exception(new AlgosException(message));
+        }
 
+        //errore grave - traccia l'eccezione
+        if (textService.isEmpty(nomeFile)) {
+            return result
+                    .nonValido()
+                    .typeResult(AETypeResult.noFileName)
+                    .typeTxt(VUOTA)
+                    .exception(new AlgosException(AETypeResult.noFileName.getTag()));
+        }
+
+        //errore lieve
         if (textService.isEmpty(srcPathDir)) {
-            return result.nonValido().type(AETypeResult.noSrcDir);
+            return result.nonValido().typeResult(AETypeResult.noSrcDir);
         }
         srcPathDir = srcPathDir.endsWith(SLASH) ? srcPathDir : srcPathDir + SLASH;
+        srcPath = srcPathDir + nomeFile;
+        fileSrc = new File(srcPath);
 
-
+        //errore lieve
         if (textService.isEmpty(destPathDir)) {
-            return result.nonValido().type(AETypeResult.noDestDir);
+            return result.nonValido().typeResult(AETypeResult.noDestDir);
         }
         destPathDir = destPathDir.endsWith(SLASH) ? destPathDir : destPathDir + SLASH;
-
-
-        if (typeCopy.getType() != AECopyType.file) {
-            message = String.format("Il type.%s previsto non è compatibile col metodo %s", typeCopy, result.getMethod());
-            logger.warn(AETypeLog.file, new AlgosException(message));
-            return result.nonValido().type(AETypeResult.typeNonCompatibile).errorMessage(message);
-        }
-
-        if (textService.isEmpty(nomeFile)) {
-            message = AETypeResult.noFileName.getTag();
-            logger.warn(AETypeLog.file, new AlgosException(message));
-            return result.nonValido().type(AETypeResult.noFileName).type(VUOTA).errorMessage(message);
-        }
-
-        if (textService.isEmpty(destPathDir)) {
-            message = "Manca il nome della directory di destinazione";
-            logger.warn(AETypeLog.file, new AlgosException(message));
-            return result.errorMessage(message);
-        }
+        destPath = destPathDir + nomeFile;
+        fileDest = new File(destPath);
+        result.target(destPath);
 
         result = checkPath(result, destPath);
         if (result.isErrato()) {
             return result;
         }
 
+        //errore lieve
         if (!new File(srcPath).exists()) {
-            message = String.format("Non sono riuscito a trovare il file sorgente %s nella directory %s", nomeFile, srcPathDir);
-            logger.warn(AETypeLog.file, new AlgosException(message));
-            return result.errorMessage(message);
+            return result.nonValido().typeResult(AETypeResult.noSourceFile);
         }
 
         switch (typeCopy) {
-            //esiste ed è uguale
-            //esiste ma viene modificato
-            //non esiste
-            case fileDelete:
+
+            //esiste e non fa nulla
+            //non esiste e lo crea
+            case fileCreaOnlyNotExist:
+                if (fileDest.exists()) {
+                    return result
+                            .valido(true)
+                            .eseguito(false)
+                            .typeResult(AETypeResult.fileEsistente);
+                }
+                else {
+                    return copyFile(result, fileSrc, fileDest);
+                }
+
+                //esiste, viene sovrascritto ma era uguale
+                //esiste, viene sovrascritto ma era diverso
+                //non esiste e lo crea
+            case fileModifyEver:
                 if (fileDest.exists()) {
                     srcText = leggeFile(srcPath);
                     destText = leggeFile(destPath);
                     if (destText.equals(srcText)) {
-                        //                        result.setTagCode(AEKeyFile.esistente.name());
-
-                        return result.type(AETypeResult.fileEsistenteUguale).eseguito(false).valido(true);
-
-                        //                        message = "Il file: " + path + " esisteva già e non è stato modificato.";
-                        //                        return result.validMessage(message).nonEseguito();
+                        return result
+                                .valido(true)
+                                .eseguito(false)
+                                .typeResult(AETypeResult.fileEsistenteUguale);
                     }
                     else {
-                        try {
-                            FileUtils.copyFile(fileSrc, fileDest);
-                            result.setTagCode(AEKeyFile.modificato.name());
-                            message = "Il file: " + path + " esisteva già ma è stato modificato.";
-                            return result.validMessage(message).type(AETypeResult.fileEsistenteModificato).eseguito(true).valido(true);
-                        } catch (Exception unErrore) {
-                            logger.error(new WrapLog().exception(unErrore).usaDb());
-                            return result.errorMessage(unErrore.getMessage());
+                        result = copyFile(result, fileSrc, fileDest);
+                        if (result.isValido()) {
+                            return result.typeResult(AETypeResult.fileEsistenteModificato);
+                        }
+                        else {
+                            return result;
                         }
                     }
                 }
                 else {
-                    try {
-                        FileUtils.copyFile(fileSrc, fileDest);
-                        result.setTagCode(AEKeyFile.creato.name());
-                        message = "Il file: " + path + " non esisteva ed è stato copiato.";
-                        return result.validMessage(message).type(AETypeResult.fileCreato).eseguito(true).valido(true);
-                    } catch (Exception unErrore) {
-                        logger.error(new WrapLog().exception(unErrore).usaDb());
-                        return result.errorMessage(unErrore.getMessage());
+                    return copyFile(result, fileSrc, fileDest);
+                }
+
+            case fileModifyToken:
+                tokens = String.format("%s[%s%s%s]", SPAZIO, srcToken, FORWARD, destToken);
+
+                //                    fileTokenCreatoUguale("Il file è stato creato senza modifiche al token"), //dopo fileModifyToken
+                //                            fileTokenCreatoDiverso("Il file è stato creato e il token adeguato"), //dopo fileModifyToken
+                //                            fileTokenModificatoNoToken("Il file è stato modificato ma il token no"), //dopo fileModifyToken
+                //                            fileTokenModificatoSiToken("Il file è stato modificato e anche il token"), //dopo fileModifyToken
+                //                            fileTokenUgualeSiToken("Il file non è stato modificato e neanche il token"), //dopo fileModifyToken
+                //                            fileTokenUgualeNoToken("Il file non è stato modificato ma il token si"), //dopo fileModifyToken
+
+                if (fileDest.exists()) {
+                    result = copyFile(AECopy.fileModifyEver, srcPathDir, destPathDir, nomeFile).typeCopy(AECopy.fileModifyToken);
+
+                    if (result.getTypeResult() == AETypeResult.fileEsistenteUguale) {
+                        if (isUgualeToken(srcPath, destPath, srcToken, destToken)) {
+                            return result.typeResult(AETypeResult.fileTokenUgualeNoToken).validMessage(tokens);
+                        }
+                        else {
+                            fileText = leggeFile(destPath);
+                            fileText = textService.sostituisce(fileText, srcToken, destToken);
+                            sovraScriveFile(destPath, fileText);
+                            return result.typeResult(AETypeResult.fileTokenUgualeSiToken).validMessage(tokens);
+                        }
+                    }
+
+                    if (result.getTypeResult() == AETypeResult.fileEsistenteModificato) {
+                        if (isUgualeToken(srcPath, destPath, srcToken, destToken)) {
+                            return result.typeResult(AETypeResult.fileTokenModificatoNoToken).validMessage(tokens);
+                        }
+                        else {
+                            fileText = leggeFile(destPath);
+                            fileText = textService.sostituisce(fileText, srcToken, destToken);
+                            sovraScriveFile(destPath, fileText);
+                            return result.typeResult(AETypeResult.fileTokenModificatoSiToken).validMessage(tokens);
+                        }
+                    }
+
+                    return result.errorMessage("Qualcosa non ha funzionato");
+                }
+                else {
+                    // crea il file
+                    result = copyFile(result, fileSrc, fileDest);
+
+                    // check del token
+                    if (isUgualeToken(srcPath, destPath, srcToken, destToken)) {
+                        return result.typeResult(AETypeResult.fileTokenCreatoUguale).validMessage(tokens);
+                    }
+                    else {
+                        fileText = leggeFile(destPath);
+                        fileText = textService.sostituisce(fileText, srcToken, destToken);
+                        sovraScriveFile(destPath, fileText);
+                        return result.typeResult(AETypeResult.fileTokenCreatoDiverso).validMessage(tokens);
                     }
                 }
 
-            case fileOnly:
-                if (fileDest.exists()) {
-                    return result.type(AETypeResult.fileEsistente).eseguito(false).valido(true);
-                }
-                else {
-                    try {
-                        FileUtils.copyFile(fileSrc, fileDest);
-                        result.setTagCode(AEKeyFile.creato.name());
-                        message = "Il file: " + filePath + " non esisteva ed è stato copiato.";
-                        return result.validMessage(message);
-                    } catch (Exception unErrore) {
-                        logger.error(new WrapLog().exception(unErrore).usaDb());
-                        return result.errorMessage(unErrore.getMessage());
-                    }
-                }
+                //non usato - troppo complicato da mantenere
             case fileCheck:
                 logger.warn(AETypeLog.file, new AlgosException(SWITCH_FUTURO));
                 return result.errorMessage(SWITCH_FUTURO);
             default:
                 logger.warn(AETypeLog.file, new AlgosException(SWITCH));
                 return result.errorMessage(SWITCH);
+        }
+    }
+
+    private AResult copyFile(AResult result, File fileSrc, File fileDest) {
+        try {
+            FileUtils.copyFile(fileSrc, fileDest);
+            return result
+                    .valido(true)
+                    .eseguito(true)
+                    .typeResult(AETypeResult.fileCreato);
+        } catch (Exception unErrore) {
+            logger.error(new WrapLog().exception(unErrore).usaDb());
+            return result
+                    .valido(false)
+                    .eseguito(false)
+                    .typeResult(AETypeResult.error)
+                    .errorMessage(unErrore.getMessage());
         }
     }
 
@@ -789,9 +863,11 @@ public class FileService extends AbstractService {
      * Se esiste la directory di destinazione ed è AECopyDir.addingOnly, la integra aggiungendo file/cartelle <br>
      * Nei messaggi di avviso, accorcia il destPath eliminando i livelli precedenti alla directory indicata <br>
      *
-     * @param typeCopy modalità di comportamento se esiste la directory di destinazione
-     * @param srcPath  nome completo della directory sorgente
-     * @param destPath nome completo della directory destinazione
+     * @param typeCopy  modalità di comportamento se esiste la directory di destinazione
+     * @param srcPath   nome completo della directory sorgente
+     * @param destPath  nome completo della directory destinazione
+     * @param srcToken  (opzionale) token originario da sostituire
+     * @param destToken (opzionale) token definitivo da inserire
      *
      * @return wrapper di informazioni risultanti
      */
@@ -816,28 +892,33 @@ public class FileService extends AbstractService {
         LinkedHashMap resultMap = new LinkedHashMap();
 
         if (typeCopy == null) {
-            result.setType(NULL);
-            message = "Manca il type AECopy";
-            return result.errorMessage(message);
+            return result
+                    .nonValido()
+                    .typeResult(AETypeResult.noAECopy)
+                    .exception(new AlgosException(AETypeResult.noAECopy.getTag()));
         }
+        result = result.typeTxt(typeCopy.getDescrizione());
+
+        if (textService.isEmpty(srcPath)) {
+            return result.nonValido().typeResult(AETypeResult.noSrcDir);
+        }
+        srcPath = srcPath.endsWith(SLASH) ? srcPath : srcPath + SLASH;
+
+        if (textService.isEmpty(destPath)) {
+            return result.nonValido().typeResult(AETypeResult.noDestDir);
+        }
+        destPath = destPath.endsWith(SLASH) ? destPath : destPath + SLASH;
 
         if (typeCopy.getType() == AECopyType.file || typeCopy.getType() == AECopyType.source) {
-            result.setType(typeCopy.name());
+            result.setTypeTxt(typeCopy.name());
             message = "Il type AECopy non è adatto ad una directory";
             return result.errorMessage(message);
         }
 
-        if (textService.isEmpty(srcPath) || textService.isEmpty(destPath)) {
-            tag = textService.isEmpty(srcPath) ? "srcPath" : "destPath";
-            message = String.format("Manca il '%s' della directory da copiare.", tag);
-            return result.setErrorMessage(message);
-        }
-        srcPath = srcPath.endsWith(SLASH) ? srcPath : srcPath + SLASH;
-        destPath = destPath.endsWith(SLASH) ? destPath : destPath + SLASH;
         path = this.findPathBreve(destPath);
         dir = srcPath.contains(test) ? dir + " di test" : dir;
 
-        result = result.type(typeCopy + FORWARD + typeCopy.getDescrizione());
+        result = result.typeTxt(typeCopy + FORWARD + typeCopy.getDescrizione());
 
         if (typeCopy.getType() != AECopyType.directory) {
             message = String.format("Il type.%s previsto non è compatibile col metodo %s", typeCopy, result.getMethod());
@@ -847,7 +928,7 @@ public class FileService extends AbstractService {
 
         if (!dirSrc.isDirectory()) {
             message = String.format("Non esiste la %s sorgente '%s' da copiare.", srcPath, dir);
-            return result.setErrorMessage(message);
+            return result.setErrorMessage(message).typeResult(AETypeResult.noSrcDir);
         }
 
         if (typeCopy == AECopy.dirFilesModificaToken) {
@@ -882,11 +963,13 @@ public class FileService extends AbstractService {
                     filesDestinazionePost = getFilesName(destPath);
                     resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
 
-                    message = String.format("La %s '%s' esisteva già e non è stata toccata.", dir, path);
-                    result.setValidMessage(message);
+                    //                    message = String.format("La %s '%s' esisteva già e non è stata toccata.", dir, path);
+                    result.typeResult(AETypeResult.dirEsistente);
                 }
                 else {
-                    result = creaNuova(result, dirSrc, dirDest, path);
+                    AResult result2;
+                    result2 = creaNuova(result, dirSrc, dirDest, path);
+                    result.typeResult(AETypeResult.dirCreata);
                 }
                 return result;
 
@@ -924,7 +1007,7 @@ public class FileService extends AbstractService {
                     //--copio SOLO i sorgenti NON presenti nella destinazione
                     for (String nomeFile : filesSorgenti) {
                         if (!filesDestinazioneAnte.contains(nomeFile)) {
-                            copyFile(AECopy.fileOnly, srcPath, destPath, nomeFile);
+                            copyFile(AECopy.fileCreaOnlyNotExist, srcPath, destPath, nomeFile);
                             filesAggiunti.add(nomeFile);
                         }
                     }
@@ -961,17 +1044,17 @@ public class FileService extends AbstractService {
                                 if (typeCopy == AECopy.dirFilesModificaToken) {
                                     //--file uguali a parte il token
                                     if (!isUgualeToken(srcPath, destPath, nomeFile, srcToken, destToken)) {
-                                        copyFile(AECopy.fileDelete, srcPath, destPath, nomeFile);
+                                        copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile);
                                         filesTokenModificati.add(nomeFile);
                                     }
                                     else {
-                                        copyFile(AECopy.fileDelete, srcPath, destPath, nomeFile);
+                                        copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile);
                                         filesTokenUguali.add(nomeFile);
                                     }
                                 }
                                 //--diversi e non controlla le differenze del token
                                 else {
-                                    copyFile(AECopy.fileDelete, srcPath, destPath, nomeFile);
+                                    copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile);
                                     filesModificati.add(nomeFile);
                                 }
                             }
@@ -986,7 +1069,7 @@ public class FileService extends AbstractService {
                         }
                         //--se manca, lo aggiunge
                         else {
-                            copyFile(AECopy.fileOnly, srcPath, destPath, nomeFile);
+                            copyFile(AECopy.fileCreaOnlyNotExist, srcPath, destPath, nomeFile);
                             filesAggiunti.add(nomeFile);
                         }
                     }
@@ -1082,6 +1165,13 @@ public class FileService extends AbstractService {
         return sorgente.equals(destinazione);
     }
 
+    public boolean isUgualeToken(String srcPath, String destPath, String srcToken, String destToken) {
+        String sorgente = leggeFile(srcPath);
+        String destinazione = leggeFile(destPath);
+        sorgente = textService.sostituisce(sorgente, srcToken, destToken);
+        return sorgente.equals(destinazione);
+    }
+
     /**
      * Scrive un file
      * Se non esiste, lo crea
@@ -1141,7 +1231,7 @@ public class FileService extends AbstractService {
         switch (typeCopy) {
             case fileCheck, sourceCheckFlagSeEsiste -> {
             }
-            case fileOnly, sourceSoloSeNonEsiste -> {
+            case fileCreaOnlyNotExist, sourceSoloSeNonEsiste -> {
                 if (isEsisteFile(pathFileToBeWritten)) {
                     message = String.format("Il file '%s' esisteva già e non è stato modificato", path);
                     result.setErrorMessage(message);
@@ -1152,7 +1242,7 @@ public class FileService extends AbstractService {
                     result = AResult.valido(message);
                 }
             }
-            case fileDelete, sourceSovrascriveSempreAncheSeEsiste -> {
+            case fileModifyEver, sourceSovrascriveSempreAncheSeEsiste -> {
                 if (isEsisteFile(pathFileToBeWritten)) {
                     message = String.format("Il file '%s' esisteva già ma è stato modificato", path);
                 }
