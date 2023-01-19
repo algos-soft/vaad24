@@ -58,20 +58,24 @@ public class WizElaboraUpdateProject extends WizElabora {
             if (mappaCheckbox.get(key).getValue()) {
                 wiz = AEWizProject.valueOf(key);
                 switch (wiz.getCopy().getType()) {
-                    case directory -> directory(wiz);
+                    case directory -> {
+                        result = directory(wiz);
+                        logger.copy(result);
+                    }
                     case file -> {
                         result = file(wiz);
                         logger.copy(result);
                     }
                     case source -> source(wiz);
                     case elaboraFile, elaboraDir -> elabora(wiz);
-                } ;
+                }
             }
 
         }
         //        Avviso.message("Update project").success().open();
 
-         message = String.format("Aggiornato il progetto esistente [%s]", newUpdateProject);
+        logger.info(new WrapLog().type(AETypeLog.spazio));
+        message = String.format("Aggiornato il modulo '%s' del progetto corrente [%s]", VaadVar.moduloVaadin24, newUpdateProject);
         logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
 
         super.eliminaSources();

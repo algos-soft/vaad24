@@ -37,7 +37,7 @@ public enum AETypeResult implements AIType {
     fileSovrascritto("Il file è stato sovrascritto"),
 
 
-    dirEsistente("La directory esisteva già e non è stata toccata"),
+    dirEsistente("La directory esisteva già e non è stata modificata"),
     dirCreata("La directory è stata creata"),
 
 

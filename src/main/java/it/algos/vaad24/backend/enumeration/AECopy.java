@@ -18,11 +18,11 @@ public enum AECopy {
     elaboraFile("Elaborazione specifica del file", AECopyType.elaboraFile),
 
 
-    dirDelete("Cancella sempre la vecchia cartella e poi ricopia tutto.", AECopyType.directory),
-    dirOnly("Se esiste già, non fa nulla. Se non esiste, crea la cartella e il suo contenuto.", AECopyType.directory),
-    dirFilesAddOnly("Aggiunge directories e files senza modificare o cancellare quelli esistenti.", AECopyType.directory),
-    dirFilesModifica("Aggiunge directories e files e modifica quelli esistenti.", AECopyType.directory),
-    dirFilesModificaToken("Aggiunge e modifica dirs/files con check del token.", AECopyType.directory),
+    dirDelete("Ricrea SEMPRE la directory.", AECopyType.directory),
+    dirOnly("Crea la directory SOLO se non esiste", AECopyType.directory),
+    dirFilesAddOnly("Aggiunge dir/files SENZA modificare quelli esistenti.", AECopyType.directory),
+    dirFilesModifica("Aggiunge dir/files e MODIFICA quelli esistenti.", AECopyType.directory),
+    dirFilesModificaToken("Aggiunge e MODIFICA dirs/files con check del token.", AECopyType.directory),
     elaboraDir("Elaborazione specifica della directory", AECopyType.elaboraDir),
 
     sourceSovrascriveSempreAncheSeEsiste("", AECopyType.source),

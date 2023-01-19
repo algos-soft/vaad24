@@ -75,15 +75,16 @@ public abstract class WizElabora {
 
     public AResult directory(final AEWizProject wiz) {
         AResult result;
+        AECopy copy = wiz.getCopy();
         String srcPath = srcVaad24 + wiz.getCopyDest() + SLASH;
         String destPath = destNewProject + wiz.getCopyDest() + SLASH;
         String dir = fileService.lastDirectory(destPath).toLowerCase();
         String tag = progettoEsistente ? "Update" : "New";
 
         result = fileService.copyDirectory(wiz.getCopy(), srcPath, destPath);
-        mostraRisultato(result, wiz.getCopy(), dir, tag);
+//        mostraRisultato(result, wiz.getCopy(), dir, tag);
+        return result.typeLog(AETypeLog.wizard).typeCopy(copy);
 
-        return result;
     }
 
 
