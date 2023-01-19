@@ -479,9 +479,10 @@ public class LogService extends AbstractService {
         String message;
         AETypeLog log;
         AECopy copy;
-        String typeCopy;
+        String titolo;
+        String test = "/src/test/java/";
         String path;
-        String typeResult;
+        String textResult;
 
         if (result == null) {
             info(WrapLog.build().type(AETypeLog.error).message(AETypeResult.mancaResult.getTag()));
@@ -490,16 +491,18 @@ public class LogService extends AbstractService {
 
         log = result.getTypeLog() != null ? result.getTypeLog() : AETypeLog.error;
         copy = result.getTypeCopy() != null ? result.getTypeCopy() : AECopy.noCopy;
-        typeCopy = textService.primaMaiuscola(copy.getType().toString());
+        titolo = copy.getType().toString();
+        titolo = result.getTarget().contains(test) ? "test " + titolo : titolo;
+        titolo = textService.primaMaiuscola(titolo);
 
         if (copy == AECopy.modulo) {
             message = String.format("Il modulo [%s] è stato completamente riscritto", VaadVar.moduloVaadin24);
         }
         else {
             path = fileService.findPathBreve(result.getTarget());
-            typeResult = result.getTypeResult() != null ? result.getTypeResult().getTag() : AETypeResult.indeterminato.getTag();
-            typeResult += result.getValidMessage();
-            message = String.format("%s [%s] (%s)%s%s", typeCopy, path, copy.getDescrizione(), FORWARD, typeResult);
+            textResult = result.getTypeResult() != null ? result.getTypeResult().getTag() : AETypeResult.indeterminato.getTag();
+            textResult += result.getValidMessage();
+            message = String.format("%s [%s] (%s)%s%s", titolo, path, copy.getDescrizione(), FORWARD, textResult);
         }
 
         if (result.isValido()) {

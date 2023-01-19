@@ -38,7 +38,8 @@ public enum AETypeResult implements AIType {
 
 
     dirEsistente("La directory esisteva già e non è stata modificata"),
-    dirCreata("La directory è stata creata"),
+    dirCreata("La directory mancava ed è stata creata"),
+    dirRiCreata("La directory esisteva ed è stata ricreata"),
     moduloSovrascritto("Il modulo è stato completamente riscritto"),
 
 

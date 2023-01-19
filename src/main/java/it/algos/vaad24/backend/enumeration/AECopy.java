@@ -18,12 +18,12 @@ public enum AECopy {
     elaboraFile("Elaborazione specifica del file", AECopyType.elaboraFile),
 
 
-    modulo("Ricrea SEMPRE il modulo.", AECopyType.modulo),
-    dirDelete("Ricrea SEMPRE la directory.", AECopyType.directory),
+    modulo("Ricrea SEMPRE il modulo", AECopyType.modulo),
+    dirDelete("Ricrea SEMPRE la directory", AECopyType.directory),
     dirOnly("Crea la directory SOLO se non esiste", AECopyType.directory),
-    dirFilesAddOnly("Aggiunge dir/files SENZA modificare quelli esistenti.", AECopyType.directory),
-    dirFilesModifica("Aggiunge dir/files e MODIFICA quelli esistenti.", AECopyType.directory),
-    dirFilesModificaToken("Aggiunge e MODIFICA dirs/files con check del token.", AECopyType.directory),
+    dirFilesAddOnly("Aggiunge dir/files SENZA modificare quelli esistenti", AECopyType.directory),
+    dirFilesModifica("Aggiunge dir/files e MODIFICA quelli esistenti", AECopyType.directory),
+    dirFilesModificaToken("Aggiunge e MODIFICA dirs/files con check del token", AECopyType.directory),
     elaboraDir("Elaborazione specifica della directory", AECopyType.elaboraDir),
 
     sourceSovrascriveSempreAncheSeEsiste("", AECopyType.source),

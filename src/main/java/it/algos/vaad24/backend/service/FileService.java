@@ -971,10 +971,10 @@ public class FileService extends AbstractService {
 
             case modulo, dirDelete:
                 if (dirDest.exists()) {
-
                     try {
                         FileUtils.deleteDirectory(dirDest);
                         FileUtils.copyDirectory(dirSrc, dirDest);
+                        result.typeResult(AETypeResult.dirRiCreata);
                     } catch (Exception unErrore) {
                         logger.error(new WrapLog().exception(unErrore).usaDb());
                         return result.setErrorMessage(unErrore.getMessage());
@@ -990,11 +990,12 @@ public class FileService extends AbstractService {
                     filesDestinazionePost = getFilesName(destPath);
                     resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
 
-                    message = String.format("La %s '%s' esisteva già ma è stata cancellata e creata ex-novo.", dir, path);
-                    result.setValidMessage(message);
+//                    message = String.format("La %s '%s' esisteva già ma è stata cancellata e creata ex-novo.", dir, path);
+//                    result.setValidMessage(message);
                 }
                 else {
                     result = creaNuova(result, dirSrc, dirDest, path);
+                    int a=86;
                 }
                 return result;
 
@@ -1021,10 +1022,12 @@ public class FileService extends AbstractService {
                         message = String.format("La %s '%s' esisteva già e non è stato aggiunto nessun nuovo file.", dir, path);
                         result.setTagCode(AEKeyDir.esistente.name());
                     }
-                    result.setValidMessage(message);
+//                    result.setValidMessage(message);
+                    result.typeResult(AETypeResult.dirRiCreata);
                 }
                 else {
                     result = creaNuova(result, dirSrc, dirDest, path);
+                    result.typeResult(AETypeResult.dirCreata);
                 }
                 return result;
 
@@ -1108,10 +1111,12 @@ public class FileService extends AbstractService {
                             message = String.format("La %s '%s' esisteva già; aggiunti: %s; modificati: %s", dir, path, filesAggiunti, filesModificati);
                         }
                     }
-                    result.setValidMessage(message);
+//                    result.setValidMessage(message);
+                    result.typeResult(AETypeResult.dirRiCreata);
                 }
                 else {
                     result = creaNuova(result, dirSrc, dirDest, path);
+                    result.typeResult(AETypeResult.dirCreata);
                 }
                 return result;
 
@@ -1146,7 +1151,8 @@ public class FileService extends AbstractService {
 
         message = String.format("La directory '%s' non esisteva ed è stata creata.", path);
 
-        return result.validMessage(message);
+//        return result.validMessage(message);
+        return result;
     }
 
 
