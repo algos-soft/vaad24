@@ -73,15 +73,44 @@ public abstract class WizElabora {
         AEToken.firstProject.set(newUpdateProject.substring(0, 1).toUpperCase());
     }
 
-    public AResult directory(final AEWizProject wiz) {
-        AResult result;
+
+
+    public AResult file(final AEWizProject wiz) {
         AECopy copy = wiz.getCopy();
+        AResult result = AResult.build()
+                .typeLog(AETypeLog.wizard)
+                .target(wiz.getNomeFile())
+                .method("copyFile")
+                .typeCopy(copy);
+        String srcPath = srcVaad24 + wiz.getCopyDest();
+
+        //check esiste nome file
+        if (textService.isEmpty(wiz.getNomeFile())) {
+            return result.typeResult(AETypeResult.noFileName).typeCopy(copy).eseguito(false).nonValido();
+        }
+
+        //check esiste file sorgente
+        if (!fileService.isEsisteFile(srcPath)) {
+            return result.typeResult(AETypeResult.noSourceFile).typeCopy(copy).eseguito(false).nonValido();
+        }
+        result = fileService.copyFile(copy, srcVaad24, destNewProject, wiz.getCopyDest(), wiz.getSrcToken(), wiz.getDestToken());
+        return result.typeLog(AETypeLog.wizard).typeCopy(copy);
+    }
+
+
+    public AResult directory(final AEWizProject wiz) {
+        AECopy copy = wiz.getCopy();
+        AResult result = AResult.build()
+                .typeLog(AETypeLog.wizard)
+                .target(wiz.getCopyDest())
+                .method("copyDirectory")
+                .typeCopy(copy);
         String srcPath = srcVaad24 + wiz.getCopyDest() + SLASH;
         String destPath = destNewProject + wiz.getCopyDest() + SLASH;
-        String dir = fileService.lastDirectory(destPath).toLowerCase();
-        String tag = progettoEsistente ? "Update" : "New";
+//        String dir = fileService.lastDirectory(destPath).toLowerCase();
+//        String tag = progettoEsistente ? "Update" : "New";
 
-        result = fileService.copyDirectory(wiz.getCopy(), srcPath, destPath);
+        result = fileService.copyDirectory(copy, srcPath, destPath);
 //        mostraRisultato(result, wiz.getCopy(), dir, tag);
         return result.typeLog(AETypeLog.wizard).typeCopy(copy);
 
@@ -208,27 +237,6 @@ public abstract class WizElabora {
     }
 
 
-    public AResult file(AEWizProject wiz) {
-        AECopy copy = wiz.getCopy();
-        AResult result = AResult.build()
-                .typeLog(AETypeLog.wizard)
-                .target(wiz.getNomeFile())
-                .method("copyFile")
-                .typeCopy(copy);
-        String srcPath = srcVaad24 + wiz.getCopyDest();
-
-        //check esiste nome file
-        if (textService.isEmpty(wiz.getNomeFile())) {
-            return result.typeResult(AETypeResult.noFileName).typeCopy(copy).eseguito(false).nonValido();
-        }
-
-        //check esiste file sorgente
-        if (!fileService.isEsisteFile(srcPath)) {
-            return result.typeResult(AETypeResult.noSourceFile).typeCopy(copy).eseguito(false).nonValido();
-        }
-        result = fileService.copyFile(copy, srcVaad24, destNewProject, wiz.getCopyDest(), wiz.getSrcToken(), wiz.getDestToken());
-        return result.typeLog(AETypeLog.wizard).typeCopy(copy);
-    }
 
 
     public AResult source(final AEWizProject wiz) {

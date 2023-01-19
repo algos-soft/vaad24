@@ -895,7 +895,7 @@ public class FileService extends AbstractService {
         result.typeCopy(typeCopy).typeTxt(typeCopy.getDescrizione());
 
         //errore grave - traccia l'eccezione
-        if (typeCopy.getType() != AECopyType.directory) {
+        if (typeCopy.getType() != AECopyType.modulo && typeCopy.getType() != AECopyType.directory) {
             message = String.format("Il type [%s] previsto non è compatibile col metodo [%s]", typeCopy, result.getMethod());
             return result
                     .nonValido()
@@ -920,8 +920,7 @@ public class FileService extends AbstractService {
         path = this.findPathBreve(destPath);
         dir = srcPath.contains(test) ? "Test " + dir : dir;
 
-//        result = result.typeTxt(typeCopy + FORWARD + typeCopy.getDescrizione());
-
+        //        result = result.typeTxt(typeCopy + FORWARD + typeCopy.getDescrizione());
 
         if (!dirSrc.isDirectory()) {
             message = String.format("Non esiste la %s sorgente '%s' da copiare.", srcPath, dir);
@@ -970,7 +969,7 @@ public class FileService extends AbstractService {
                 }
                 return result;
 
-            case dirDelete:
+            case modulo, dirDelete:
                 if (dirDest.exists()) {
 
                     try {

@@ -12,6 +12,7 @@ import java.util.*;
  * User: gac
  * Date: mer, 04-nov-2020
  * Time: 18:56
+ * x
  */
 public enum AEWizProject {
     config("Directory CONFIG di risorse on-line esterne al JAR (vaad24)", true, false, "config", AECopy.dirFilesModifica),
@@ -24,7 +25,7 @@ public enum AEWizProject {
 
     snippets("Directory SNIPPETS di codice suggerito (vaad24)", true, false, "snippets", AECopy.dirFilesModifica),
 
-    flow("Directory BASE Vaad24 (Wizard compreso)", true, false, "src/main/java/it/algos/vaad24", AECopy.dirDelete),
+    flow("Directory BASE Vaad24 (Wizard compreso)", true, true, "src/main/java/it/algos/vaad24", AECopy.modulo),
 
     //    projectNew("Directory modulo del nuovo progetto (...)", false, VUOTA, AECopy.dirAddingOnly),
 
@@ -34,17 +35,17 @@ public enum AEWizProject {
             AECopy.sourceSovrascriveSempreAncheSeEsiste, "properties"
     ),
 
-    banner("File BANNER di SpringBoot (vaad24) [need riavvio]", true, true, "src/main/resources/banner.txt", AECopy.fileModifyEver),
+    banner("File BANNER di SpringBoot (vaad24) [need riavvio]", true, false, "src/main/resources/banner.txt", AECopy.fileModifyEver),
 
-    git("File GIT di esclusione (sources)", true, true, ".gitignore", AECopy.fileModifyEver),
+    git("File GIT di esclusione (sources)", true, false, ".gitignore", AECopy.fileModifyEver),
 
     pomVaad24("File POM.xml di Maven (vaad24)", true, false, "pom.xml", AECopy.elaboraFile),
     pomSources("File POM.xml di Maven (sources)", true, false, "pom.xml", AECopy.sourceSovrascriveSempreAncheSeEsiste, "pom"),
 
     read("File README con note di testo (sources)", true, false, "README.md", AECopy.sourceSoloSeNonEsiste, "readme"),
 
-    testBase("Directory TEST /base (vaad24)", false, true, "src/test/java/it/algos/base", AECopy.dirFilesModifica),
-    testEnum("Directory TEST /enum (vaad24)", false, true, "src/test/java/it/algos/enumeration", AECopy.dirFilesModifica),
+    testBase("Directory TEST /base (vaad24)", false, false, "src/test/java/it/algos/base", AECopy.dirFilesModifica),
+    testEnum("Directory TEST /enum (vaad24)", false, false, "src/test/java/it/algos/enumeration", AECopy.dirFilesModifica),
     testService("Directory TEST /service (vaad24)", false, false, "src/test/java/it/algos/service", AECopy.elaboraDir),
     testBackend("Directory TEST /backend (vaad24)", false, false, "src/test/java/it/algos/backend", AECopy.elaboraDir),
     application("Main class java", true, false, "src/main/java/it/algos/@PROJECTUPPER@Application.java",

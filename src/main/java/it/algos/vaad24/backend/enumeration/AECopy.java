@@ -18,6 +18,7 @@ public enum AECopy {
     elaboraFile("Elaborazione specifica del file", AECopyType.elaboraFile),
 
 
+    modulo("Ricrea SEMPRE il modulo.", AECopyType.modulo),
     dirDelete("Ricrea SEMPRE la directory.", AECopyType.directory),
     dirOnly("Crea la directory SOLO se non esiste", AECopyType.directory),
     dirFilesAddOnly("Aggiunge dir/files SENZA modificare quelli esistenti.", AECopyType.directory),

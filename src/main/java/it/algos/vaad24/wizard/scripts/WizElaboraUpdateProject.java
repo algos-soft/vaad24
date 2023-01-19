@@ -58,7 +58,7 @@ public class WizElaboraUpdateProject extends WizElabora {
             if (mappaCheckbox.get(key).getValue()) {
                 wiz = AEWizProject.valueOf(key);
                 switch (wiz.getCopy().getType()) {
-                    case directory -> {
+                    case modulo, directory -> {
                         result = directory(wiz);
                         logger.copy(result);
                     }
