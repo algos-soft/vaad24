@@ -871,8 +871,8 @@ public class FileService extends AbstractService {
         String test = "/test/";
         String dir = "directory";
         String path;
-        File dirSrc = new File(srcPath);
-        File dirDest = new File(destPath);
+        File dirSrc;
+        File dirDest;
         List<String> filesSorgenti;
         List<String> filesDestinazioneAnte = new ArrayList<>();
         List<String> filesDestinazionePost;
@@ -884,40 +884,44 @@ public class FileService extends AbstractService {
         List<String> filesRimossi;
         LinkedHashMap resultMap = new LinkedHashMap();
 
+        //errore grave - traccia l'eccezione
         if (typeCopy == null) {
             return result
                     .nonValido()
                     .typeResult(AETypeResult.noAECopy)
+                    .typeTxt(VUOTA)
                     .exception(new AlgosException(AETypeResult.noAECopy.getTag()));
         }
-        result = result.typeTxt(typeCopy.getDescrizione());
+        result.typeCopy(typeCopy).typeTxt(typeCopy.getDescrizione());
 
+        //errore grave - traccia l'eccezione
+        if (typeCopy.getType() != AECopyType.directory) {
+            message = String.format("Il type [%s] previsto non è compatibile col metodo [%s]", typeCopy, result.getMethod());
+            return result
+                    .nonValido()
+                    .typeResult(AETypeResult.typeNonCompatibile)
+                    .typeTxt(VUOTA)
+                    .exception(new AlgosException(message));
+        }
+
+        //errore lieve
         if (textService.isEmpty(srcPath)) {
             return result.nonValido().typeResult(AETypeResult.noSrcDir);
         }
         srcPath = srcPath.endsWith(SLASH) ? srcPath : srcPath + SLASH;
+        dirSrc = new File(srcPath);
 
         if (textService.isEmpty(destPath)) {
             return result.nonValido().typeResult(AETypeResult.noDestDir);
         }
         destPath = destPath.endsWith(SLASH) ? destPath : destPath + SLASH;
-
-        if (typeCopy.getType() == AECopyType.file || typeCopy.getType() == AECopyType.source) {
-            result.setTypeTxt(typeCopy.name());
-            message = "Il type AECopy non è adatto ad una directory";
-            return result.errorMessage(message);
-        }
+        dirDest = new File(destPath);
 
         path = this.findPathBreve(destPath);
-        dir = srcPath.contains(test) ? dir + " di test" : dir;
+        dir = srcPath.contains(test) ? "Test " + dir : dir;
 
-        result = result.typeTxt(typeCopy + FORWARD + typeCopy.getDescrizione());
+//        result = result.typeTxt(typeCopy + FORWARD + typeCopy.getDescrizione());
 
-        if (typeCopy.getType() != AECopyType.directory) {
-            message = String.format("Il type.%s previsto non è compatibile col metodo %s", typeCopy, result.getMethod());
-            logger.warn(AETypeLog.file, new AlgosException(message));
-            return result.errorMessage(message);
-        }
 
         if (!dirSrc.isDirectory()) {
             message = String.format("Non esiste la %s sorgente '%s' da copiare.", srcPath, dir);

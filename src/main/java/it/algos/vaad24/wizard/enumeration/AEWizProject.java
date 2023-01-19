@@ -14,7 +14,6 @@ import java.util.*;
  * Time: 18:56
  */
 public enum AEWizProject {
-
     config("Directory CONFIG di risorse on-line esterne al JAR (vaad24)", true, false, "config", AECopy.dirFilesModifica),
 
     documentation("Directory DOC di documentazione (vaad24)", true, false, "doc", AECopy.dirFilesModifica),
@@ -37,15 +36,15 @@ public enum AEWizProject {
 
     banner("File BANNER di SpringBoot (vaad24) [need riavvio]", true, true, "src/main/resources/banner.txt", AECopy.fileModifyEver),
 
-    git("File GIT di esclusione (sources)", true, false, ".gitignore", AECopy.sourceSoloSeNonEsiste, "git"),
+    git("File GIT di esclusione (sources)", true, true, ".gitignore", AECopy.fileModifyEver),
 
     pomVaad24("File POM.xml di Maven (vaad24)", true, false, "pom.xml", AECopy.elaboraFile),
     pomSources("File POM.xml di Maven (sources)", true, false, "pom.xml", AECopy.sourceSovrascriveSempreAncheSeEsiste, "pom"),
 
     read("File README con note di testo (sources)", true, false, "README.md", AECopy.sourceSoloSeNonEsiste, "readme"),
 
-    testBase("Directory TEST /base (vaad24)", false, false, "src/test/java/it/algos/base", AECopy.dirFilesModifica),
-    testEnum("Directory TEST /enum (vaad24)", false, false, "src/test/java/it/algos/enumeration", AECopy.dirFilesModifica),
+    testBase("Directory TEST /base (vaad24)", false, true, "src/test/java/it/algos/base", AECopy.dirFilesModifica),
+    testEnum("Directory TEST /enum (vaad24)", false, true, "src/test/java/it/algos/enumeration", AECopy.dirFilesModifica),
     testService("Directory TEST /service (vaad24)", false, false, "src/test/java/it/algos/service", AECopy.elaboraDir),
     testBackend("Directory TEST /backend (vaad24)", false, false, "src/test/java/it/algos/backend", AECopy.elaboraDir),
     application("Main class java", true, false, "src/main/java/it/algos/@PROJECTUPPER@Application.java",
@@ -85,12 +84,23 @@ public enum AEWizProject {
 
     private final boolean accesoUpdate;
 
+    private String srcToken;
+
+    private String destToken;
 
     AEWizProject(final String caption, final boolean accesoNew, final boolean accesoUpdate, final String copyDest, final AECopy copy) {
-        this(caption, accesoNew, accesoUpdate, copyDest, copy, VUOTA);
+        this(caption, accesoNew, accesoUpdate, copyDest, copy, VUOTA, VUOTA, VUOTA);
+    }
+
+    AEWizProject(final String caption, final boolean accesoNew, final boolean accesoUpdate, final String copyDest, final AECopy copy, String srcToken, String destToken) {
+        this(caption, accesoNew, accesoUpdate, copyDest, copy, VUOTA, srcToken, destToken);
     }
 
     AEWizProject(final String caption, final boolean accesoNew, final boolean accesoUpdate, final String copyDest, final AECopy copy, final String fileSource) {
+        this(caption, accesoNew, accesoUpdate, copyDest, copy, fileSource, VUOTA, VUOTA);
+    }
+
+    AEWizProject(final String caption, final boolean accesoNew, final boolean accesoUpdate, final String copyDest, final AECopy copy, final String fileSource, String srcToken, String destToken) {
         this.caption = caption;
         this.accesoNew = accesoNew;
         this.accesoUpdate = accesoUpdate;
@@ -98,6 +108,8 @@ public enum AEWizProject {
         this.copyDest = copyDest;
         this.copy = copy;
         this.fileSource = fileSource;
+        this.srcToken = srcToken;
+        this.destToken = destToken;
     }
 
     public static List<AEWizProject> getAllEnums() {
@@ -146,12 +158,21 @@ public enum AEWizProject {
     public String getCopyDest() {
         return copyDest;
     }
+
     public String getNomeFile() {
         return copyDest;
     }
 
     public AECopy getCopy() {
         return copy;
+    }
+
+    public String getSrcToken() {
+        return srcToken;
+    }
+
+    public String getDestToken() {
+        return destToken;
     }
 
     public String getFileSource() {

@@ -218,14 +218,14 @@ public abstract class WizElabora {
 
         //check esiste nome file
         if (textService.isEmpty(wiz.getNomeFile())) {
-            return result.typeResult(AETypeResult.noFileName).typeTxt(copy.name()).eseguito(false).nonValido();
+            return result.typeResult(AETypeResult.noFileName).typeCopy(copy).eseguito(false).nonValido();
         }
 
         //check esiste file sorgente
         if (!fileService.isEsisteFile(srcPath)) {
-            return result.typeResult(AETypeResult.noSourceFile).typeTxt(copy.name()).eseguito(false).nonValido();
+            return result.typeResult(AETypeResult.noSourceFile).typeCopy(copy).eseguito(false).nonValido();
         }
-        result = fileService.copyFile(copy, srcVaad24, destNewProject, wiz.getCopyDest());
+        result = fileService.copyFile(copy, srcVaad24, destNewProject, wiz.getCopyDest(), wiz.getSrcToken(), wiz.getDestToken());
         return result.typeLog(AETypeLog.wizard).typeCopy(copy);
     }
 
