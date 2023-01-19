@@ -180,14 +180,12 @@ public class FileServiceTest extends AlgosIntegrationTest {
     protected static Stream<Arguments> COPY_FILE_TOKEN() {
         return Stream.of(
                 Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_ALFA, AETypeResult.fileTokenCreatoUguale),
+                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_TRE_POST, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileTokenCreatoDiverso),
                 Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_SRC, TOKEN_BETA, TOKEN_BETA, AETypeResult.fileTokenUgualeNoToken),
-                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_SRC, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileTokenUgualeSiToken)
-                //                Arguments.of(AECopy.fileModifyToken, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false, false, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST),
-                //                Arguments.of(AECopy.fileModifyToken, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false, false, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST),
-                //                Arguments.of(AECopy.fileModifyToken, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false, false, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST),
-                //                Arguments.of(AECopy.fileModifyToken, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false, false, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST),
-                //                Arguments.of(AECopy.fileModifyToken, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false, false, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST)
-        );
+                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_SRC, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileTokenUgualeSiToken),
+                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_ALFA, AETypeResult.fileTokenModificatoNoToken),
+                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileTokenModificatoSiToken)
+                );
     }
 
     //--type copy

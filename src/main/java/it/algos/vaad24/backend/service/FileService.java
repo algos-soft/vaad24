@@ -768,13 +768,6 @@ public class FileService extends AbstractService {
             case fileModifyToken:
                 tokens = String.format("%s[%s%s%s]", SPAZIO, srcToken, FORWARD, destToken);
 
-                //                    fileTokenCreatoUguale("Il file è stato creato senza modifiche al token"), //dopo fileModifyToken
-                //                            fileTokenCreatoDiverso("Il file è stato creato e il token adeguato"), //dopo fileModifyToken
-                //                            fileTokenModificatoNoToken("Il file è stato modificato ma il token no"), //dopo fileModifyToken
-                //                            fileTokenModificatoSiToken("Il file è stato modificato e anche il token"), //dopo fileModifyToken
-                //                            fileTokenUgualeSiToken("Il file non è stato modificato e neanche il token"), //dopo fileModifyToken
-                //                            fileTokenUgualeNoToken("Il file non è stato modificato ma il token si"), //dopo fileModifyToken
-
                 if (fileDest.exists()) {
                     result = copyFile(AECopy.fileModifyEver, srcPathDir, destPathDir, nomeFile).typeCopy(AECopy.fileModifyToken);
 
