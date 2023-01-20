@@ -496,7 +496,7 @@ public class LogService extends AbstractService {
         titolo = textService.primaMaiuscola(titolo);
 
         if (copy == AECopy.modulo) {
-            message = String.format("Il modulo [%s] è stato completamente riscritto", VaadVar.moduloVaadin24);
+            message = String.format("Il modulo '%s' su [%s] è stato completamente riscritto", VaadVar.moduloVaadin24, VaadVar.projectCurrent);
         }
         else {
             path = fileService.findPathBreve(result.getTarget());

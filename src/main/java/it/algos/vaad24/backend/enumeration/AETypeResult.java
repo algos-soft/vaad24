@@ -20,6 +20,7 @@ public enum AETypeResult implements AIType {
     noSourceFile("Manca il file sorgente"),
     noSrcDir("Manca la directory sorgente"),
     noDestDir("Manca la directory destinazione"),
+    noToken("Manca un token"),
 
 
     fileEsistente("Il file esisteva già"), //dopo fileCreaOnlyNotExist
@@ -38,6 +39,7 @@ public enum AETypeResult implements AIType {
 
 
     dirEsistente("La directory esisteva già e non è stata modificata"),
+    dirModificata("La directory esisteva ed è stata modificata"),
     dirCreata("La directory mancava ed è stata creata"),
     dirRiCreata("La directory esisteva ed è stata ricreata"),
     moduloSovrascritto("Il modulo è stato completamente riscritto"),

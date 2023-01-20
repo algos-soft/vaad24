@@ -74,7 +74,6 @@ public abstract class WizElabora {
     }
 
 
-
     public AResult file(final AEWizProject wiz) {
         AECopy copy = wiz.getCopy();
         AResult result = AResult.build()
@@ -107,11 +106,17 @@ public abstract class WizElabora {
                 .typeCopy(copy);
         String srcPath = srcVaad24 + wiz.getCopyDest() + SLASH;
         String destPath = destNewProject + wiz.getCopyDest() + SLASH;
-//        String dir = fileService.lastDirectory(destPath).toLowerCase();
-//        String tag = progettoEsistente ? "Update" : "New";
+        //        String dir = fileService.lastDirectory(destPath).toLowerCase();
+        //        String tag = progettoEsistente ? "Update" : "New";
 
-        result = fileService.copyDirectory(copy, srcPath, destPath);
-//        mostraRisultato(result, wiz.getCopy(), dir, tag);
+        if (copy.name().equals(AECopy.dirFilesModificaToken.name())) {
+            result = fileService.copyDirectory(copy, srcPath, destPath, wiz.getSrcToken(), wiz.getDestToken());
+        }
+        else {
+            result = fileService.copyDirectory(copy, srcPath, destPath);
+        }
+
+        //        mostraRisultato(result, wiz.getCopy(), dir, tag);
         return result.typeLog(AETypeLog.wizard).typeCopy(copy);
 
     }
@@ -235,8 +240,6 @@ public abstract class WizElabora {
             logger.warn(new WrapLog().message(message).type(AETypeLog.wizard));
         }
     }
-
-
 
 
     public AResult source(final AEWizProject wiz) {

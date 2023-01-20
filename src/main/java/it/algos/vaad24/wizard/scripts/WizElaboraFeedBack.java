@@ -1,6 +1,7 @@
 package it.algos.vaad24.wizard.scripts;
 
 import com.vaadin.flow.spring.annotation.*;
+import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -46,7 +47,7 @@ public class WizElaboraFeedBack extends WizElabora {
             if (result.isValido()) {
                 if (result.getTagCode().equals(AEKeyDir.integrata.name())) {
                     mostraRisultato(result, AECopy.dirFilesModifica, destWizard, "Rollback");
-                    message = String.format("La directory 'wizard' su [%s] è stata aggiornata", PROJECT_VAADIN24);
+                    message = String.format("La directory 'wizard' su [%s] è stata aggiornata partendo da quella di [%s]", PROJECT_VAADIN24, VaadVar.projectCurrent);
                     logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
                     Avviso.message("Feedback di wizard").success().open();
                 }
