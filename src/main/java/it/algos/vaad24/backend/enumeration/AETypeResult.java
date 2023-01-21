@@ -28,12 +28,6 @@ public enum AETypeResult implements AIType {
     fileEsistenteUguale("Il file esisteva già e non è stato modificato"), //dopo fileModifyEver
     fileEsistenteModificato("Il file esisteva già ma è stato modificato"), //dopo fileModifyEver
 
-    fileTokenCreatoUguale("Il file è stato creato senza modifiche al token"), //dopo fileModifyToken
-    fileTokenCreatoDiverso("Il file è stato creato e il token adeguato"), //dopo fileModifyToken
-    fileTokenModificatoNoToken("Il file è stato modificato ma il token no"), //dopo fileModifyToken
-    fileTokenModificatoSiToken("Il file è stato modificato e anche il token"), //dopo fileModifyToken
-    fileTokenUgualeNoToken("Il file non è stato modificato e neanche il token"), //dopo fileModifyToken
-    fileTokenUgualeSiToken("Il file non è stato modificato ma il token si"), //dopo fileModifyToken
 
     fileSovrascritto("Il file è stato sovrascritto"),
 
