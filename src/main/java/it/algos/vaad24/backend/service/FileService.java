@@ -901,10 +901,10 @@ public class FileService extends AbstractService {
 
         if (typeCopy == AECopy.dirFilesModificaToken) {
             if (textService.isEmpty(srcToken)) {
-                return result.exception(new AlgosException("Manca il token sorgente")).typeResult(AETypeResult.noToken);
+                return result.exception(new AlgosException("Manca il token sorgente")).typeResult(AETypeResult.noToken).nonValido();
             }
             if (textService.isEmpty(destToken)) {
-                return result.exception(new AlgosException("Manca il token destinazione")).typeResult(AETypeResult.noToken);
+                return result.exception(new AlgosException("Manca il token destinazione")).typeResult(AETypeResult.noToken).nonValido();
             }
         }
 
@@ -1008,23 +1008,31 @@ public class FileService extends AbstractService {
                         if (filesDestinazioneAnte.contains(nomeFile)) {
                             //--se è diverso, lo modifica
                             if (!isUguale(srcPath, destPath, nomeFile)) {
-                                //--diversi però controlla le differenze del token
-                                if (typeCopy == AECopy.dirFilesModificaToken) {
-                                    //--file uguali a parte il token
-                                    if (!isUgualeToken(srcPath, destPath, nomeFile, srcToken, destToken)) {
-                                        copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
-                                        filesTokenModificati.add(nomeFile);
-                                    }
-                                    else {
-                                        copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile);
-                                        filesTokenUguali.add(nomeFile);
-                                    }
-                                }
-                                //--diversi e non controlla le differenze del token
-                                else {
+                                if (typeCopy == AECopy.dirFilesModifica) {
                                     copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile);
-                                    filesModificati.add(nomeFile);
                                 }
+                                if (typeCopy == AECopy.dirFilesModificaToken) {
+                                    copyFile(AECopy.fileModifyToken, srcPath, destPath, nomeFile, srcToken, destToken);
+                                }
+                                filesModificati.add(nomeFile);
+
+                                //                                //--diversi però controlla le differenze del token
+                                //                                if (typeCopy == AECopy.dirFilesModificaToken) {
+                                //                                    //--file uguali a parte il token
+                                //                                    if (!isUgualeToken(srcPath, destPath, nomeFile, srcToken, destToken)) {
+                                //                                        copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
+                                //                                        filesTokenModificati.add(nomeFile);
+                                //                                    }
+                                //                                    else {
+                                //                                        copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile);
+                                //                                        filesTokenUguali.add(nomeFile);
+                                //                                    }
+                                //                                }
+                                //                                //--diversi e non controlla le differenze del token
+                                //                                else {
+                                //                                    copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile);
+                                //                                    filesModificati.add(nomeFile);
+                                //                                }
                             }
                             else {
                                 if (typeCopy == AECopy.dirFilesModificaToken) {
