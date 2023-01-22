@@ -481,7 +481,7 @@ public class LogService extends AbstractService {
         AECopy copy;
         String titolo;
         String test = "/src/test/java/";
-        String path;
+        String path = fileService.findPathBreve(result.getTarget());
         String textResult;
 
         if (result == null) {
@@ -499,7 +499,6 @@ public class LogService extends AbstractService {
             message = String.format("Il modulo '%s' su [%s] è stato completamente riscritto", VaadVar.moduloVaadin24, VaadVar.projectCurrent);
         }
         else {
-            path = fileService.findPathBreve(result.getTarget());
             textResult = result.getTypeResult() != null ? result.getTypeResult().getTag() : AETypeResult.indeterminato.getTag();
             textResult += result.getValidMessage();
             message = String.format("%s [%s] (%s)%s%s", titolo, path, copy.getDescrizione(), FORWARD, textResult);
@@ -511,6 +510,15 @@ public class LogService extends AbstractService {
         else {
             warn(WrapLog.build().type(log).message(message).exception(result.getException()));
         }
+        if (log == AETypeLog.test || Pref.debug.is()) {
+            if (result.getTypeCopy() != null && result.getTypeCopy().getType() == AECopyType.directory && result.getMappa() != null) {
+                for (Object key : result.getMappa().keySet()) {
+                    message = String.format("[%s].%s: %s", path, key, result.getMappa().get(key));
+                    info(WrapLog.build().type(log).message(message));
+                }
+            }
+        }
+
     }
 
 
