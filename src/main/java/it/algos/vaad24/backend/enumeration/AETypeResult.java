@@ -21,6 +21,7 @@ public enum AETypeResult implements AIType {
     noSrcDir("Manca la directory sorgente"),
     noDestDir("Manca la directory destinazione"),
     noToken("Manca un token"),
+    tokenUguali("Token src e dest sono identici"),
 
 
     fileEsistente("Il file esisteva già"), //dopo fileCreaOnlyNotExist

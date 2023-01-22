@@ -165,6 +165,7 @@ public class FileServiceTest extends AlgosIntegrationTest {
                 Arguments.of(AECopy.fileModifyEver, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, VUOTA, false, false, AETypeResult.noFileName),
                 Arguments.of(AECopy.fileCreaOnlyNotExist, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, true, false, AETypeResult.fileEsistente),
                 Arguments.of(AECopy.fileModifyEver, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, true, true, AETypeResult.fileEsistenteModificato),
+                Arguments.of(AECopy.fileModifyEver, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, true, false, AETypeResult.fileEsistenteUguale),
                 Arguments.of(AECopy.fileCreaOnlyNotExist, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false, false, AETypeResult.noDestDir),
                 Arguments.of(AECopy.fileModifyEver, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false, false, AETypeResult.noDestDir)
         );
@@ -181,14 +182,16 @@ public class FileServiceTest extends AlgosIntegrationTest {
     protected static Stream<Arguments> COPY_FILE_TOKEN() {
         return Stream.of(
                 Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_DEST, VUOTA, TOKEN_BETA, AETypeResult.noToken),
-                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_DEST, VUOTA, VUOTA, AETypeResult.noToken),
                 Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, VUOTA, AETypeResult.noToken),
-                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_ALFA, AETypeResult.fileCreato),
-                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_TRE_POST, TOKEN_SRC, TOKEN_DEST, TOKEN_BETA, TOKEN_BETA, AETypeResult.fileEsistenteModificato),
+                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_ALFA, AETypeResult.tokenUguali),
+                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_TRE_POST, TOKEN_SRC, TOKEN_DEST, TOKEN_BETA, TOKEN_BETA, AETypeResult.tokenUguali),
                 Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_TRE_POST, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileEsistenteUguale),
-                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_SRC, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileEsistenteUguale),
-                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_ALFA, AETypeResult.fileEsistenteModificato),
-                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileEsistenteUguale)
+                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_SRC, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileCreato),
+                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_ALFA, AETypeResult.tokenUguali),
+                Arguments.of( PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileEsistenteUguale),
+                Arguments.of( PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileEsistenteUguale)
+
+
         );
     }
 
@@ -552,7 +555,7 @@ public class FileServiceTest extends AlgosIntegrationTest {
         //--src token
         //--dest token
         //--type result previsto
-    void copyFile(final String srcPathDir,
+    void copyFileToken(final String srcPathDir,
                   final String destPathDir,
                   final String nomeFile,
                   String srcText,
@@ -573,7 +576,7 @@ public class FileServiceTest extends AlgosIntegrationTest {
             service.sovraScriveFile(destPathDir + nomeFile, destText);
         }
 
-        ottenutoRisultato = service.copyFile(AECopy.fileModifyToken, srcPathDir, destPathDir, nomeFile, srcToken, destToken);
+        ottenutoRisultato = service.copyFile(AECopy.fileModifyEver, srcPathDir, destPathDir, nomeFile, srcToken, destToken);
         assertNotNull(ottenutoRisultato);
         assertEquals(typeResult, ottenutoRisultato.getTypeResult());
 

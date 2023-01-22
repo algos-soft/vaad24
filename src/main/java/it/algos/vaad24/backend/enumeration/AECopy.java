@@ -13,8 +13,8 @@ public enum AECopy {
 
     fileCreaOnlyNotExist("Crea il file solo se manca", AECopyType.file),
     fileModifyEver("Sovrascrive sempre il file", AECopyType.file),
-    fileModifyToken("Sovrascrive il file e modifica il token", AECopyType.file),
-    fileCheck("Controlla un flag iniziale", AECopyType.file),
+//    fileModifyToken("Sovrascrive il file e modifica il token", AECopyType.file),
+//    fileCheck("Controlla un flag iniziale", AECopyType.file),
     elaboraFile("Elaborazione specifica del file", AECopyType.elaboraFile),
 
 

@@ -698,6 +698,27 @@ public class FileService extends AbstractService {
                     .exception(new AlgosException(AETypeResult.noFileName.getTag()));
         }
 
+        //check tokens
+        if (textService.isEmpty(srcToken) && textService.isEmpty(destToken)) {
+        }
+        else {
+            if (textService.isEmpty(srcToken) || textService.isEmpty(destToken)) {
+                return result
+                        .nonValido()
+                        .typeResult(AETypeResult.noToken)
+                        .typeTxt(VUOTA)
+                        .exception(new AlgosException(AETypeResult.noToken.getTag()));
+            }
+            if (srcToken.equals(destToken)) {
+                return result
+                        .nonValido()
+                        .typeResult(AETypeResult.tokenUguali)
+                        .typeTxt(VUOTA)
+                        .exception(new AlgosException(AETypeResult.tokenUguali.getTag()));
+            }
+        }
+        result.setTagCode(String.format("[%S%S%S]", srcToken, FORWARD, destToken));
+
         //errore grave - traccia l'eccezione ed esce
         if (textService.isEmpty(srcPathDir)) {
             return result
@@ -717,6 +738,7 @@ public class FileService extends AbstractService {
                     .exception(new AlgosException(AETypeResult.noSourceFile.getTag()));
         }
         srcText = leggeFile(srcPath);
+        srcText = textService.sostituisce(srcText, srcToken, destToken);
 
         //errore grave - traccia l'eccezione ed esce
         if (textService.isEmpty(destPathDir)) {
@@ -731,86 +753,64 @@ public class FileService extends AbstractService {
         fileDest = new File(destPath);
         result.target(destPath);
 
-        //errore grave - traccia l'eccezione ed esce
-        if (typeCopy == AECopy.fileModifyToken) {
-            if (textService.isEmpty(srcToken) || textService.isEmpty(destToken)) {
-                return result
-                        .nonValido()
-                        .typeResult(AETypeResult.noToken)
-                        .typeTxt(VUOTA)
-                        .exception(new AlgosException(AETypeResult.noToken.getTag()));
-            }
-        }
-
         result = checkPath(result, destPath);
         if (result.isErrato()) {
             return result;
         }
 
-        if (fileDest.exists()) {
-
-            if (typeCopy == AECopy.fileCreaOnlyNotExist) {
+        if (!fileDest.exists()) {
+            if (sovraScriveFile(destPath, srcText)) {
                 return result
                         .valido(true)
-                        .eseguito(false)
-                        .typeResult(AETypeResult.fileEsistente);
+                        .eseguito(true)
+                        .typeResult(AETypeResult.fileCreato);
             }
+        }
 
-            destText = leggeFile(destPath);
-            ugualeTesto = destText.equals(srcText);
-            if (ugualeTesto) {
-                return result
-                        .valido(true)
-                        .eseguito(false)
-                        .typeResult(AETypeResult.fileEsistenteUguale);
-            }
+        if (typeCopy == AECopy.fileCreaOnlyNotExist) {
+            return result
+                    .valido(true)
+                    .eseguito(false)
+                    .typeResult(AETypeResult.fileEsistente);
+        }
 
-            if (typeCopy == AECopy.fileModifyToken) {
-                srcText = textService.sostituisce(srcText, srcToken, destToken);
-                ugualeToken = destText.equals(srcText);
-                if (ugualeToken) {
-                    return result
-                            .valido(true)
-                            .eseguito(false)
-                            .typeResult(AETypeResult.fileEsistenteUguale);
-                }
-            }
-
+        //esiste
+        destText = leggeFile(destPath);
+        ugualeTesto = destText.equals(srcText);
+        if (ugualeTesto) {
+            return result
+                    .valido(true)
+                    .eseguito(false)
+                    .typeResult(AETypeResult.fileEsistenteUguale);
+        }
+        else {
             if (sovraScriveFile(destPath, srcText)) {
                 return result
                         .valido(true)
                         .eseguito(true)
                         .typeResult(AETypeResult.fileEsistenteModificato);
             }
-            else {
-                return result
-                        .valido(false)
-                        .eseguito(false)
-                        .typeResult(AETypeResult.error);
-            }
         }
-        else {
-            return copyFile(result, fileSrc, fileDest);
-        }
+
+        return result;
     }
 
-
-    private AResult copyFile(AResult result, File fileSrc, File fileDest) {
-        try {
-            FileUtils.copyFile(fileSrc, fileDest);
-            return result
-                    .valido(true)
-                    .eseguito(true)
-                    .typeResult(AETypeResult.fileCreato);
-        } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(unErrore).usaDb());
-            return result
-                    .valido(false)
-                    .eseguito(false)
-                    .typeResult(AETypeResult.error)
-                    .errorMessage(unErrore.getMessage());
-        }
-    }
+    //    private AResult copyFile(AResult result, File fileSrc, File fileDest) {
+    //        try {
+    //            FileUtils.copyFile(fileSrc, fileDest);
+    //            return result
+    //                    .valido(true)
+    //                    .eseguito(true)
+    //                    .typeResult(AETypeResult.fileCreato);
+    //        } catch (Exception unErrore) {
+    //            logger.error(new WrapLog().exception(unErrore).usaDb());
+    //            return result
+    //                    .valido(false)
+    //                    .eseguito(false)
+    //                    .typeResult(AETypeResult.error)
+    //                    .errorMessage(unErrore.getMessage());
+    //        }
+    //    }
 
     public AResult copyDirectory(final AECopy typeCopy, String srcPath, String destPath) {
         return copyDirectory(typeCopy, srcPath, destPath, VUOTA, VUOTA);
@@ -1011,15 +1011,15 @@ public class FileService extends AbstractService {
                                 if (typeCopy == AECopy.dirFilesModifica) {
                                     copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile);
                                 }
-                                if (typeCopy == AECopy.dirFilesModificaToken) {
-                                    copyFile(AECopy.fileModifyToken, srcPath, destPath, nomeFile, srcToken, destToken);
-                                }
+                                //                                if (typeCopy == AECopy.dirFilesModificaToken) {
+                                //                                    copyFile(AECopy.fileModifyToken, srcPath, destPath, nomeFile, srcToken, destToken);
+                                //                                }
                                 filesModificati.add(nomeFile);
                             }
                             else {
                                 if (typeCopy == AECopy.dirFilesModificaToken) {
-                                    copyFile(AECopy.fileModifyToken, srcPath, destPath, nomeFile, srcToken, destToken);
-                                    filesTokenUguali.add(nomeFile);
+                                    //                                    copyFile(AECopy.fileModifyToken, srcPath, destPath, nomeFile, srcToken, destToken);
+                                    //                                    filesTokenUguali.add(nomeFile);
                                 }
                                 else {
                                     filesUguali.add(nomeFile);
@@ -1029,8 +1029,8 @@ public class FileService extends AbstractService {
                         //--se manca, lo aggiunge
                         else {
                             if (typeCopy == AECopy.dirFilesModificaToken) {
-                                copyFile(AECopy.fileModifyToken, srcPath, destPath, nomeFile, srcToken, destToken);
-                                filesAggiunti.add(nomeFile);
+                                //                                copyFile(AECopy.fileModifyToken, srcPath, destPath, nomeFile, srcToken, destToken);
+                                //                                filesAggiunti.add(nomeFile);
                             }
                             else {
                                 copyFile(AECopy.fileCreaOnlyNotExist, srcPath, destPath, nomeFile);
@@ -1198,7 +1198,7 @@ public class FileService extends AbstractService {
         }
 
         switch (typeCopy) {
-            case fileCheck, sourceCheckFlagSeEsiste -> {
+            case sourceCheckFlagSeEsiste -> {
             }
             case fileCreaOnlyNotExist, sourceSoloSeNonEsiste -> {
                 if (isEsisteFile(pathFileToBeWritten)) {
