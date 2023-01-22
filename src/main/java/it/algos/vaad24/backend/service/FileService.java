@@ -1015,28 +1015,10 @@ public class FileService extends AbstractService {
                                     copyFile(AECopy.fileModifyToken, srcPath, destPath, nomeFile, srcToken, destToken);
                                 }
                                 filesModificati.add(nomeFile);
-
-                                //                                //--diversi però controlla le differenze del token
-                                //                                if (typeCopy == AECopy.dirFilesModificaToken) {
-                                //                                    //--file uguali a parte il token
-                                //                                    if (!isUgualeToken(srcPath, destPath, nomeFile, srcToken, destToken)) {
-                                //                                        copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
-                                //                                        filesTokenModificati.add(nomeFile);
-                                //                                    }
-                                //                                    else {
-                                //                                        copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile);
-                                //                                        filesTokenUguali.add(nomeFile);
-                                //                                    }
-                                //                                }
-                                //                                //--diversi e non controlla le differenze del token
-                                //                                else {
-                                //                                    copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile);
-                                //                                    filesModificati.add(nomeFile);
-                                //                                }
                             }
                             else {
                                 if (typeCopy == AECopy.dirFilesModificaToken) {
-                                    copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
+                                    copyFile(AECopy.fileModifyToken, srcPath, destPath, nomeFile, srcToken, destToken);
                                     filesTokenUguali.add(nomeFile);
                                 }
                                 else {
@@ -1046,8 +1028,14 @@ public class FileService extends AbstractService {
                         }
                         //--se manca, lo aggiunge
                         else {
-                            copyFile(AECopy.fileCreaOnlyNotExist, srcPath, destPath, nomeFile);
-                            filesAggiunti.add(nomeFile);
+                            if (typeCopy == AECopy.dirFilesModificaToken) {
+                                copyFile(AECopy.fileModifyToken, srcPath, destPath, nomeFile, srcToken, destToken);
+                                filesAggiunti.add(nomeFile);
+                            }
+                            else {
+                                copyFile(AECopy.fileCreaOnlyNotExist, srcPath, destPath, nomeFile);
+                                filesAggiunti.add(nomeFile);
+                            }
                         }
                     }
 
