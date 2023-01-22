@@ -795,22 +795,6 @@ public class FileService extends AbstractService {
         return result;
     }
 
-    //    private AResult copyFile(AResult result, File fileSrc, File fileDest) {
-    //        try {
-    //            FileUtils.copyFile(fileSrc, fileDest);
-    //            return result
-    //                    .valido(true)
-    //                    .eseguito(true)
-    //                    .typeResult(AETypeResult.fileCreato);
-    //        } catch (Exception unErrore) {
-    //            logger.error(new WrapLog().exception(unErrore).usaDb());
-    //            return result
-    //                    .valido(false)
-    //                    .eseguito(false)
-    //                    .typeResult(AETypeResult.error)
-    //                    .errorMessage(unErrore.getMessage());
-    //        }
-    //    }
 
     public AResult copyDirectory(final AECopy typeCopy, String srcPath, String destPath) {
         return copyDirectory(typeCopy, srcPath, destPath, VUOTA, VUOTA);
