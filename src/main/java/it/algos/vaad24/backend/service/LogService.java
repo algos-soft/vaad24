@@ -483,6 +483,7 @@ public class LogService extends AbstractService {
         String test = "/src/test/java/";
         String path = fileService.findPathBreve(result.getTarget());
         String textResult;
+        String resultTagCode = VUOTA;
         String tagCode = VUOTA;
 
         if (result == null) {
@@ -502,7 +503,8 @@ public class LogService extends AbstractService {
         else {
             textResult = result.getTypeResult() != null ? result.getTypeResult().getTag() : AETypeResult.indeterminato.getTag();
             textResult += result.getValidMessage();
-            tagCode = textService.isValid(result.getTagCode()) ? SPAZIO + result.getTagCode() : VUOTA;
+            resultTagCode = result.getTagCode();
+            tagCode = textService.isValid(resultTagCode) ? SPAZIO + resultTagCode : VUOTA;
             message = String.format("%s [%s] (%s)%s%s%s", titolo, path, copy.getDescrizione(), FORWARD, textResult, tagCode);
         }
 

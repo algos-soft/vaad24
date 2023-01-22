@@ -109,7 +109,7 @@ public abstract class WizElabora {
         //        String dir = fileService.lastDirectory(destPath).toLowerCase();
         //        String tag = progettoEsistente ? "Update" : "New";
 
-        if (copy.name().equals(AECopy.dirFilesModificaToken.name())) {
+        if (copy.name().equals(AECopy.dirFilesModifica.name())) {
             result = fileService.copyDirectory(copy, srcPath, destPath, wiz.getSrcToken(), wiz.getDestToken());
         }
         else {
@@ -160,8 +160,8 @@ public abstract class WizElabora {
             filesTokenUguali = filesTokenUguali != null ? filesTokenUguali : new ArrayList<>();
 
             switch (copy) {
-                case dirOnly -> {}
-                case dirDelete -> {}
+                case dirCreaOnlyNotExisting -> {}
+                case dirModifyEver -> {}
                 case dirFilesAddOnly -> {
                     if (result.getTagCode().equals(AEKeyDir.creataNuova.describeConstable())) {
                         messageType = "DirFilesAddOnly - Directory creata ex novo";
@@ -197,7 +197,7 @@ public abstract class WizElabora {
                         logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.wizard));
                     }
                 }
-                case dirFilesModifica, dirFilesModificaToken -> {
+                case dirFilesModifica -> {
                     if (result.getTagCode().equals(AEKeyDir.creataNuova)) {
                         messageType = "DirFilesModifica - Directory creata ex novo";
                         message = String.format("%s: %s (%s)", tag, textService.primaMinuscola(result.getMessage()), copy);

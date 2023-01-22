@@ -160,13 +160,13 @@ public class FileServiceTest extends AlgosIntegrationTest {
                 Arguments.of(AECopy.dirFilesModifica, VUOTA, VUOTA, NOME_FILE_UNO, false, false, AETypeResult.typeNonCompatibile),
                 Arguments.of(AECopy.fileModifyEver, VUOTA, VUOTA, VUOTA, false, false, AETypeResult.noFileName),
                 Arguments.of(AECopy.sourceSoloSeNonEsiste, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, false, false, AETypeResult.typeNonCompatibile),
-                Arguments.of(AECopy.fileCreaOnlyNotExist, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, VUOTA, false, false, AETypeResult.noFileName),
-                Arguments.of(AECopy.fileCreaOnlyNotExist, PATH_DIRECTORY_ERRATA, PATH_DIRECTORY_DUE, NOME_FILE_UNO, true, false, AETypeResult.fileEsistente),
+                Arguments.of(AECopy.fileCreaOnlyNotExisting, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, VUOTA, false, false, AETypeResult.noFileName),
+                Arguments.of(AECopy.fileCreaOnlyNotExisting, PATH_DIRECTORY_ERRATA, PATH_DIRECTORY_DUE, NOME_FILE_UNO, true, false, AETypeResult.fileEsistente),
                 Arguments.of(AECopy.fileModifyEver, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, VUOTA, false, false, AETypeResult.noFileName),
-                Arguments.of(AECopy.fileCreaOnlyNotExist, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, true, false, AETypeResult.fileEsistente),
+                Arguments.of(AECopy.fileCreaOnlyNotExisting, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, true, false, AETypeResult.fileEsistente),
                 Arguments.of(AECopy.fileModifyEver, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, true, true, AETypeResult.fileEsistenteModificato),
                 Arguments.of(AECopy.fileModifyEver, PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, true, false, AETypeResult.fileEsistenteUguale),
-                Arguments.of(AECopy.fileCreaOnlyNotExist, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false, false, AETypeResult.noDestDir),
+                Arguments.of(AECopy.fileCreaOnlyNotExisting, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false, false, AETypeResult.noDestDir),
                 Arguments.of(AECopy.fileModifyEver, PATH_DIRECTORY_TRE, VUOTA, NOME_FILE_UNO, false, false, AETypeResult.noDestDir)
         );
     }
@@ -188,9 +188,8 @@ public class FileServiceTest extends AlgosIntegrationTest {
                 Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_TRE_POST, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileEsistenteUguale),
                 Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_SRC, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileCreato),
                 Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_QUATTRO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_ALFA, AETypeResult.tokenUguali),
-                Arguments.of( PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileEsistenteUguale),
-                Arguments.of( PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileEsistenteUguale)
-
+                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileEsistenteUguale),
+                Arguments.of(PATH_DIRECTORY_TRE, PATH_DIRECTORY_DUE, NOME_FILE_UNO, TOKEN_SRC, TOKEN_DEST, TOKEN_ALFA, TOKEN_BETA, AETypeResult.fileEsistenteUguale)
 
         );
     }
@@ -201,27 +200,28 @@ public class FileServiceTest extends AlgosIntegrationTest {
     //--directory copiata
     //--src token (opzionale)
     //--dest token (opzionale)
+    //--type result previsto
     protected static Stream<Arguments> COPY_DIRECTORY() {
         return Stream.of(
-                Arguments.of(null, VUOTA, VUOTA, false, VUOTA, VUOTA),
-                Arguments.of(AECopy.fileCreaOnlyNotExist, VUOTA, VUOTA, false, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirOnly, VUOTA, VUOTA, false, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirOnly, VUOTA, DEST, false, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirOnly, SOURCE, VUOTA, false, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirOnly, PATH_DIRECTORY_MANCANTE, DEST, false, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirOnly, SOURCE, PATH_DIRECTORY_DUE, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirOnly, SOURCE, DEST, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirDelete, SOURCE, PATH_DIRECTORY_MANCANTE, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirDelete, SOURCE, PATH_DIRECTORY_DUE, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirFilesAddOnly, SOURCE, DEST, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirFilesAddOnly, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirFilesModifica, SOURCE, DEST, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_TRE, false, VUOTA, VUOTA),
-                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_TRE, false, VUOTA, TESTO_TOKEN_POST),
-                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_TRE, false, TESTO_TOKEN_ANTE, VUOTA),
-                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_TRE, true, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST),
-                Arguments.of(AECopy.dirFilesModificaToken, SOURCE, PATH_DIRECTORY_TRE, true, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST)
+                Arguments.of(null, VUOTA, VUOTA, false, VUOTA, VUOTA, AETypeResult.noAECopy),
+                Arguments.of(AECopy.fileCreaOnlyNotExisting, VUOTA, VUOTA, false, VUOTA, VUOTA, AETypeResult.typeNonCompatibile),
+                Arguments.of(AECopy.dirCreaOnlyNotExisting, VUOTA, VUOTA, false, VUOTA, VUOTA, AETypeResult.noSrcDir),
+                Arguments.of(AECopy.dirCreaOnlyNotExisting, VUOTA, DEST, false, VUOTA, VUOTA, AETypeResult.noSrcDir),
+                Arguments.of(AECopy.dirCreaOnlyNotExisting, SOURCE, VUOTA, false, VUOTA, VUOTA, AETypeResult.noDestDir),
+                Arguments.of(AECopy.dirCreaOnlyNotExisting, PATH_DIRECTORY_MANCANTE, DEST, false, VUOTA, VUOTA, AETypeResult.noSrcDir),
+                Arguments.of(AECopy.dirCreaOnlyNotExisting, SOURCE, PATH_DIRECTORY_DUE, true, VUOTA, VUOTA, AETypeResult.dirEsistente),
+                Arguments.of(AECopy.dirCreaOnlyNotExisting, SOURCE, DEST, true, VUOTA, VUOTA, AETypeResult.dirCreata),
+                Arguments.of(AECopy.dirModifyEver, SOURCE, PATH_DIRECTORY_MANCANTE, true, VUOTA, VUOTA, AETypeResult.dirCreata),
+                Arguments.of(AECopy.dirModifyEver, SOURCE, PATH_DIRECTORY_DUE, true, VUOTA, VUOTA, AETypeResult.dirCreata),
+                Arguments.of(AECopy.dirFilesAddOnly, SOURCE, DEST, true, VUOTA, VUOTA, AETypeResult.dirModificata),
+                Arguments.of(AECopy.dirFilesAddOnly, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA, AETypeResult.dirModificata),
+                Arguments.of(AECopy.dirFilesModifica, SOURCE, DEST, true, VUOTA, VUOTA, AETypeResult.dirModificata),
+                Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA, AETypeResult.dirModificata),
+                Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_TRE, true, VUOTA, VUOTA, AETypeResult.dirModificata),
+                Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_TRE, false, VUOTA, TESTO_TOKEN_POST, AETypeResult.noToken),
+                Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_TRE, false, TESTO_TOKEN_ANTE, VUOTA, AETypeResult.noToken),
+                Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_TRE, true, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST, AETypeResult.dirModificata),
+                Arguments.of(AECopy.dirFilesModifica, SOURCE, PATH_DIRECTORY_TRE, true, TESTO_TOKEN_ANTE, TESTO_TOKEN_POST, AETypeResult.dirModificata)
         );
     }
 
@@ -556,13 +556,13 @@ public class FileServiceTest extends AlgosIntegrationTest {
         //--dest token
         //--type result previsto
     void copyFileToken(final String srcPathDir,
-                  final String destPathDir,
-                  final String nomeFile,
-                  String srcText,
-                  String destText,
-                  String srcToken,
-                  String destToken,
-                  final AETypeResult typeResult) {
+                       final String destPathDir,
+                       final String nomeFile,
+                       String srcText,
+                       String destText,
+                       String srcToken,
+                       String destToken,
+                       final AETypeResult typeResult) {
         System.out.println("10 - Copia il file token");
         System.out.println(VUOTA);
 
@@ -595,7 +595,13 @@ public class FileServiceTest extends AlgosIntegrationTest {
         //--directory copiata
         //--src token (opzionale)
         //--dest token (opzionale)
-    void copyDirectory(final AECopy typeCopy, final String srcPathDir, final String destPathDir, final boolean copiato, String srcToken, String destToken) {
+        //--type result previsto
+    void copyDirectory(final AECopy typeCopy,
+                       final String srcPathDir,
+                       final String destPathDir,
+                       final boolean copiato,
+                       String srcToken, String destToken,
+                       final AETypeResult typeResult) {
         System.out.println("11 - Copia la directory");
         System.out.println(VUOTA);
 
@@ -605,9 +611,11 @@ public class FileServiceTest extends AlgosIntegrationTest {
 
         ottenutoRisultato = service.copyDirectory(typeCopy, srcPathDir, destPathDir, srcToken, destToken);
         assertNotNull(ottenutoRisultato);
-        logger.copy(ottenutoRisultato.typeLog(AETypeLog.test).typeCopy(typeCopy));
-        printRisultato(ottenutoRisultato);
+        assertEquals(typeResult, ottenutoRisultato.getTypeResult());
         assertEquals(copiato, ottenutoRisultato.isValido());
+
+        logger.copy(ottenutoRisultato.typeLog(AETypeLog.test));
+        printRisultato(ottenutoRisultato);
 
         //--cancella le due cartella
         fixSorgente(false);
@@ -648,7 +656,7 @@ public class FileServiceTest extends AlgosIntegrationTest {
 
         System.out.println(VUOTA);
         System.out.println("D - Il file viene copiato (copyFile)");
-        ottenutoRisultato = service.copyFile(AECopy.fileCreaOnlyNotExist, dirSorgente, dirDestinazione, nomeFile);
+        ottenutoRisultato = service.copyFile(AECopy.fileCreaOnlyNotExisting, dirSorgente, dirDestinazione, nomeFile);
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
         printRisultato(ottenutoRisultato);
@@ -722,7 +730,7 @@ public class FileServiceTest extends AlgosIntegrationTest {
 
         System.out.println(VUOTA);
         System.out.println("G - Prova a copiare il file sovrascrivendo quello esistente (copyFile)");
-        ottenutoRisultato = service.copyFile(AECopy.fileCreaOnlyNotExist, dirSorgente, dirDestinazione, nomeFile);
+        ottenutoRisultato = service.copyFile(AECopy.fileCreaOnlyNotExisting, dirSorgente, dirDestinazione, nomeFile);
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
         printRisultato(ottenutoRisultato);

@@ -11,19 +11,17 @@ import java.util.*;
  */
 public enum AECopy {
 
-    fileCreaOnlyNotExist("Crea il file solo se manca", AECopyType.file),
-    fileModifyEver("Sovrascrive sempre il file", AECopyType.file),
-//    fileModifyToken("Sovrascrive il file e modifica il token", AECopyType.file),
-//    fileCheck("Controlla un flag iniziale", AECopyType.file),
+    fileCreaOnlyNotExisting("Crea il file SOLO se manca", AECopyType.file),
+    fileModifyEver("Sovrascrive SEMPRE il file", AECopyType.file),
     elaboraFile("Elaborazione specifica del file", AECopyType.elaboraFile),
 
 
-    modulo("Ricrea SEMPRE il modulo", AECopyType.modulo),
-    dirDelete("Ricrea SEMPRE la directory", AECopyType.directory),
-    dirOnly("Crea la directory SOLO se non esiste", AECopyType.directory),
+    modulo("Cancella e ricrea SEMPRE l'intero modulo", AECopyType.modulo),
+    dirCreaOnlyNotExisting("Crea la directory SOLO se manca", AECopyType.directory),
+    dirModifyEver("Cancella e ricrea SEMPRE l'intera directory", AECopyType.directory),
     dirFilesAddOnly("Aggiunge dir/files SENZA modificare quelli esistenti", AECopyType.directory),
     dirFilesModifica("Aggiunge dir/files e MODIFICA quelli esistenti", AECopyType.directory),
-    dirFilesModificaToken("Aggiunge e MODIFICA dirs/files con check del token", AECopyType.directory),
+    //    dirFilesModificaToken("Aggiunge e MODIFICA dirs/files con check del token", AECopyType.directory),
     elaboraDir("Elaborazione specifica della directory", AECopyType.elaboraDir),
 
     sourceSovrascriveSempreAncheSeEsiste("", AECopyType.source),

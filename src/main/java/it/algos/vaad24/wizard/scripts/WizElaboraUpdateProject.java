@@ -7,7 +7,6 @@ import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
-import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.wizard.enumeration.*;
 import static it.algos.vaad24.wizard.scripts.WizElaboraNewProject.*;
 import org.springframework.beans.factory.config.*;
@@ -97,12 +96,12 @@ public class WizElaboraUpdateProject extends WizElabora {
                 oldToken = PROJECT_VAADIN24;
                 newToken = VaadVar.projectCurrent;
                 result = fixToken(result, wiz, oldToken, newToken);
-                mostraRisultato(result, AECopy.dirFilesModificaToken, dir, tag);
+                mostraRisultato(result, AECopy.dirFilesModifica, dir, tag);
             }
             case testService, testBackend -> {
-                result = fileService.copyDirectory(AECopy.dirFilesModificaToken, srcPath, destPath, oldToken, newToken);
+                result = fileService.copyDirectory(AECopy.dirFilesModifica, srcPath, destPath, oldToken, newToken);
                 result = fixToken(result, wiz, oldToken, newToken);
-                mostraRisultato(result, AECopy.dirFilesModificaToken, dir, tag);
+                mostraRisultato(result, AECopy.dirFilesModifica, dir, tag);
             }
             default -> {}
         }
