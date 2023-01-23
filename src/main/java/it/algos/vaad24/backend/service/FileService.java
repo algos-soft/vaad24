@@ -904,10 +904,7 @@ public class FileService extends AbstractService {
         }
         //        destPath = destPath.endsWith(SLASH) ? destPath : destPath + SLASH;
         dirDest = new File(destPath);
-
-        path = this.findPathBreve(destPath);
-        dir = srcPath.contains(test) ? "Test " + dir : dir;
-        result.target(path);
+        result.target(destPath);
 
         //--recupero i files esistenti nella dir sorgente
         filesSorgenti = getFilesName(srcPath);
