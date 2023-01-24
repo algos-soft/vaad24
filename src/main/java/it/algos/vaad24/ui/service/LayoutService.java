@@ -4,12 +4,15 @@ import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.dependency.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.*;
+import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.service.*;
+import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
@@ -132,6 +135,31 @@ public class LayoutService extends AbstractService {
             }
         }
 
+    }
+
+
+    public Component bottomAlgos() {
+        VerticalLayout bottomPlaceHolder = new VerticalLayout();
+        bottomPlaceHolder.setPadding(false);
+        bottomPlaceHolder.setSpacing(false);
+        bottomPlaceHolder.setMargin(false);
+
+        String message;
+        double doppio = VaadVar.projectVersion;
+        String nome = VaadVar.projectNameUpper;
+        String data = VaadVar.projectDate;
+        String note = VaadVar.projectNote;
+
+        //--Locale.US per forzare la visualizzazione grafica di un punto anziché una virgola
+        message = String.format(Locale.US, "Algos® - %s %2.1f", nome, doppio);
+        bottomPlaceHolder.add(htmlService.getSpan(new WrapSpan(message).color(AETypeColor.blue).weight(AEFontWeight.bold).fontHeight(AEFontSize.em7)));
+        message = String.format(Locale.US, "%s", data);
+        bottomPlaceHolder.add(htmlService.getSpan(new WrapSpan(message).color(AETypeColor.blue).weight(AEFontWeight.bold).fontHeight(AEFontSize.em7)));
+        if (textService.isValid(note)) {
+            bottomPlaceHolder.add(htmlService.getSpan(new WrapSpan(note).color(AETypeColor.blue).weight(AEFontWeight.bold).fontHeight(AEFontSize.em7)));
+        }
+
+        return bottomPlaceHolder;
     }
 
 }

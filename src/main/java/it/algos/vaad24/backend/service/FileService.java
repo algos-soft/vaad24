@@ -884,7 +884,6 @@ public class FileService extends AbstractService {
         }
 
         //errore grave - traccia l'eccezione ed esce
-        //        srcPath = srcPath.endsWith(SLASH) ? srcPath : srcPath + SLASH;
         dirSrc = new File(srcPath);
         if (!dirSrc.exists()) {
             return result
@@ -902,7 +901,6 @@ public class FileService extends AbstractService {
                     .typeTxt(VUOTA)
                     .exception(new AlgosException(AETypeResult.noDestDir.getTag()));
         }
-        //        destPath = destPath.endsWith(SLASH) ? destPath : destPath + SLASH;
         dirDest = new File(destPath);
         result.target(destPath);
 
@@ -912,7 +910,7 @@ public class FileService extends AbstractService {
         result.setMappa(resultMap);
 
         //--controlla, cancella e poi ricrea
-        if (typeCopy == AECopy.dirModifyEver && dirDest.exists()) {
+        if (typeCopy == AECopy.modulo || (typeCopy == AECopy.dirModifyEver && dirDest.exists())) {
             deleteDirectory(dirDest);
         }
 

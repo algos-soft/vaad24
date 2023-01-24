@@ -1,6 +1,5 @@
 package it.algos.vaad24.backend.boot;
 
-import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -15,9 +14,7 @@ import it.algos.vaad24.backend.utility.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.wizard.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.beans.factory.config.*;
 import org.springframework.context.*;
-import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.EventListener;
 import org.springframework.context.event.*;
 import org.springframework.core.env.*;
@@ -49,8 +46,8 @@ import java.util.*;
  * 7) costruisce una versione demo <br>
  * 8) controlla l' esistenza di utenti abilitati all' accesso <br>
  */
-@SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+//@SpringComponent
+//@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public  class VaadBoot implements ServletContextListener {
 
     protected boolean allDebugSetup;

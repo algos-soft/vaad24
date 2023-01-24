@@ -157,8 +157,11 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
         VaadVar.menuRouteList.add(TestView.class);
         super.fixMenuRoutes();
 
-        VaadVar.menuRouteList.add(ContinenteView.class); VaadVar.menuRouteList.add(MeseView.class);
-        VaadVar.menuRouteList.add(SecoloView.class); VaadVar.menuRouteList.add(GiornoView.class); VaadVar.menuRouteList.add(AnnoView.class);
+        VaadVar.menuRouteList.add(ContinenteView.class);
+        VaadVar.menuRouteList.add(MeseView.class);
+        VaadVar.menuRouteList.add(SecoloView.class);
+        VaadVar.menuRouteList.add(GiornoView.class);
+        VaadVar.menuRouteList.add(AnnoView.class);
         VaadVar.menuRouteList.add(ViaView.class);
     }
 

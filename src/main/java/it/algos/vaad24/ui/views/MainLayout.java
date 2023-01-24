@@ -38,6 +38,9 @@ public class MainLayout extends AppLayout {
     @Autowired
     public TextService textService;
 
+    @Autowired
+    HtmlService htmlService;
+
     private H1 viewTitle;
 
 
@@ -116,6 +119,7 @@ public class MainLayout extends AppLayout {
         return nav;
     }
 
+
     private List<ListItem> createMenuItems() {
         return layoutService.getAllItem();
     }
@@ -124,8 +128,11 @@ public class MainLayout extends AppLayout {
         Footer layout = new Footer();
         layout.addClassNames("flex", "items-center", "my-s", "px-m", "py-xs");
 
+        layout.add(layoutService.bottomAlgos());
+
         return layout;
     }
+
 
     @Override
     protected void afterNavigation() {

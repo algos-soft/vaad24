@@ -108,6 +108,105 @@ public enum AESchedule {
      */
     dieciDomenica("0 10 * * sun", "alle dieci di ogni domenica.", 7),
 
+    /**
+     * Pattern: 0 3 * * mon
+     * Descrizione: alle tre di ogni lunedì
+     */
+    lunedi3("0 3 * * mon", "alle 3 di ogni lunedì."),
+
+    /**
+     * Pattern: 0 7 * * mon
+     * Descrizione: alle sette di ogni lunedì
+     */
+    lunedi7("0 7 * * mon", "alle 7 di ogni lunedì."),
+
+
+
+
+    /**
+     * Pattern: 0 3 * * tue
+     * Descrizione: alle tre di ogni martedì
+     */
+    martedi3("0 3 * * tue", "alle 3 di ogni martedì."),
+
+    /**
+     * Pattern: 0 7 * * tue
+     * Descrizione: alle sette di ogni martedì
+     */
+    martedi7("0 7 * * tue", "alle 7 di ogni martedì."),
+
+
+
+
+    /**
+     * Pattern: 0 3 * * wed
+     * Descrizione: alle tre di ogni mercoledì
+     */
+    mercoledi3("0 3 * * wed", "alle 3 di ogni mercoledì."),
+
+    /**
+     * Pattern: 0 7 * * wed
+     * Descrizione: alle sette di ogni mercoledì
+     */
+    mercoledi7("0 7 * * wed", "alle 7 di ogni mercoledì."),
+
+
+
+
+
+    /**
+     * Pattern: 0 3 * * thu
+     * Descrizione: alle tre di ogni giovedì
+     */
+    giovedi3("0 3 * * thu", "alle 3 di ogni giovedì."),
+
+    /**
+     * Pattern: 0 7 * * thu
+     * Descrizione: alle sette di ogni giovedì
+     */
+    giovedi7("0 7 * * thu", "alle 7 di ogni giovedì."),
+
+
+
+    /**
+     * Pattern: 0 3 * * fri
+     * Descrizione: alle tre di ogni venerdì
+     */
+    venerdi3("0 3 * * fri", "alle 3 di ogni venerdì."),
+
+    /**
+     * Pattern: 0 7 * * fri
+     * Descrizione: alle sette di ogni venerdì
+     */
+    venerdi7("0 7 * * fri", "alle 7 di ogni venerdì."),
+
+
+    /**
+     * Pattern: 0 3 * * sat
+     * Descrizione: alle tre di ogni sabato
+     */
+    sabato3("0 3 * * sat", "alle 3 di ogni sabato."),
+
+    /**
+     * Pattern: 0 7 * * sat
+     * Descrizione: alle sette di ogni sabato
+     */
+    sabato7("0 7 * * sat", "alle 7 di ogni sabato."),
+
+
+
+    /**
+     * Pattern: 0 3 * * sun
+     * Descrizione: alle tre di ogni domenica
+     */
+    domenica3("0 3 * * sun", "alle 3 di ogni domenica."),
+
+    /**
+     * Pattern: 0 7 * * sun
+     * Descrizione: alle sette di ogni domenica
+     */
+    domenica7("0 7 * * sun", "alle 7 di ogni domenica."),
+
     ;
 
     /**

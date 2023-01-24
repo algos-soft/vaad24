@@ -13,7 +13,6 @@ import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.data.selection.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.logic.*;
@@ -616,17 +615,6 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
             bottomPlaceHolder.removeAll();
             if (usaBottomTotale) {
                 bottomPlaceHolder.add(htmlService.getSpan(new WrapSpan(message).color(AETypeColor.verde).weight(AEFontWeight.bold).fontHeight(AEFontSize.em7)));
-            }
-
-            if (usaBottomInfo) {
-                double doppio = VaadVar.projectVersion;
-                String nome = VaadVar.projectNameUpper;
-                String data = VaadVar.projectDate;
-                String note = textService.isValid(VaadVar.projectNote) ? SLASH_SPACE + VaadVar.projectNote : VUOTA;
-
-                //--Locale.US per forzare la visualizzazione grafica di un punto anziché una virgola
-                message = String.format(Locale.US, "Algos® - %s %2.1f di %s%s", nome, doppio, data, note);
-                bottomPlaceHolder.add(htmlService.getSpan(new WrapSpan(message).color(AETypeColor.blue).weight(AEFontWeight.bold).fontHeight(AEFontSize.em7)));
             }
         }
     }
