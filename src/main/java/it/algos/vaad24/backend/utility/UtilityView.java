@@ -84,7 +84,7 @@ public class UtilityView extends VerticalLayout {
     protected void postConstruct() {
         initView();
         LogService.debug(": [flow     ] - UtilityView.postConstruct()");
-        if (VaadVar.projectNameModulo!=null) {
+        if (VaadVar.projectNameModulo != null) {
             LogService.debug(": [flow     ] - UtilityView.postConstruct() - valido");
         }
         else {
@@ -138,18 +138,26 @@ public class UtilityView extends VerticalLayout {
     }
 
     private List<String> getListaReset() {
-        List<String> lista = new ArrayList<>();
+        List<String> listAll = new ArrayList<>();
+        List<String> lista;
 
-        if (VaadVar.projectNameModulo!=null) {
+        if (VaadVar.projectNameModulo != null) {
             LogService.debug(": [flow     ] - UtilityView.getListaReset() - valido");
         }
         else {
             LogService.debug(": [flow     ] - UtilityView.getListaReset() - nullo");
         }
 
-                lista.addAll(classService.allModuleEntityResetName(VaadVar.moduloVaadin24));
-                lista.addAll(classService.allModuleEntityResetName(VaadVar.projectNameModulo));
-        return lista;
+        lista = classService.allModuleEntityResetName(VaadVar.moduloVaadin24);
+        if (lista != null) {
+            listAll.addAll(lista);
+        }
+        lista = classService.allModuleEntityResetName(VaadVar.projectNameModulo);
+        if (lista != null) {
+            listAll.addAll(lista);
+        }
+
+        return listAll;
     }
 
 
