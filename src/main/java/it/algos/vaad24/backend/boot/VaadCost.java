@@ -56,6 +56,7 @@ public class VaadCost {
     public static final String PROJECT_VAADIN23 = "vaadin23";
 
     public static final String PROJECT_VAADIN24 = "vaad24";
+
     public static final String TAG_LOG_ADMIN = "vaad24.admin";
 
     public static final String APPLICATION_VAADIN24 = "Vaad24SimpleApplication";
@@ -93,6 +94,7 @@ public class VaadCost {
     public static final String TAB = "\t";
 
     public static final String ASTERISCO = "*";
+
     public static final String CAPO_ASTERISCO = "\n*";
 
     public static final String PIENA = "Piena";
@@ -186,6 +188,8 @@ public class VaadCost {
     public static final String HTML = "[html";
 
     public static final String REF_OPEN = "<ref";
+
+    public static final String REF_NAME = "<ref name=";
 
     public static final String REF_END = "</ref>";
 

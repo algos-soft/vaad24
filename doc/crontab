@@ -1,0 +1,21 @@
+https://betterprogramming.pub/https-medium-com-ratik96-scheduling-jobs-with-crontab-on-macos-add5a8b26c30
+
+Next, fire up the terminal and run crontab -e.
+
+Once you’re on the vim screen, hit i to put the editor into INSERT mode
+
+After typing out the cron expression, hit esc and then type :wq to save and exit vim.
+
+To see your active cron jobs, you can use the crontab -l command.
+
+
+
+
+
+https://ss64.com/osx/crontab.html
+
+crontab unix free
+cronette pagamento
+cronnix terminato
+lingon 6€
+LaunchControl

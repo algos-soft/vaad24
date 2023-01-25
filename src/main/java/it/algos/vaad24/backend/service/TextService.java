@@ -1020,7 +1020,7 @@ public class TextService extends AbstractService {
         if (this.isValid(testoOut) && this.isValid(tagIniziale)) {
             tag = tagIniziale.equals(CAPO) ? tagIniziale : tagIniziale.trim();
             if (testoOut.contains(tag)) {
-                testoOut = testoOut.substring(testoOut.indexOf(tag)+tag.length());
+                testoOut = testoOut.substring(testoOut.indexOf(tag) + tag.length());
             }
         }
 
@@ -1300,10 +1300,53 @@ public class TextService extends AbstractService {
      * @return stringa con <ref></ref> aggiunti
      */
     public String setRef(final String stringaIn) {
-        String stringaOut = REF + stringaIn.trim() + REF_END;
-        return stringaOut.trim();
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(REF);
+        buffer.append(stringaIn.trim());
+        buffer.append(REF_END);
+
+        return buffer.toString();
     }
 
+
+    /**
+     * Aggiunge i tag '<ref></ref>' in testa e coda alla stringa. <br>
+     * Registra la nota con un nome riutilizzabile <br>
+     *
+     * @param stringaIn in ingresso
+     * @param keyNota   chiave della nota
+     *
+     * @return stringa con <ref></ref> aggiunti
+     */
+    public String setRef(final String stringaIn, final String keyNota) {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(REF_NAME);
+        buffer.append(keyNota);
+        buffer.append(">");
+        buffer.append(stringaIn.trim());
+        buffer.append(REF_END);
+
+        return buffer.toString();
+    }
+    /**
+     * Aggiunge i tag '<ref></ref>' in testa e coda alla stringa. <br>
+     * Elimina spazi vuoti iniziali e finali <br>
+     *
+     * @param keyNota   chiave della nota
+     *
+     * @return stringa con <ref></ref> aggiunti
+     */
+    public String getRef(final String keyNota) {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(REF_NAME);
+        buffer.append(keyNota);
+        buffer.append("/>");
+
+        return buffer.toString();
+    }
 
     /**
      * Aggiunge 3 tag APICE in testa e coda alla stringa. <br>
