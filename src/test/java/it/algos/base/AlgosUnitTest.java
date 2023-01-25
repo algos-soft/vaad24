@@ -211,6 +211,9 @@ public abstract class AlgosUnitTest {
     @Autowired
     public LogService logger;
 
+    @Autowired
+    public MathService mathService;
+
     //--clazz
     //--simpleName
     protected static Stream<Arguments> CLAZZ_FOR_NAME() {
@@ -306,6 +309,7 @@ public abstract class AlgosUnitTest {
         assertNotNull(webService);
         assertNotNull(loggerBackend);
         assertNotNull(regexService);
+        assertNotNull(mathService);
     }
 
 

@@ -39,8 +39,8 @@ public class MathService extends AbstractService {
     /**
      * Divisione tra due numeri double <br>
      *
-     * @param dividendo quantità da dividere
-     * @param divisore  quantità che divide
+     * @param dividendo quantità (più grande, di solito) da dividere
+     * @param divisore  quantità (più piccola, di solito) usata per dividere
      *
      * @return valore risultante di tipo double
      */
@@ -51,27 +51,26 @@ public class MathService extends AbstractService {
 
     /**
      * Percentuale tra due numeri interi <br>
-     * ATTENZIONE che nella percentuale dividendo e divisore si alternano
      *
-     * @param dividendo quantità da dividere
-     * @param divisore  quantità che divide
+     * @param percentuale quantità (più piccola, di solito) da dividere
+     * @param valoreTotale  quantità (più grande, di solito) usata per dividere
      *
      * @return valore risultante di tipo double
      */
-    public double percentuale(int dividendo, int divisore) {
-        return divisione((double) divisore, (double) dividendo) * 100;
+    public double percentuale(int percentuale, int valoreTotale) {
+        return divisione((double) percentuale, (double) valoreTotale) * 100;
     }
 
     /**
-     * Percentuale tra due numeri interi <br>
+     * Percentuale tra due numeri interi, espressa come testo con 2 decimali <br>
      *
-     * @param dividendo quantità da dividere
-     * @param divisore  quantità che divide
+     * @param percentuale quantità (più piccola, di solito) da dividere
+     * @param valoreTotale  quantità (più grande, di solito) usata per dividere
      *
      * @return valore risultante di tipo String
      */
-    public String percentualeDueDecimali(int dividendo, int divisore) {
-        return new DecimalFormat("0.00").format(percentuale(dividendo, divisore)) + "%";
+    public String percentualeTxt(int percentuale, int valoreTotale) {
+        return new DecimalFormat("0.00").format(percentuale(percentuale, valoreTotale)) + "%";
     }
 
 }
