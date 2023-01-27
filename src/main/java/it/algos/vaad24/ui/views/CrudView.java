@@ -205,7 +205,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     /**
      * Flag di preferenza per la classe di dialogo. Di default CrudDialog. <br>
      */
-    protected Class<?> dialogClazz = CrudDialogBase.class;
+    protected Class<?> dialogClazz = CrudDialog.class;
 
     protected CrudDialog dialog;
 
@@ -731,7 +731,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         else {
             operation = CrudOperation.READ;
         }
-        dialog = (CrudDialogBase) appContext.getBean(dialogClazz, entityBeanDaRegistrare, operation, crudBackend, formPropertyNamesList);
+        dialog = (CrudDialog) appContext.getBean(dialogClazz, entityBeanDaRegistrare, operation, crudBackend, formPropertyNamesList);
         dialog.open(this::saveHandler, this::annullaHandler);
     }
 

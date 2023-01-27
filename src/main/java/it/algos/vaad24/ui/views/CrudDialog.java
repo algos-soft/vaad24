@@ -15,7 +15,6 @@ import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.component.timepicker.*;
 import com.vaadin.flow.data.binder.*;
 import com.vaadin.flow.data.converter.*;
-import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -24,9 +23,7 @@ import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.beans.factory.config.*;
 import org.springframework.context.*;
-import org.springframework.context.annotation.Scope;
 import org.vaadin.crudui.crud.*;
 
 import javax.annotation.*;
@@ -40,9 +37,7 @@ import java.util.function.*;
  * Date: sab, 02-apr-2022
  * Time: 07:39
  */
-@SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class CrudDialog extends Dialog {
+public abstract class CrudDialog extends Dialog {
 
     protected final H2 titleField = new H2();
 
