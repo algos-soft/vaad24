@@ -120,9 +120,6 @@ public enum AESchedule {
      */
     lunedi7("0 7 * * mon", "alle 7 di ogni lunedì."),
 
-
-
-
     /**
      * Pattern: 0 3 * * tue
      * Descrizione: alle tre di ogni martedì
@@ -134,9 +131,6 @@ public enum AESchedule {
      * Descrizione: alle sette di ogni martedì
      */
     martedi7("0 7 * * tue", "alle 7 di ogni martedì."),
-
-
-
 
     /**
      * Pattern: 0 3 * * wed
@@ -150,10 +144,6 @@ public enum AESchedule {
      */
     mercoledi7("0 7 * * wed", "alle 7 di ogni mercoledì."),
 
-
-
-
-
     /**
      * Pattern: 0 3 * * thu
      * Descrizione: alle tre di ogni giovedì
@@ -165,8 +155,6 @@ public enum AESchedule {
      * Descrizione: alle sette di ogni giovedì
      */
     giovedi7("0 7 * * thu", "alle 7 di ogni giovedì."),
-
-
 
     /**
      * Pattern: 0 3 * * fri
@@ -180,7 +168,6 @@ public enum AESchedule {
      */
     venerdi7("0 7 * * fri", "alle 7 di ogni venerdì."),
 
-
     /**
      * Pattern: 0 3 * * sat
      * Descrizione: alle tre di ogni sabato
@@ -193,8 +180,6 @@ public enum AESchedule {
      */
     sabato7("0 7 * * sat", "alle 7 di ogni sabato."),
 
-
-
     /**
      * Pattern: 0 3 * * sun
      * Descrizione: alle tre di ogni domenica
@@ -206,6 +191,18 @@ public enum AESchedule {
      * Descrizione: alle sette di ogni domenica
      */
     domenica7("0 7 * * sun", "alle 7 di ogni domenica."),
+
+    /**
+     * Pattern: 0 3 * * mon,wed,fri
+     * Descrizione: alle 3 di ogni giorno dispari (lunedì, mercoledì, venerdì)
+     */
+    dispari3("0 3 * * 1,3,5", "alle 3 di ogni giorno dispari (lunedì, mercoledì, venerdì)"),
+
+    /**
+     * Pattern: 0 3 * * tue,thu,sat
+     * Descrizione: alle 3 di ogni giorno pari (martedì, giovedì, sabato)
+     */
+    pari3("0 3 * * 2,4,6", "alle 3 di ogni giorno pari (martedì, giovedì, sabato)"),
 
     ;
 

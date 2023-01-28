@@ -48,5 +48,16 @@ are needed after this. See Date/Time conversion below.
 * Javatpoint [https://www.javatpoint.com/java-string-format]
 
 
+== Scheduler
+
+* Sotto-pattern per i minuti. I valori ammessi vanno da 0 a 59.
+* Sotto-pattern per le ore. I valori ammessi vanno da 0 a 23.
+* Sotto-pattern per il giorno del mese. I valori ammessi vanno da 1 a 31.
+* Sotto-pattern per il mese. I valori ammessi vanno da 1 (gennaio) a 12 (dicembre), o le stringhe-equivalenti "jan", "feb", "mar", "apr",
+"may", "jun", "jul", "aug", "sep", "oct", "nov" e "dec".
+* Sotto-pattern per il giorno della settimana. I valori ammessi vanno da 0 (domenica) a 6 (sabato), o le stringhe-equivalenti: "sun",
+"mon", "tue", "wed", "thu", "fri" e "sat".
+
+* Cron4j [http://www.sauronsoftware.it/projects/cron4j/manual.php]
 
 
