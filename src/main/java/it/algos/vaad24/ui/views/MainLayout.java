@@ -13,7 +13,6 @@ import it.algos.vaad24.ui.service.*;
 import org.springframework.beans.factory.annotation.*;
 
 import javax.annotation.*;
-import java.util.*;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -74,8 +73,12 @@ public class MainLayout extends AppLayout {
         toggle.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
         toggle.getElement().setAttribute("aria-label", "Menu toggle");
 
+
+        // Placeholder for the title of the current view.
+        // The title will be set after navigation.
         viewTitle = new H1();
         viewTitle.addClassNames("m-0", "text-l");
+
 
         if (VaadVar.usaSecurity) {
             logout = new Button("Log out", e -> securityService.logout());
@@ -85,6 +88,13 @@ public class MainLayout extends AppLayout {
             header = new HorizontalLayout(toggle, viewTitle);
         }
 
+        // Configure styling for the header
+        header.setId("header");
+        header.getThemeList().set("dark", true);
+        header.setWidthFull();
+        header.setSpacing(false);
+        header.setAlignItems(FlexComponent.Alignment.CENTER);
+
         header.addClassNames("bg-base", "border-b", "border-contrast-10", "box-border", "flex", "h-xl", "items-center", "w-full");
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.expand(viewTitle);
@@ -93,6 +103,7 @@ public class MainLayout extends AppLayout {
     }
 
     private void createDrawer() {
+
         H2 appName = new H2(textService.primaMaiuscola(VaadVar.projectCurrent));
         appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
 
@@ -103,6 +114,7 @@ public class MainLayout extends AppLayout {
     }
 
     private Nav createNavigation() {
+
         Nav nav = new Nav();
         nav.addClassNames("border-b", "border-contrast-10", "flex-grow", "overflow-auto");
         nav.getElement().setAttribute("aria-labelledby", "views");
@@ -111,18 +123,11 @@ public class MainLayout extends AppLayout {
         UnorderedList list = new UnorderedList();
         list.addClassNames("list-none", "m-0", "p-0");
         nav.add(list);
-
-        for (ListItem menuItem : createMenuItems()) {
-            list.add(menuItem);
-        }
+        list.add(layoutService.getMenuItems());
 
         return nav;
     }
 
-
-    private List<ListItem> createMenuItems() {
-        return layoutService.getAllItem();
-    }
 
     private Footer createFooter() {
         Footer layout = new Footer();

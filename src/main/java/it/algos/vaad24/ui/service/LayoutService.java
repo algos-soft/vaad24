@@ -29,6 +29,9 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class LayoutService extends AbstractService {
 
+    public List<Component> getMenuItems() {
+        return getAllItem();
+    }
 
     /**
      * Tutti gli item di menu per la barra del Drawer alla partenza del programma <br>
@@ -38,8 +41,8 @@ public class LayoutService extends AbstractService {
      *
      * @return lista degli item di menu del Drawer
      */
-    public List<ListItem> getAllItem() {
-        List<ListItem> listaItems = new ArrayList<>();
+    public List<Component> getAllItem() {
+        List<Component> listaItems = new ArrayList<>();
         ListItem item;
         String menuName;
         VaadinIcon icon;
@@ -70,7 +73,7 @@ public class LayoutService extends AbstractService {
      *
      * @return item di menu del Drawer
      */
-    private ListItem getItem(final String menuTitle, final VaadinIcon icon, final String iconClass, final Class<? extends Component> view) {
+    public ListItem getItem(final String menuTitle, final VaadinIcon icon, final String iconClass, final Class<? extends Component> view) {
         ListItem item = new ListItem();
         RouterLink link = new RouterLink();
 
