@@ -211,7 +211,7 @@ public abstract class AlgosUnitTest {
     @Autowired
     public LogService logger;
 
-    @Autowired
+    @InjectMocks
     public MathService mathService;
 
     //--clazz
