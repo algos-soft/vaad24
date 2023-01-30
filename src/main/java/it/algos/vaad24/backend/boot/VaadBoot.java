@@ -119,8 +119,6 @@ public  class VaadBoot implements ServletContextListener {
      * Al termine del ciclo init() del costruttore il framework SpringBoot/Vaadin, inietterà la relativa istanza <br>
      */
     public VaadBoot() {
-        LogService.debug(": [flow     ] - VaadBoot, init()");
-
         //        this.setMongo(mongo);
         //        this.setLogger(logger)
         //        this.setEnvironment(environment);
@@ -141,7 +139,6 @@ public  class VaadBoot implements ServletContextListener {
      */
     @PostConstruct
     private void postConstruct() {
-        LogService.debug(": [flow     ] - VaadBoot.postConstruct()");
         this.inizia();
     }
 

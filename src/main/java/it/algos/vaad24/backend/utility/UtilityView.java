@@ -76,19 +76,15 @@ public class UtilityView extends VerticalLayout {
      */
     public UtilityView() {
         super();
-        LogService.debug(": [flow     ] - UtilityView.init()");
     }// end of Vaadin/@Route constructor
 
 
     @PostConstruct
     protected void postConstruct() {
         initView();
-        LogService.debug(": [flow     ] - UtilityView.postConstruct()");
         if (VaadVar.projectNameModulo != null) {
-            LogService.debug(": [flow     ] - UtilityView.postConstruct() - valido");
         }
         else {
-            LogService.debug(": [flow     ] - UtilityView.postConstruct() - nullo");
         }
     }
 
@@ -142,10 +138,8 @@ public class UtilityView extends VerticalLayout {
         List<String> lista;
 
         if (VaadVar.projectNameModulo != null) {
-            LogService.debug(": [flow     ] - UtilityView.getListaReset() - valido");
         }
         else {
-            LogService.debug(": [flow     ] - UtilityView.getListaReset() - nullo");
         }
 
         lista = classService.allModuleEntityResetName(VaadVar.moduloVaadin24);

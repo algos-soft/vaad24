@@ -98,7 +98,6 @@ public class LogService extends AbstractService {
     @PostConstruct
     private void postConstruct() {
         slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
-        LogService.debug(": [flow     ] - LogService.postConstruct()");
     }
 
     public static void debug(String message) {

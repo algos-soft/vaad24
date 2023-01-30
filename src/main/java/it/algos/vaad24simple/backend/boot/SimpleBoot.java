@@ -9,7 +9,6 @@ import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
-import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.vaad24simple.backend.boot.SimpleCost.*;
 import it.algos.vaad24simple.backend.schedule.*;
@@ -64,8 +63,6 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
     @Override
     protected void fixVariabili() {
         super.fixVariabili();
-
-        LogService.debug(": [flow     ] - SimpleBoot.fixVariabili()");
 
         /**
          * Nome della classe di partenza col metodo 'main' <br>
