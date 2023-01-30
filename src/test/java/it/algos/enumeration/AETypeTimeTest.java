@@ -37,6 +37,7 @@ public class AETypeTimeTest extends AlgosUnitTest {
     private List<String> listaTag;
 
     private long inizio;
+    private long fine;
 
 
     /**
