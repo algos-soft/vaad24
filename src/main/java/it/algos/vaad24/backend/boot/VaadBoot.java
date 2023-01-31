@@ -204,9 +204,7 @@ public  class VaadBoot implements ServletContextListener {
 
         databaseName = environment.getProperty("spring.data.mongodb.database");
         message = String.format("Database mongo in uso: %s", databaseName);
-        if (allDebugSetup) {
-            logger.info(new WrapLog().message(message).type(AETypeLog.setup));
-        }
+        logger.info(new WrapLog().message(message).type(AETypeLog.setup));
 
         autoIndexCreation = environment.getProperty("spring.data.mongodb.auto-index-creation");
         message = String.format("Auto creazione degli indici (per la classi @Document): %s", autoIndexCreation);

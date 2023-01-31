@@ -4,6 +4,13 @@
 
 = Miscellaneous
 
+== Vaadin
+- Start [https://vaadin.com/docs/latest/guide/quick-start]
+- MyApp [https://start.vaadin.com/app]
+- Components [https://vaadin.com/docs/latest/components]
+- Release [https://github.com/vaadin/platform/tags]
+- 23.3.5 [https://github.com/vaadin/platform/releases/tag/23.3.5]
+
 == AsciiDoc
 Baeldung [https://www.baeldung.com/asciidoctor]
 

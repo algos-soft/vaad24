@@ -14,4 +14,5 @@ Vaadin ver: ${AnsiColor.GREEN}${vaadin.version}${AnsiColor.MAGENTA}
 Vaad24 ver: ${AnsiColor.GREEN}${algos.vaad24.version}${AnsiColor.MAGENTA} di ${AnsiColor.GREEN}${algos.vaad24.version.date}${AnsiColor.MAGENTA}
 ${algos.project.name} ver: ${AnsiColor.GREEN}${algos.project.version}${AnsiColor.MAGENTA} di ${AnsiColor.GREEN}${algos.project.version.date}${AnsiColor.MAGENTA}
 Tomcat port: ${AnsiColor.GREEN}${server.port}${AnsiColor.MAGENTA}
+MongDB name: ${AnsiColor.GREEN}${spring.data.mongodb.database}${AnsiColor.MAGENTA}
 ${AnsiColor.DEFAULT}
