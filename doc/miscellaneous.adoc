@@ -67,4 +67,6 @@ are needed after this. See Date/Time conversion below.
 
 * Cron4j [http://www.sauronsoftware.it/projects/cron4j/manual.php]
 
+== Icons
 
+* Vaadin [https://vaadin.com/docs/latest/components/icons]
