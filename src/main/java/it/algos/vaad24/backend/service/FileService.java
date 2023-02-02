@@ -827,6 +827,7 @@ public class FileService extends AbstractService {
         String test = "/test/";
         String dir = "directory";
         String path;
+        int length = 10;
         File dirSrc;
         File dirDest;
         List<String> filesSorgenti = new ArrayList<>(); ;
@@ -880,7 +881,8 @@ public class FileService extends AbstractService {
                         .typeTxt(VUOTA)
                         .exception(new AlgosException(AETypeResult.tokenUguali.getTag()));
             }
-            result.setTagCode(String.format("[%s%s%s%s]", tagToken, srcToken, FORWARD, destToken));
+            message = String.format("[%s%s%s%s]", tagToken, textService.fixSizePunti(srcToken, length), FORWARD, textService.fixSizePunti(destToken, length));
+            result.setTagCode(message);
         }
 
         //errore grave - traccia l'eccezione ed esce

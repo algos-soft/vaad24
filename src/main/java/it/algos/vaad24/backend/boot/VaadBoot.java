@@ -48,9 +48,10 @@ import java.util.*;
  */
 //@SpringComponent
 //@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public  class VaadBoot implements ServletContextListener {
+public class VaadBoot implements ServletContextListener {
 
     protected boolean allDebugSetup;
+
     private String property;
 
     /**
@@ -142,14 +143,14 @@ public  class VaadBoot implements ServletContextListener {
         this.inizia();
     }
 
-        /**
-         * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
-         * event, the application is ready to service Vaadin requests <br>
-         */
-        @EventListener(ContextRefreshedEvent.class)
-        public void onContextRefreshEvent() {
-//            this.inizia();
-        }
+    /**
+     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
+     * event, the application is ready to service Vaadin requests <br>
+     */
+    @EventListener(ContextRefreshedEvent.class)
+    public void onContextRefreshEvent() {
+        //            this.inizia();
+    }
 
     /**
      * Primo ingresso nel programma <br>
@@ -323,6 +324,18 @@ public  class VaadBoot implements ServletContextListener {
          */
         VaadVar.usaSecurity = false;
 
+        /**
+         * Titolo del banner <br>
+         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         */
+        VaadVar.vaadin24BannerTitle = " _______ _______ _______ _______ _______ _______\n" +
+                "|\\     /|\\     /|\\     /|\\     /|\\     /|\\     /|\n" +
+                "| +---+ | +---+ | +---+ | +---+ | +---+ | +---+ |\n" +
+                "| |   | | |   | | |   | | |   | | |   | | |   | |\n" +
+                "| |v  | | |a  | | |a  | | |d  | | |2  | | |4  | |\n" +
+                "| +---+ | +---+ | +---+ | +---+ | +---+ | +---+ |\n" +
+                "|/_____\\|/_____\\|/_____\\|/_____\\|/_____\\|/_____\\|\n";
+
 
         /*
          * Nome identificativo minuscolo del progetto corrente <br>
@@ -403,6 +416,7 @@ public  class VaadBoot implements ServletContextListener {
             String message = String.format("Non ho trovato la property %s nelle risorse", property);
             logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
         }
+
 
     }
 

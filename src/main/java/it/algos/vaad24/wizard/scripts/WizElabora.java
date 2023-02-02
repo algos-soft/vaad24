@@ -241,6 +241,14 @@ public abstract class WizElabora {
         }
     }
 
+    public void mostraRisultato(AResult result, String nomeFile, String srcToken, String destToken) {
+        String message;
+        String messageType = VUOTA;
+
+        messageType = "ElaboraFile - Files e tokens modificati";
+        message = String.format("%s: %s (%s)", messageType, textService.primaMinuscola(result.getMessage()), "Pippoz");
+        logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
+    }
 
     public AResult source(final AEWizProject wiz) {
         String message;

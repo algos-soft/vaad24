@@ -89,6 +89,7 @@ public class WizElaboraUpdateProject extends WizElabora {
         String oldToken = APPLICATION_VAADIN24;
         String newToken = VaadVar.projectCurrentMainApplication;
         String tag = progettoEsistente ? "Update" : "New";
+        String oldText;
 
         switch (wiz) {
             case pomVaad24 -> {
@@ -103,6 +104,13 @@ public class WizElaboraUpdateProject extends WizElabora {
                 result = fixToken(result, wiz, oldToken, newToken);
                 mostraRisultato(result, AECopy.dirFilesModifica, dir, tag);
             }
+            case banner -> {
+                oldToken = VaadVar.vaadin24BannerTitle;
+                newToken = VaadVar.projectBannerTitle;
+                result = fileService.copyFile(AECopy.fileModifyEver, srcVaad24, destNewProject, wiz.getNomeFile(), oldToken, newToken);
+                mostraRisultato(result, wiz.getNomeFile(), oldToken, newToken);
+            }
+
             default -> {}
         }
 

@@ -1,18 +1,16 @@
 ${AnsiColor.GREEN}
-                          _  ____   _  _
-__   __  __ _   __ _   __| ||___ \ | || |  
-\ \ / / / _` | / _` | / _` |  __) || || |_ 
- \ V / | (_| || (_| || (_| | / __/ |__   _|
-  \_/   \__,_| \__,_| \__,_||_____|   |_|  
-
-${AnsiBackground.DEFAULT}
-${AnsiColor.MAGENTA}
-Vaad24 FrameWork  (c)Algos
+ _______ _______ _______ _______ _______ _______
+|\     /|\     /|\     /|\     /|\     /|\     /|
+| +---+ | +---+ | +---+ | +---+ | +---+ | +---+ |
+| |   | | |   | | |   | | |   | | |   | | |   | |
+| |v  | | |a  | | |a  | | |d  | | |2  | | |4  | |
+| +---+ | +---+ | +---+ | +---+ | +---+ | +---+ |
+|/_____\|/_____\|/_____\|/_____\|/_____\|/_____\|
+${AnsiBackground.DEFAULT}${AnsiColor.MAGENTA}Vaad24 FrameWork  (c)Algos
 Java ver: ${AnsiColor.GREEN}${java.version}${AnsiColor.MAGENTA}
 SpringBoot ver: ${AnsiColor.GREEN}${spring-boot.version}${AnsiColor.MAGENTA}
 Vaadin ver: ${AnsiColor.GREEN}${vaadin.version}${AnsiColor.MAGENTA}
 Vaad24 ver: ${AnsiColor.GREEN}${algos.vaad24.version}${AnsiColor.MAGENTA} di ${AnsiColor.GREEN}${algos.vaad24.version.date}${AnsiColor.MAGENTA}
 ${algos.project.name} ver: ${AnsiColor.GREEN}${algos.project.version}${AnsiColor.MAGENTA} di ${AnsiColor.GREEN}${algos.project.version.date}${AnsiColor.MAGENTA}
 Tomcat port: ${AnsiColor.GREEN}${server.port}${AnsiColor.MAGENTA}
-MongDB name: ${AnsiColor.GREEN}${spring.data.mongodb.database}${AnsiColor.MAGENTA}
-${AnsiColor.DEFAULT}
+MongDB name: ${AnsiColor.GREEN}${spring.data.mongodb.database}${AnsiColor.MAGENTA}${AnsiColor.DEFAULT}

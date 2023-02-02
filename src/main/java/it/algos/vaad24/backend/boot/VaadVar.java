@@ -154,5 +154,16 @@ public class VaadVar {
      */
     public static boolean usaSecurity;
 
+    /**
+     * Titolo del banner <br>
+     * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+     */
+    public static String vaadin24BannerTitle;
+
+    /**
+     * Titolo del banner <br>
+     * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+     */
+    public static String projectBannerTitle;
 
 }
