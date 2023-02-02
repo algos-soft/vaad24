@@ -2244,7 +2244,7 @@ public class FileService extends AbstractService {
             logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
 
-        return lista;
+        return lista.stream().sorted().collect(Collectors.toList());
     }
 
     public List<String> scanJar(String jarPath) {

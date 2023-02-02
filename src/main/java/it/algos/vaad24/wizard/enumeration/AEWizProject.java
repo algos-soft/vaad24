@@ -35,7 +35,7 @@ public enum AEWizProject {
             AECopy.sourceSovrascriveSempreAncheSeEsiste, "properties"
     ),
 
-    banner("File BANNER di SpringBoot (vaad24) [need riavvio]", true, true, "src/main/resources/banner.txt", AECopy.elaboraFile),
+    banner("File BANNER di SpringBoot (vaad24) [need riavvio]", true, false, "src/main/resources/banner.txt", AECopy.elaboraFile),
 
     git("File GIT di esclusione (sources)", true, false, ".gitignore", AECopy.fileModifyEver),
 
