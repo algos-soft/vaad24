@@ -58,6 +58,30 @@ public class TextServiceTest extends AlgosIntegrationTest {
     //--src
     //--risultato
     //--length
+    protected static Stream<Arguments> MAX_SIZE() {
+        return Stream.of(
+                Arguments.of(VUOTA, VUOTA, 0),
+                Arguments.of(VUOTA, VUOTA, 3),
+                Arguments.of("alfa", VUOTA, 0),
+                Arguments.of("alfa", "..", 2),
+                Arguments.of("alfa", "alfa", 4),
+                Arguments.of("alfa  ", "alfa", 6),
+                Arguments.of("  alfa", "alfa", 6),
+                Arguments.of("  alfa  ", "alfa", 6),
+                Arguments.of("  alfa  ", "..", 2),
+                Arguments.of("  alfa", "alfa", 4),
+                Arguments.of("alfa", "alfa", 6),
+                Arguments.of("alfetta", "alf...", 6),
+                Arguments.of("alfetta", "alfetta", 8),
+                Arguments.of(" alfetta ", "...", 3)
+        );
+    }
+
+
+
+    //--src
+    //--risultato
+    //--length
     protected static Stream<Arguments> FIX_SIZE() {
         return Stream.of(
                 Arguments.of(VUOTA, VUOTA, 0),
@@ -84,19 +108,19 @@ public class TextServiceTest extends AlgosIntegrationTest {
     protected static Stream<Arguments> FIX_SIZE_PUNTI() {
         return Stream.of(
                 Arguments.of(VUOTA, VUOTA, 0),
-                Arguments.of(VUOTA, "   ", 3),
-                Arguments.of("alfa", TRE_PUNTI, 0),
-                Arguments.of("alfa", "al...", 2),
+                Arguments.of(VUOTA, "...", 3),
+                Arguments.of("alfa", VUOTA, 0),
+                Arguments.of("alfa", "..", 2),
                 Arguments.of("alfa", "alfa", 4),
                 Arguments.of("alfa  ", "alfa  ", 6),
                 Arguments.of("  alfa", "alfa  ", 6),
                 Arguments.of("  alfa  ", "alfa  ", 6),
-                Arguments.of("  alfa  ", "al...", 2),
+                Arguments.of("  alfa  ", "..", 2),
                 Arguments.of("  alfa", "alfa", 4),
                 Arguments.of("alfa", "alfa  ", 6),
-                Arguments.of("alfetta", "alfett...", 6),
+                Arguments.of("alfetta", "alf...", 6),
                 Arguments.of("alfetta", "alfetta ", 8),
-                Arguments.of(" alfetta ", "alf...", 3)
+                Arguments.of(" alfetta ", "...", 3)
         );
     }
 
@@ -136,9 +160,9 @@ public class TextServiceTest extends AlgosIntegrationTest {
         sorgenteIntero = length;
         previsto = risultato;
         ottenuto = service.rightPad(sorgente, sorgenteIntero);
-        assertEquals(previsto, ottenuto);
         message = String.format("[%s] (%d) %s[%s]", sorgente, sorgenteIntero, FORWARD, ottenuto);
         System.out.println(message);
+        assertEquals(previsto, ottenuto);
     }
 
 
@@ -151,9 +175,9 @@ public class TextServiceTest extends AlgosIntegrationTest {
         sorgenteIntero = length;
         previsto = risultato;
         ottenuto = service.fixSize(sorgente, sorgenteIntero);
-        assertEquals(previsto, ottenuto);
         message = String.format("[%s] (%d) %s[%s]", sorgente, sorgenteIntero, FORWARD, ottenuto);
         System.out.println(message);
+        assertEquals(previsto, ottenuto);
     }
 
     @ParameterizedTest
@@ -165,11 +189,25 @@ public class TextServiceTest extends AlgosIntegrationTest {
         sorgenteIntero = length;
         previsto = risultato;
         ottenuto = service.fixSizePunti(sorgente, sorgenteIntero);
-        assertEquals(previsto, ottenuto);
         message = String.format("[%s] (%d) %s[%s]", sorgente, sorgenteIntero, FORWARD, ottenuto);
         System.out.println(message);
+        assertEquals(previsto, ottenuto);
     }
 
+
+    @ParameterizedTest
+    @MethodSource(value = "MAX_SIZE")
+    @Order(4)
+    @DisplayName("4 - maxSize")
+    void maxSize(final String src, final String risultato, final int length) {
+        sorgente = src;
+        sorgenteIntero = length;
+        previsto = risultato;
+        ottenuto = service.maxSize(sorgente, sorgenteIntero);
+        message = String.format("[%s] (%d) %s[%s]", sorgente, sorgenteIntero, FORWARD, ottenuto);
+        System.out.println(message);
+        assertEquals(previsto, ottenuto);
+    }
 
     /**
      * Qui passa al termine di ogni singolo test <br>

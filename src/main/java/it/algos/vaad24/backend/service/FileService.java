@@ -827,7 +827,7 @@ public class FileService extends AbstractService {
         String test = "/test/";
         String dir = "directory";
         String path;
-        int length = 10;
+        int length = 20;
         File dirSrc;
         File dirDest;
         List<String> filesSorgenti = new ArrayList<>(); ;
@@ -881,7 +881,7 @@ public class FileService extends AbstractService {
                         .typeTxt(VUOTA)
                         .exception(new AlgosException(AETypeResult.tokenUguali.getTag()));
             }
-            message = String.format("[%s%s%s%s]", tagToken, textService.fixSizePunti(srcToken, length), FORWARD, textService.fixSizePunti(destToken, length));
+            message = String.format("[%s%s%s%s]", tagToken, textService.maxSize(srcToken, length), FORWARD, textService.maxSize(destToken, length));
             result.setTagCode(message);
         }
 
@@ -945,7 +945,7 @@ public class FileService extends AbstractService {
 
         if (typeCopy == AECopy.dirFilesAddOnly || typeCopy == AECopy.dirFilesModifica) {
             for (String nomeFile : filesSorgenti) {
-                if (isEsisteFile(srcPath + nomeFile)) {
+                if (filesDestinazioneAnte.contains(nomeFile)) {
                     if (typeCopy == AECopy.dirFilesModifica) {
                         resultFile = copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
                         filesModificati.add(nomeFile);

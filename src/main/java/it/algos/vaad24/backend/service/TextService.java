@@ -878,16 +878,17 @@ public class TextService extends AbstractService {
      * Se è più lungo, rimane inalterato <br>
      * La stringa in ingresso viene 'giustificata' a sinistra <br>
      * Vengono eliminati gli spazi vuoti che precedono la stringa <br>
+     * La lunghezza è come minimo quella indicata, ma potrebbe essere maggiore <br>
      *
      * @param testoIn stringa in ingresso
-     * @param length finale della stringa
+     * @param length  minima della stringa
      *
-     * @return testo della 'lunghezza' richiesta
+     * @return testo almeno della 'lunghezza' richiesta
      */
-
     public String rightPad(final String testoIn, int length) {
         return StringUtils.rightPad(testoIn.trim(), length);
     }
+
 
     /**
      * Forza un testo alla lunghezza desiderata. <br>
@@ -895,17 +896,19 @@ public class TextService extends AbstractService {
      * Se è più lungo, lo tronca <br>
      * La stringa in ingresso viene 'giustificata' a sinistra <br>
      * Vengono eliminati gli spazi vuoti che precedono la stringa <br>
+     * La lunghezza è sempre quella indicata <br>
      *
      * @param testoIn stringa in ingresso
+     * @param length  finale della stringa
      *
-     * @return testo della 'lunghezza' richiesta
+     * @return testo sempre della 'lunghezza' richiesta
      */
 
-    public String fixSize(final String testoIn, int size) {
-        String testoOut = rightPad(testoIn, size);
+    public String fixSize(final String testoIn, int length) {
+        String testoOut = rightPad(testoIn, length);
 
-        if (testoOut.length() > size) {
-            testoOut = testoOut.substring(0, size);
+        if (testoOut.length() > length) {
+            testoOut = testoOut.substring(0, length);
         }
 
         return testoOut;
@@ -918,17 +921,66 @@ public class TextService extends AbstractService {
      * Se è più lungo, lo tronca e aggiunge 3 punti <br>
      * La stringa in ingresso viene 'giustificata' a sinistra <br>
      * Vengono eliminati gli spazi vuoti che precedono la stringa <br>
+     * La lunghezza è sempre quella indicata <br>
      *
      * @param testoIn stringa in ingresso
+     * @param length  finale della stringa
      *
      * @return testo della 'lunghezza' richiesta
      */
 
-    public String fixSizePunti(final String testoIn, int size) {
-        String testoOut = rightPad(testoIn, size);
+    public String fixSizePunti(final String testoIn, int length) {
+        String testoOut;
 
-        if (testoOut.length() > size) {
-            testoOut = testoOut.substring(0, size);
+        if (length < 1) {
+            return VUOTA;
+        }
+
+        if (length <= TRE_PUNTI.length()) {
+            return PUNTO.repeat(length);
+        }
+
+        testoOut = rightPad(testoIn, length);
+        if (testoOut.length() > length) {
+            testoOut = testoOut.substring(0, length - TRE_PUNTI.length());
+            testoOut += TRE_PUNTI;
+        }
+
+        return testoOut;
+    }
+
+
+    /**
+     * Controlla che un testo non superi la lunghezza desiderata. <br>
+     * Se è più corta, NON aggiunge spazi <br>
+     * Se è più lungo, lo tronca e aggiunge 3 punti <br>
+     * La stringa in ingresso viene 'giustificata' a sinistra <br>
+     * Vengono eliminati gli spazi vuoti che precedono la stringa <br>
+     * La lunghezza è come massimo quella indicata, ma potrebbe essere minore <br>
+     *
+     * @param testoIn stringa in ingresso
+     * @param length  massima della stringa
+     *
+     * @return testo al massimo della 'lunghezza' richiesta
+     */
+    public String maxSize(final String testoIn, int length) {
+        String testoOut;
+
+        if (length < 1) {
+            return VUOTA;
+        }
+
+        if (isEmpty(testoIn)) {
+            return VUOTA;
+        }
+
+        if (length <= TRE_PUNTI.length()) {
+            return PUNTO.repeat(length);
+        }
+
+        testoOut = testoIn.trim();
+        if (testoOut.length() > length) {
+            testoOut = testoOut.substring(0, length - TRE_PUNTI.length());
             testoOut += TRE_PUNTI;
         }
 
