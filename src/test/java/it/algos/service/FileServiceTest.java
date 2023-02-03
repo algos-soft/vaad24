@@ -1,5 +1,6 @@
 package it.algos.service;
 
+import com.mongodb.client.internal.*;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
@@ -286,7 +287,9 @@ public class FileServiceTest extends AlgosIntegrationTest {
     void checkDirectory(final String absolutePathDirectoryToBeChecked, final boolean previstoBooleano) {
         System.out.println("1 - Check di una directory");
         System.out.println(VUOTA);
-
+        MongoDatabaseImpl cliente=(MongoDatabaseImpl)mongoService.getDataBase();
+String nome=cliente.getName();
+String alfa=nome;
         sorgente = absolutePathDirectoryToBeChecked;
         ottenutoRisultato = service.checkDirectory(sorgente);
         assertNotNull(ottenutoRisultato);
