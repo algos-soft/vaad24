@@ -959,7 +959,7 @@ public class FileService extends AbstractService {
         String tagToken = "Token: ";
 
         if (Pref.debug.is()) {
-            return String.format("[%s%s%s%s]", tagToken, srcToken, destToken);
+            return String.format("[%s%s%s%s]", tagToken, srcToken, FORWARD, destToken);
         }
         else {
             return String.format("[%s%s%s%s]", tagToken, textService.maxSize(srcToken, MAX_TOKEN_LENGTH), FORWARD, textService.maxSize(destToken, MAX_TOKEN_LENGTH));

@@ -84,7 +84,7 @@ public class VaadData extends AbstractService {
 
         boolean isJar = reflectionService.isJarRunning();
         message = String.format("Stiamo girando da %s", isJar ? "JAR" : "IDE");
-        logger.info(new WrapLog().message(message).type(AETypeLog.setup));
+        logger.info(new WrapLog().message(message).type(AETypeLog.info));
 
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
         resetData(VaadVar.moduloVaadin24);

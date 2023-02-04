@@ -55,24 +55,6 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
 
 
     /**
-     * Regola le variabili generali dell' applicazione con il loro valore iniziale di default <br>
-     * Le variabili (static) sono uniche per tutta l' applicazione <br>
-     * Il loro valore può essere modificato SOLO in questa classe o in una sua sottoclasse <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    protected void fixVariabili() {
-        super.fixVariabili();
-
-        /**
-         * Nome della classe di partenza col metodo 'main' <br>
-         * Spesso coincide (non obbligatoriamente) con projectCurrent + Application <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-         */
-        VaadVar.projectCurrentMainApplication = "Vaad24SimpleApplication";
-    }
-
-    /**
      * Costruisce alcune istanze generali dell'applicazione e ne mantiene i riferimenti nelle apposite variabili <br>
      * Le istanze (prototype) sono uniche per tutta l' applicazione <br>
      * Vengono create SOLO in questa classe o in una sua sottoclasse <br>

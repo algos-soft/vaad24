@@ -145,6 +145,55 @@ public class MongoService<capture> extends AbstractService {
     }
 
     /**
+     * Collezioni esistenti nel database <br>
+     *
+     * @param dataBase da esaminare
+     */
+    public List<String> listCollectionNames(MongoDatabase dataBase) {
+        List<String> lista = new ArrayList<>();
+
+        MongoIterable iterable = dataBase.listCollectionNames();
+        MongoCursor iterator = iterable.iterator();
+        while (iterator.hasNext()) {
+            Object document = iterator.next();
+            lista.add(document.toString());
+        }
+        return lista;
+    }
+
+    /**
+     *
+     */
+    public String versione() {
+        MongoDatabase dataBase = getDBAdmin();
+        List<String> lista = listCollectionNames(dataBase);
+        collection = dataBase.getCollection("system");
+        MongoNamespace fullName = collection.getNamespace();
+        String collectionName = fullName.getCollectionName();
+
+//        MongoDatabase alfa2=  mongoClient.getDatabase("system");
+//        DB alfa3=  mongoClient.getDatabase("system");
+//        MongoDatabase database = client.getDatabase("admin");
+        Document documentA = dataBase.runCommand(new Document("enablesharding", "test"));
+        Document documentB = dataBase.runCommand(new Document("shardcollection", "testDB.x").append("key", new Document("userId", 1)));
+
+        long alfa=collection.estimatedDocumentCount();
+        FindIterable iterable = collection.find();
+        MongoCursor iterator = iterable.iterator();
+        int num=iterator.available();
+        while (iterator.hasNext()) {
+            Object document = iterator.next();
+            lista.add(document.toString());
+        }
+
+        if (collection.countDocuments() > 1) {
+        }
+
+        return "Collection non trovata";
+    }
+
+
+    /**
      * Recupera il valore di un parametro
      *
      * @param parameterName
@@ -398,6 +447,7 @@ public class MongoService<capture> extends AbstractService {
     public void deleteAll(final String collectionName) {
         mongoOp.dropCollection(collectionName);
     }
+
     public void deleteAll(final Class clazz) {
         mongoOp.dropCollection(clazz);
     }
