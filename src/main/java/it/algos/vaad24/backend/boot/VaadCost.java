@@ -145,6 +145,8 @@ public class VaadCost {
 
     public static final String DOPPIO_SPAZIO = SPAZIO + SPAZIO;
 
+    public static final String TAB_SPAZIO = DOPPIO_SPAZIO + DOPPIO_SPAZIO;
+
     public static final String VIRGOLA_SPAZIO = VIRGOLA + SPAZIO;
 
 
@@ -360,6 +362,8 @@ public class VaadCost {
     public static final String PARAGRAFO = UGUALE_SEMPLICE + UGUALE_SEMPLICE;
 
     public static final String PARAGRAFO_SUB = UGUALE_SEMPLICE + UGUALE_SEMPLICE + UGUALE_SEMPLICE;
+
+    public static final int MAX_TOKEN_LENGTH = 15;
 
     /**
      * tag '@Qualifier'

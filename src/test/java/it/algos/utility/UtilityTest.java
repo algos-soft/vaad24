@@ -22,7 +22,7 @@ import java.util.*;
  * Nella superclasse AlgosTest vengono regolati tutti i link incrociati tra le varie classi singleton di service <br>
  */
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {Vaad24SimpleApplication.class})
+@SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
 @DisplayName("Utility")

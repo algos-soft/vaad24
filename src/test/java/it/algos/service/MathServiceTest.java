@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.*;
  * Time: 11:19
  */
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {Vaad24SimpleApplication.class})
+@SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("service")
 @DisplayName("Math Service")

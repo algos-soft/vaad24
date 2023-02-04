@@ -22,7 +22,7 @@ import java.util.stream.*;
  * Time: 15:19
  */
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {Vaad24SimpleApplication.class})
+@SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("service")
 @DisplayName("Text Service")

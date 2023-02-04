@@ -74,6 +74,12 @@ public class WizElaboraFeedBack extends WizElabora {
             }
             Avviso.message("Feedback non riuscito").primary().open();
         }
+
+        message = String.format("La directory 'wizard' su [%s] è stata aggiornata partendo da quella di [%s]", PROJECT_VAADIN24, VaadVar.projectCurrent);
+        logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
+
     }
+
+
 
 }

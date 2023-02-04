@@ -827,7 +827,6 @@ public class FileService extends AbstractService {
         String test = "/test/";
         String dir = "directory";
         String path;
-        int length = 20;
         File dirSrc;
         File dirDest;
         List<String> filesSorgenti = new ArrayList<>(); ;
@@ -840,8 +839,6 @@ public class FileService extends AbstractService {
         List<String> filesTokenUguali = new ArrayList<>();
         List<String> filesRimossi;
         LinkedHashMap resultMap = new LinkedHashMap();
-        String tagToken = "Token: ";
-        AResult resultFile;
 
         //errore grave - traccia l'eccezione
         if (typeCopy == null) {
@@ -881,8 +878,7 @@ public class FileService extends AbstractService {
                         .typeTxt(VUOTA)
                         .exception(new AlgosException(AETypeResult.tokenUguali.getTag()));
             }
-            message = String.format("[%s%s%s%s]", tagToken, textService.maxSize(srcToken, length), FORWARD, textService.maxSize(destToken, length));
-            result.setTagCode(message);
+            result.setTagCode(getTokenTag(srcToken, destToken));
         }
 
         //errore grave - traccia l'eccezione ed esce
@@ -920,7 +916,7 @@ public class FileService extends AbstractService {
         //--se è stata cancellata (da dirModifyEver) la ricrea
         if (!dirDest.exists()) {
             for (String nomeFile : filesSorgenti) {
-                resultFile = copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
+                copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
                 filesAggiunti.add(nomeFile);
             }
             return result
@@ -947,12 +943,12 @@ public class FileService extends AbstractService {
             for (String nomeFile : filesSorgenti) {
                 if (filesDestinazioneAnte.contains(nomeFile)) {
                     if (typeCopy == AECopy.dirFilesModifica) {
-                        resultFile = copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
+                        copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
                         filesModificati.add(nomeFile);
                     }
                 }
                 else {
-                    resultFile = copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
+                    copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
                     filesAggiunti.add(nomeFile);
                 }
             }
@@ -963,6 +959,10 @@ public class FileService extends AbstractService {
         return result.valido(true).eseguito(true).typeResult(AETypeResult.dirModificata);
     }
 
+    public String getTokenTag(String srcToken, String destToken) {
+        String tagToken = "Token: ";
+        return String.format("[%s%s%s%s]", tagToken, textService.maxSize(srcToken, MAX_TOKEN_LENGTH), FORWARD, textService.maxSize(destToken, MAX_TOKEN_LENGTH));
+    }
 
     public AResult creaNuova(AResult result, File dirSrc, File dirDest, String path) {
         LinkedHashMap<String, List<String>> resultMap = result.getMappa();

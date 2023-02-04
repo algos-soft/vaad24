@@ -9,7 +9,9 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.service.*;
+import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import it.algos.vaad24.wizard.scripts.*;
@@ -201,8 +203,10 @@ public class WizardView extends VerticalLayout {
     }
 
     private void elaboraUpdateProject(final LinkedHashMap<String, Checkbox> mappaCheckbox) {
+        logger.info(new WrapLog().type(AETypeLog.spazio));
         elaboraFeedBack();
         appContext.getBean(WizElaboraUpdateProject.class, updateProject).esegue(mappaCheckbox);
+        logger.info(new WrapLog().type(AETypeLog.spazio));
     }
 
     public void paragrafoFeedBackWizard() {

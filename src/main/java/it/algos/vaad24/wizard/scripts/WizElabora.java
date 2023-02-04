@@ -55,7 +55,6 @@ public abstract class WizElabora {
 
     public void esegue() {
         String message;
-        logger.info(new WrapLog().type(AETypeLog.spazio));
 
         //        if (progettoEsistente) {
         //            message = String.format("Aggiornato il progetto esistente: '%s'", newUpdateProject);
@@ -93,6 +92,7 @@ public abstract class WizElabora {
             return result.typeResult(AETypeResult.noSourceFile).typeCopy(copy).eseguito(false).nonValido();
         }
         result = fileService.copyFile(copy, srcVaad24, destNewProject, wiz.getCopyDest(), wiz.getSrcToken(), wiz.getDestToken());
+        logger.copy(result.typeLog(AETypeLog.wizard));
         return result.typeLog(AETypeLog.wizard).typeCopy(copy);
     }
 
@@ -116,9 +116,8 @@ public abstract class WizElabora {
             result = fileService.copyDirectory(copy, srcPath, destPath);
         }
 
-        //        mostraRisultato(result, wiz.getCopy(), dir, tag);
+        logger.copy(result.typeLog(AETypeLog.wizard));
         return result.typeLog(AETypeLog.wizard).typeCopy(copy);
-
     }
 
 
@@ -276,20 +275,5 @@ public abstract class WizElabora {
         return result;
     }
 
-    public void eliminaSources() {
-        String message;
-
-        //--elimina la directory 'sources' che deve restare unicamente nel progetto 'vaadin23' e non nei derivati
-        if (fileService.isEsisteDirectory(destNewProject + SOURCE_PREFIX + VAADIN_MODULE + SOURCE_SUFFFIX)) {
-            if (fileService.deleteDirectory(destNewProject + SOURCE_PREFIX + VAADIN_MODULE + SOURCE_SUFFFIX).isValido()) {
-                message = String.format("Delete: cancellata la directory 'sources' dal progetto %s", newUpdateProject);
-                logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
-            }
-            else {
-                message = String.format("Non sono riuscito a cancellare la directory 'sources' dal progetto %s", newUpdateProject);
-                logger.warn(new WrapLog().message(message).type(AETypeLog.wizard));
-            }
-        }
-    }
 
 }

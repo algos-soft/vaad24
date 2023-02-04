@@ -40,10 +40,10 @@ import org.springframework.boot.autoconfigure.security.servlet.*;
 @NpmPackage(value = "mobx", version = "^6.3.5")
 @NpmPackage(value = "line-awesome", version = "1.3.0")
 @NpmPackage(value = "@vaadin-component-factory/vcf-nav", version = "1.0.6")
-public class Vaad24SimpleApplication implements AppShellConfigurator {
+public class Vaad24SimpleApp implements AppShellConfigurator {
 
     public static void main(String[] args) {
-        SpringApplication.run(Vaad24SimpleApplication.class, args);
+        SpringApplication.run(Vaad24SimpleApp.class, args);
 //        SimpleBoot.start();
     }
 

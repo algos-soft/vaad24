@@ -167,11 +167,12 @@ public class VaadBoot implements ServletContextListener {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void inizia() {
+        this.fixVariabili();
         logger.setUpIni();
 
         this.fixEnvironment();
         this.fixDBMongo();
-        this.fixVariabili();
+
         this.fixVariabiliRiferimentoIstanzeGenerali();
         this.fixPreferenze();
         this.fixMenuRoutes();
@@ -324,7 +325,7 @@ public class VaadBoot implements ServletContextListener {
          */
         VaadVar.usaSecurity = false;
 
-        /**
+        /*
          * Titolo del banner <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
@@ -335,6 +336,48 @@ public class VaadBoot implements ServletContextListener {
                 "| |v  | | |a  | | |a  | | |d  | | |2  | | |4  | |\n" +
                 "| +---+ | +---+ | +---+ | +---+ | +---+ | +---+ |\n" +
                 "|/_____\\|/_____\\|/_____\\|/_____\\|/_____\\|/_____\\|\n";
+
+
+        /**
+         * Nome della classe di partenza col metodo 'main' <br>
+         * Spesso coincide (non obbligatoriamente) con projectCurrent + Application <br>
+         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         */
+        try {
+            property = "algos.project.application";
+            VaadVar.projectCurrentMainApplication = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
+
+        /**
+         * Nome identificativo maiuscolo dell' applicazione <br>
+         * Usato (eventualmente) nella barra di menu in testa pagina <br>
+         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
+         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         */
+        try {
+            property = "algos.project.name";
+            VaadVar.projectNameUpper = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
+
+        /**
+         * Nome identificativo minuscolo del modulo dell' applicazione <br>
+         * Usato come parte del path delle varie directory <br>
+         * Spesso coincide (non obbligatoriamente) con projectNameIdea <br>
+         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         */
+        try {
+            property = "algos.project.nameModulo";
+            VaadVar.projectNameModulo = Objects.requireNonNull(environment.getProperty(property)).toLowerCase();
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
 
 
         /*

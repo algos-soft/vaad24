@@ -20,7 +20,7 @@ import org.springframework.test.context.junit.jupiter.*;
  * Time: 20:49
  */
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {Vaad24SimpleApplication.class})
+@SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("service")
 @DisplayName("Reflection Service")

@@ -41,8 +41,6 @@ public class WizElaboraNewProject extends WizElabora {
                 case source -> source(wiz);
             }
         }
-
-        super.eliminaSources();
     }
 
 }

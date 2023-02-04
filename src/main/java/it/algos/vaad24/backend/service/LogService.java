@@ -137,7 +137,7 @@ public class LogService extends AbstractService {
      */
 
     public void setUpIni() {
-        String message = "Inizio regolazioni di VaadBoot";
+        String message = String.format("Inizio regolazioni di %s", VaadVar.projectNameUpper);
         this.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
         this.info(new WrapLog().message(message).type(AETypeLog.setup));
     }
@@ -147,15 +147,11 @@ public class LogService extends AbstractService {
      * Gestisce un messaggio alla partenza del programma <br>
      */
     public void setUpEnd() {
-        String message = VUOTA;
-        message += VaadVar.projectNameUpper;
-        message += SEP;
-        message += "Versione ";
-        message += VaadVar.projectVersion;
-        message += " di ";
-        message += VaadVar.projectDate;
-        message += SEP;
-        message += VaadVar.projectNote;
+        String message = String.format("Fine regolazioni di %s", VaadVar.projectNameUpper);
+        message += String.format("%sVersione %s di %s", SEP, VaadVar.projectVersion, VaadVar.projectDate);
+        if (textService.isValid(VaadVar.projectNote)) {
+            message += String.format("%s%s", SEP, VaadVar.projectNote);
+        }
 
         this.info(new WrapLog().message(message).type(AETypeLog.setup));
         this.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
@@ -484,6 +480,7 @@ public class LogService extends AbstractService {
         String textResult;
         String resultTagCode = VUOTA;
         String tagCode = VUOTA;
+        String tab = TAB_SPAZIO;
 
         if (result == null) {
             info(WrapLog.build().type(AETypeLog.error).message(AETypeResult.mancaResult.getTag()));
@@ -497,7 +494,7 @@ public class LogService extends AbstractService {
         titolo = textService.primaMaiuscola(titolo);
 
         if (copy == AECopy.modulo) {
-            message = String.format("Il modulo '%s' su [%s] è stato completamente riscritto", VaadVar.moduloVaadin24, VaadVar.projectCurrent);
+            message = String.format("Il modulo '%s' su [%s] è stato completamente riscritto partendo da quello di [%s]", VaadVar.moduloVaadin24, VaadVar.projectCurrent, VaadVar.moduloVaadin24);
         }
         else {
             textResult = result.getTypeResult() != null ? result.getTypeResult().getTag() : AETypeResult.indeterminato.getTag();
@@ -516,7 +513,7 @@ public class LogService extends AbstractService {
         if (log == AETypeLog.test || Pref.debug.is()) {
             if (result.getTypeCopy() != null && result.getTypeCopy().getType() == AECopyType.directory && result.getMappa() != null) {
                 for (Object key : result.getMappa().keySet()) {
-                    message = String.format("[%s].%s: %s", path, key, result.getMappa().get(key));
+                    message = String.format("%s[%s].%s: %s", tab, path, key, result.getMappa().get(key));
                     info(WrapLog.build().type(log).message(message));
                 }
             }
@@ -559,7 +556,12 @@ public class LogService extends AbstractService {
         message = textService.isValid(typeText) ? typeText : VUOTA;
 
         //--2) Messaggio fisso della descrizione
-        message += textService.isValid(wrap.getMessage()) ? SEP + wrap.getMessage() : VUOTA;
+        if (textService.isValid(wrap.getMessage())) {
+            if (!wrap.getMessage().startsWith(SPAZIO)) {
+                message += SEP;
+            }
+            message += wrap.getMessage();
+        }
 
         //--3) Inserimento opzionale dei dati (company, user, IP) se multiCompany
         if (wrap.isMultiCompany()) {
@@ -577,9 +579,6 @@ public class LogService extends AbstractService {
             if (wrap.getMessage() != null && !wrap.getMessage().equals(errorMessage)) {
                 message += SPAZIO + errorMessage;
             }
-        }
-        else {
-            message = String.format("%s%s", DUE_PUNTI_SPAZIO, message);
         }
 
         //-- Inserimento opzionale nella collection di mongoDB

@@ -57,27 +57,18 @@ public class WizElaboraUpdateProject extends WizElabora {
             if (mappaCheckbox.get(key).getValue()) {
                 wiz = AEWizProject.valueOf(key);
                 switch (wiz.getCopy().getType()) {
-                    case modulo, directory -> {
-                        result = directory(wiz);
-                        logger.copy(result);
+                    case modulo -> {
+                        directory(wiz);
+                        eliminaSources();
                     }
-                    case file -> {
-                        result = file(wiz);
-                        logger.copy(result);
-                    }
+                    case directory -> directory(wiz);
+                    case file -> file(wiz);
                     case source -> source(wiz);
                     case elaboraFile, elaboraDir -> elabora(wiz);
                 }
             }
 
         }
-        //        Avviso.message("Update project").success().open();
-
-        logger.info(new WrapLog().type(AETypeLog.spazio));
-        message = String.format("Aggiornato il modulo '%s' del progetto corrente [%s]", VaadVar.moduloVaadin24, newUpdateProject);
-        logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
-
-        super.eliminaSources();
     }
 
 
@@ -108,7 +99,7 @@ public class WizElaboraUpdateProject extends WizElabora {
                 oldToken = VaadVar.vaadin24BannerTitle;
                 newToken = VaadVar.projectBannerTitle;
                 result = fileService.copyFile(AECopy.fileModifyEver, srcVaad24, destNewProject, wiz.getNomeFile(), oldToken, newToken);
-                mostraRisultato(result, wiz.getNomeFile(), oldToken, newToken);
+                logger.copy(result.typeLog(AETypeLog.wizard));
             }
 
             default -> {}
@@ -179,5 +170,20 @@ public class WizElaboraUpdateProject extends WizElabora {
         return AResult.valido();
     }
 
+    public void eliminaSources() {
+        String message;
+
+        //--elimina la directory 'sources' che deve restare unicamente nel progetto 'vaadin23' e non nei derivati
+        if (fileService.isEsisteDirectory(destNewProject + SOURCE_PREFIX + VAADIN_MODULE + SOURCE_SUFFFIX)) {
+            if (fileService.deleteDirectory(destNewProject + SOURCE_PREFIX + VAADIN_MODULE + SOURCE_SUFFFIX).isValido()) {
+                message = String.format("Delete: cancellata la directory 'sources' dal progetto %s", newUpdateProject);
+                logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
+            }
+            else {
+                message = String.format("Non sono riuscito a cancellare la directory 'sources' dal progetto %s", newUpdateProject);
+                logger.warn(new WrapLog().message(message).type(AETypeLog.wizard));
+            }
+        }
+    }
 
 }
