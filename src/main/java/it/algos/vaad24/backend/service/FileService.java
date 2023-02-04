@@ -667,7 +667,7 @@ public class FileService extends AbstractService {
         String srcText;
         String destText;
         boolean ugualeTesto;
-//        String tagToken = "Token: ";
+        //        String tagToken = "Token: ";
 
         //errore grave - traccia l'eccezione ed esce
         if (typeCopy == null) {
@@ -957,7 +957,13 @@ public class FileService extends AbstractService {
 
     public String getTokenTag(String srcToken, String destToken) {
         String tagToken = "Token: ";
-        return String.format("[%s%s%s%s]", tagToken, textService.maxSize(srcToken, MAX_TOKEN_LENGTH), FORWARD, textService.maxSize(destToken, MAX_TOKEN_LENGTH));
+
+        if (Pref.debug.is()) {
+            return String.format("[%s%s%s%s]", tagToken, srcToken, destToken);
+        }
+        else {
+            return String.format("[%s%s%s%s]", tagToken, textService.maxSize(srcToken, MAX_TOKEN_LENGTH), FORWARD, textService.maxSize(destToken, MAX_TOKEN_LENGTH));
+        }
     }
 
     public AResult creaNuova(AResult result, File dirSrc, File dirDest, String path) {
