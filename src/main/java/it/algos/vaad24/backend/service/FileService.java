@@ -667,7 +667,7 @@ public class FileService extends AbstractService {
         String srcText;
         String destText;
         boolean ugualeTesto;
-        String tagToken = "Token: ";
+//        String tagToken = "Token: ";
 
         //errore grave - traccia l'eccezione ed esce
         if (typeCopy == null) {
@@ -716,7 +716,7 @@ public class FileService extends AbstractService {
                         .typeTxt(VUOTA)
                         .exception(new AlgosException(AETypeResult.tokenUguali.getTag()));
             }
-            result.setTagCode(String.format("[%s%s%s%s]", tagToken, srcToken, FORWARD, destToken));
+            result.setTagCode(getTokenTag(srcToken, destToken));
         }
 
         //errore grave - traccia l'eccezione ed esce
@@ -823,10 +823,6 @@ public class FileService extends AbstractService {
     public AResult copyDirectory(final AECopy typeCopy, String srcPath, String destPath, String srcToken, String destToken) {
         AResult result = AResult.build().method("copyDirectory").target(destPath);
         String message;
-        String tag;
-        String test = "/test/";
-        String dir = "directory";
-        String path;
         File dirSrc;
         File dirDest;
         List<String> filesSorgenti = new ArrayList<>(); ;
