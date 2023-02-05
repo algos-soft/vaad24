@@ -29,8 +29,11 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class LayoutService extends AbstractService {
 
-    public List<Component> getMenuItems() {
-        return getAllItem();
+    public List<Component> getMenuItemsVaadin() {
+        return getAllItem(VaadVar.menuRouteListVaadin);
+    }
+    public List<Component> getMenuItemsProject() {
+        return getAllItem(VaadVar.menuRouteListProject);
     }
 
     /**
@@ -41,15 +44,15 @@ public class LayoutService extends AbstractService {
      *
      * @return lista degli item di menu del Drawer
      */
-    public List<Component> getAllItem() {
+    public List<Component> getAllItem(List<Class<? extends Component>> lista) {
         List<Component> listaItems = new ArrayList<>();
         ListItem item;
         String menuName;
         VaadinIcon icon;
         String lineawesomeClassnames;
 
-        if (VaadVar.menuRouteList != null && VaadVar.menuRouteList.size() > 0) {
-            for (Class<? extends Component> clazz : VaadVar.menuRouteList) {
+        if (lista != null && lista.size() > 0) {
+            for (Class<? extends Component> clazz : lista) {
                 menuName = annotationService.getMenuName(clazz);
                 icon = annotationService.getMenuVaadinIcon(clazz);
                 lineawesomeClassnames = getLineawesomeClassnames(clazz);

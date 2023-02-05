@@ -314,11 +314,18 @@ public class VaadBoot implements ServletContextListener {
         VaadVar.projectNameModulo = MODULO_VAADIN24;
 
         /**
-         * Lista dei moduli di menu da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
+         * Lista dei moduli di menu del framework base, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
          * Regolata dall'applicazione durante l'esecuzione del 'container startup' (non-UI logic) <br>
          * Usata da ALayoutService per conto di MainLayout allo start della UI-logic <br>
          */
-        VaadVar.menuRouteList = new ArrayList<>();
+        VaadVar.menuRouteListVaadin = new ArrayList<>();
+
+        /**
+         * Lista dei moduli di menu del project corrente, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
+         * Regolata dall'applicazione durante l'esecuzione del 'container startup' (non-UI logic) <br>
+         * Usata da ALayoutService per conto di MainLayout allo start della UI-logic <br>
+         */
+        VaadVar.menuRouteListProject = new ArrayList<>();
 
         //        /**
         //         * Classe da usare per lo startup del programma <br>
@@ -484,12 +491,12 @@ public class VaadBoot implements ServletContextListener {
         //        VaadVar.menuRouteList.add(AddressFormView.class);
         //        VaadVar.menuRouteList.add(CarrelloFormView.class);
         //        VaadVar.menuRouteList.add(ContinenteView.class);
-        VaadVar.menuRouteList.add(WizardView.class);
-        VaadVar.menuRouteList.add(UtilityView.class);
-        VaadVar.menuRouteList.add(NotaView.class);
-        VaadVar.menuRouteList.add(VersioneView.class);
-        VaadVar.menuRouteList.add(LoggerView.class);
-        VaadVar.menuRouteList.add(PreferenzaView.class);
+        VaadVar.menuRouteListVaadin.add(WizardView.class);
+        VaadVar.menuRouteListVaadin.add(UtilityView.class);
+        VaadVar.menuRouteListVaadin.add(NotaView.class);
+        VaadVar.menuRouteListVaadin.add(VersioneView.class);
+        VaadVar.menuRouteListVaadin.add(LoggerView.class);
+        VaadVar.menuRouteListVaadin.add(PreferenzaView.class);
     }
 
 

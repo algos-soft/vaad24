@@ -27,11 +27,18 @@ import java.util.*;
 public class VaadVar {
 
     /**
-     * Lista dei moduli di menu da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
+     * Lista dei moduli di menu del framework base, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
      * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
      * Usata da ALayoutService per conto di MainLayout allo start della UI-logic <br>
      */
-    public static List<Class<? extends Component>> menuRouteList;
+    public static List<Class<? extends Component>> menuRouteListVaadin;
+
+    /**
+     * Lista dei moduli di menu del project corrente, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
+     * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
+     * Usata da ALayoutService per conto di MainLayout allo start della UI-logic <br>
+     */
+    public static List<Class<? extends Component>> menuRouteListProject;
 
     /**
      * Lista delle (eventuali) task per gli eventi Schedule. <br>

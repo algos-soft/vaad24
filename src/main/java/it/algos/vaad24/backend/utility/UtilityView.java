@@ -117,13 +117,17 @@ public class UtilityView extends VerticalLayout {
         layout.setSpacing(false);
         String message;
         List<String> lista;
-        H3 paragrafo = new H3("Reset di tutte le collection [ordinate] che lo implementano");
+        H3 paragrafo = new H3("Reset di tutte le collection [ordinate]");
         paragrafo.getElement().getStyle().set("color", "blue");
 
         message = String.format("Esegue il %s() su tutte le collection [ordinate] che implementano %s()", TAG_RESET_FORCING, TAG_RESET_ONLY);
         layout.add(ASpan.text(message));
-        lista = getListaReset();
-        layout.add(ASpan.text(lista.toString()));
+        lista = getListaReset(VaadVar.moduloVaadin24);
+        message = String.format("%s%s%s", VaadVar.moduloVaadin24, DUE_PUNTI_SPAZIO, lista.toString());
+        layout.add(ASpan.text(message));
+        lista = getListaReset(VaadVar.projectNameModulo);
+        message = String.format("%s%s%s", VaadVar.projectNameModulo, DUE_PUNTI_SPAZIO, lista.toString());
+        layout.add(ASpan.text(message));
         Button bottone = new Button("Reset all");
         bottone.getElement().setAttribute("theme", "primary");
         bottone.addClickListener(event -> AReset.reset(this::reset));
@@ -133,25 +137,16 @@ public class UtilityView extends VerticalLayout {
         this.add(layout);
     }
 
-    private List<String> getListaReset() {
-        List<String> listAll = new ArrayList<>();
-        List<String> lista;
+    private List<String> getListaReset(String moduleName) {
+        List<String> lista = new ArrayList<>();
 
         if (VaadVar.projectNameModulo != null) {
         }
         else {
         }
 
-        lista = classService.allModuleEntityResetName(VaadVar.moduloVaadin24);
-        if (lista != null) {
-            listAll.addAll(lista);
-        }
-        lista = classService.allModuleEntityResetName(VaadVar.projectNameModulo);
-        if (lista != null) {
-            listAll.addAll(lista);
-        }
-
-        return listAll;
+        lista = classService.allModuleEntityResetName(moduleName);
+        return lista;
     }
 
 

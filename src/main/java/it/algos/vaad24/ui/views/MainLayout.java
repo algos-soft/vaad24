@@ -1,6 +1,7 @@
 package it.algos.vaad24.ui.views;
 
 
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.applayout.*;
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
@@ -13,6 +14,7 @@ import it.algos.vaad24.ui.service.*;
 import org.springframework.beans.factory.annotation.*;
 
 import javax.annotation.*;
+import java.util.*;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -73,12 +75,10 @@ public class MainLayout extends AppLayout {
         toggle.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
         toggle.getElement().setAttribute("aria-label", "Menu toggle");
 
-
         // Placeholder for the title of the current view.
         // The title will be set after navigation.
         viewTitle = new H1();
         viewTitle.addClassNames("m-0", "text-l");
-
 
         if (VaadVar.usaSecurity) {
             logout = new Button("Log out", e -> securityService.logout());
@@ -103,18 +103,18 @@ public class MainLayout extends AppLayout {
     }
 
     private void createDrawer() {
+        H2 vaadAppName = new H2(textService.primaMaiuscola(VaadVar.projectVaadin24));
+        vaadAppName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
+        H2 currentAppName = new H2(textService.primaMaiuscola(VaadVar.projectCurrent));
+        currentAppName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
 
-        H2 appName = new H2(textService.primaMaiuscola(VaadVar.projectCurrent));
-        appName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
-
-        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(appName, createNavigation(), createFooter());
+        com.vaadin.flow.component.html.Section section = new com.vaadin.flow.component.html.Section(vaadAppName, createNavigationVaadin(), currentAppName, createNavigationProject(), createFooter());
         section.addClassNames("flex", "flex-col", "items-stretch", "max-h-full", "min-h-full");
 
         addToDrawer(section);
     }
 
-    private Nav createNavigation() {
-
+    private Nav createNavigationVaadin() {
         Nav nav = new Nav();
         nav.addClassNames("border-b", "border-contrast-10", "flex-grow", "overflow-auto");
         nav.getElement().setAttribute("aria-labelledby", "views");
@@ -123,7 +123,24 @@ public class MainLayout extends AppLayout {
         UnorderedList list = new UnorderedList();
         list.addClassNames("list-none", "m-0", "p-0");
         nav.add(list);
-        list.add(layoutService.getMenuItems());
+        list.add(layoutService.getMenuItemsVaadin());
+
+        return nav;
+    }
+
+    private Nav createNavigationProject() {
+        List<Component> lista = layoutService.getMenuItemsProject();
+        Nav nav = new Nav();
+        nav.addClassNames("border-b", "border-contrast-10", "flex-grow", "overflow-auto");
+        nav.getElement().setAttribute("aria-labelledby", "views");
+
+        // Wrap the links in a list; improves accessibility
+        UnorderedList list = new UnorderedList();
+        list.addClassNames("list-none", "m-0", "p-0");
+        nav.add(list);
+        if (lista != null) {
+            list.add(layoutService.getMenuItemsProject());
+        }
 
         return nav;
     }
