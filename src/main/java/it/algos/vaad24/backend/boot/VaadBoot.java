@@ -1,6 +1,7 @@
 package it.algos.vaad24.backend.boot;
 
 import com.mongodb.client.*;
+import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -47,7 +48,7 @@ import java.util.*;
  * 7) costruisce una versione demo <br>
  * 8) controlla l' esistenza di utenti abilitati all' accesso <br>
  */
-//@SpringComponent
+@SpringComponent
 //@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class VaadBoot implements ServletContextListener {
 
@@ -473,6 +474,12 @@ public class VaadBoot implements ServletContextListener {
             String message = String.format("Non ho trovato la property %s nelle risorse", property);
             logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
         }
+
+        /**
+         * Directory config di recovery sul server Algos <br>
+         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         */
+        VaadVar.serverConfig = WebService.URL_BASE_VAADIN24_CONFIG;
 
     }
 

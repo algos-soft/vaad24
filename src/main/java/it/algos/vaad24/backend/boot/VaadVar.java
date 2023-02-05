@@ -173,4 +173,10 @@ public class VaadVar {
      */
     public static String projectBannerTitle;
 
+    /**
+     * Directory config di recovery sul server Algos <br>
+     * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+     */
+    public static String serverConfig;
+
 }

@@ -122,10 +122,10 @@ public class UtilityView extends VerticalLayout {
 
         message = String.format("Esegue il %s() su tutte le collection [ordinate] che implementano %s()", TAG_RESET_FORCING, TAG_RESET_ONLY);
         layout.add(ASpan.text(message));
-        lista = getListaReset(VaadVar.moduloVaadin24);
+        lista = classService.allModuleEntityResetOrderedClassName(VaadVar.moduloVaadin24);
         message = String.format("%s%s%s", VaadVar.moduloVaadin24, DUE_PUNTI_SPAZIO, lista.toString());
         layout.add(ASpan.text(message));
-        lista = getListaReset(VaadVar.projectNameModulo);
+        lista = classService.allModuleEntityResetOrderedClassName(VaadVar.projectNameModulo);
         message = String.format("%s%s%s", VaadVar.projectNameModulo, DUE_PUNTI_SPAZIO, lista.toString());
         layout.add(ASpan.text(message));
         Button bottone = new Button("Reset all");
@@ -137,17 +137,6 @@ public class UtilityView extends VerticalLayout {
         this.add(layout);
     }
 
-    private List<String> getListaReset(String moduleName) {
-        List<String> lista = new ArrayList<>();
-
-        if (VaadVar.projectNameModulo != null) {
-        }
-        else {
-        }
-
-        lista = classService.allModuleEntityResetName(moduleName);
-        return lista;
-    }
 
 
     private void reset() {

@@ -565,7 +565,7 @@ public class ClassService extends AbstractService {
 
     /**
      * Spazzola tutta la directory package del modulo in esame e recupera in ordine
-     * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi
+     * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi <br>
      *
      * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
      *
@@ -573,8 +573,8 @@ public class ClassService extends AbstractService {
      */
     public List<Class> allModuleBackendResetOrderedClass(final String moduleName) {
         List<Class> allOrderedClazz = null;
-        List<Class> allBackendClazz = null;
-        Class entityClazz = null;
+        List<Class> allBackendClazz;
+        Class entityClazz;
         Map<String, Class> mappaClazz = new HashMap();
         String simpleName;
         String pathName;
@@ -613,6 +613,31 @@ public class ClassService extends AbstractService {
         return allOrderedClazz;
     }
 
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera in ordine
+     * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi <br>
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
+     *
+     * @return lista ordinata dei nomi di tutte le classi 'backend' && 'reset' del package
+     */
+    public List<String> allModuleBackendResetOrderedClassName(final String moduleName) {
+        List<Class> listaClassi = allModuleBackendResetOrderedClass(moduleName);
+        return listaClassi != null ? listaClassi.stream().map(clazz -> clazz.getSimpleName()).collect(Collectors.toList()) : new ArrayList<>();
+    }
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera in ordine
+     * tutti i nomi delle entity di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi <br>
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
+     *
+     * @return lista ordinata dei nomi di tutte le entity 'backend' && 'reset' del package
+     */
+    public List<String> allModuleEntityResetOrderedClassName(final String moduleName) {
+        List<String> listaBackend = allModuleBackendResetOrderedClassName(moduleName);
+        return listaBackend != null ? listaBackend.stream().map(name -> textService.levaCoda(name, SUFFIX_BACKEND)).collect(Collectors.toList()) : new ArrayList<>();
+    }
 
     public AResult esegueMetodo(String publicClassName, String publicMethodName) {
         AResult result = AResult.build();
