@@ -669,7 +669,10 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
 
     protected void reset() {
-        if (crudBackend.resetForcing().isValido()) {
+        AResult result = crudBackend.resetForcing();
+
+        if (result.isValido()) {
+            logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.reset));
             grid.setItems(crudBackend.findAll(sortOrder));
             Avviso.message("Eseguito reset completo").success().open();
             refresh();
@@ -759,7 +762,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     public void deleteHandler() {
         Optional<AEntity> entityBean = grid.getSelectedItems().stream().findFirst();
         if (entityBean.isPresent()) {
-            crudBackend.delete( entityBean.get());
+            crudBackend.delete(entityBean.get());
             grid.setItems(crudBackend.findAll(sortOrder));
             Avviso.message(String.format("%s successfully deleted", entityBean.get())).success().open();
         }

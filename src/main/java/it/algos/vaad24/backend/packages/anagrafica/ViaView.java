@@ -1,7 +1,6 @@
 package it.algos.vaad24.backend.packages.anagrafica;
 
 import com.vaadin.flow.router.*;
-import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
@@ -42,7 +41,6 @@ public class ViaView extends CrudView {
     public ViaView(@Autowired final ViaBackend crudBackend) {
         super(crudBackend, Via.class);
         this.backend = crudBackend;
-        LogService.debug(": [flow     ] - ViaView.init()");
     }
 
     /**
