@@ -32,9 +32,9 @@ public class WebService extends AbstractService {
 
     public static final String URL_BASE_ALGOS = "http://www.algos.it/";
 
-    public static final String URL_BASE_VAADIN23 = URL_BASE_ALGOS + "vaadin23/";
+    public static final String URL_BASE_VAADIN24 = URL_BASE_ALGOS + "vaadin24/";
 
-    public static final String URL_BASE_VAADIN23_CONFIG = URL_BASE_VAADIN23 + "config/";
+    public static final String URL_BASE_VAADIN24_CONFIG = URL_BASE_VAADIN24 + "config/";
 
 
     /**
