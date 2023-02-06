@@ -701,7 +701,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
      * Passa al dialogo gli handler per annullare e creare <br>
      */
     public void newItem() {
-        dialog = (CrudDialogBase) appContext.getBean(dialogClazz, crudBackend.newEntity(), CrudOperation.ADD, crudBackend, formPropertyNamesList);
+        dialog = (CrudDialog) appContext.getBean(dialogClazz, crudBackend.newEntity(), CrudOperation.ADD, crudBackend, formPropertyNamesList);
         dialog.open(this::saveHandler, this::annullaHandler);
     }
 
