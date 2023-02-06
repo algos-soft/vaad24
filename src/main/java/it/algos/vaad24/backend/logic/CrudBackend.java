@@ -70,8 +70,20 @@ public abstract class CrudBackend extends AbstractService {
     public CrudBackend(final MongoRepository crudRepository, final Class<? extends AEntity> entityClazz) {
         this.crudRepository = crudRepository;
         this.entityClazz = entityClazz;
+
+        //--Preferenze usate da questa 'logic'
+        this.fixPreferenze();
+
     }// end of constructor with @Autowired
 
+
+    /**
+     * Preferenze usate da questa 'backend' <br>
+     * Primo metodo chiamato dopo init() (implicito del costruttore) e postConstruct() (facoltativo) <br>
+     * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected void fixPreferenze() {
+    }
 
     public AEntity newEntity(Document doc) {
         return null;

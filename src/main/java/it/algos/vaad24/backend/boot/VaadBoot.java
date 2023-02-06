@@ -1,7 +1,6 @@
 package it.algos.vaad24.backend.boot;
 
 import com.mongodb.client.*;
-import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -48,8 +47,6 @@ import java.util.*;
  * 7) costruisce una versione demo <br>
  * 8) controlla l' esistenza di utenti abilitati all' accesso <br>
  */
-@SpringComponent
-//@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class VaadBoot implements ServletContextListener {
 
     protected boolean allDebugSetup;

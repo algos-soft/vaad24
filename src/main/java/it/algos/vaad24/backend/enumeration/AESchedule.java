@@ -226,7 +226,7 @@ public enum AESchedule {
      * Pattern: 0 5 * * tue,thu,sat,sun
      * Descrizione: alle 5 di ogni giorno pari (martedì, giovedì, sabato) più la domenica
      */
-    paridomenica5("0 5 * * 2,4,6,0", "alle 5 di ogni giorno pari (martedì, giovedì, sabato) più la domenica"),
+    paripiudomenica5("0 5 * * 2,4,6,0", "alle 5 di ogni giorno pari (martedì, giovedì, sabato) più la domenica"),
 
     ;
 
