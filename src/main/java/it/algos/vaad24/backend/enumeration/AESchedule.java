@@ -199,10 +199,34 @@ public enum AESchedule {
     dispari3("0 3 * * 1,3,5", "alle 3 di ogni giorno dispari (lunedì, mercoledì, venerdì)"),
 
     /**
+     * Pattern: 0 3 * * mon,wed,fri,sun
+     * Descrizione: alle 3 di ogni giorno dispari (lunedì, mercoledì, venerdì) più la domenica
+     */
+    disparipiudomenica3("0 3 * * 1,3,5,0", "alle 3 di ogni giorno dispari (lunedì, mercoledì, venerdì) più la domenica"),
+
+    /**
+     * Pattern: 0 5 * * mon,wed,fri
+     * Descrizione: alle 5 di ogni giorno dispari (lunedì, mercoledì, venerdì)
+     */
+    dispari5("0 5 * * 1,3,5", "alle 5 di ogni giorno dispari (lunedì, mercoledì, venerdì)"),
+
+    /**
      * Pattern: 0 3 * * tue,thu,sat
      * Descrizione: alle 3 di ogni giorno pari (martedì, giovedì, sabato)
      */
     pari3("0 3 * * 2,4,6", "alle 3 di ogni giorno pari (martedì, giovedì, sabato)"),
+
+    /**
+     * Pattern: 0 5 * * tue,thu,sat
+     * Descrizione: alle 5 di ogni giorno pari (martedì, giovedì, sabato)
+     */
+    pari5("0 5 * * 2,4,6", "alle 5 di ogni giorno pari (martedì, giovedì, sabato)"),
+
+    /**
+     * Pattern: 0 5 * * tue,thu,sat,sun
+     * Descrizione: alle 5 di ogni giorno pari (martedì, giovedì, sabato) più la domenica
+     */
+    paridomenica5("0 5 * * 2,4,6,0", "alle 5 di ogni giorno pari (martedì, giovedì, sabato) più la domenica"),
 
     ;
 
