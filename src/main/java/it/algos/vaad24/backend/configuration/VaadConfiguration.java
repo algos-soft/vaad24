@@ -1,5 +1,6 @@
 package it.algos.vaad24.backend.configuration;
 
+import it.algos.vaad24.backend.boot.*;
 import org.springframework.context.annotation.*;
 
 /**
@@ -14,7 +15,17 @@ import org.springframework.context.annotation.*;
 @Configuration
 public class VaadConfiguration {
 
-//    @Autowired
+
+//    @Bean
+//    public LogService logServiceBean() {
+//        return new LogService();
+//    }
+    @Bean
+    public VaadBoot vaadBootBean() {
+        return new VaadBoot();
+    }
+
+    //    @Autowired
 //    Pref.PreferenzaServiceInjector preferenzaServiceInjector;
 //    @Bean
 //    public Pref.PreferenzaServiceInjector preferenzaServiceInjector() {

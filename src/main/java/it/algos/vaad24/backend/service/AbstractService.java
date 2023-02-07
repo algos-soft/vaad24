@@ -3,6 +3,7 @@ package it.algos.vaad24.backend.service;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
+import org.springframework.core.env.*;
 
 /**
  * Project vaadin23
@@ -66,6 +67,14 @@ public abstract class AbstractService {
     @Autowired
     public LogService logger;
 
+
+    /**
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata dal framework SpringBoot/Vaadin usando il metodo setter() <br>
+     * al termine del ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    public Environment environment;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>

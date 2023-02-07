@@ -20,7 +20,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.context.event.*;
 import org.springframework.core.env.*;
 
-import javax.annotation.*;
 import javax.servlet.*;
 import java.util.*;
 
@@ -136,19 +135,19 @@ public class VaadBoot implements ServletContextListener {
     }// end of constructor with @Autowired on setter
 
 
-    /**
-     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
-     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
-     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
-     * <p>
-     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti <br>
-     * L'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
-     * Se viene implementata una istanza di sottoclasse, passa di qui per ogni istanza <br>
-     */
-    @PostConstruct
-    private void postConstruct() {
-        this.inizia();
-    }
+//    /**
+//     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
+//     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
+//     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+//     * <p>
+//     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti <br>
+//     * L'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
+//     * Se viene implementata una istanza di sottoclasse, passa di qui per ogni istanza <br>
+//     */
+//    @PostConstruct
+//    private void postConstruct() {
+//        this.inizia();
+//    }
 
     /**
      * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
@@ -478,6 +477,11 @@ public class VaadBoot implements ServletContextListener {
          */
         VaadVar.serverConfig = WebService.URL_BASE_VAADIN24_CONFIG;
 
+        /**
+         * File name per i logger nella directory 'log' <br>
+         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         */
+        VaadVar.logbackName = "pippo" + "-admin";
     }
 
     /**
@@ -614,7 +618,7 @@ public class VaadBoot implements ServletContextListener {
             }
         }
         else {
-            message = String.format("Nel modulo %s non ci sono 'task'", VaadVar.projectNameUpper);
+            message = String.format("Nel modulo %s non ci sono 'task'", VaadVar.projectNameModulo);
             logger.info(new WrapLog().message(message).type(AETypeLog.schedule));
         }
 

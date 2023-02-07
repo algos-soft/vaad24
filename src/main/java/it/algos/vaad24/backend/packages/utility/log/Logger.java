@@ -63,6 +63,11 @@ public class Logger extends AEntity {
     @AIField(type = AETypeField.integer, header = "#")
     public int linea;
 
+    @Transient
+    public LocalDate giorno = evento.toLocalDate();
+
+    @Transient
+    public LocalTime ora = evento.toLocalTime();
 
     @Override
     public String toString() {

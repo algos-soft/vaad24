@@ -1,8 +1,8 @@
 package it.algos.vaad24.backend.service;
 
 import com.vaadin.flow.component.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.packages.utility.log.*;
@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
 
 import javax.annotation.*;
+import java.util.*;
 import java.util.function.*;
 
 
@@ -97,7 +98,17 @@ public class LogService extends AbstractService {
      */
     @PostConstruct
     private void postConstruct() {
-        slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
+        String logbackName;
+        String property = "logging.algos.admin";
+
+        try {
+            logbackName = Objects.requireNonNull(environment.getProperty(property));
+            slf4jLogger = LoggerFactory.getLogger(logbackName);
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s in application.properties e ho usato un logbackName di default=%s", property, VaadCost.TAG_LOG_ADMIN);
+            slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
     }
 
     public static void debug(String message) {
@@ -137,9 +148,10 @@ public class LogService extends AbstractService {
      */
 
     public void setUpIni() {
-        String message = String.format("Inizio regolazioni di %s", VaadVar.projectNameUpper);
+        String message = String.format("Inizio regolazioni del progetto %s", VaadVar.projectNameUpper);
         this.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
         this.info(new WrapLog().message(message).type(AETypeLog.setup));
+        this.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
     }
 
     /**
@@ -147,7 +159,7 @@ public class LogService extends AbstractService {
      * Gestisce un messaggio alla partenza del programma <br>
      */
     public void setUpEnd() {
-        String message = String.format("Fine regolazioni di %s", VaadVar.projectNameUpper);
+        String message = String.format("Fine regolazioni del progetto %s", VaadVar.projectNameUpper);
         message += String.format("%sVersione %s di %s", SEP, VaadVar.projectVersion, VaadVar.projectDate);
         if (textService.isValid(VaadVar.projectNote)) {
             message += String.format("%s%s", SEP, VaadVar.projectNote);
