@@ -84,7 +84,7 @@ public class VersioneBackend extends CrudBackend {
             final String company,
             boolean riferitoVaadin23) {
         String tag = " del ";
-        double release = riferitoVaadin23 ? VaadVar.vaadin23Version : VaadVar.projectVersion;
+        double release = riferitoVaadin23 ? VaadVar.vaadin24Version : VaadVar.projectVersion;
 
         return Versione.builder()
                 .ordine(nextOrdine())

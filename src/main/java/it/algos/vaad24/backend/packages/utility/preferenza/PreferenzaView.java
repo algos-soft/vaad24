@@ -148,7 +148,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
 
         span.add(ASpan.text("Preferenze registrate nel database mongoDB").blue());
         span.add(ASpan.text("Mostra solo le properties di un programma non multiCompany").rosso());
-        span.add(ASpan.text(String.format("Vaad23=true per le preferenze del programma base '%s'", VaadVar.projectVaadin24)).verde());
+        span.add(ASpan.text(String.format("Vaad23=true per le preferenze del programma base '%s'", VaadVar.frameworkVaadin24)).verde());
         span.add(ASpan.text(String.format("Vaad23=false per le preferenze del programma corrente '%s'", VaadVar.projectCurrent)).verde());
         span.add(ASpan.text("NeedRiavvio=true se la preferenza ha effetto solo dopo un riavvio del programma").verde());
         span.add(ASpan.text("Le preferenze sono create/cancellate solo via hardcode (tramite una Enumeration)").rosso());
@@ -461,7 +461,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
 
             if (usaBottomInfo) {
                 double doppio = VaadVar.projectVersion;
-                String nome = VaadVar.projectNameUpper;
+                String nome = VaadVar.projectCurrentUpper;
                 String data = VaadVar.projectDate;
 
                 //--Locale.US per forzare la visualizzazione grafica di un punto anziché una virgola

@@ -137,7 +137,7 @@ public class VaadData extends AbstractService {
             for (Class clazz : allResetOrderedClass) {
                 result = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY);
                 if (result.isValido()) {
-                    logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.reset));
+                    logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.checkData).usaDb());
                 }
             }
         }

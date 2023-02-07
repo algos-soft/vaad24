@@ -64,10 +64,10 @@ public class Logger extends AEntity {
     public int linea;
 
     @Transient
-    public LocalDate giorno = evento.toLocalDate();
+    public LocalDate giorno;
 
     @Transient
-    public LocalTime ora = evento.toLocalTime();
+    public LocalTime ora;
 
     @Override
     public String toString() {

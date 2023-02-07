@@ -192,13 +192,14 @@ public class VaadBoot implements ServletContextListener {
     }
 
     public void printInfo() {
-        printInfo("VaadVar.projectVaadin24", VaadVar.projectVaadin24);
+        printInfo("VaadVar.frameworkVaadin24", VaadVar.frameworkVaadin24);
         printInfo("VaadVar.moduloVaadin24", VaadVar.moduloVaadin24);
+
+        printInfo("VaadVar.projectCurrentUpper", VaadVar.projectCurrentUpper);
+        printInfo("VaadVar.projectCurrent", VaadVar.projectCurrent);
         printInfo("VaadVar.projectNameModulo", VaadVar.projectNameModulo);
         printInfo("VaadVar.projectCurrentMainApplication", VaadVar.projectCurrentMainApplication);
-        printInfo("VaadVar.projectNameUpper", VaadVar.projectNameUpper);
-        printInfo("VaadVar.projectNameModulo", VaadVar.projectNameModulo);
-        printInfo("VaadVar.projectCurrent", VaadVar.projectCurrent);
+
         printInfo("VaadVar.projectDate", VaadVar.projectDate);
         printInfo("VaadVar.projectNote", VaadVar.projectNote);
     }
@@ -294,7 +295,7 @@ public class VaadBoot implements ServletContextListener {
          * Nome identificativo minuscolo del progetto base vaadin23 <br>
          * Deve essere regolato in backend.boot.VaadBoot.fixVariabili() del progetto base <br>
          */
-        VaadVar.projectVaadin24 = PROJECT_VAADIN24;
+        VaadVar.frameworkVaadin24 = PROJECT_VAADIN24;
 
         /**
          * Nome identificativo minuscolo del modulo base vaad23 <br>
@@ -343,7 +344,7 @@ public class VaadBoot implements ServletContextListener {
          * Usato solo internamente <br>
          * Deve essere regolato in backend.boot.VaadBoot.fixVariabili() del progetto corrente <br>
          */
-        VaadVar.vaadin23Version = Double.parseDouble(Objects.requireNonNull(environment.getProperty("algos.vaad24.version")));
+        VaadVar.vaadin24Version = Double.parseDouble(Objects.requireNonNull(environment.getProperty("algos.vaad24.version")));
 
         /**
          * Controlla se l' applicazione è multi-company oppure no <br>
@@ -397,7 +398,7 @@ public class VaadBoot implements ServletContextListener {
          */
         try {
             property = "algos.project.name";
-            VaadVar.projectNameUpper = Objects.requireNonNull(environment.getProperty(property));
+            VaadVar.projectCurrentUpper = Objects.requireNonNull(environment.getProperty(property));
         } catch (Exception unErrore) {
             String message = String.format("Non ho trovato la property %s nelle risorse", property);
             logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());

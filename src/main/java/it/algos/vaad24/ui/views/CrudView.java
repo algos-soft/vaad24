@@ -672,7 +672,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         AResult result = crudBackend.resetForcing();
 
         if (result.isValido()) {
-            logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.reset));
+            logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.reset).usaDb());
             grid.setItems(crudBackend.findAll(sortOrder));
             Avviso.message("Eseguito reset completo").success().open();
             refresh();

@@ -148,7 +148,7 @@ public class LogService extends AbstractService {
      */
 
     public void setUpIni() {
-        String message = String.format("Inizio regolazioni del progetto %s", VaadVar.projectNameUpper);
+        String message = String.format("Inizio regolazioni del progetto %s", VaadVar.projectCurrentUpper);
         this.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
         this.info(new WrapLog().message(message).type(AETypeLog.setup));
         this.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
@@ -159,7 +159,7 @@ public class LogService extends AbstractService {
      * Gestisce un messaggio alla partenza del programma <br>
      */
     public void setUpEnd() {
-        String message = String.format("Fine regolazioni del progetto %s", VaadVar.projectNameUpper);
+        String message = String.format("Fine regolazioni del progetto %s", VaadVar.projectCurrentUpper);
         message += String.format("%sVersione %s di %s", SEP, VaadVar.projectVersion, VaadVar.projectDate);
         if (textService.isValid(VaadVar.projectNote)) {
             message += String.format("%s%s", SEP, VaadVar.projectNote);

@@ -152,7 +152,7 @@ public class LayoutService extends AbstractService {
 
         String message;
         double doppio = VaadVar.projectVersion;
-        String nome = VaadVar.projectNameUpper;
+        String nome = VaadVar.projectCurrentUpper;
         String data = VaadVar.projectDate;
         String note = VaadVar.projectNote;
 

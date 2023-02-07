@@ -103,7 +103,7 @@ public class MainLayout extends AppLayout {
     }
 
     private void createDrawer() {
-        H2 vaadAppName = new H2(textService.primaMaiuscola(VaadVar.projectVaadin24));
+        H2 vaadAppName = new H2(textService.primaMaiuscola(VaadVar.frameworkVaadin24));
         vaadAppName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
         H2 currentAppName = new H2(textService.primaMaiuscola(VaadVar.projectCurrent));
         currentAppName.addClassNames("flex", "items-center", "h-xl", "m-0", "px-m", "text-m");
