@@ -76,14 +76,6 @@ public class VaadBoot implements ServletContextListener {
 
 
     /**
-     * Istanza di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    public AIEnumPref prefInstance;
-
-
-    /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata dal framework SpringBoot/Vaadin usando il metodo setter() <br>
      * al termine del ciclo init() del costruttore di questa classe <br>
@@ -115,6 +107,14 @@ public class VaadBoot implements ServletContextListener {
     @Autowired
     protected MongoService mongoService;
 
+    /**
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    protected DateService dateService;
+
     @Autowired
     protected PreferenceService preferenceService;
 
@@ -131,23 +131,8 @@ public class VaadBoot implements ServletContextListener {
         //        this.setEnvironment(environment);
         this.setVersInstance(versInstance);
         //        this.setDataInstance(dataInstance);
-        this.setPrefInstance(prefInstance);
     }// end of constructor with @Autowired on setter
 
-
-//    /**
-//     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
-//     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
-//     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
-//     * <p>
-//     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti <br>
-//     * L'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
-//     * Se viene implementata una istanza di sottoclasse, passa di qui per ogni istanza <br>
-//     */
-//    @PostConstruct
-//    private void postConstruct() {
-//        this.inizia();
-//    }
 
     /**
      * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
@@ -155,7 +140,6 @@ public class VaadBoot implements ServletContextListener {
      */
     @EventListener(ContextRefreshedEvent.class)
     public void onContextRefreshEvent() {
-        //            this.inizia();
     }
 
     /**
@@ -174,14 +158,15 @@ public class VaadBoot implements ServletContextListener {
      */
     protected void inizia() {
         this.fixVariabili();
+        this.fixPreferenze();
         logger.setUpIni();
 
         this.printInfo();
         this.fixEnvironment();
         this.fixDBMongo();
+        this.fixDebug();
 
         this.fixVariabiliRiferimentoIstanzeGenerali();
-        this.fixPreferenze();
         this.fixMenuRoutes();
         this.fixData();
         this.fixVersioni();
@@ -189,6 +174,15 @@ public class VaadBoot implements ServletContextListener {
         this.fixLogin();
 
         logger.setUpEnd();
+    }
+
+    public void fixPreferenze() {
+        for (AIGenPref pref : Pref.getAllEnums()) {
+            pref.setText(textService);
+            pref.setLogger(logger);
+            pref.setDate(dateService);
+            pref.setPreferenceService(preferenceService);
+        }
     }
 
     public void printInfo() {
@@ -543,7 +537,7 @@ public class VaadBoot implements ServletContextListener {
     @Autowired
     @Qualifier(QUALIFIER_PREFERENCES_VAAD)
     public void setPrefInstance(final AIEnumPref prefInstance) {
-        this.prefInstance = prefInstance;
+        VaadVar.prefInstance = prefInstance;
     }
 
 
@@ -552,7 +546,6 @@ public class VaadBoot implements ServletContextListener {
      * Inizializzazione dei database del programma specifico <br>
      */
     protected void fixData() {
-        //        this.dataInstance.inizia();
     }
 
     /**
@@ -563,13 +556,6 @@ public class VaadBoot implements ServletContextListener {
         this.versInstance.inizia();
     }
 
-    /**
-     * Inizializzazione delle versioni standard di vaadinFlow <br>
-     * Inizializzazione delle versioni del programma specifico <br>
-     */
-    public void fixPreferenze() {
-        this.prefInstance.inizia();
-    }
 
     /**
      * Eventuale collegamento <br>
@@ -577,6 +563,19 @@ public class VaadBoot implements ServletContextListener {
      */
     public void fixLogin() {
     }
+
+    public void fixDebug() {
+        String message;
+
+        if (Pref.debug != null && Pref.debug.is()) {
+            message ="Stiamo girando in modalità 'debug'";
+        }
+        else {
+            message ="Stiamo girando in modalità 'normale'";
+        }
+        logger.info(new WrapLog().message(message).type(AETypeLog.setup));
+    }
+
 
     /**
      * Eventuali task <br>

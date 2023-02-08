@@ -2,6 +2,7 @@ package it.algos.vaad24.backend.boot;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.spring.annotation.*;
+import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.schedule.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -111,6 +112,13 @@ public class VaadVar {
      * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
      */
     public static Class versionClazz;
+
+    /**
+     * Istanza di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+     */
+    public static AIEnumPref prefInstance;
 
 
     /**

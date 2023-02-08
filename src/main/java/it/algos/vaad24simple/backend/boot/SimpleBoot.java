@@ -130,7 +130,7 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
     @Autowired
     @Qualifier(QUALIFIER_PREFERENCES_SIMPLE)
     public void setPrefInstance(final AIEnumPref prefInstance) {
-        this.prefInstance = prefInstance;
+        VaadVar.prefInstance = prefInstance;
     }
 
 

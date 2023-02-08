@@ -49,13 +49,13 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
     @Autowired
     public TextService textService;
 
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
-    public VaadBoot vaadBoot;
+    //    /**
+    //     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+    //     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+    //     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+    //     */
+    //    @Autowired
+    //    public VaadBoot vaadBoot;
 
     @Autowired
     protected ApplicationContext appContext;
@@ -130,7 +130,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
      */
 
     public void fixPreferenze() {
-        this.enumPref = vaadBoot.prefInstance;
+        this.enumPref = VaadVar.prefInstance;
         this.usaBottomInfo = true;
         this.usaBottomTotale = true;
     }

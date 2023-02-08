@@ -74,7 +74,7 @@ public enum AETypeTime implements AIType {
         String message;
         int durata = durata(inizio);
         String delta = textService.format(durata);
-        message = String.format("%s in %s %s", info, delta, tag);
+        message = String.format("%s in %s %s.", info, delta, tag);
 
         return message;
     }

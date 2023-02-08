@@ -148,10 +148,12 @@ public class LogService extends AbstractService {
      */
 
     public void setUpIni() {
+        AELogLevel level;
         String message = String.format("Inizio regolazioni del progetto %s", VaadVar.projectCurrentUpper);
-        this.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
-        this.info(new WrapLog().message(message).type(AETypeLog.setup));
-        this.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
+
+        logBase(AELogLevel.info, new WrapLog().message(VUOTA).type(AETypeLog.setup));
+        logBase(AELogLevel.info, new WrapLog().message(message).type(AETypeLog.setup));
+        logBase(AELogLevel.info, new WrapLog().message(VUOTA).type(AETypeLog.setup));
     }
 
     /**

@@ -27,7 +27,7 @@ public enum AEWizProject {
 
     snippets("Directory SNIPPETS di codice suggerito (vaad24)", true, false, "snippets", AECopy.dirFilesModifica),
 
-    flow("Modulo BASE Vaad24 (Wizard compreso)", true, false, "src/main/java/it/algos/vaad24", AECopy.modulo),
+    flow("Modulo BASE Vaad24 (Wizard compreso)", true, true, "src/main/java/it/algos/vaad24", AECopy.modulo),
 
     //    projectNew("Directory modulo del nuovo progetto (...)", false, VUOTA, AECopy.dirAddingOnly),
 
@@ -37,7 +37,7 @@ public enum AEWizProject {
             AECopy.sourceSovrascriveSempreAncheSeEsiste, "properties"
     ),
 
-    banner("File BANNER di SpringBoot (vaad24) [need riavvio]", true, false, "src/main/resources/banner.txt", AECopy.elaboraFile),
+    banner("File BANNER di SpringBoot (vaad24) [need riavvio]", true, true, "src/main/resources/banner.txt", AECopy.elaboraFile),
 
     git("File GIT di esclusione (sources)", true, false, ".gitignore", AECopy.fileModifyEver),
 
@@ -46,10 +46,10 @@ public enum AEWizProject {
 
     read("File README con note di testo (sources)", true, false, "README.md", AECopy.sourceSoloSeNonEsiste, "readme"),
 
-    testBase("Directory TEST /base (vaad24)", false, false, "src/test/java/it/algos/base", AECopy.dirFilesModifica),
-    testEnum("Directory TEST /enum (vaad24)", false, false, "src/test/java/it/algos/enumeration", AECopy.dirFilesModifica),
-    testService("Directory TEST /service (vaad24)", false, false, "src/test/java/it/algos/service", AECopy.dirFilesModifica, "Vaad24SimpleApp", "Wiki24App"),
-    testBackend("Directory TEST /backend (vaad24)", false, false, "src/test/java/it/algos/backend", AECopy.dirFilesModifica, "Vaad24SimpleApp", "Wiki24App"),
+    testBase("Directory TEST /base (vaad24)", false, true, "src/test/java/it/algos/base", AECopy.dirFilesModifica),
+    testEnum("Directory TEST /enum (vaad24)", false, true, "src/test/java/it/algos/enumeration", AECopy.dirFilesModifica),
+    testService("Directory TEST /service (vaad24)", false, true, "src/test/java/it/algos/service", AECopy.dirFilesModifica, "Vaad24SimpleApp", "Wiki24App"),
+    testBackend("Directory TEST /backend (vaad24)", false, true, "src/test/java/it/algos/backend", AECopy.dirFilesModifica, "Vaad24SimpleApp", "Wiki24App"),
     application("Main class java", true, false, "src/main/java/it/algos/@PROJECTUPPER@Application.java",
             AECopy.sourceSovrascriveSempreAncheSeEsiste, "application"
     ),
