@@ -579,10 +579,6 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixListener() {
-        // pass the row/item that the user double-clicked to method updateItem
-        //        if (usaSingleClick) {
-        //            grid.addItemClickListener(listener -> updateItem(listener.getItem()));
-        //        }
         if (usaDoubleClick) {
             grid.addItemDoubleClickListener(listener -> updateItem(listener.getItem()));
         }

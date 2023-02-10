@@ -1,6 +1,10 @@
 package it.algos.vaad24.backend.packages.utility.log;
 
 import com.vaadin.flow.component.combobox.*;
+import com.vaadin.flow.component.grid.*;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.icon.*;
+import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
@@ -10,6 +14,8 @@ import it.algos.vaad24.ui.views.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 
+import java.time.*;
+import java.time.format.*;
 import java.util.*;
 
 /**
@@ -59,7 +65,7 @@ public class LoggerView extends CrudView {
             super.formPropertyNamesList = Arrays.asList("type", "livello", "evento", "descrizione", "company", "user", "classe", "metodo", "linea");
         }
         else {
-            super.gridPropertyNamesList = Arrays.asList("type", "livello", "evento", "giorno","ora","descrizione", "classe", "metodo", "linea");
+            super.gridPropertyNamesList = Arrays.asList("type", "livello", "evento", "descrizione", "classe", "metodo", "linea");
             super.formPropertyNamesList = Arrays.asList("type", "livello", "evento", "descrizione", "classe", "metodo", "linea");
         }
         super.sortOrder = Sort.by(Sort.Direction.DESC, "evento");
@@ -90,7 +96,48 @@ public class LoggerView extends CrudView {
 
     @Override
     protected void addColumnsOneByOne() {
-        columnService.addColumnsOneByOne(grid, entityClazz, gridPropertyNamesList);
+        super.addColumnsOneByOne();
+
+        Grid.Column mese = grid.addColumn(new ComponentRenderer<>(entity -> {
+            Logger logger = (Logger) entity;
+            LocalDateTime evento = logger.evento;
+            LocalDate data = evento.toLocalDate();
+            String meseTxt = data.format(DateTimeFormatter.ofPattern("MMM"));
+            return new Span(meseTxt);
+        })).setHeader(VaadinIcon.CALENDAR.create()).setKey("mese").setFlexGrow(0).setWidth("3em");
+        Grid.Column giorno = grid.addColumn(new ComponentRenderer<>(entity -> {
+            Logger logger = (Logger) entity;
+            LocalDateTime evento = logger.evento;
+            LocalDate data = evento.toLocalDate();
+            int giornoInt = data.getDayOfMonth();
+            return new Span(String.valueOf(giornoInt));
+        })).setHeader(VaadinIcon.CALENDAR.create()).setKey("giorno").setFlexGrow(0).setWidth("3em");
+        Grid.Column ora = grid.addColumn(new ComponentRenderer<>(entity -> {
+            Logger logger = (Logger) entity;
+            LocalDateTime evento = logger.evento;
+            LocalTime data = evento.toLocalTime();
+            String oraTxt = data.format(DateTimeFormatter.ofPattern("H:mm"));
+            return new Span(oraTxt);
+        })).setHeader(VaadinIcon.CALENDAR.create()).setKey("ora").setFlexGrow(0).setWidth("5em");
+
+        Grid.Column ordine = grid.getColumnByKey(FIELD_KEY_ORDER);
+        Grid.Column type = grid.getColumnByKey("type");
+        Grid.Column livello = grid.getColumnByKey("livello");
+        Grid.Column evento = grid.getColumnByKey("evento");
+        Grid.Column descrizione = grid.getColumnByKey("descrizione");
+        Grid.Column classe = grid.getColumnByKey("classe");
+        Grid.Column metodo = grid.getColumnByKey("metodo");
+        Grid.Column linea = grid.getColumnByKey("linea");
+
+        if (VaadVar.usaCompany) {
+            Grid.Column company = grid.getColumnByKey("company");
+            Grid.Column user = grid.getColumnByKey("user");
+            grid.setColumnOrder(ordine, type, livello, evento, giorno, mese, ora, descrizione, company, user, classe, metodo, linea);
+        }
+        else {
+            grid.setColumnOrder(ordine, type, livello, evento, giorno, mese, ora, descrizione, classe, metodo, linea);
+        }
+
     }
 
     /**

@@ -157,7 +157,7 @@ public class LayoutService extends AbstractService {
         String note = VaadVar.projectNote;
 
         //--Locale.US per forzare la visualizzazione grafica di un punto anziché una virgola
-        message = String.format(Locale.US, "Algos® - %s %2.1f", nome, doppio);
+        message = String.format(Locale.US, "Algos® - %s, %2.1f", nome, doppio);
         bottomPlaceHolder.add(htmlService.getSpan(new WrapSpan(message).color(AETypeColor.blue).weight(AEFontWeight.bold).fontHeight(AEFontSize.em7)));
         message = String.format(Locale.US, "%s", data);
         bottomPlaceHolder.add(htmlService.getSpan(new WrapSpan(message).color(AETypeColor.blue).weight(AEFontWeight.bold).fontHeight(AEFontSize.em7)));
