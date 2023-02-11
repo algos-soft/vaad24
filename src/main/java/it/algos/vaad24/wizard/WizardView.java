@@ -2,7 +2,6 @@ package it.algos.vaad24.wizard;
 
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.checkbox.*;
-import com.vaadin.flow.component.dependency.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
@@ -220,7 +219,7 @@ public class WizardView extends VerticalLayout {
 
         layout.add(new Label("Ricopia su Vaad24 la directory 'wizard' di questo progetto"));
 
-        Button bottone = new Button(String.format("Send back to %s", PROJECT_VAADIN24));
+        Button bottone = new Button(String.format("Send back to %s", VaadVar.frameworkVaadin24));
         bottone.getElement().setAttribute("theme", "primary");
         bottone.addClickListener(event -> openFeedBack());
 
@@ -235,10 +234,10 @@ public class WizardView extends VerticalLayout {
         String srcVaadin23 = System.getProperty("user.dir");
         String currentProject = fileService.estraeClasseFinaleSenzaJava(srcVaadin23).toLowerCase();
 
-        message = String.format("Ricopia la directory %s di %s su %s", TAG_WIZ, currentProject, PROJECT_VAADIN24);
+        message = String.format("Ricopia la directory %s di %s su %s", TAG_WIZ, currentProject, VaadVar.frameworkVaadin24);
         buffer.append(ASpan.text(message).verde().bold().get());
         buffer.append(CAPO_HTML);
-        message = String.format("Non modifica %s su %s", "../"+DIR_WIZARD + DIR_SOURCES, PROJECT_VAADIN24);
+        message = String.format("Non modifica %s su %s", "../"+DIR_WIZARD + DIR_SOURCES, VaadVar.frameworkVaadin24);
         buffer.append(ASpan.text(message).verde().bold().get());
         buffer.append(CAPO_HTML);
         buffer.append(ASpan.text("Le modifiche sono irreversibili").rosso().bold().get());

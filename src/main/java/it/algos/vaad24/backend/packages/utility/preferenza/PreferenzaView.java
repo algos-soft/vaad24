@@ -153,8 +153,8 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
 
         span.add(ASpan.text("Preferenze registrate nel database mongoDB").blue());
         span.add(ASpan.text("Mostra solo le properties di un programma non multiCompany").rosso());
-        span.add(ASpan.text(String.format("Vaad23=true per le preferenze del programma base '%s'", VaadVar.frameworkVaadin24)).verde());
-        span.add(ASpan.text(String.format("Vaad23=false per le preferenze del programma corrente '%s'", VaadVar.projectCurrent)).verde());
+        span.add(ASpan.text(String.format("Vaad24=true per le preferenze del programma base '%s'", VaadVar.frameworkVaadin24)).verde());
+        span.add(ASpan.text(String.format("Vaad24=false per le preferenze del programma corrente '%s'", VaadVar.projectCurrent)).verde());
         span.add(ASpan.text("NeedRiavvio=true se la preferenza ha effetto solo dopo un riavvio del programma").verde());
         span.add(ASpan.text("Le preferenze sono create/cancellate solo via hardcode (tramite una Enumeration)").rosso());
         span.add(ASpan.text("Refresh ripristina nel database i valori di default annullando le successive modifiche").rosso());
@@ -213,7 +213,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         layout.add(comboTypePref);
 
         boxBoxVaad23 = new IndeterminateCheckbox();
-        boxBoxVaad23.setLabel("Vaad24 / Specifica");
+        boxBoxVaad23.setLabel(String.format("%s / %s", VaadVar.frameworkVaadin24, VaadVar.projectCurrentUpper));
         boxBoxVaad23.setIndeterminate(true);
         boxBoxVaad23.addValueChangeListener(event -> sincroFiltri());
         HorizontalLayout layout2 = new HorizontalLayout(boxBoxVaad23);
@@ -431,7 +431,6 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
                     .toList();
         }
 
-
         if (items != null) {
             grid.setItems((List) items);
             elementiFiltrati = items.size();
@@ -451,11 +450,29 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
     }
 
     protected void refreshAll() {
-        backend.deleteAll();
-        enumPref.inizia();
-        //        vaadBoot.fixPreferenze();
+        List<AIGenPref> listaPref = VaadVar.prefList;
+        boolean almenoUnaModificata = false;
+        String message;
+        String keyCode;
+        Object oldValue;
+
+        for (AIGenPref pref : listaPref) {
+            oldValue = backend.getValore(pref);
+            if (backend.resetStandard(pref)) {
+                keyCode = pref.getKeyCode();
+                message = String.format("Reset preferenza [%s]: %s%s(%s)%s%s", keyCode, oldValue, FORWARD, pref.getType(), FORWARD, pref.getDefaultValue());
+                logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+                almenoUnaModificata = true;
+            }
+        }
+
+        if (!almenoUnaModificata) {
+            message = "Reset preferenze - Tutte le preferenze avevano già il valore standard";
+            logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+        }
+
         grid.setItems(backend.findAll());
-        Avviso.message("Refreshed view").primary().open();
+        Avviso.message("Reset preferenze").primary().open();
     }
 
     /**

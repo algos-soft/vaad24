@@ -290,24 +290,41 @@ public class VaadBoot implements ServletContextListener {
     protected void fixVariabili() {
 
         /**
-         * Nome identificativo minuscolo del progetto base vaadin23 <br>
+         * Nome identificativo maiuscolo del progetto base vaadin24 <br>
          * Deve essere regolato in backend.boot.VaadBoot.fixVariabili() del progetto base <br>
          */
-        VaadVar.frameworkVaadin24 = PROJECT_VAADIN24;
+        try {
+            property = "algos.vaad24.name";
+            VaadVar.frameworkVaadin24 = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
 
         /**
-         * Nome identificativo minuscolo del modulo base vaad23 <br>
+         * Nome identificativo minuscolo del modulo base vaad24 <br>
          * Deve essere regolato in backend.boot.VaadBoot.fixVariabili() del progetto base <br>
          */
-        VaadVar.moduloVaadin24 = MODULO_VAADIN24;
+        try {
+            property = "algos.vaad24.module";
+            VaadVar.moduloVaadin24 = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
 
         /**
-         * Nome identificativo minuscolo del modulo dell' applicazione <br>
-         * Usato come parte del path delle varie directory <br>
-         * Spesso coincide (non obbligatoriamente) con projectNameIdea <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         * Classe 'main' di partenza del framework base vaad24 <br>
+         * Deve essere regolato in backend.boot.VaadBoot.fixVariabili() del progetto base <br>
          */
-        VaadVar.projectNameModulo = MODULO_VAADIN24;
+        try {
+            property = "algos.vaad24.application";
+            VaadVar.vaadin24MainApplication = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
+
 
         /**
          * Lista dei moduli di menu del framework base, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>

@@ -52,7 +52,7 @@ public class VaadVar {
      * Lista di quelle base di Vaadin24 <br>
      * Lista (eventuale) di quelle del progetto specifico <br>
      * Deve essere regolato in backend.boot.VaadBoot.fixPreferenze() del progetto base <br>
-     * Deve essere regolato in backend.boot.xxxBoot.fixPreferenze() del progetto specifico <br>
+     * Deve essere regolato in backend.boot.xxxBoot.fixPreferenze() del progetto sèecifico <br>
      */
     public static List prefList = new ArrayList<>();
 
@@ -68,6 +68,14 @@ public class VaadVar {
      * Deve essere regolato in backend.boot.VaadBoot.fixVariabili() del progetto base <br>
      */
     public static String moduloVaadin24;
+
+    /**
+     * Nome della classe di partenza col metodo 'main' <br>
+     * Spesso coincide (non obbligatoriamente) con projectCurrent + Application <br>
+     * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+     */
+    public static String vaadin24MainApplication;
+
 
     /**
      * Nome identificativo minuscolo del progetto corrente <br>

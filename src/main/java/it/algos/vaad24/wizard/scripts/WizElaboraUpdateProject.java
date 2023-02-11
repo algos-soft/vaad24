@@ -77,7 +77,7 @@ public class WizElaboraUpdateProject extends WizElabora {
         String srcPath = srcVaad24 + wiz.getCopyDest() + SLASH;
         String destPath = destNewProject + wiz.getCopyDest() + SLASH;
         String dir = fileService.lastDirectory(destPath).toLowerCase();
-        String oldToken = APPLICATION_VAADIN24;
+        String oldToken = VaadVar.vaadin24MainApplication;
         String newToken = VaadVar.projectCurrentMainApplication;
         String tag = progettoEsistente ? "Update" : "New";
         String oldText;
@@ -85,7 +85,7 @@ public class WizElaboraUpdateProject extends WizElabora {
         switch (wiz) {
             case pomVaad24 -> {
                 result = fileService.copyFile(AECopy.fileModifyEver, srcVaad24, destNewProject, wiz.getNomeFile());
-                oldToken = PROJECT_VAADIN24;
+                oldToken = VaadVar.frameworkVaadin24;
                 newToken = VaadVar.projectCurrent;
                 result = fixToken(result, wiz, oldToken, newToken);
                 mostraRisultato(result, AECopy.dirFilesModifica, dir, tag);

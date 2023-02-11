@@ -1,6 +1,7 @@
 package it.algos.vaad24.backend.packages.utility.preferenza;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.logic.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.mongodb.repository.*;
@@ -46,8 +47,69 @@ public class PreferenzaBackend extends CrudBackend {
     }
 
 
-    public Preferenza findByKeyCode(final String key) {
-        return repository.findFirstByCode(key);
+    public Preferenza findByKeyCode(final String keyCode) {
+        return repository.findFirstByCode(keyCode);
+    }
+
+
+    public Object getValore(final AIGenPref enumeration) {
+        return getValore(enumeration.getKeyCode());
+    }
+
+    public Object getValore(final String keyCode) {
+        Preferenza preferenza = findByKeyCode(keyCode);
+        return preferenza != null ? preferenza.getValore() : null;
+    }
+
+
+    public boolean setValore(final AIGenPref enumeration, final Object newJavaValue) {
+        return setValore(enumeration.getKeyCode(), newJavaValue);
+    }
+
+    public boolean setValore(final String keyCode, final Object newJavaValue) {
+        boolean modificato = false;
+        Object oldJavaValue;
+        Preferenza preferenza = findByKeyCode(keyCode);
+
+        if (preferenza != null) {
+            oldJavaValue = preferenza.getValore();
+            if (!newJavaValue.equals(oldJavaValue)) {
+                preferenza.setValore(newJavaValue);
+                update(preferenza);
+                modificato = true;
+            }
+        }
+
+        return modificato;
+    }
+
+
+    public boolean resetStandard(final AIGenPref prefEnum) {
+        boolean modificato = false;
+        String keyCode;
+        Object oldPrefJavaValue = null;
+        Object standardEnumJavaValue;
+        Preferenza preferenza;
+
+        if (prefEnum == null) {
+            return false;
+        }
+        keyCode = prefEnum.getKeyCode();
+
+        preferenza = findByKeyCode(keyCode);
+        if (preferenza == null) {
+            return false;
+        }
+
+        oldPrefJavaValue = preferenza.getValore();
+        standardEnumJavaValue = prefEnum.getDefaultValue();
+        if (!standardEnumJavaValue.equals(oldPrefJavaValue)) {
+            preferenza.setValore(standardEnumJavaValue);
+            update(preferenza);
+            modificato = true;
+        }
+
+        return modificato;
     }
 
 

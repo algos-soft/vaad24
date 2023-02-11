@@ -27,7 +27,7 @@ public enum SPref implements AIGenPref {
     localDate("localDate", AETypePref.localdate, ROOT_DATA),
     localTime("localTime", AETypePref.localtime, ROOT_TIME),
     email("email", AETypePref.email, "mail"),
-    enumerationType("enumerationType", AETypePref.enumerationType, AELogLevel.info, DESCRIZIONE_PREFERENZA, AELogLevel.info),
+//    enumerationType("enumerationType", AETypePref.enumerationType, AELogLevel.info, DESCRIZIONE_PREFERENZA, AELogLevel.info),
     enumerationString("enumerationString", AETypePref.enumerationString, "alfa,beta,gamma;beta"),
 
     ;
@@ -83,6 +83,7 @@ public enum SPref implements AIGenPref {
     public static List getAll() {
         return Arrays.stream(values()).toList();
     }
+
     public static List<SPref> getAllEnums() {
         return Arrays.stream(values()).toList();
     }

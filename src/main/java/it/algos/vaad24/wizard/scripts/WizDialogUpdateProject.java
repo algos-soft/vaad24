@@ -3,7 +3,6 @@ package it.algos.vaad24.wizard.scripts;
 import com.vaadin.flow.component.checkbox.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -101,7 +100,7 @@ public class WizDialogUpdateProject extends WizDialog {
         confirmButton.getElement().setAttribute("theme", "primary");
         confirmButton.setEnabled(true);
 
-        message = String.format("Confermando viene aggiornata la directory 'wizard' su [%s]", PROJECT_VAADIN24);
+        message = String.format("Confermando viene aggiornata la directory 'wizard' su [%s]", VaadVar.frameworkVaadin24);
         spanConferma.add(ASpan.text(message).rosso().bold());
         message = String.format("Confermando vengono aggiornati i files selezionati su [%s]", VaadVar.projectCurrent);
         spanConferma.add(ASpan.text(message).rosso().bold());

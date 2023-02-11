@@ -47,12 +47,12 @@ public class WizElaboraFeedBack extends WizElabora {
             if (result.isValido()) {
                 if (result.getTagCode().equals(AEKeyDir.integrata.name())) {
                     mostraRisultato(result, AECopy.dirFilesModifica, destWizard, "Rollback");
-                    message = String.format("La directory 'wizard' su [%s] è stata aggiornata partendo da quella di [%s]", PROJECT_VAADIN24, VaadVar.projectCurrent);
+                    message = String.format("La directory 'wizard' su [%s] è stata aggiornata partendo da quella di [%s]", VaadVar.frameworkVaadin24, VaadVar.projectCurrent);
                     logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
                     Avviso.message("Feedback di wizard").success().open();
                 }
                 if (result.getTagCode().equals(AEKeyDir.esistente.name())) {
-                    message = String.format("La directory 'wizard' su [%s] non è stata modificata", PROJECT_VAADIN24);
+                    message = String.format("La directory 'wizard' su [%s] non è stata modificata", VaadVar.frameworkVaadin24);
                     logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
                     Avviso.message("Feedback di wizard").primary().open();
                 }
@@ -75,7 +75,7 @@ public class WizElaboraFeedBack extends WizElabora {
             Avviso.message("Feedback non riuscito").primary().open();
         }
 
-        message = String.format("La directory 'wizard' su [%s] è stata aggiornata partendo da quella di [%s]", PROJECT_VAADIN24, VaadVar.projectCurrent);
+        message = String.format("La directory 'wizard' su [%s] è stata aggiornata partendo da quella di [%s]", VaadVar.frameworkVaadin24, VaadVar.projectCurrent);
         logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
 
     }

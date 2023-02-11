@@ -55,7 +55,7 @@ public class ClassServiceTest extends AlgosIntegrationTest {
         return Stream.of(
                 Arguments.of(VUOTA),
                 Arguments.of("Pippo"),
-                Arguments.of(PROJECT_VAADIN24),
+                Arguments.of(VaadVar.moduloVaadin24),
                 Arguments.of("vaad24"),
                 Arguments.of("vaad24Simple"),
                 Arguments.of("wiki23"),

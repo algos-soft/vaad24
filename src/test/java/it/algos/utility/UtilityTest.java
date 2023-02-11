@@ -2,7 +2,7 @@ package it.algos.utility;
 
 import it.algos.*;
 import it.algos.base.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.boot.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;
 import org.springframework.boot.test.context.*;
@@ -60,7 +60,7 @@ public class UtilityTest extends AlgosIntegrationTest {
         sorgenteArray = Arrays.asList("Anno", "Secolo", "Continente", "Giorno", "Mese", "Via");
         previstoArray = Arrays.asList("Via", "Continente", "Secolo", "Anno", "Mese", "Giorno");
         ottenutoArray = new ArrayList<>();
-        sorgente = PROJECT_VAADIN24;
+        sorgente = VaadVar.moduloVaadin24;
 
         sorgenteArray = classService.allModuleEntityResetName(sorgente);
         ottenutoArray = arrayService.orderTree(sorgenteArray);

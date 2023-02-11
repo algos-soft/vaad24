@@ -156,6 +156,10 @@ public class Preferenza extends AEntity {
         this.value = value;
     }
 
+    public void setValore(Object javaValue) {
+        this.value = type.objectToBytes(javaValue);
+    }
+
     public boolean isVaad23() {
         return vaad23;
     }
