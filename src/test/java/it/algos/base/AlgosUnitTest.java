@@ -214,6 +214,10 @@ public abstract class AlgosUnitTest {
     @InjectMocks
     public MathService mathService;
 
+    @InjectMocks
+    public PreferenceService preferenceService;
+
+
     //--clazz
     //--simpleName
     protected static Stream<Arguments> CLAZZ_FOR_NAME() {
@@ -310,6 +314,7 @@ public abstract class AlgosUnitTest {
         assertNotNull(loggerBackend);
         assertNotNull(regexService);
         assertNotNull(mathService);
+        assertNotNull(preferenceService);
     }
 
 

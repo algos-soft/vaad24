@@ -77,6 +77,9 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
     @Autowired
     protected LogService logger;
 
+    @Autowired
+    protected PreferenceService preferenceService;
+
     protected AIEnumPref enumPref;
 
     protected Button refreshButton;
@@ -92,6 +95,8 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
     protected IndeterminateCheckbox boxBoxVaad23;
 
     protected IndeterminateCheckbox boxBoxRiavvio;
+
+    protected IndeterminateCheckbox boxBoxDefault;
 
     protected int elementiFiltrati;
 
@@ -208,7 +213,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         layout.add(comboTypePref);
 
         boxBoxVaad23 = new IndeterminateCheckbox();
-        boxBoxVaad23.setLabel("Vaad23 / Specifica");
+        boxBoxVaad23.setLabel("Vaad24 / Specifica");
         boxBoxVaad23.setIndeterminate(true);
         boxBoxVaad23.addValueChangeListener(event -> sincroFiltri());
         HorizontalLayout layout2 = new HorizontalLayout(boxBoxVaad23);
@@ -222,6 +227,14 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         HorizontalLayout layout3 = new HorizontalLayout(boxBoxRiavvio);
         layout3.setAlignItems(Alignment.CENTER);
         layout.add(layout3);
+
+        boxBoxDefault = new IndeterminateCheckbox();
+        boxBoxDefault.setLabel("Default");
+        boxBoxDefault.setIndeterminate(true);
+        boxBoxDefault.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layout4 = new HorizontalLayout(boxBoxDefault);
+        layout4.setAlignItems(Alignment.CENTER);
+        layout.add(layout4);
 
         this.add(layout);
     }
@@ -299,12 +312,20 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
             Icon icona = pref.vaad23 ? VaadinIcon.CHECK.create() : VaadinIcon.CLOSE.create();
             icona.setColor(pref.vaad23 ? COLOR_VERO : COLOR_FALSO);
             return icona;
-        })).setHeader("Vaad23").setKey("vaadFlow").setWidth(larBool).setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
+        })).setHeader("Vaad24").setKey("vaadFlow").setWidth(larBool).setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
+
         grid.addColumn(new ComponentRenderer<>(pref -> {
             Icon icona = pref.needRiavvio ? VaadinIcon.CHECK.create() : VaadinIcon.CLOSE.create();
             icona.setColor(pref.needRiavvio ? COLOR_VERO : COLOR_FALSO);
             return icona;
         })).setHeader("Riavvio").setKey("needRiavvio").setWidth(larBool).setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
+
+        grid.addColumn(new ComponentRenderer<>(prefDB -> {
+            boolean usaDefault = preferenceService.isStandard(prefDB.code);
+            Icon icona = usaDefault ? VaadinIcon.CHECK.create() : VaadinIcon.CLOSE.create();
+            icona.setColor(usaDefault ? COLOR_VERO : COLOR_FALSO);
+            return icona;
+        })).setHeader("Default").setKey("usaDefault").setWidth(larBool).setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
 
     }
 
@@ -380,21 +401,36 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
 
         final String textSearch = filter != null ? filter.getValue() : VUOTA;
         if (textService.isValid(textSearch)) {
-            items = items.stream().filter(pref -> pref.code.matches("^(?i)" + textSearch + ".*$")).toList();
+            items = items.stream()
+                    .filter(pref -> pref.code.matches("^(?i)" + textSearch + ".*$"))
+                    .toList();
         }
 
         final AETypePref type = comboTypePref != null ? comboTypePref.getValue() : null;
         if (type != null) {
-            items = items.stream().filter(pref -> pref.type == type).toList();
+            items = items.stream()
+                    .filter(pref -> pref.type == type)
+                    .toList();
         }
 
         if (boxBoxVaad23 != null && !boxBoxVaad23.isIndeterminate()) {
-            items = items.stream().filter(pref -> pref.vaad23 == boxBoxVaad23.getValue()).toList();
+            items = items.stream()
+                    .filter(pref -> pref.vaad23 == boxBoxVaad23.getValue())
+                    .toList();
         }
 
         if (boxBoxRiavvio != null && !boxBoxRiavvio.isIndeterminate()) {
-            items = items.stream().filter(pref -> pref.needRiavvio == boxBoxRiavvio.getValue()).toList();
+            items = items.stream()
+                    .filter(pref -> pref.needRiavvio == boxBoxRiavvio.getValue())
+                    .toList();
         }
+
+        if (boxBoxDefault != null && !boxBoxDefault.isIndeterminate()) {
+            items = items.stream()
+                    .filter(pref -> preferenceService.isStandard(pref.code) == boxBoxDefault.getValue())
+                    .toList();
+        }
+
 
         if (items != null) {
             grid.setItems((List) items);

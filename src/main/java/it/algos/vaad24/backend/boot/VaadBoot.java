@@ -177,7 +177,11 @@ public class VaadBoot implements ServletContextListener {
     }
 
     public void fixPreferenze() {
-        for (AIGenPref pref : Pref.getAllEnums()) {
+        for (Pref pref : Pref.getAllEnums()) {
+            VaadVar.prefList.add(pref);
+        }
+
+        for (Pref pref : Pref.getAllEnums()) {
             pref.setText(textService);
             pref.setLogger(logger);
             pref.setDate(dateService);
@@ -568,10 +572,10 @@ public class VaadBoot implements ServletContextListener {
         String message;
 
         if (Pref.debug != null && Pref.debug.is()) {
-            message ="Stiamo girando in modalità 'debug'";
+            message = "Stiamo girando in modalità 'debug'";
         }
         else {
-            message ="Stiamo girando in modalità 'normale'";
+            message = "Stiamo girando in modalità 'normale'";
         }
         logger.info(new WrapLog().message(message).type(AETypeLog.setup));
     }

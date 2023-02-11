@@ -11,6 +11,7 @@ import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.vaad24simple.backend.boot.SimpleCost.*;
+import it.algos.vaad24simple.backend.enumeration.*;
 import it.algos.vaad24simple.backend.schedule.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
@@ -68,6 +69,13 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
     ////        this.inizia();
     //    }
 
+    public void fixPreferenze() {
+        super.fixPreferenze();
+
+        for (SPref pref : SPref.values()) {
+            VaadVar.prefList.add(pref);
+        }
+    }
 
     /**
      * Costruisce alcune istanze generali dell'applicazione e ne mantiene i riferimenti nelle apposite variabili <br>

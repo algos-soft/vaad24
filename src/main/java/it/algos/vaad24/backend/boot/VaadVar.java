@@ -47,6 +47,15 @@ public class VaadVar {
      */
     public static List<VaadTask> taskList = new ArrayList<>();
 
+    /**
+     * Lista delle preferenze. <br>
+     * Lista di quelle base di Vaadin24 <br>
+     * Lista (eventuale) di quelle del progetto specifico <br>
+     * Deve essere regolato in backend.boot.VaadBoot.fixPreferenze() del progetto base <br>
+     * Deve essere regolato in backend.boot.xxxBoot.fixPreferenze() del progetto specifico <br>
+     */
+    public static List prefList = new ArrayList<>();
+
 
     /**
      * Nome identificativo minuscolo del progetto base vaadin23 <br>

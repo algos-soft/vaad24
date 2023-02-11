@@ -3,6 +3,7 @@ package it.algos.vaad24simple.backend.boot;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24simple.backend.boot.SimpleCost.*;
 import it.algos.vaad24.backend.boot.*;
+import it.algos.vaad24simple.backend.enumeration.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -40,7 +41,7 @@ public class SimplePref extends VaadPref {
      */
     public void inizia() {
         super.inizia();
-        for (it.algos.vaad24simple.backend.enumeration.SimplePref pref : it.algos.vaad24simple.backend.enumeration.SimplePref.getAllEnums()) {
+        for (SPref pref : SPref.getAllEnums()) {
             crea(pref);
         }
     }
@@ -49,7 +50,7 @@ public class SimplePref extends VaadPref {
      * Inserimento di una preferenza del progetto specifico <br>
      * Controlla che la entity non esista già <br>
      */
-    protected void crea(final it.algos.vaad24simple.backend.enumeration.SimplePref pref) {
+    protected void crea(final SPref pref) {
         crea(pref.getKeyCode(), pref.getType(), pref.getDefaultValue(), pref.getDescrizione(), false, false);
     }
 

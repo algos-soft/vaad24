@@ -1,6 +1,7 @@
 package it.algos.vaad24.backend.service;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.interfaces.*;
@@ -9,6 +10,8 @@ import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
+
+import java.util.*;
 
 /**
  * Project vaadin23
@@ -21,18 +24,18 @@ import org.springframework.stereotype.*;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class PreferenceService extends AbstractService {
 
-//    /**
-//     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
-//     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
-//     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
-//     * <p>
-//     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti, ma l'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
-//     * Se viene implementata una sottoclasse, passa di qui per ogni sottoclasse oltre che per questa istanza <br>
-//     * Se esistono delle sottoclassi, passa di qui per ognuna di esse (oltre a questa classe madre) <br>
-//     */
-//    @PostConstruct
-//    private void postConstruct() {
-//    }
+    //    /**
+    //     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
+    //     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
+    //     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+    //     * <p>
+    //     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti, ma l'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
+    //     * Se viene implementata una sottoclasse, passa di qui per ogni sottoclasse oltre che per questa istanza <br>
+    //     * Se esistono delle sottoclassi, passa di qui per ognuna di esse (oltre a questa classe madre) <br>
+    //     */
+    //    @PostConstruct
+    //    private void postConstruct() {
+    //    }
 
     public void setValue(AETypePref type, String keyCode, Object javaValue) {
         Preferenza preferenza;
@@ -210,6 +213,33 @@ public class PreferenceService extends AbstractService {
         String message;
         message = String.format("La preferenza %s è di type %s. Non puoi usare il metodo %s", keyCode, type, methodName);
         logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
+    }
+
+
+    public AIGenPref getPref(final String keyCode) {
+        List<AIGenPref> lista = VaadVar.prefList;
+
+        for (AIGenPref prefEnum : lista) {
+            if (prefEnum.getKeyCode().equals(keyCode)) {
+                return prefEnum;
+            }
+        }
+
+        return null;
+    }
+
+
+    public boolean isStandard(final String keyCode) {
+        boolean valoreCorrenteStandard = false;
+        Object valoreCorrenteDataBase = preferenzaBackend.findByKeyCode(keyCode).getValore();
+        AIGenPref prefEnum = preferenceService.getPref(keyCode);
+        Object valoreDefaultEnumeration = prefEnum.getDefaultValue();
+
+        if (valoreCorrenteDataBase != null && valoreDefaultEnumeration != null) {
+            valoreCorrenteStandard = valoreCorrenteDataBase.equals(valoreDefaultEnumeration);
+        }
+
+        return valoreCorrenteStandard;
     }
 
 }

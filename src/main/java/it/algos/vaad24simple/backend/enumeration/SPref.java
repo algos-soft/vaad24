@@ -18,7 +18,7 @@ import java.util.*;
  * Date: sab, 07-mag-2022
  * Time: 13:34
  */
-public enum SimplePref implements AIGenPref {
+public enum SPref implements AIGenPref {
     string("string", AETypePref.string, "stringa"),
     bool("bool", AETypePref.bool, false),
     integer("integer", AETypePref.integer, 0),
@@ -64,15 +64,15 @@ public enum SimplePref implements AIGenPref {
 
     private TextService text;
 
-    SimplePref(final String keyCode, final AETypePref type, final Object defaultValue) {
+    SPref(final String keyCode, final AETypePref type, final Object defaultValue) {
         this(keyCode, type, defaultValue, DESCRIZIONE_PREFERENZA);
     }// fine del costruttore
 
-    SimplePref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione) {
+    SPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione) {
         this(keyCode, type, defaultValue, descrizione, null);
     }// fine del costruttore
 
-    SimplePref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione, AITypePref typeEnum) {
+    SPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione, AITypePref typeEnum) {
         this.keyCode = keyCode;
         this.type = type;
         this.defaultValue = defaultValue;
@@ -80,7 +80,10 @@ public enum SimplePref implements AIGenPref {
         this.typeEnum = typeEnum;
     }// fine del costruttore
 
-    public static List<SimplePref> getAllEnums() {
+    public static List getAll() {
+        return Arrays.stream(values()).toList();
+    }
+    public static List<SPref> getAllEnums() {
         return Arrays.stream(values()).toList();
     }
 
@@ -217,7 +220,7 @@ public enum SimplePref implements AIGenPref {
 
         @PostConstruct
         public void postConstruct() {
-            for (SimplePref pref : SimplePref.values()) {
+            for (SPref pref : SPref.values()) {
                 pref.setPreferenceService(preferenceService);
                 pref.setLogger(logger);
                 pref.setDate(date);

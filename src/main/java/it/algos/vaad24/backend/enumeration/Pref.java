@@ -74,9 +74,14 @@ public enum Pref implements AIGenPref {
     }// fine del costruttore
 
 
+    public static List getAll() {
+        return Arrays.stream(values()).toList();
+    }
+
     public static List<Pref> getAllEnums() {
         return Arrays.stream(values()).toList();
     }
+
     public static List<String> getAllKeyCode() {
         List<String> listaTags = new ArrayList<>();
 
