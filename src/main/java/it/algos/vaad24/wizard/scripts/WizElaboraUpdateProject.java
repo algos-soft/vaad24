@@ -77,7 +77,7 @@ public class WizElaboraUpdateProject extends WizElabora {
         String srcPath = srcVaad24 + wiz.getCopyDest() + SLASH;
         String destPath = destNewProject + wiz.getCopyDest() + SLASH;
         String dir = fileService.lastDirectory(destPath).toLowerCase();
-        String oldToken = VaadVar.vaadin24MainApplication;
+        String oldToken = VaadVar.frameworkVaadin24;
         String newToken = VaadVar.projectCurrentMainApplication;
         String tag = progettoEsistente ? "Update" : "New";
         String oldText;

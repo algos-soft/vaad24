@@ -1,4 +1,4 @@
-package it.algos.service;
+package it.algos.simpleOnly;
 
 import it.algos.*;
 import it.algos.base.*;

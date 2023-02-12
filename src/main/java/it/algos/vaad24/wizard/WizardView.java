@@ -2,6 +2,7 @@ package it.algos.vaad24.wizard;
 
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.checkbox.*;
+import com.vaadin.flow.component.dependency.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;

@@ -110,6 +110,8 @@ public class PreferenzaDialog extends Dialog {
 
     Checkbox needRiavvio;
 
+    Checkbox dinamica;
+
     private Preferenza currentItem;
 
     private BiConsumer<Preferenza, CrudOperation> saveHandler;
@@ -274,6 +276,9 @@ public class PreferenzaDialog extends Dialog {
         needRiavvio = new Checkbox("Riavvio necessario");
         needRiavvio.setReadOnly(operation == CrudOperation.DELETE);
 
+        dinamica = new Checkbox("Valore dinamico");
+        dinamica.setReadOnly(operation == CrudOperation.DELETE);
+
         binder.bindInstanceFields(this);
 
         // Updates the value in each bound field component
@@ -282,7 +287,7 @@ public class PreferenzaDialog extends Dialog {
         // Update the value of preference
         sincroValueToPresentation();
 
-        formLayout.add(code, type, descrizione, valueLayout, descrizioneEstesa, vaadFlow, needRiavvio);
+        formLayout.add(code, type, descrizione, valueLayout, descrizioneEstesa, vaadFlow, needRiavvio, dinamica);
         formLayout.setColspan(descrizione, 2);
         formLayout.setColspan(descrizioneEstesa, 2);
 
@@ -381,11 +386,12 @@ public class PreferenzaDialog extends Dialog {
 
     protected boolean sincroValueToModel() {
         boolean valido = false;
-        Component comp;
+        Component comp = valueLayout.getComponentAt(0);
+        Object timeValue;
+        String message;
 
         switch (type.getValue()) {
             case string -> {
-                comp = valueLayout.getComponentAt(0);
                 if (comp != null && comp instanceof TextField textField) {
                     if (textService.isValid(textField.getValue())) {
                         try {
@@ -402,43 +408,56 @@ public class PreferenzaDialog extends Dialog {
                 }
             }
             case bool -> {
-                comp = valueLayout.getComponentAt(0);
                 if (comp != null && comp instanceof Checkbox checkField) {
                     currentItem.setValue(type.getValue().objectToBytes(checkField.getValue()));
                     valido = true;
                 }
             }
             case integer -> {
-                comp = valueLayout.getComponentAt(0);
                 if (comp != null && comp instanceof TextField textField) {
                     currentItem.setValue(type.getValue().objectToBytes(textField.getValue()));
                     valido = true;
                 }
             }
 
+            case localdatetime -> {
+                if (comp != null && comp instanceof DateTimePicker pickerField) {
+                    timeValue = pickerField.getValue();
+                    if (timeValue == null) {
+                        timeValue = ROOT_DATA_TIME;
+                        message = String.format("Alla preferenza [%s] manca la data%s%s", currentItem.code, FORWARD, timeValue);
+                        logger.warn(new WrapLog().type(AETypeLog.preferenze).message(message).usaDb());
+                    }
+                    currentItem.setValue(type.getValue().objectToBytes(timeValue));
+                    valido = true;
+                }
+            }
+
             case localdate -> {
-                comp = valueLayout.getComponentAt(0);
-                if (comp != null && comp instanceof DatePicker textField) {
-                    currentItem.setValue(type.getValue().objectToBytes(textField.getValue()));
+                if (comp != null && comp instanceof DatePicker pickerField) {
+                    timeValue = pickerField.getValue();
+                    if (timeValue == null) {
+                        timeValue = ROOT_DATA;
+                        message = String.format("Alla preferenza [%s] manca la data%s%s", currentItem.code, FORWARD, timeValue);
+                        logger.warn(new WrapLog().type(AETypeLog.preferenze).message(message).usaDb());
+                    }
+                    currentItem.setValue(type.getValue().objectToBytes(timeValue));
                     valido = true;
                 }
             }
             case localtime -> {
-                comp = valueLayout.getComponentAt(0);
-                if (comp != null && comp instanceof TimePicker textField) {
-                    currentItem.setValue(type.getValue().objectToBytes(textField.getValue()));
-                    valido = true;
-                }
-            }
-            case localdatetime -> {
-                comp = valueLayout.getComponentAt(0);
-                if (comp != null && comp instanceof DateTimePicker textField) {
-                    currentItem.setValue(type.getValue().objectToBytes(textField.getValue()));
+                if (comp != null && comp instanceof TimePicker pickerField) {
+                    timeValue = pickerField.getValue();
+                    if (timeValue == null) {
+                        timeValue = ROOT_TIME;
+                        message = String.format("Alla preferenza [%s] manca la data%s%s", currentItem.code, FORWARD, timeValue);
+                        logger.warn(new WrapLog().type(AETypeLog.preferenze).message(message).usaDb());
+                    }
+                    currentItem.setValue(type.getValue().objectToBytes(timeValue));
                     valido = true;
                 }
             }
             case enumerationType -> {
-                comp = valueLayout.getComponentAt(0);
                 if (comp != null && comp instanceof ComboBox combo) {
                     String value = (String) combo.getValue();
                     String allEnumSelection = (String) type.getValue().bytesToObject(currentItem.getValue());
@@ -448,7 +467,6 @@ public class PreferenzaDialog extends Dialog {
                 }
             }
             case enumerationString -> {
-                comp = valueLayout.getComponentAt(0);
                 if (comp != null && comp instanceof ComboBox combo) {
                     String value = (String) combo.getValue();
                     String allEnumSelection = (String) type.getValue().bytesToObject(currentItem.getValue());

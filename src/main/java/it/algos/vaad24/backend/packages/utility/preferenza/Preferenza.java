@@ -82,6 +82,8 @@ public class Preferenza extends AEntity {
     //    @AIColumn(headerIcon = VaadinIcon.USER)
     public boolean visibileAdmin;
 
+    public boolean dinamica;
+
     /**
      * descrizione (obbligatoria)
      */
@@ -190,6 +192,14 @@ public class Preferenza extends AEntity {
 
     public void setVisibileAdmin(boolean visibileAdmin) {
         this.visibileAdmin = visibileAdmin;
+    }
+
+    public void setDinamica(boolean dinamica) {
+        this.dinamica = dinamica;
+    }
+
+    public boolean isDinamica() {
+        return dinamica;
     }
 
     public String getEnumClazzName() {

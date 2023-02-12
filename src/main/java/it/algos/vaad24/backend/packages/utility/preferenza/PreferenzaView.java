@@ -327,6 +327,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
             return icona;
         })).setHeader("Default").setKey("usaDefault").setWidth(larBool).setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
 
+        grid.addColumns("dinamica");
     }
 
     /**

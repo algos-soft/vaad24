@@ -132,6 +132,7 @@ public class VaadPref implements AIEnumPref, ServletContextListener {
         preferenza.usaCompany = false;
         preferenza.needRiavvio = needRiavvio;
         preferenza.visibileAdmin = false;
+        preferenza.dinamica = false;
         preferenza.descrizione = descrizione;
         preferenza.descrizioneEstesa = descrizione;
         preferenza.enumClazzName = AETypeLog.class.getSimpleName();

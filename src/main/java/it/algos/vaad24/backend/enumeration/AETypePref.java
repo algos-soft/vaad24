@@ -184,6 +184,7 @@ public enum AETypePref implements AITypePref {
                 //                long millis = ((LocalDateTime) obj).;
                 bytes = Longs.toByteArray(millis);
             }
+
             return bytes;
         }
 

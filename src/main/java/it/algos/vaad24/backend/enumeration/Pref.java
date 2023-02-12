@@ -50,6 +50,8 @@ public enum Pref implements AIGenPref {
     //--preferenze visibile agli admin se l'applicazione è usaSecurity=true
     private boolean visibileAdmin;
 
+    private boolean dinamico;
+
     //--descrizione breve ma comprensibile. Ulteriori (eventuali) informazioni nel campo 'note'
     private String descrizione;
 
@@ -68,11 +70,17 @@ public enum Pref implements AIGenPref {
     private TextService text;
 
     Pref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione) {
+        this(keyCode, type, defaultValue, descrizione, false);
+    }// fine del costruttore
+
+    Pref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione, boolean dinamico) {
         this.keyCode = keyCode;
         this.type = type;
         this.defaultValue = defaultValue;
         this.descrizione = descrizione;
+        this.dinamico = dinamico;
     }// fine del costruttore
+
 
 
     public static List getAll() {
@@ -205,6 +213,9 @@ public enum Pref implements AIGenPref {
         preferenceService.setEnumCurrentObj(type, keyCode, currentValue);
     }
 
+    public boolean isDinamico() {
+        return dinamico;
+    }
 
     @Component
     public static class PreferenzaServiceInjector {
