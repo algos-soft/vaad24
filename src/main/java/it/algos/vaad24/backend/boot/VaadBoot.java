@@ -176,12 +176,18 @@ public class VaadBoot implements ServletContextListener {
         logger.setUpEnd();
     }
 
+    /**
+     * Crea le Enumeration in memoria con la injection di SpringBoot <br>
+     * Aggiunge le singole Enumeration all lista globale <br>
+     * NON crea le preferenze su mondoDB <br>
+     * Può essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     */
     public void fixPreferenze() {
         for (Pref pref : Pref.getAllEnums()) {
             VaadVar.prefList.add(pref);
         }
 
-        for (Pref pref : Pref.getAllEnums()) {
+        for (AIGenPref pref : VaadVar.prefList) {
             pref.setText(textService);
             pref.setLogger(logger);
             pref.setDate(dateService);

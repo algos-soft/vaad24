@@ -82,6 +82,7 @@ public class Preferenza extends AEntity {
     //    @AIColumn(headerIcon = VaadinIcon.USER)
     public boolean visibileAdmin;
 
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkIcon)
     public boolean dinamica;
 
     /**

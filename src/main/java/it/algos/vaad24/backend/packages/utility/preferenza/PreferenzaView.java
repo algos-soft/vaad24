@@ -97,6 +97,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
     protected IndeterminateCheckbox boxBoxRiavvio;
 
     protected IndeterminateCheckbox boxBoxDefault;
+    protected IndeterminateCheckbox boxBoxDinamica;
 
     protected int elementiFiltrati;
 
@@ -236,6 +237,14 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         layout4.setAlignItems(Alignment.CENTER);
         layout.add(layout4);
 
+        boxBoxDinamica = new IndeterminateCheckbox();
+        boxBoxDinamica.setLabel("Dinamica");
+        boxBoxDinamica.setIndeterminate(true);
+        boxBoxDinamica.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layout5 = new HorizontalLayout(boxBoxDinamica);
+        layout5.setAlignItems(Alignment.CENTER);
+        layout.add(layout5);
+
         this.add(layout);
     }
 
@@ -327,7 +336,12 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
             return icona;
         })).setHeader("Default").setKey("usaDefault").setWidth(larBool).setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
 
-        grid.addColumns("dinamica");
+        grid.addColumn(new ComponentRenderer<>(pref -> {
+            Icon icona = pref.dinamica ? VaadinIcon.CHECK.create() : VaadinIcon.CLOSE.create();
+            icona.setColor(pref.dinamica ? COLOR_VERO : COLOR_FALSO);
+            return icona;
+        })).setHeader("Dinamica").setKey("dinamica").setWidth(larBool).setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
+//        grid.addColumns("dinamica");
     }
 
     /**
@@ -431,6 +445,13 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
                     .filter(pref -> preferenceService.isStandard(pref.code) == boxBoxDefault.getValue())
                     .toList();
         }
+
+        if (boxBoxDinamica != null && !boxBoxDinamica.isIndeterminate()) {
+            items = items.stream()
+                    .filter(pref -> pref.dinamica == boxBoxDinamica.getValue())
+                    .toList();
+        }
+
 
         if (items != null) {
             grid.setItems((List) items);

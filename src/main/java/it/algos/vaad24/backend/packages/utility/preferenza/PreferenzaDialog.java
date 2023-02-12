@@ -29,6 +29,7 @@ import org.springframework.context.annotation.Scope;
 import org.vaadin.crudui.crud.*;
 
 import javax.annotation.*;
+import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -223,7 +224,7 @@ public class PreferenzaDialog extends Dialog {
                 // Use one column by default
                 new FormLayout.ResponsiveStep("0", 1),
                 // Use two columns, if layout's width exceeds 500px
-                new FormLayout.ResponsiveStep("500px", 2)
+                new FormLayout.ResponsiveStep("500px", 3)
         );
 
         formLayout.addClassName("no-padding");
@@ -289,7 +290,8 @@ public class PreferenzaDialog extends Dialog {
 
         formLayout.add(code, type, descrizione, valueLayout, descrizioneEstesa, vaadFlow, needRiavvio, dinamica);
         formLayout.setColspan(descrizione, 2);
-        formLayout.setColspan(descrizioneEstesa, 2);
+        formLayout.setColspan(valueLayout, 2);
+        formLayout.setColspan(descrizioneEstesa, 3);
 
     }
 
@@ -304,9 +306,9 @@ public class PreferenzaDialog extends Dialog {
         switch (type.getValue()) {
             case string -> {
                 TextField textField = new TextField("Value (string)");
-                textField.setRequired(true);
-                textField.setReadOnly(operation == CrudOperation.DELETE);
                 textField.setValue(type.getValue().bytesToString(currentItem.getValue()));
+                textField.setReadOnly(operation == CrudOperation.DELETE);
+                textField.setRequired(true);
                 valueLayout.add(textField);
             }
             case bool -> {
@@ -324,21 +326,25 @@ public class PreferenzaDialog extends Dialog {
                 }
                 valueLayout.add(numberField);
             }
+            case localdatetime -> {
+                DateTimePicker pickerField = new DateTimePicker("Data completa (giorno e orario)");
+                pickerField.setValue((LocalDateTime) type.getValue().bytesToObject(currentItem.getValue()));
+                pickerField.setReadOnly(operation == CrudOperation.DELETE);
+                valueLayout.add(pickerField);
+            }
+
             case localdate -> {
                 DatePicker pickerField = new DatePicker("Data (giorno)");
-                pickerField.setRequired(true);
+                pickerField.setValue((LocalDate) type.getValue().bytesToObject(currentItem.getValue()));
                 pickerField.setReadOnly(operation == CrudOperation.DELETE);
+                pickerField.setRequired(true);
                 valueLayout.add(pickerField);
             }
             case localtime -> {
                 TimePicker pickerField = new TimePicker("Time (orario)");
+                pickerField.setValue((LocalTime) type.getValue().bytesToObject(currentItem.getValue()));
+                pickerField.setReadOnly(operation == CrudOperation.DELETE);
                 pickerField.setRequired(true);
-                pickerField.setReadOnly(operation == CrudOperation.DELETE);
-                valueLayout.add(pickerField);
-            }
-            case localdatetime -> {
-                DateTimePicker pickerField = new DateTimePicker("Data completa (giorno e orario)");
-                pickerField.setReadOnly(operation == CrudOperation.DELETE);
                 valueLayout.add(pickerField);
             }
             case enumerationType -> {
@@ -535,6 +541,9 @@ public class PreferenzaDialog extends Dialog {
 
 
     public void saveHandler() {
+        String message;
+        Preferenza oldEntity = preferenzaBackend.findByKeyCode(currentItem.code);
+
         try {
             if (binder.writeBeanIfValid(currentItem) && sincroValueToModel()) {
                 binder.writeBean(currentItem);
@@ -547,6 +556,14 @@ public class PreferenzaDialog extends Dialog {
             logger.error(error);
             return;
         }
+
+        if (!currentItem.getValore().equals(oldEntity.getValore())) {
+            if (!currentItem.isDinamica()) {
+                message = String.format("Modificata [%s]: %s%s%s", currentItem.code, oldEntity.getValore(), FORWARD, currentItem.getValore());
+                logger.info(new WrapLog().type(AETypeLog.preferenze).message(message).usaDb());
+            }
+        }
+
         preferenzaBackend.update(currentItem);
         switch (operation) {
             case ADD -> Avviso.message("Registrata la preferenza").success().open();

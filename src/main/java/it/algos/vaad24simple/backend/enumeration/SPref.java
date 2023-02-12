@@ -21,13 +21,13 @@ import java.util.*;
 public enum SPref implements AIGenPref {
     string("string", AETypePref.string, "stringa"),
     bool("bool", AETypePref.bool, false),
-    integer("integer", AETypePref.integer, 0),
+    integer("integer", AETypePref.integer, 0, true),
     lungo("lungo", AETypePref.lungo, 0L),
-    localDateTime("localDateTime", AETypePref.localdatetime, ROOT_DATA_TIME),
-    localDate("localDate", AETypePref.localdate, ROOT_DATA),
-    localTime("localTime", AETypePref.localtime, ROOT_TIME),
+    localDateTime("localDateTime", AETypePref.localdatetime, ROOT_DATA_TIME, true),
+    localDate("localDate", AETypePref.localdate, ROOT_DATA, true),
+    localTime("localTime", AETypePref.localtime, ROOT_TIME, true),
     email("email", AETypePref.email, "mail"),
-//    enumerationType("enumerationType", AETypePref.enumerationType, AELogLevel.info, DESCRIZIONE_PREFERENZA, AELogLevel.info),
+    //    enumerationType("enumerationType", AETypePref.enumerationType, AELogLevel.info, DESCRIZIONE_PREFERENZA, AELogLevel.info),
     enumerationString("enumerationString", AETypePref.enumerationString, "alfa,beta,gamma;beta"),
 
     ;
@@ -53,6 +53,8 @@ public enum SPref implements AIGenPref {
     //--preferenze che necessita di un riavvio del programma per avere effetto
     private boolean needRiavvio;
 
+    private boolean dinamica;
+
     //--Link injected da un metodo static
     private PreferenceService preferenceService;
 
@@ -69,15 +71,20 @@ public enum SPref implements AIGenPref {
     }// fine del costruttore
 
     SPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione) {
-        this(keyCode, type, defaultValue, descrizione, null);
+        this(keyCode, type, defaultValue, descrizione, null, false);
     }// fine del costruttore
 
-    SPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione, AITypePref typeEnum) {
+    SPref(final String keyCode, final AETypePref type, final Object defaultValue, boolean dinamica) {
+        this(keyCode, type, defaultValue, DESCRIZIONE, null, dinamica);
+    }// fine del costruttore
+
+    SPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione, AITypePref typeEnum, boolean dinamica) {
         this.keyCode = keyCode;
         this.type = type;
         this.defaultValue = defaultValue;
         this.descrizione = descrizione;
         this.typeEnum = typeEnum;
+        this.dinamica = dinamica;
     }// fine del costruttore
 
     public static List getAll() {
@@ -202,6 +209,10 @@ public enum SPref implements AIGenPref {
     @Override
     public void setEnumCurrentObj(AITypePref currentValue) {
         preferenceService.setEnumCurrentObj(type, keyCode, currentValue);
+    }
+
+    public boolean isDinamica() {
+        return dinamica;
     }
 
     @Component

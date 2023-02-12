@@ -54,7 +54,7 @@ public class VaadVar {
      * Deve essere regolato in backend.boot.VaadBoot.fixPreferenze() del progetto base <br>
      * Deve essere regolato in backend.boot.xxxBoot.fixPreferenze() del progetto sèecifico <br>
      */
-    public static List prefList = new ArrayList<>();
+    public static List<AIGenPref> prefList = new ArrayList<>();
 
 
     /**

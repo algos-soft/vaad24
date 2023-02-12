@@ -69,12 +69,18 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
     ////        this.inizia();
     //    }
 
+    /**
+     * Crea le Enumeration in memoria con la injection di SpringBoot <br>
+     * Aggiunge le singole Enumeration all lista globale <br>
+     * NON crea le preferenze su mondoDB <br>
+     * Può essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     */
     public void fixPreferenze() {
-        super.fixPreferenze();
-
         for (SPref pref : SPref.values()) {
             VaadVar.prefList.add(pref);
         }
+
+        super.fixPreferenze();
     }
 
     /**
