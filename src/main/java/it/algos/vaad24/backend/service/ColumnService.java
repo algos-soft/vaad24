@@ -158,10 +158,9 @@ public class ColumnService extends AbstractService {
             if (flexGrow) {
                 colonna.setFlexGrow(1);
             }
-            if (textService.isValid(sortProperty)) {
+            if (textService.isValid(sortProperty) && type != AETypeField.booleano) {
                 colonna.setSortProperty(sortProperty);
             }
-
         }
         else {
             messageEsterno = String.format("La colonna del parametro %s non è stata creata", propertyName);
