@@ -136,7 +136,6 @@ public enum AETypePref implements AITypePref {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
-            LocalDate data;
             long giorni;
 
             if (obj instanceof LocalDate data) {
