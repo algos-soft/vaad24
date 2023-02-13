@@ -100,6 +100,9 @@ public class PreferenzaBackend extends CrudBackend {
         if (preferenza == null) {
             return false;
         }
+        if (preferenza.isDinamica()) {
+            return false;
+        }
 
         oldPrefJavaValue = preferenza.getValore();
         standardEnumJavaValue = prefEnum.getDefaultValue();
