@@ -93,6 +93,10 @@ public class VaadPref implements AIEnumPref, ServletContextListener {
         Preferenza preferenza = null;
         String message;
 
+        if (backend.existsByKeyCode(keyCode)) {
+            return;
+        }
+
         if (textService.isEmpty(keyCode)) {
             logger.error(new WrapLog().exception(new AlgosException("Manca il keyCode")).usaDb());
             return;
@@ -113,16 +117,12 @@ public class VaadPref implements AIEnumPref, ServletContextListener {
             return;
         }
 
-        if (backend.existsByKeyCode(keyCode)) {
-            return;
-        }
-
-        if (type == AETypePref.enumerationType && value instanceof AITypePref) {
-            Object obj = ((AITypePref) value).getPref();
-            if (obj instanceof String valueTxt) {
-                value = valueTxt;
-            }
-        }
+//        if (type == AETypePref.enumerationType && value instanceof AITypePref) {
+//            Object obj = ((AITypePref) value).getPref();
+//            if (obj instanceof String valueTxt) {
+//                value = valueTxt;
+//            }
+//        }
 
         preferenza = new Preferenza();
         preferenza.code = keyCode;

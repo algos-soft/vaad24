@@ -27,7 +27,7 @@ public enum SPref implements AIGenPref {
     localDate("localDate", AETypePref.localdate, ROOT_DATA, true),
     localTime("localTime", AETypePref.localtime, ROOT_TIME, true),
     email("email", AETypePref.email, "mail"),
-    //    enumerationType("enumerationType", AETypePref.enumerationType, AELogLevel.info, DESCRIZIONE_PREFERENZA, AELogLevel.info),
+    enumerationType("enumerationType", AETypePref.enumerationType, AELogLevel.info, DESCRIZIONE_PREFERENZA),
     enumerationString("enumerationString", AETypePref.enumerationString, "alfa,beta,gamma;beta"),
 
     ;
