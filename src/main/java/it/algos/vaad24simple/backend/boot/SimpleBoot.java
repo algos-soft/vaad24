@@ -12,6 +12,7 @@ import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.vaad24simple.backend.boot.SimpleCost.*;
 import it.algos.vaad24simple.backend.enumeration.*;
+import it.algos.vaad24simple.backend.packages.prova.*;
 import it.algos.vaad24simple.backend.schedule.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
@@ -171,6 +172,7 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
         VaadVar.menuRouteListProject.add(GiornoView.class);
         VaadVar.menuRouteListProject.add(AnnoView.class);
         VaadVar.menuRouteListProject.add(ViaView.class);
+        VaadVar.menuRouteListProject.add(ProvaView.class);
     }
 
 }

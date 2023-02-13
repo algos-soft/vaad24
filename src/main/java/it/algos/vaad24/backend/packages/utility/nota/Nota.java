@@ -33,10 +33,10 @@ import java.time.format.*;
 @MappedSuperclass()
 public class Nota extends AEntity {
 
-    @AIField(type = AETypeField.enumeration, enumClazz = AETypeLog.class)
+    @AIField(type = AETypeField.enumerationType, enumClazz = AETypeLog.class)
     public AETypeLog type;
 
-    @AIField(type = AETypeField.enumeration, enumClazz = AENotaLevel.class)
+    @AIField(type = AETypeField.enumerationType, enumClazz = AENotaLevel.class)
     public AENotaLevel livello;
 
     @AIField(type = AETypeField.localDate)

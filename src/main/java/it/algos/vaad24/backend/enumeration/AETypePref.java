@@ -259,15 +259,15 @@ public enum AETypePref implements AITypePref {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
-            if (obj instanceof String stringa) {
-                bytes = stringa.getBytes(Charset.forName("UTF-8"));
+            if (obj instanceof AITypePref enumeration) {
+                bytes =  enumeration.getPref().getBytes(Charset.forName("UTF-8"));
             }
             return bytes;
         }
 
         @Override
         public String bytesToObject(byte[] bytes) {
-            String obj = "";
+            String obj = VUOTA;
             if (bytes != null) {
                 obj = new String(bytes, Charset.forName("UTF-8"));
             }

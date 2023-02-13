@@ -18,6 +18,7 @@ import org.springframework.stereotype.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.*;
 import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * Project vaadin23
@@ -703,6 +704,47 @@ public class AnnotationService extends AbstractService {
         }
 
         return linkClazz == Object.class ? null : linkClazz;
+    }
+
+
+    /**
+     * Get the basic values of enumeration/String.
+     *
+     * @param entityClazz     the class of type AEntity
+     * @param publicFieldName the property name
+     *
+     * @return the string of all possible values
+     */
+    @SuppressWarnings("all")
+    public String getValoriBaseEnum(final Class<? extends AEntity> entityClazz, final String publicFieldName) {
+        String values = VUOTA;
+        AIField annotation = this.getAIField(entityClazz, publicFieldName);
+
+        if (annotation != null) {
+            values = annotation.valoriEnum();
+        }
+
+        return values;
+    }
+
+    /**
+     * Get the list of all basic values of enumeration/String.
+     *
+     * @param entityClazz     the class of type AEntity
+     * @param publicFieldName the property name
+     *
+     * @return the list of all possible values
+     */
+    @SuppressWarnings("all")
+    public List<String> getListaValoriEnum(final Class<? extends AEntity> entityClazz, final String publicFieldName) {
+        List<String> listaValori = new ArrayList<>();
+        String values = getValoriBaseEnum(entityClazz, publicFieldName);
+
+        if (values.contains(VIRGOLA)) {
+            listaValori = arrayService.getList(values);
+        }
+
+        return listaValori;
     }
 
     /**

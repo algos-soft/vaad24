@@ -38,7 +38,7 @@ public class Versione extends AEntity {
     @AIField(type = AETypeField.text, widthEM = 6)
     public String code;
 
-    @AIField(type = AETypeField.enumeration, enumClazz = AETypeVers.class)
+    @AIField(type = AETypeField.enumerationType, enumClazz = AETypeVers.class)
     public AETypeVers type;
 
     @AIField(type = AETypeField.doppio)

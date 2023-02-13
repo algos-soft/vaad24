@@ -77,7 +77,7 @@ public class ColumnService extends AbstractService {
         String sortProperty = annotationService.getSortProperty(entityClazz, propertyName);
 
         colonna = switch (type) {
-            case text, enumeration, link, localDateTime, localDate, localTime -> grid.addColumn(propertyName).setSortable(true);
+            case text, enumerationString, enumerationType, link, localDateTime, localDate, localTime -> grid.addColumn(propertyName).setSortable(true);
             case integer, lungo -> grid.addColumn(propertyName).setSortable(true);
             case booleano -> addBoolean(grid, entityClazz, propertyName);
 

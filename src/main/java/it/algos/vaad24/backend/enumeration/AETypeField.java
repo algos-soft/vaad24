@@ -41,12 +41,13 @@ public enum AETypeField {
     //    onedecimal,
 
     combo(8, 10),
-    stringLinkClassCombo(10, 14),
+//    stringLinkClassCombo(10, 14),
 
     //    multicombo,
-    //    combolinkato,
+    combolinkato(8, 8),
 
-    enumeration(8, 8),
+    enumerationString(8, 8),
+    enumerationType(8, 8),
     gridShowOnly(0, 20),
 
     //    dateNotEnabled,
@@ -69,7 +70,6 @@ public enum AETypeField {
     private double widthColumn;
 
     private double widthField;
-
 
 
     AETypeField(double widthColumn, double widthField) {

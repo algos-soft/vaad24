@@ -18,6 +18,7 @@ import com.vaadin.flow.data.converter.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.fields.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -258,10 +259,12 @@ public abstract class CrudDialog extends Dialog {
         Class linkClazz;
         boolean hasFocus = false;
         String caption;
+        String valoriEnum;
         List enumObjects;
         List items;
         ComboBox combo;
         boolean nullSelectionAllowed;
+        EnumTypeField enumField;
 
         try {
             for (String key : fields) {
@@ -275,7 +278,21 @@ public abstract class CrudDialog extends Dialog {
                     case integer -> new IntegerField(caption);
                     case lungo -> new TextField(caption);
                     case booleano -> new Checkbox(caption);
-                    case enumeration -> {
+                    case enumerationString -> {
+                        combo = new ComboBox(caption);
+                        combo.setClearButtonVisible(nullSelectionAllowed);
+                        try {
+                            enumObjects = annotationService.getListaValoriEnum(currentItem.getClass(), key);
+                            if (enumObjects != null) {
+                                combo.setItems(enumObjects);
+                            }
+                        } catch (Exception unErrore) {
+                            logger.error(new WrapLog().exception(unErrore).usaDb());
+                        }
+                        yield combo;
+                    }
+                    case enumerationType -> {
+                        enumField = new EnumTypeField();
                         combo = new ComboBox(caption);
                         combo.setClearButtonVisible(nullSelectionAllowed);
                         try {
@@ -334,6 +351,10 @@ public abstract class CrudDialog extends Dialog {
                     textField.setAutoselect(true);
                 }
             }
+            enumField = new EnumTypeField();
+            formLayout.add(enumField);
+            binder.forField(enumField).bind("typeType");
+
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(unErrore).usaDb());
         }

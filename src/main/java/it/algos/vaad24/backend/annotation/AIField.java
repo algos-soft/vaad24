@@ -47,6 +47,8 @@ public @interface AIField {
      */
     Class<?> enumClazz() default Object.class;
 
+    String valoriEnum() default VUOTA;
+
     /**
      * (Optional) Classe della property.
      * Utilizzato nei fields calcolati (ed altro).
@@ -219,8 +221,6 @@ public @interface AIField {
      * @return the boolean
      */
     boolean onlyLetter() default false;
-
-
 
 
     /**
@@ -408,5 +408,6 @@ public @interface AIField {
      * @return the field type
      */
     AETypeBoolCol typeBool() default AETypeBoolCol.checkIcon;
+
 
 }

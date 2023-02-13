@@ -32,10 +32,10 @@ import java.time.format.*;
 @MappedSuperclass()
 public class Logger extends AEntity {
 
-    @AIField(type = AETypeField.enumeration, enumClazz = AETypeLog.class)
+    @AIField(type = AETypeField.enumerationType, enumClazz = AETypeLog.class)
     public AETypeLog type;
 
-    @AIField(type = AETypeField.enumeration, enumClazz = AELogLevel.class)
+    @AIField(type = AETypeField.enumerationType, enumClazz = AELogLevel.class)
     public AELogLevel livello;
 
     @AIField(type = AETypeField.localDateTime)

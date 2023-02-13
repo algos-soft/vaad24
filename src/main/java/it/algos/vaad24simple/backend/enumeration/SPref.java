@@ -19,16 +19,17 @@ import java.util.*;
  * Time: 13:34
  */
 public enum SPref implements AIGenPref {
-    string("string", AETypePref.string, "stringa"),
-    bool("bool", AETypePref.bool, false),
-    integer("integer", AETypePref.integer, 0, true),
-    lungo("lungo", AETypePref.lungo, 0L),
-    localDateTime("localDateTime", AETypePref.localdatetime, ROOT_DATA_TIME, true),
-    localDate("localDate", AETypePref.localdate, ROOT_DATA, true),
-    localTime("localTime", AETypePref.localtime, ROOT_TIME, true),
-    email("email", AETypePref.email, "mail"),
-    enumerationType("enumerationType", AETypePref.enumerationType, AELogLevel.info, DESCRIZIONE_PREFERENZA),
-    enumerationString("enumerationString", AETypePref.enumerationString, "alfa,beta,gamma;beta"),
+    string("string", AETypePref.string, "stringa", DESCRIZIONE_PREFERENZA),
+    bool("bool", AETypePref.bool, false, DESCRIZIONE_PREFERENZA),
+    integer("integer", AETypePref.integer, 0, DESCRIZIONE_PREFERENZA, true),
+    lungo("lungo", AETypePref.lungo, 0L, DESCRIZIONE_PREFERENZA),
+    localDateTime("localDateTime", AETypePref.localdatetime, ROOT_DATA_TIME, DESCRIZIONE_PREFERENZA, true),
+    localDate("localDate", AETypePref.localdate, ROOT_DATA, DESCRIZIONE_PREFERENZA, true),
+    localTime("localTime", AETypePref.localtime, ROOT_TIME, DESCRIZIONE_PREFERENZA, true),
+    email("email", AETypePref.email, "mail", DESCRIZIONE_PREFERENZA),
+    enumerationString("enumerationString", AETypePref.enumerationString, "alfa,beta,gamma;beta", DESCRIZIONE_PREFERENZA),
+    enumerationTypeA("enumerationTypeA", AETypePref.enumerationType, AELogLevel.info, DESCRIZIONE_PREFERENZA),
+    enumerationTypeB("enumerationTypeB", AETypePref.enumerationType, AEFontSize.em9, DESCRIZIONE_PREFERENZA),
 
     ;
 
@@ -66,24 +67,20 @@ public enum SPref implements AIGenPref {
 
     private TextService text;
 
-    SPref(final String keyCode, final AETypePref type, final Object defaultValue) {
-        this(keyCode, type, defaultValue, DESCRIZIONE_PREFERENZA);
-    }// fine del costruttore
 
     SPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione) {
-        this(keyCode, type, defaultValue, descrizione, null, false);
+        this(keyCode, type, defaultValue, descrizione, false);
     }// fine del costruttore
 
-    SPref(final String keyCode, final AETypePref type, final Object defaultValue, boolean dinamica) {
-        this(keyCode, type, defaultValue, DESCRIZIONE, null, dinamica);
-    }// fine del costruttore
 
-    SPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione, AITypePref typeEnum, boolean dinamica) {
+    SPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione, boolean dinamica) {
         this.keyCode = keyCode;
         this.type = type;
         this.defaultValue = defaultValue;
         this.descrizione = descrizione;
-        this.typeEnum = typeEnum;
+        if (type == AETypePref.enumerationType) {
+            this.typeEnum = (AITypePref) defaultValue;
+        }
         this.dinamica = dinamica;
     }// fine del costruttore
 
