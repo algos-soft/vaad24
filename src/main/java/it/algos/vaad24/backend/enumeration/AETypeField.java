@@ -41,13 +41,13 @@ public enum AETypeField {
     //    onedecimal,
 
     combo(8, 10),
-//    stringLinkClassCombo(10, 14),
+    //    stringLinkClassCombo(10, 14),
 
     //    multicombo,
     combolinkato(8, 8),
 
     enumerationString(8, 8),
-    enumerationType(8, 8),
+    enumerationType(true,8, 8),
     gridShowOnly(0, 20),
 
     //    dateNotEnabled,
@@ -71,8 +71,14 @@ public enum AETypeField {
 
     private double widthField;
 
+    private boolean customField = false;
 
     AETypeField(double widthColumn, double widthField) {
+        this(false, widthColumn, widthField);
+    }
+
+    AETypeField(boolean customField, double widthColumn, double widthField) {
+        this.customField = customField;
         this.widthColumn = widthColumn;
         this.widthField = widthField;
     }
@@ -91,4 +97,7 @@ public enum AETypeField {
         return widthField;
     }
 
+    public boolean isCustomField() {
+        return customField;
+    }
 }

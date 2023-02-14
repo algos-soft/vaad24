@@ -10,7 +10,7 @@ import com.vaadin.flow.component.customfield.*;
  * Date: Mon, 13-Feb-2023
  * Time: 20:03
  */
-public abstract class AField extends CustomField implements HasValue {
+public abstract class AField<O> extends CustomField implements HasValue {
 
     @Override
     protected Object generateModelValue() {

@@ -255,6 +255,7 @@ public abstract class CrudDialog extends Dialog {
     protected void fixBody() {
         AETypeField type;
         AbstractSinglePropertyField field;
+        AComboField aField;
         Class enumClazz;
         Class linkClazz;
         boolean hasFocus = false;
@@ -273,87 +274,95 @@ public abstract class CrudDialog extends Dialog {
                 caption = annotationService.getCaption(currentItem.getClass(), key); ;
                 nullSelectionAllowed = annotationService.nullSelectionAllowed(currentItem.getClass(), key); ;
 
-                field = switch (type) {
-                    case text -> new TextField(caption);
-                    case integer -> new IntegerField(caption);
-                    case lungo -> new TextField(caption);
-                    case booleano -> new Checkbox(caption);
-                    case enumerationString -> {
-                        combo = new ComboBox(caption);
-                        combo.setClearButtonVisible(nullSelectionAllowed);
-                        try {
-                            enumObjects = annotationService.getListaValoriEnum(currentItem.getClass(), key);
-                            if (enumObjects != null) {
-                                combo.setItems(enumObjects);
-                            }
-                        } catch (Exception unErrore) {
-                            logger.error(new WrapLog().exception(unErrore).usaDb());
-                        }
-                        yield combo;
-                    }
-                    case enumerationType -> {
-                        enumField = new EnumTypeField();
-                        combo = new ComboBox(caption);
-                        combo.setClearButtonVisible(nullSelectionAllowed);
-                        try {
-                            enumClazz = annotationService.getEnumClazz(currentItem.getClass(), key);
-                            Object[] elementi = enumClazz.getEnumConstants();
-                            if (elementi != null) {
-                                enumObjects = Arrays.asList(elementi);
-                                combo.setItems(enumObjects);
-                            }
-                        } catch (Exception unErrore) {
-                            logger.error(new WrapLog().exception(unErrore).usaDb());
-                        }
-                        yield combo;
-                    }
-                    case link -> {
-                        combo = new ComboBox(caption);
-                        combo.setClearButtonVisible(nullSelectionAllowed);
-
-                        try {
-                            linkClazz = annotationService.getLinkClazz(currentItem.getClass(), key);
-                            Object obj = appContext.getBean(linkClazz);
-                            if (obj instanceof CrudBackend backend) {
-                                items = backend.findAll();
-                                if (items != null) {
-                                    combo.setItems(items);
+                if (!type.isCustomField()) {
+                    field = switch (type) {
+                        case text -> new TextField(caption);
+                        case integer -> new IntegerField(caption);
+                        case lungo -> new TextField(caption);
+                        case booleano -> new Checkbox(caption);
+                        case enumerationString -> {
+                            combo = new ComboBox(caption);
+                            combo.setClearButtonVisible(nullSelectionAllowed);
+                            try {
+                                enumObjects = annotationService.getListaValoriEnum(currentItem.getClass(), key);
+                                if (enumObjects != null) {
+                                    combo.setItems(enumObjects);
                                 }
+                            } catch (Exception unErrore) {
+                                logger.error(new WrapLog().exception(unErrore).usaDb());
                             }
-                        } catch (Exception unErrore) {
-                            logger.error(new WrapLog().exception(unErrore).usaDb());
+                            yield combo;
                         }
-                        yield combo;
-                    }
-                    case localDateTime -> new DateTimePicker(caption);
-                    case localDate -> new DatePicker(caption);
-                    case localTime -> new TimePicker(caption);
-                    default -> {
-                        logger.error(new WrapLog().exception(new AlgosException("Manca il case dello switch")).usaDb());
-                        yield new TextField(key);
-                    }
-                };
+                        case link -> {
+                            combo = new ComboBox(caption);
+                            combo.setClearButtonVisible(nullSelectionAllowed);
 
-                formLayout.add(field);
-                if (type == AETypeField.lungo) {
-                    String message = String.format("%s deve contenere solo caratteri numerici", key);
-                    StringToLongConverter longConverter = new StringToLongConverter(0L, message);
-                    binder.forField(field)
-                            .withConverter(longConverter)
-                            .bind(key);
+                            try {
+                                linkClazz = annotationService.getLinkClazz(currentItem.getClass(), key);
+                                Object obj = appContext.getBean(linkClazz);
+                                if (obj instanceof CrudBackend backend) {
+                                    items = backend.findAll();
+                                    if (items != null) {
+                                        combo.setItems(items);
+                                    }
+                                }
+                            } catch (Exception unErrore) {
+                                logger.error(new WrapLog().exception(unErrore).usaDb());
+                            }
+                            yield combo;
+                        }
+                        case localDateTime -> new DateTimePicker(caption);
+                        case localDate -> new DatePicker(caption);
+                        case localTime -> new TimePicker(caption);
+                        default -> {
+                            logger.error(new WrapLog().exception(new AlgosException("Manca il case dello switch")).usaDb());
+                            yield new TextField(key);
+                        }
+                    };
+
+                    formLayout.add(field);
+                    if (type == AETypeField.lungo) {
+                        String message = String.format("%s deve contenere solo caratteri numerici", key);
+                        StringToLongConverter longConverter = new StringToLongConverter(0L, message);
+                        binder.forField(field)
+                                .withConverter(longConverter)
+                                .bind(key);
+                    }
+                    else {
+                        binder.forField(field).bind(key);
+                    }
+
+                    if (hasFocus && field instanceof TextField textField) {
+                        textField.focus();
+                        textField.setAutoselect(true);
+                    }
                 }
                 else {
-                    binder.forField(field).bind(key);
-                }
+                    aField = switch (type) {
+                        case enumerationType -> {
+                            aField = new AComboField();
+                            try {
+                                enumClazz = annotationService.getEnumClazz(currentItem.getClass(), key);
+                                Object[] elementi = enumClazz.getEnumConstants();
+                                if (elementi != null) {
+                                    enumObjects = Arrays.asList(elementi);
+                                    aField = new AComboField(enumObjects);
+                                }
+                            } catch (Exception unErrore) {
+                                logger.error(new WrapLog().exception(unErrore).usaDb());
+                            }
+                            yield aField;
+                        }
+                        default -> {
+                            logger.error(new WrapLog().exception(new AlgosException("Manca il case dello switch")).usaDb());
+                            yield null;
+                        }
+                    };
 
-                if (hasFocus && field instanceof TextField textField) {
-                    textField.focus();
-                    textField.setAutoselect(true);
+                    formLayout.add(aField);
+                    binder.forField(aField).bind(key);
                 }
             }
-            enumField = new EnumTypeField();
-            formLayout.add(enumField);
-            binder.forField(enumField).bind("typeType");
 
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(unErrore).usaDb());

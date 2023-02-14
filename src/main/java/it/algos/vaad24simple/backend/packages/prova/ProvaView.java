@@ -52,7 +52,7 @@ public class ProvaView extends CrudView {
         super.fixPreferenze();
 
         super.gridPropertyNamesList = Arrays.asList("descrizione", "continenti", "typeString"); // controllare la congruità con la Entity
-        super.formPropertyNamesList = Arrays.asList("descrizione", "continenti", "typeString"); // controllare la congruità con la Entity
+        super.formPropertyNamesList = Arrays.asList("descrizione", "continenti", "typeString","typeType"); // controllare la congruità con la Entity
         super.riordinaColonne = true; //se rimane true, uguale al default, si può cancellare
         super.usaBottoneRefresh = false; //se rimane false, uguale al default, si può cancellare
         super.usaBottoneDeleteReset = false; //se rimane false, uguale al default, si può cancellare
