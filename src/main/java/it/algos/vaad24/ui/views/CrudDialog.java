@@ -347,6 +347,8 @@ public abstract class CrudDialog extends Dialog {
                                 if (elementi != null) {
                                     enumObjects = Arrays.asList(elementi);
                                     aField = new AComboField(enumObjects);
+                                    aField.setLabel(key);
+                                    aField.setSizeFull();
                                 }
                             } catch (Exception unErrore) {
                                 logger.error(new WrapLog().exception(unErrore).usaDb());

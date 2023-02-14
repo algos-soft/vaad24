@@ -70,3 +70,8 @@ are needed after this. See Date/Time conversion below.
 == Icons
 
 * Vaadin [https://vaadin.com/docs/latest/components/icons]
+
+
+== Enums
+
+* Baeldung [https://www.baeldung.com/a-guide-to-java-enums]

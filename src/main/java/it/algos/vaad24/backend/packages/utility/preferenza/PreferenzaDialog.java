@@ -19,6 +19,7 @@ import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.fields.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
@@ -70,6 +71,8 @@ public class PreferenzaDialog extends Dialog {
 
     @Autowired
     public LogService logger;
+    @Autowired
+    public AnnotationService annotationService;
 
     @Autowired
     public ArrayService arrayService;
@@ -297,6 +300,9 @@ public class PreferenzaDialog extends Dialog {
 
     protected void sincroValueToPresentation() {
         valueLayout.removeAll();
+        Class enumClazz;
+        List enumObjects;
+        AComboField aField;
 
         if (type.getValue() == null) {
             logger.warn(new WrapLog().exception(new AlgosException("Type senza valore")));
@@ -348,23 +354,32 @@ public class PreferenzaDialog extends Dialog {
                 valueLayout.add(pickerField);
             }
             case enumerationType -> {
-                ComboBox<String> combo = new ComboBox<>();
-                combo.setRequired(true);
-                combo.setAllowCustomValue(false);
-                combo.setClearButtonVisible(false);
-                combo.setReadOnly(false);
-                combo.addValueChangeListener(event -> sincroCombo());
-                String allEnumSelection = (String) type.getValue().bytesToObject(currentItem.getValue());
-                String allValues = textService.getEnumAll(allEnumSelection);
-                String selectedValue = textService.getEnumValue(allEnumSelection);
-                List<String> items = arrayService.getList(allValues);
-                if (items != null) {
-                    combo.setItems(items);
-                    if (items.contains(selectedValue)) {
-                        combo.setValue(selectedValue);
-                    }
-                }
-                valueLayout.add(combo);
+
+                //                enumClazz = annotationService.getEnumClazz(currentItem.getClass());
+//                Object[] elementi = enumClazz.getEnumConstants();
+//                if (elementi != null) {
+//                    enumObjects = Arrays.asList(elementi);
+//                    aField = new AComboField(enumObjects);
+//                    aField.setSizeFull();
+//                }
+//                valueLayout.add(aField);
+//                ComboBox<String> combo = new ComboBox<>();
+//                combo.setRequired(true);
+//                combo.setAllowCustomValue(false);
+//                combo.setClearButtonVisible(false);
+//                combo.setReadOnly(false);
+//                combo.addValueChangeListener(event -> sincroCombo());
+//                String allEnumSelection = (String) type.getValue().bytesToObject(currentItem.getValue());
+//                String allValues = textService.getEnumAll(allEnumSelection);
+//                String selectedValue = textService.getEnumValue(allEnumSelection);
+//                List<String> items = arrayService.getList(allValues);
+//                if (items != null) {
+//                    combo.setItems(items);
+//                    if (items.contains(selectedValue)) {
+//                        combo.setValue(selectedValue);
+//                    }
+//                }
+//                valueLayout.add(combo);
             }
 
             case enumerationString -> {

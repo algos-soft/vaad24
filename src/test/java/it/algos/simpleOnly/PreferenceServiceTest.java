@@ -184,6 +184,16 @@ public class PreferenceServiceTest extends AlgosIntegrationTest {
         //        Assert.assertEquals(previsto, ottenuto);
     }
 
+    @Test
+    @Order(30)
+    @DisplayName("30 - Test enumeration")
+    public void enumeration() {
+        sorgente = "AEKeyFile.esistente";
+        Object alfa=   AEKeyFile.esistente;
+        Object istanza = appContext.getBean(sorgente);
+        Assert.assertNotNull(istanza);
+    }
+
     public void printPrefA(List lista) {
         Assert.assertNotNull(lista);
         if (lista.size() > 0) {
