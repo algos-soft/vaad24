@@ -115,22 +115,16 @@ public class FileService extends AbstractService {
 
         if (directoryToBeChecked.exists()) {
             if (directoryToBeChecked.isDirectory()) {
-                Object alfa = getSubDirName(directoryToBeChecked.getAbsolutePath());
-                Object beta = getFilesPath(directoryToBeChecked.getAbsolutePath());
-                Object gamma = getFilesName(directoryToBeChecked.getAbsolutePath());
                 message = String.format("Trovata la directory %s", directoryToBeChecked.getAbsolutePath());
-                //                logger.info(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
                 return result.validMessage(message);
             }
             else {
                 message = String.format("%s%s%s", NON_E_DIRECTORY, FORWARD, directoryToBeChecked.getAbsolutePath());
-                //                logger.error(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
                 return result.errorMessage(message);
             }
         }
         else {
             message = String.format("%s%s%s", NON_ESISTE_DIRECTORY, FORWARD, directoryToBeChecked.getAbsolutePath());
-            //            logger.info(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
             return result.errorMessage(message);
         }
     }

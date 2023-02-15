@@ -385,8 +385,8 @@ public class PreferenzaDialog extends Dialog {
             case enumerationType -> {
                 enumStringhe = new ArrayList<>();
                 enumPref = preferenceService.getPref(currentItem.code);
-                Object gamma = enumPref.getEnumClazz();
-                Object[] elementi = ((Class<?>) gamma).getEnumConstants();
+                enumClazz = enumPref.getEnumClazz();
+                Object[] elementi = ((Class<?>) enumClazz).getEnumConstants();
                 for (Object obj : elementi) {
                     if (obj instanceof AITypePref enumeration) {
                         enumStringhe.add(enumeration.toString());
