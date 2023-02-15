@@ -19,17 +19,17 @@ import java.util.*;
  * Time: 13:34
  */
 public enum SPref implements AIGenPref {
-    string("string", AETypePref.string, "stringa", DESCRIZIONE_PREFERENZA),
-    bool("bool", AETypePref.bool, false, DESCRIZIONE_PREFERENZA),
-    integer("integer", AETypePref.integer, 0, DESCRIZIONE_PREFERENZA, true),
-    lungo("lungo", AETypePref.lungo, 0L, DESCRIZIONE_PREFERENZA),
-    localDateTime("localDateTime", AETypePref.localdatetime, ROOT_DATA_TIME, DESCRIZIONE_PREFERENZA, true),
-    localDate("localDate", AETypePref.localdate, ROOT_DATA, DESCRIZIONE_PREFERENZA, true),
-    localTime("localTime", AETypePref.localtime, ROOT_TIME, DESCRIZIONE_PREFERENZA, true),
-    email("email", AETypePref.email, "mail", DESCRIZIONE_PREFERENZA),
-    enumerationString("enumerationString", AETypePref.enumerationString, "alfa,beta,gamma;beta", DESCRIZIONE_PREFERENZA),
-    enumerationTypeA("enumerationTypeA", AETypePref.enumerationType, AELogLevel.info, DESCRIZIONE_PREFERENZA),
-    enumerationTypeB("enumerationTypeB", AETypePref.enumerationType, AEFontSize.em9, DESCRIZIONE_PREFERENZA),
+    string("string", AETypePref.string, "stringa", DESCRIZIONE_PREFERENZA + "stringa"),
+    bool("bool", AETypePref.bool, false, DESCRIZIONE_PREFERENZA + "bool"),
+    integer("integer", AETypePref.integer, 0, DESCRIZIONE_PREFERENZA + "integer", true),
+    lungo("lungo", AETypePref.lungo, 0L, DESCRIZIONE_PREFERENZA + "lungo"),
+    localDateTime("localDateTime", AETypePref.localdatetime, ROOT_DATA_TIME, DESCRIZIONE_PREFERENZA + "localDateTime", true),
+    localDate("localDate", AETypePref.localdate, ROOT_DATA, DESCRIZIONE_PREFERENZA + "localDate", true),
+    localTime("localTime", AETypePref.localtime, ROOT_TIME, DESCRIZIONE_PREFERENZA + "localTime", true),
+    email("email", AETypePref.email, "mail", DESCRIZIONE_PREFERENZA + "email"),
+    enumerationString("enumerationString", AETypePref.enumerationString, "alfa,beta,gamma;beta", DESCRIZIONE_PREFERENZA + "stringa"),
+    enumerationTypeA("enumerationTypeA", AETypePref.enumerationType, AELogLevel.info, DESCRIZIONE_PREFERENZA_ENUMERATION + "AELogLevel"),
+    enumerationTypeB("enumerationTypeB", AETypePref.enumerationType, AEFontSize.em9, DESCRIZIONE_PREFERENZA_ENUMERATION + "AEFontSize"),
 
     ;
 
@@ -67,6 +67,7 @@ public enum SPref implements AIGenPref {
 
     private TextService text;
 
+    private Class<?> enumClazz;
 
     SPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione) {
         this(keyCode, type, defaultValue, descrizione, false);
@@ -76,12 +77,25 @@ public enum SPref implements AIGenPref {
     SPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione, boolean dinamica) {
         this.keyCode = keyCode;
         this.type = type;
-        this.defaultValue = defaultValue;
         this.descrizione = descrizione;
-        if (type == AETypePref.enumerationType) {
-            this.typeEnum = (AITypePref) defaultValue;
-        }
         this.dinamica = dinamica;
+        if (type == AETypePref.enumerationType) {
+            if (defaultValue instanceof AITypePref enumeration) {
+                this.defaultValue = enumeration.toString();
+                this.typeEnum = enumeration;
+                this.enumClazz = typeEnum.getClass();
+            }
+            else {
+                this.defaultValue = defaultValue;
+                this.typeEnum = null;
+                this.enumClazz = null;
+            }
+        }
+        else {
+            this.defaultValue = defaultValue;
+            this.typeEnum = null;
+            this.enumClazz = null;
+        }
     }// fine del costruttore
 
     public static List getAll() {
@@ -210,6 +224,10 @@ public enum SPref implements AIGenPref {
 
     public boolean isDinamica() {
         return dinamica;
+    }
+
+    public Class<?> getEnumClazz() {
+        return enumClazz;
     }
 
     @Component

@@ -21,6 +21,7 @@ public class SimpleCost {
 
     public static final String QUALIFIER_PREFERENCES_SIMPLE = "preferencesSimple";
 
-    public static final String DESCRIZIONE_PREFERENZA = "Test di preferenza per type. Solo in questo progetto";
+    public static final String DESCRIZIONE_PREFERENZA = "Solo in questo progetto. Test per una preferenza di type: ";
+    public static final String DESCRIZIONE_PREFERENZA_ENUMERATION = "Solo in questo progetto. Test per una preferenza/enumeration di type: ";
 
 }

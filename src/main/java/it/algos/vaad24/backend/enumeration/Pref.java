@@ -69,6 +69,8 @@ public enum Pref implements AIGenPref {
 
     private TextService text;
 
+    private Class<?> enumClazz;
+
     Pref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione) {
         this(keyCode, type, defaultValue, descrizione, false);
     }// fine del costruttore
@@ -80,7 +82,6 @@ public enum Pref implements AIGenPref {
         this.descrizione = descrizione;
         this.dinamica = dinamica;
     }// fine del costruttore
-
 
 
     public static List getAll() {
@@ -215,6 +216,9 @@ public enum Pref implements AIGenPref {
 
     public boolean isDinamica() {
         return dinamica;
+    }
+    public Class<?> getEnumClazz() {
+        return enumClazz;
     }
 
     @Component

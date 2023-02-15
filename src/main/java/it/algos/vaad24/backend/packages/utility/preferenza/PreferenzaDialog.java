@@ -20,6 +20,7 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.fields.*;
+import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
@@ -71,11 +72,15 @@ public class PreferenzaDialog extends Dialog {
 
     @Autowired
     public LogService logger;
+
     @Autowired
     public AnnotationService annotationService;
 
     @Autowired
     public ArrayService arrayService;
+
+    @Autowired
+    public PreferenceService preferenceService;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -302,7 +307,10 @@ public class PreferenzaDialog extends Dialog {
         valueLayout.removeAll();
         Class enumClazz;
         List enumObjects;
+        List<String> enumStringhe;
         AComboField aField;
+        AIGenPref enumPref;
+        AITypePref typePref;
 
         if (type.getValue() == null) {
             logger.warn(new WrapLog().exception(new AlgosException("Type senza valore")));
@@ -353,34 +361,6 @@ public class PreferenzaDialog extends Dialog {
                 pickerField.setRequired(true);
                 valueLayout.add(pickerField);
             }
-            case enumerationType -> {
-
-                //                enumClazz = annotationService.getEnumClazz(currentItem.getClass());
-//                Object[] elementi = enumClazz.getEnumConstants();
-//                if (elementi != null) {
-//                    enumObjects = Arrays.asList(elementi);
-//                    aField = new AComboField(enumObjects);
-//                    aField.setSizeFull();
-//                }
-//                valueLayout.add(aField);
-//                ComboBox<String> combo = new ComboBox<>();
-//                combo.setRequired(true);
-//                combo.setAllowCustomValue(false);
-//                combo.setClearButtonVisible(false);
-//                combo.setReadOnly(false);
-//                combo.addValueChangeListener(event -> sincroCombo());
-//                String allEnumSelection = (String) type.getValue().bytesToObject(currentItem.getValue());
-//                String allValues = textService.getEnumAll(allEnumSelection);
-//                String selectedValue = textService.getEnumValue(allEnumSelection);
-//                List<String> items = arrayService.getList(allValues);
-//                if (items != null) {
-//                    combo.setItems(items);
-//                    if (items.contains(selectedValue)) {
-//                        combo.setValue(selectedValue);
-//                    }
-//                }
-//                valueLayout.add(combo);
-            }
 
             case enumerationString -> {
                 ComboBox<String> combo = new ComboBox<>();
@@ -401,6 +381,31 @@ public class PreferenzaDialog extends Dialog {
                 }
                 valueLayout.add(combo);
             }
+
+            case enumerationType -> {
+                enumStringhe = new ArrayList<>();
+                enumPref = preferenceService.getPref(currentItem.code);
+                Object gamma = enumPref.getEnumClazz();
+                Object[] elementi = ((Class<?>) gamma).getEnumConstants();
+                for (Object obj : elementi) {
+                    if (obj instanceof AITypePref enumeration) {
+                        enumStringhe.add(enumeration.toString());
+                    }
+                }
+
+                if (elementi != null) {
+                    aField = new AComboField(enumStringhe);
+                    aField.setLabel(currentItem.code);
+                    aField.setSizeFull();
+
+                    String selectedValue = (String) type.getValue().bytesToObject(currentItem.getValue());
+                    if (enumStringhe.contains(selectedValue)) {
+                        aField.setValue(selectedValue);
+                    }
+                    valueLayout.add(aField);
+                }
+            }
+
             default -> valueLayout.add(new Label("Type non ancora gestito"));
         }
     }
@@ -478,7 +483,7 @@ public class PreferenzaDialog extends Dialog {
                     valido = true;
                 }
             }
-            case enumerationType -> {
+            case enumerationString -> {
                 if (comp != null && comp instanceof ComboBox combo) {
                     String value = (String) combo.getValue();
                     String allEnumSelection = (String) type.getValue().bytesToObject(currentItem.getValue());
@@ -487,11 +492,9 @@ public class PreferenzaDialog extends Dialog {
                     valido = true;
                 }
             }
-            case enumerationString -> {
-                if (comp != null && comp instanceof ComboBox combo) {
+            case enumerationType -> {
+                if (comp != null && comp instanceof AComboField combo) {
                     String value = (String) combo.getValue();
-                    String allEnumSelection = (String) type.getValue().bytesToObject(currentItem.getValue());
-                    value = textService.setEnumValue(allEnumSelection, value);
                     currentItem.setValue(type.getValue().objectToBytes(value));
                     valido = true;
                 }
@@ -525,8 +528,6 @@ public class PreferenzaDialog extends Dialog {
         annullaButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
         annullaButton.addClickShortcut(Key.ARROW_LEFT, KeyModifier.CONTROL); //@todo non funziona
         layout.add(annullaButton);
-
-        //        layout.add(spazioVuotoEspandibile);
 
         saveButton.setText(textSaveButton);
         saveButton.getElement().setAttribute("theme", operation == CrudOperation.UPDATE ? "primary" : "secondary");
@@ -574,7 +575,22 @@ public class PreferenzaDialog extends Dialog {
 
         if (!currentItem.getValore().equals(oldEntity.getValore())) {
             if (!currentItem.isDinamica()) {
-                message = String.format("Modificata [%s]: %s%s%s", currentItem.code, oldEntity.getValore(), FORWARD, currentItem.getValore());
+                switch (currentItem.type) {
+                    case enumerationString -> {
+                        String allValuesOld = (String) oldEntity.getValore();
+                        String allValuesNew = (String) currentItem.getValore();
+                        String valoriBase = textService.getEnumAll(allValuesOld);
+                        String ante = textService.getEnumValue(allValuesOld);
+                        String post = textService.getEnumValue(allValuesNew);
+
+                        message = String.format("Modificata [%s] (%s): %s%s%s", currentItem.code, valoriBase, ante, FORWARD, post);
+                    }
+                    case enumerationType -> {
+                        String enumName = currentItem.getEnumClazzName();
+                        message = String.format("Modificata [%s] (%s): %s%s%s", currentItem.code, enumName, oldEntity.getValore(), FORWARD, currentItem.getValore());
+                    }
+                    default -> message = String.format("Modificata [%s]: %s%s%s", currentItem.code, oldEntity.getValore(), FORWARD, currentItem.getValore());
+                }
                 logger.info(new WrapLog().type(AETypeLog.preferenze).message(message).usaDb());
             }
         }

@@ -81,7 +81,7 @@ public class VaadPref implements AIEnumPref, ServletContextListener {
      * Controlla che la entity non esista già <br>
      */
     protected void crea(final Pref pref) {
-        crea(pref.getKeyCode(), pref.getType(), pref.getDefaultValue(), pref.getDescrizione(), false, true,pref.isDinamica());
+        crea(pref.getKeyCode(), pref.getType(), pref.getDefaultValue(), pref.getDescrizione(), false, true, pref.isDinamica(), null);
     }
 
     /**
@@ -89,7 +89,7 @@ public class VaadPref implements AIEnumPref, ServletContextListener {
      * Controlla che la entity non esista già <br>
      */
     protected void crea(final String keyCode, final AETypePref type, Object value, final String descrizione,
-                        final boolean needRiavvio, final boolean vaad23, final boolean dinamica) {
+                        final boolean needRiavvio, final boolean vaad23, final boolean dinamica, final Class<?> enumClazz) {
         Preferenza preferenza = null;
         String message;
 
@@ -117,12 +117,12 @@ public class VaadPref implements AIEnumPref, ServletContextListener {
             return;
         }
 
-//        if (type == AETypePref.enumerationType && value instanceof AITypePref) {
-//            Object obj = ((AITypePref) value).getPref();
-//            if (obj instanceof String valueTxt) {
-//                value = valueTxt;
-//            }
-//        }
+        //        if (type == AETypePref.enumerationType && value instanceof AITypePref) {
+        //            Object obj = ((AITypePref) value).getPref();
+        //            if (obj instanceof String valueTxt) {
+        //                value = valueTxt;
+        //            }
+        //        }
 
         preferenza = new Preferenza();
         preferenza.code = keyCode;
@@ -135,7 +135,7 @@ public class VaadPref implements AIEnumPref, ServletContextListener {
         preferenza.dinamica = dinamica;
         preferenza.descrizione = descrizione;
         preferenza.descrizioneEstesa = descrizione;
-        preferenza.enumClazzName = AETypeLog.class.getSimpleName();
+        preferenza.enumClazzName = enumClazz != null ? enumClazz.getSimpleName() : null;
 
         backend.add(preferenza);
     }

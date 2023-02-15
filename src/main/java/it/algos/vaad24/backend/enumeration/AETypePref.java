@@ -88,7 +88,7 @@ public enum AETypePref implements AITypePref {
                 bytes = intToByteArray(num);
             }
             if (obj instanceof String) {
-                bytes = intToByteArray(Integer.valueOf((String)obj));
+                bytes = intToByteArray(Integer.valueOf((String) obj));
             }
 
             return bytes;
@@ -115,7 +115,7 @@ public enum AETypePref implements AITypePref {
                 bytes = longToByteArray(lungo);
             }
             if (obj instanceof String) {
-                bytes = longToByteArray( Long.valueOf((String) obj));
+                bytes = longToByteArray(Long.valueOf((String) obj));
             }
 
             return bytes;
@@ -255,12 +255,12 @@ public enum AETypePref implements AITypePref {
         }
     },// end of single enumeration
 
-    enumerationType("enumType", "black") {
+    enumerationString("enumString", "black") {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
-            if (obj instanceof AITypePref enumeration) {
-                bytes =  enumeration.getPref().getBytes(Charset.forName("UTF-8"));
+            if (obj instanceof String stringa) {
+                bytes = stringa.getBytes(Charset.forName("UTF-8"));
             }
             return bytes;
         }
@@ -276,14 +276,23 @@ public enum AETypePref implements AITypePref {
 
         @Override
         public String bytesToString(byte[] bytes) {
-            return bytesToObject(bytes).substring(bytesToObject(bytes).indexOf(PUNTO_VIRGOLA) + 1);
+            String obj = bytesToObject(bytes);
+            if (obj.contains(VIRGOLA)) {
+                return obj.substring(bytesToObject(bytes).indexOf(PUNTO_VIRGOLA) + 1);
+            }
+            else {
+                return obj;
+            }
         }
     },// end of single enumeration
 
-    enumerationString("enumString", "black") {
+    enumerationType("enumType", "black") {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
+            if (obj instanceof AITypePref enumeration) {
+                bytes = enumeration.getPref().getBytes(Charset.forName("UTF-8"));
+            }
             if (obj instanceof String stringa) {
                 bytes = stringa.getBytes(Charset.forName("UTF-8"));
             }
@@ -292,7 +301,7 @@ public enum AETypePref implements AITypePref {
 
         @Override
         public String bytesToObject(byte[] bytes) {
-            String obj = "";
+            String obj = VUOTA;
             if (bytes != null) {
                 obj = new String(bytes, Charset.forName("UTF-8"));
             }
@@ -301,7 +310,13 @@ public enum AETypePref implements AITypePref {
 
         @Override
         public String bytesToString(byte[] bytes) {
-            return bytesToObject(bytes).substring(bytesToObject(bytes).indexOf(PUNTO_VIRGOLA) + 1);
+            String obj = bytesToObject(bytes);
+            if (obj.contains(VIRGOLA)) {
+                return obj.substring(bytesToObject(bytes).indexOf(PUNTO_VIRGOLA) + 1);
+            }
+            else {
+                return obj;
+            }
         }
     },// end of single enumeration
 

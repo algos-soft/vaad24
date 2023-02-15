@@ -51,7 +51,7 @@ public class SimplePref extends VaadPref {
      * Controlla che la entity non esista già <br>
      */
     protected void crea(final SPref pref) {
-        crea(pref.getKeyCode(), pref.getType(), pref.getDefaultValue(), pref.getDescrizione(), false, false, pref.isDinamica());
+        crea(pref.getKeyCode(), pref.getType(), pref.getDefaultValue(), pref.getDescrizione(), false, false, pref.isDinamica(), pref.getEnumClazz());
     }
 
 }

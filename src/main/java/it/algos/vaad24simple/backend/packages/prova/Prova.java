@@ -37,7 +37,10 @@ public class Prova extends AEntity {
     public String typeString;
 
     @AIField(type = AETypeField.enumerationType, enumClazz = AETypeVers.class)
-    public String typeType;
+    public String typeA;
+
+    @AIField(type = AETypeField.enumerationType, enumClazz = AESchedule.class)
+    public String typeB;
 
     @Override
     public String toString() {

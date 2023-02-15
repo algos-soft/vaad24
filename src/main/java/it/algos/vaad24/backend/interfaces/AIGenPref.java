@@ -53,4 +53,6 @@ public interface AIGenPref {
 
     void setEnumCurrentObj(AITypePref currentValue);
 
+    Class<?> getEnumClazz();
+
 }// end of interface
