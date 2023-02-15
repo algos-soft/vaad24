@@ -159,8 +159,10 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         span.add(ASpan.text(String.format("Vaad24=true per le preferenze del programma base '%s'", VaadVar.frameworkVaadin24)).verde());
         span.add(ASpan.text(String.format("Vaad24=false per le preferenze del programma corrente '%s'", VaadVar.projectCurrent)).verde());
         span.add(ASpan.text("NeedRiavvio=true se la preferenza ha effetto solo dopo un riavvio del programma").verde());
-        span.add(ASpan.text("Le preferenze sono create/cancellate solo via hardcode (tramite una Enumeration)").rosso());
-        span.add(ASpan.text("Refresh ripristina nel database i valori di default annullando le successive modifiche").rosso());
+        span.add(ASpan.text("Default=true se la preferenza (non dinamica) ha lo stesso valore originario della Enumeration").verde());
+        span.add(ASpan.text("Dinamica=true se la preferenza viene modificata automaticamente dalle task (scheduled) del programma").verde());
+        span.add(ASpan.text("Le preferenze sono create/cancellate solo via hardcoded (tramite una Enumeration)").rosso());
+        span.add(ASpan.text("Refresh ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche").rosso());
     }
 
     /**
@@ -481,7 +483,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         }
 
         if (!almenoUnaModificata) {
-            message = "Reset preferenze - Tutte le preferenze avevano già il valore standard";
+            message = "Reset preferenze - Tutte le preferenze (escluse quelle dinamiche) avevano già il valore standard";
             logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
         }
 
