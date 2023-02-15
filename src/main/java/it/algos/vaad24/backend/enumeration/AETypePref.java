@@ -255,7 +255,7 @@ public enum AETypePref implements AITypePref {
         }
     },// end of single enumeration
 
-    enumerationString("enumString", "black") {
+    enumerationString("enumString", "orange") {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
@@ -286,7 +286,7 @@ public enum AETypePref implements AITypePref {
         }
     },// end of single enumeration
 
-    enumerationType("enumType", "black") {
+    enumerationType("enumType", "fuchsia") {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
