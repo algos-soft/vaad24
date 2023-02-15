@@ -35,25 +35,25 @@ public enum Pref implements AIGenPref {
     //--Valore java iniziale da convertire in byte[] a seconda del type
     private Object defaultValue;
 
+    //--descrizione breve ma comprensibile. Ulteriori (eventuali) informazioni nel campo 'note'
+    private String descrizione;
+
     //--Tipo AITypePref per AETypePref.enumerationType
     private AITypePref typeEnum;
-
-    //--preferenze singole per ogni company; usa un prefisso col codice della company
-    private boolean usaCompany;
-
-    //--preferenze generale del framework e NON specifica di un'applicazione
-    private boolean vaadFlow;
 
     //--preferenze che necessita di un riavvio del programma per avere effetto
     private boolean needRiavvio;
 
-    //--preferenze visibile agli admin se l'applicazione è usaSecurity=true
-    private boolean visibileAdmin;
-
     private boolean dinamica;
 
-    //--descrizione breve ma comprensibile. Ulteriori (eventuali) informazioni nel campo 'note'
-    private String descrizione;
+    private Class<?> enumClazz;
+
+
+    //--preferenze singole per ogni company; usa un prefisso col codice della company
+    private boolean usaCompany; // @todo da implementare
+
+    //--preferenze visibile agli admin se l'applicazione è usaSecurity=true
+    private boolean visibileAdmin; // @todo da implementare
 
     //--descrizione aggiuntiva eventuale
     private String note;
@@ -69,7 +69,6 @@ public enum Pref implements AIGenPref {
 
     private TextService text;
 
-    private Class<?> enumClazz;
 
     Pref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione) {
         this(keyCode, type, defaultValue, descrizione, false);
@@ -217,6 +216,16 @@ public enum Pref implements AIGenPref {
     public boolean isDinamica() {
         return dinamica;
     }
+
+    public boolean needRiavvio() {
+        return needRiavvio;
+    }
+
+    public boolean isVaad24() {
+        return true;
+    }
+
+
     public Class<?> getEnumClazz() {
         return enumClazz;
     }

@@ -1,8 +1,12 @@
 package it.algos.vaad24.backend.packages.utility.preferenza;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.boot.*;
+import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.logic.*;
+import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
@@ -66,6 +70,7 @@ public class PreferenzaBackend extends CrudBackend {
         return setValore(enumeration.getKeyCode(), newJavaValue);
     }
 
+
     public boolean setValore(final String keyCode, final Object newJavaValue) {
         boolean modificato = false;
         Object oldJavaValue;
@@ -83,6 +88,69 @@ public class PreferenzaBackend extends CrudBackend {
         return modificato;
     }
 
+    public void creaAll() {
+        for (AIGenPref preferenza : VaadVar.prefList) {
+            preferenzaBackend.crea(preferenza);
+        }
+    }
+
+
+    /**
+     * Inserimento di una preferenza del progetto base Vaadin24 <br>
+     * Controlla che la entity non esista già <br>
+     */
+    public void crea(final AIGenPref pref) {
+        String keyCode = pref.getKeyCode();
+        AETypePref type = pref.getType();
+        Object defaultValue = pref.getDefaultValue();
+        String descrizione = pref.getDescrizione();
+        boolean needRiavvio = pref.needRiavvio();
+        boolean vaad24 = pref.isVaad24();
+        boolean dinamica = pref.isDinamica();
+        Class<?> enumClazz = pref.getEnumClazz();
+
+        Preferenza preferenza;
+        String message;
+
+        if (existsByKeyCode(keyCode)) {
+            return;
+        }
+
+        if (textService.isEmpty(keyCode)) {
+            logger.error(new WrapLog().exception(new AlgosException("Manca il keyCode")).usaDb());
+            return;
+        }
+        if (type == null) {
+            message = String.format("Manca il type nella preferenza %s", keyCode);
+            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
+            return;
+        }
+        if (textService.isEmpty(descrizione)) {
+            message = String.format("Manca la descrizione nella preferenza %s", keyCode);
+            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
+            return;
+        }
+        if (defaultValue == null) {
+            message = String.format("Il valore della preferenza %s è nullo", keyCode);
+            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
+            return;
+        }
+
+        preferenza = new Preferenza();
+        preferenza.code = keyCode;
+        preferenza.type = type;
+        preferenza.value = type.objectToBytes(defaultValue);
+        preferenza.vaad23 = vaad24;
+        preferenza.usaCompany = false; //@todo da implementare
+        preferenza.needRiavvio = needRiavvio;
+        preferenza.visibileAdmin = false; //@todo da implementare
+        preferenza.dinamica = dinamica;
+        preferenza.descrizione = descrizione;
+        preferenza.descrizioneEstesa = descrizione;
+        preferenza.enumClazzName = enumClazz != null ? enumClazz.getSimpleName() : null;
+
+        this.add(preferenza);
+    }
 
     public boolean resetStandard(final AIGenPref prefEnum) {
         boolean modificato = false;

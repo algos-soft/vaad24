@@ -55,4 +55,11 @@ public interface AIGenPref {
 
     Class<?> getEnumClazz();
 
+    boolean isDinamica();
+
+    boolean needRiavvio();
+
+    //--preferenza generale del framework e NON specifica di un'applicazione
+    boolean isVaad24();
+
 }// end of interface

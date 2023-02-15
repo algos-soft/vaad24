@@ -118,6 +118,9 @@ public class VaadBoot implements ServletContextListener {
     @Autowired
     protected PreferenceService preferenceService;
 
+    @Autowired
+    protected PreferenzaBackend preferenzaBackend;
+
     /**
      * Constructor with @Autowired on setter. Usato quando ci sono sottoclassi. <br>
      * Per evitare di avere nel costruttore tutte le property che devono essere iniettate e per poterle aumentare <br>
@@ -158,7 +161,9 @@ public class VaadBoot implements ServletContextListener {
      */
     protected void inizia() {
         this.fixVariabili();
-        this.fixPreferenze();
+        this.creaEnumerationPreferenze();
+        this.fixEnumerationPreferenze();
+        this.creaPreferenzeMongoDB();
         logger.setUpIni();
 
         this.printInfo();
@@ -177,22 +182,41 @@ public class VaadBoot implements ServletContextListener {
     }
 
     /**
-     * Crea le Enumeration in memoria con la injection di SpringBoot <br>
-     * Aggiunge le singole Enumeration all lista globale <br>
+     * Crea le Enumeration in memoria <br>
+     * Aggiunge le singole Enumeration alla lista globale <br>
+     * NON usa la injection di SpringBoot <br>
      * NON crea le preferenze su mondoDB <br>
-     * Può essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public void fixPreferenze() {
+    public void creaEnumerationPreferenze() {
         for (Pref pref : Pref.getAllEnums()) {
             VaadVar.prefList.add(pref);
         }
+    }
 
+
+    /**
+     * Injection di SpringBoot <br>
+     * Usa la injection di SpringBoot per ogni Enumeration della lista globale <br>
+     * NON crea le preferenze su mondoDB <br>
+     * Non deve essere sovrascritto <br>
+     */
+    public void fixEnumerationPreferenze() {
         for (AIGenPref pref : VaadVar.prefList) {
             pref.setText(textService);
             pref.setLogger(logger);
             pref.setDate(dateService);
             pref.setPreferenceService(preferenceService);
         }
+    }
+
+
+    /**
+     * Crea le preferenze su mondoDB <br>
+     * Non deve essere sovrascritto <br>
+     */
+    public void creaPreferenzeMongoDB() {
+        preferenzaBackend.creaAll();
     }
 
     public void printInfo() {
@@ -330,7 +354,6 @@ public class VaadBoot implements ServletContextListener {
             String message = String.format("Non ho trovato la property %s nelle risorse", property);
             logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
         }
-
 
         /**
          * Lista dei moduli di menu del framework base, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>

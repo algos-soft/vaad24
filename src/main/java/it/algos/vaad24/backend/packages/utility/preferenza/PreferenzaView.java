@@ -70,6 +70,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
 
     @Autowired
     protected PreferenzaBackend backend;
+
     @Autowired
     protected ColumnService columnService;
 
@@ -99,6 +100,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
     protected IndeterminateCheckbox boxBoxRiavvio;
 
     protected IndeterminateCheckbox boxBoxDefault;
+
     protected IndeterminateCheckbox boxBoxDinamica;
 
     protected int elementiFiltrati;
@@ -163,6 +165,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         span.add(ASpan.text("Dinamica=true se la preferenza viene modificata automaticamente dalle task (scheduled) del programma").verde());
         span.add(ASpan.text("Le preferenze sono create/cancellate solo via hardcoded (tramite una Enumeration)").rosso());
         span.add(ASpan.text("Refresh ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche").rosso());
+        span.add(ASpan.text("Delete ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche").rosso());
     }
 
     /**
@@ -177,17 +180,17 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         layout.setMargin(false);
         layout.setClassName("confirm-dialog-buttons");
 
+        deleteButton = new Button();
+        deleteButton.getElement().setAttribute("theme", "error");
+        deleteButton.setIcon(new Icon(VaadinIcon.TRASH));
+        deleteButton.addClickListener(event -> ADelete.deleteAll(this::deleteAll));
+        layout.add(deleteButton);
+
         refreshButton = new Button();
         refreshButton.getElement().setAttribute("theme", "error");
         refreshButton.setIcon(new Icon(VaadinIcon.REFRESH));
-        refreshButton.addClickListener(e -> refresh());
+        refreshButton.addClickListener(e -> refreshDialog());
         layout.add(refreshButton);
-
-        addButton = new Button();
-        addButton.getElement().setAttribute("theme", "secondary");
-        addButton.setIcon(new Icon(VaadinIcon.PLUS));
-        addButton.addClickListener(e -> newItem());
-        //        layout.add(addButton);
 
         editButton = new Button();
         editButton.getElement().setAttribute("theme", "secondary");
@@ -195,13 +198,6 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         editButton.addClickListener(e -> updateItem());
         editButton.setEnabled(false);
         layout.add(editButton);
-
-        deleteButton = new Button();
-        deleteButton.getElement().setAttribute("theme", "secondary");
-        deleteButton.setIcon(new Icon(VaadinIcon.TRASH));
-        deleteButton.addClickListener(e -> deleteItem());
-        deleteButton.setEnabled(false);
-        //        layout.add(deleteButton);
 
         filter = new TextField();
         filter.setPlaceholder("Filter by code");
@@ -282,7 +278,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void fixColumns() {
-        Icon iconDB= new Icon(VaadinIcon.DATABASE);
+        Icon iconDB = new Icon(VaadinIcon.DATABASE);
         iconDB.setColor("blue");
 
         grid.addColumns("code", "type");
@@ -397,13 +393,13 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         dialog.open(this::saveHandler, this::deleteHandler, this::annullaHandler);
     }
 
-    public void deleteItem() {
-        Optional entityBean = grid.getSelectedItems().stream().findFirst();
-        if (entityBean.isPresent()) {
-            PreferenzaDialog dialog = appContext.getBean(PreferenzaDialog.class, entityBean.get(), CrudOperation.DELETE);
-            dialog.open(this::saveHandler, this::deleteHandler, this::annullaHandler);
-        }
-    }
+    //    public void deleteItem() {
+    //        Optional entityBean = grid.getSelectedItems().stream().findFirst();
+    //        if (entityBean.isPresent()) {
+    //            PreferenzaDialog dialog = appContext.getBean(PreferenzaDialog.class, entityBean.get(), CrudOperation.DELETE);
+    //            dialog.open(this::saveHandler, this::deleteHandler, this::annullaHandler);
+    //        }
+    //    }
 
     protected void sincroFiltri() {
         List<Preferenza> items = backend.findAll();
@@ -446,7 +442,6 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
                     .toList();
         }
 
-
         if (items != null) {
             grid.setItems((List) items);
             elementiFiltrati = items.size();
@@ -456,12 +451,24 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
 
     protected void sincroSelection(SelectionEvent event) {
         boolean singoloSelezionato = event.getAllSelectedItems().size() == 1;
+        deleteButton.setEnabled(!singoloSelezionato);
         refreshButton.setEnabled(!singoloSelezionato);
         editButton.setEnabled(singoloSelezionato);
-        deleteButton.setEnabled(singoloSelezionato);
     }
 
-    protected void refresh() {
+    protected void deleteAll() {
+        String message;
+
+        backend.deleteAll();
+        backend.creaAll();
+        grid.setItems(backend.findAll());
+
+        Avviso.message("Reset di tutte le preferenze").success().open();
+        message = "Tutte le preferenze sono state ricostruite col valore standard";
+        logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+    }
+
+    protected void refreshDialog() {
         appContext.getBean(DialogRefreshPreferenza.class).open(this::refreshAll);
     }
 
@@ -488,7 +495,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         }
 
         grid.setItems(backend.findAll());
-        Avviso.message("Reset preferenze").primary().open();
+        Avviso.message("Reset preferenze non dinamiche").success().open();
     }
 
     /**

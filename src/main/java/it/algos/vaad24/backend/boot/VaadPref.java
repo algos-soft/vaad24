@@ -2,16 +2,12 @@ package it.algos.vaad24.backend.boot;
 
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.enumeration.*;
-import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import it.algos.vaad24.backend.service.*;
-import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.event.*;
 
 import javax.servlet.*;
 
@@ -52,14 +48,14 @@ public class VaadPref implements AIEnumPref, ServletContextListener {
     @Autowired
     public LogService logger;
 
-    /**
-     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
-     * event, the application is ready to service Vaadin requests <br>
-     */
-    @EventListener(ContextRefreshedEvent.class)
-    public void onContextRefreshEvent() {
-        this.inizia();
-    }
+//    /**
+//     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
+//     * event, the application is ready to service Vaadin requests <br>
+//     */
+//    @EventListener(ContextRefreshedEvent.class)
+//    public void onContextRefreshEvent() {
+//        this.inizia();
+//    }
 
 
     /**
@@ -71,73 +67,73 @@ public class VaadPref implements AIEnumPref, ServletContextListener {
      * Eseguito quindi a ogni avvio/riavvio del server e NON a ogni sessione <br>
      */
     public void inizia() {
-        for (Pref pref : Pref.getAllEnums()) {
-            crea(pref);
-        }
+//        for (Pref pref : Pref.getAllEnums()) {
+//            crea(pref);
+//        }
     }
 
-    /**
-     * Inserimento di una preferenza del progetto base Vaadin23 <br>
-     * Controlla che la entity non esista già <br>
-     */
-    protected void crea(final Pref pref) {
-        crea(pref.getKeyCode(), pref.getType(), pref.getDefaultValue(), pref.getDescrizione(), false, true, pref.isDinamica(), null);
-    }
+//    /**
+//     * Inserimento di una preferenza del progetto base Vaadin23 <br>
+//     * Controlla che la entity non esista già <br>
+//     */
+//    protected void crea(final Pref pref) {
+//        crea(pref.getKeyCode(), pref.getType(), pref.getDefaultValue(), pref.getDescrizione(), false, true, pref.isDinamica(), null);
+//    }
 
-    /**
-     * Inserimento di una preferenza del progetto base Vaadin23 <br>
-     * Controlla che la entity non esista già <br>
-     */
-    protected void crea(final String keyCode, final AETypePref type, Object value, final String descrizione,
-                        final boolean needRiavvio, final boolean vaad23, final boolean dinamica, final Class<?> enumClazz) {
-        Preferenza preferenza = null;
-        String message;
-
-        if (backend.existsByKeyCode(keyCode)) {
-            return;
-        }
-
-        if (textService.isEmpty(keyCode)) {
-            logger.error(new WrapLog().exception(new AlgosException("Manca il keyCode")).usaDb());
-            return;
-        }
-        if (type == null) {
-            message = String.format("Manca il type nella preferenza %s", keyCode);
-            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
-            return;
-        }
-        if (textService.isEmpty(descrizione)) {
-            message = String.format("Manca la descrizione nella preferenza %s", keyCode);
-            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
-            return;
-        }
-        if (value == null) {
-            message = String.format("Il valore della preferenza %s è nullo", keyCode);
-            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
-            return;
-        }
-
-        //        if (type == AETypePref.enumerationType && value instanceof AITypePref) {
-        //            Object obj = ((AITypePref) value).getPref();
-        //            if (obj instanceof String valueTxt) {
-        //                value = valueTxt;
-        //            }
-        //        }
-
-        preferenza = new Preferenza();
-        preferenza.code = keyCode;
-        preferenza.type = type;
-        preferenza.value = type.objectToBytes(value);
-        preferenza.vaad23 = vaad23;
-        preferenza.usaCompany = false;
-        preferenza.needRiavvio = needRiavvio;
-        preferenza.visibileAdmin = false;
-        preferenza.dinamica = dinamica;
-        preferenza.descrizione = descrizione;
-        preferenza.descrizioneEstesa = descrizione;
-        preferenza.enumClazzName = enumClazz != null ? enumClazz.getSimpleName() : null;
-
-        backend.add(preferenza);
-    }
+//    /**
+//     * Inserimento di una preferenza del progetto base Vaadin23 <br>
+//     * Controlla che la entity non esista già <br>
+//     */
+//    protected void crea(final String keyCode, final AETypePref type, Object value, final String descrizione,
+//                        final boolean needRiavvio, final boolean vaad23, final boolean dinamica, final Class<?> enumClazz) {
+//        Preferenza preferenza = null;
+//        String message;
+//
+//        if (backend.existsByKeyCode(keyCode)) {
+//            return;
+//        }
+//
+//        if (textService.isEmpty(keyCode)) {
+//            logger.error(new WrapLog().exception(new AlgosException("Manca il keyCode")).usaDb());
+//            return;
+//        }
+//        if (type == null) {
+//            message = String.format("Manca il type nella preferenza %s", keyCode);
+//            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
+//            return;
+//        }
+//        if (textService.isEmpty(descrizione)) {
+//            message = String.format("Manca la descrizione nella preferenza %s", keyCode);
+//            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
+//            return;
+//        }
+//        if (value == null) {
+//            message = String.format("Il valore della preferenza %s è nullo", keyCode);
+//            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
+//            return;
+//        }
+//
+//        //        if (type == AETypePref.enumerationType && value instanceof AITypePref) {
+//        //            Object obj = ((AITypePref) value).getPref();
+//        //            if (obj instanceof String valueTxt) {
+//        //                value = valueTxt;
+//        //            }
+//        //        }
+//
+//        preferenza = new Preferenza();
+//        preferenza.code = keyCode;
+//        preferenza.type = type;
+//        preferenza.value = type.objectToBytes(value);
+//        preferenza.vaad23 = vaad23;
+//        preferenza.usaCompany = false;
+//        preferenza.needRiavvio = needRiavvio;
+//        preferenza.visibileAdmin = false;
+//        preferenza.dinamica = dinamica;
+//        preferenza.descrizione = descrizione;
+//        preferenza.descrizioneEstesa = descrizione;
+//        preferenza.enumClazzName = enumClazz != null ? enumClazz.getSimpleName() : null;
+//
+//        backend.add(preferenza);
+//    }
 
 }

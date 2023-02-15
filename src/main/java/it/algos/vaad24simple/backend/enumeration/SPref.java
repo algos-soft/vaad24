@@ -226,6 +226,14 @@ public enum SPref implements AIGenPref {
         return dinamica;
     }
 
+    public boolean needRiavvio() {
+        return needRiavvio;
+    }
+
+    public boolean isVaad24() {
+        return false;
+    }
+
     public Class<?> getEnumClazz() {
         return enumClazz;
     }

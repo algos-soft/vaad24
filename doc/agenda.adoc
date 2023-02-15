@@ -4,6 +4,12 @@
 
 = Miscellaneous
 
+== Flusso
+
+- Vaad24SimpleApp.main();
+- SimpleBoot.postConstruct();
+- SimplePref.onContextRefreshEvent();
+
 == Vaadin
 - Start [https://vaadin.com/docs/latest/guide/quick-start]
 - MyApp [https://start.vaadin.com/app]

@@ -58,30 +58,22 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
      */
     @PostConstruct
     private void postConstruct() {
-        this.inizia();
+        super.inizia();
     }
 
-    //    /**
-    //     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
-    //     * event, the application is ready to service Vaadin requests <br>
-    //     */
-    //    @EventListener(ContextRefreshedEvent.class)
-    //    public void onContextRefreshEvent() {
-    ////        this.inizia();
-    //    }
-
     /**
-     * Crea le Enumeration in memoria con la injection di SpringBoot <br>
-     * Aggiunge le singole Enumeration all lista globale <br>
+     * Crea le Enumeration in memoria <br>
+     * Aggiunge le singole Enumeration alla lista globale <br>
+     * NON usa la injection di SpringBoot <br>
      * NON crea le preferenze su mondoDB <br>
-     * Può essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public void fixPreferenze() {
+    public void creaEnumerationPreferenze() {
+        super.creaEnumerationPreferenze();
+
         for (SPref pref : SPref.values()) {
             VaadVar.prefList.add(pref);
         }
-
-        super.fixPreferenze();
     }
 
     /**
@@ -142,11 +134,11 @@ public class SimpleBoot extends VaadBoot implements ServletContextListener {
      * Iniettata dal framework SpringBoot/Vaadin al termine del ciclo init() del costruttore di questa classe <br>
      */
 
-    @Autowired
-    @Qualifier(QUALIFIER_PREFERENCES_SIMPLE)
-    public void setPrefInstance(final AIEnumPref prefInstance) {
-        VaadVar.prefInstance = prefInstance;
-    }
+//    @Autowired
+//    @Qualifier(QUALIFIER_PREFERENCES_SIMPLE)
+//    public void setPrefInstance(final AIEnumPref prefInstance) {
+//        VaadVar.prefInstance = prefInstance;
+//    }
 
 
     /**
