@@ -156,12 +156,14 @@ public class PreferenceService extends AbstractService {
      * Valore selezionato della enum <br>
      */
     public AITypePref getEnumCurrentObj(AITypePref typeEnum, AETypePref type, String keyCode) {
-        Object obj = null;
+        Object obj;
 
         if (type == AETypePref.enumerationType) {
             obj = getValue(type, keyCode);
             if (obj instanceof String value) {
-                value = textService.getEnumValue(value);
+                if (value.contains(PUNTO_VIRGOLA)) {
+                    value = textService.getEnumValue(value);
+                }
                 typeEnum = typeEnum.get(value);
                 return typeEnum;
             }
@@ -237,7 +239,6 @@ public class PreferenceService extends AbstractService {
 
         return valoreCorrenteStandard;
     }
-
 
 
 }
