@@ -8,6 +8,7 @@ import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
@@ -70,6 +71,9 @@ public class UtilityView extends VerticalLayout {
      */
     @Autowired
     public LogService logger;
+
+    @Autowired
+    public PreferenzaBackend preferenzaBackend;
 
     /**
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -139,7 +143,6 @@ public class UtilityView extends VerticalLayout {
     }
 
 
-
     private void reset() {
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
         resetSingoloModulo(VaadVar.moduloVaadin24);
@@ -189,40 +192,32 @@ public class UtilityView extends VerticalLayout {
 
         message = String.format("Esegue il reset/refresh di tutte le preferenze");
         layout.add(ASpan.text(message));
-        message="Refresh -> ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche.";
+        message = "Refresh -> ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche.";
         layout.add(ASpan.text(message));
-        message="Delete -> ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche.";
+        message = "Delete -> ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche.";
         layout.add(ASpan.text(message));
 
         Button bottone = new Button("Refresh");
         bottone.getElement().setAttribute("theme", "primary");
-        bottone.addClickListener(event -> AReset.reset(this::refresh));
+        bottone.addClickListener(event -> refresh());
 
         Button bottone2 = new Button("Delete");
         bottone2.getElement().setAttribute("theme", "primary");
-        bottone2.addClickListener(event -> AReset.reset(this::delete));
+        bottone2.addClickListener(event -> delete());
 
         this.add(paragrafo);
-        layout.add(new HorizontalLayout(bottone,bottone2));
+        layout.add(new HorizontalLayout(bottone, bottone2));
         this.add(layout);
     }
 
 
     private void refresh() {
-        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
-        resetSingoloModulo(VaadVar.moduloVaadin24);
-        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
-        resetSingoloModulo(VaadVar.projectNameModulo);
-        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
+        preferenzaBackend.refreshAll();
     }
 
 
     private void delete() {
-        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
-        resetSingoloModulo(VaadVar.moduloVaadin24);
-        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
-        resetSingoloModulo(VaadVar.projectNameModulo);
-        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
+        preferenzaBackend.deleteAll();
     }
 
 }

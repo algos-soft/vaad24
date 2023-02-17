@@ -476,33 +476,6 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         grid.setItems(backend.findAll());
     }
 
-    //
-    //    protected void refreshAll() {
-    //        List<AIGenPref> listaPref = VaadVar.prefList;
-    //        boolean almenoUnaModificata = false;
-    //        String message;
-    //        String keyCode;
-    //        Object oldValue;
-    //
-    //        for (AIGenPref pref : listaPref) {
-    //            oldValue = backend.getValore(pref);
-    //            if (backend.resetStandard(pref)) {
-    //                keyCode = pref.getKeyCode();
-    //                message = String.format("Reset preferenza [%s]: %s%s(%s)%s%s", keyCode, oldValue, FORWARD, pref.getType(), FORWARD, pref.getDefaultValue());
-    //                logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
-    //                almenoUnaModificata = true;
-    //            }
-    //        }
-    //
-    //        if (!almenoUnaModificata) {
-    //            message = "Reset preferenze - Tutte le preferenze (escluse quelle dinamiche) avevano già il valore standard";
-    //            logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
-    //        }
-    //
-    //        grid.setItems(backend.findAll());
-    //        Avviso.message("Reset preferenze non dinamiche").success().open();
-    //    }
-    //
 
     /**
      * Primo ingresso dopo il click sul bottone del dialogo <br>

@@ -189,12 +189,12 @@ public class PreferenzaBackend extends CrudBackend {
     }
 
 
-    protected void refreshDialog(Runnable refreshHandler) {
+    public void refreshDialog(Runnable refreshHandler) {
         this.refreshHandler = refreshHandler;
         appContext.getBean(DialogRefreshPreferenza.class).open(this::refreshAll);
     }
 
-    protected void refreshAll() {
+    public void refreshAll() {
         List<AIGenPref> listaPref = VaadVar.prefList;
         boolean almenoUnaModificata = false;
         String message;
@@ -216,9 +216,31 @@ public class PreferenzaBackend extends CrudBackend {
             logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
         }
 
-        refreshHandler.run();
+        if (refreshHandler != null) {
+            refreshHandler.run();
+        }
         Avviso.message("Reset preferenze non dinamiche").success().open();
     }
 
+    public boolean deleteAll() {
+        boolean status;
+        String message;
+
+        try {
+            crudRepository.deleteAll();
+        } catch (Exception unErrore) {
+            logger.error(unErrore);
+            return false;
+        }
+
+        status = crudRepository.count() == 0;
+        creaAll();
+
+        message = "Ricreate tutte le preferenze";
+        logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+        Avviso.message(message).success().open();
+
+        return status;
+    }
 
 }// end of crud backend class
