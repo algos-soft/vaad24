@@ -164,8 +164,8 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         span.add(ASpan.text("Default=true se la preferenza (non dinamica) ha lo stesso valore originario della Enumeration").verde());
         span.add(ASpan.text("Dinamica=true se la preferenza viene modificata automaticamente dalle task (scheduled) del programma").verde());
         span.add(ASpan.text("Le preferenze sono create/cancellate solo via hardcoded (tramite una Enumeration)").rosso());
-        span.add(ASpan.text("Refresh ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche").rosso());
-        span.add(ASpan.text("Delete ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche").rosso());
+        span.add(ASpan.text("Refresh -> ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche").rosso());
+        span.add(ASpan.text("Delete -> ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche").rosso());
     }
 
     /**
@@ -469,34 +469,40 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
     }
 
     protected void refreshDialog() {
-        appContext.getBean(DialogRefreshPreferenza.class).open(this::refreshAll);
+        backend.refreshDialog(this::refreshList);
     }
 
-    protected void refreshAll() {
-        List<AIGenPref> listaPref = VaadVar.prefList;
-        boolean almenoUnaModificata = false;
-        String message;
-        String keyCode;
-        Object oldValue;
-
-        for (AIGenPref pref : listaPref) {
-            oldValue = backend.getValore(pref);
-            if (backend.resetStandard(pref)) {
-                keyCode = pref.getKeyCode();
-                message = String.format("Reset preferenza [%s]: %s%s(%s)%s%s", keyCode, oldValue, FORWARD, pref.getType(), FORWARD, pref.getDefaultValue());
-                logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
-                almenoUnaModificata = true;
-            }
-        }
-
-        if (!almenoUnaModificata) {
-            message = "Reset preferenze - Tutte le preferenze (escluse quelle dinamiche) avevano già il valore standard";
-            logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
-        }
-
+    protected void refreshList() {
         grid.setItems(backend.findAll());
-        Avviso.message("Reset preferenze non dinamiche").success().open();
     }
+
+    //
+    //    protected void refreshAll() {
+    //        List<AIGenPref> listaPref = VaadVar.prefList;
+    //        boolean almenoUnaModificata = false;
+    //        String message;
+    //        String keyCode;
+    //        Object oldValue;
+    //
+    //        for (AIGenPref pref : listaPref) {
+    //            oldValue = backend.getValore(pref);
+    //            if (backend.resetStandard(pref)) {
+    //                keyCode = pref.getKeyCode();
+    //                message = String.format("Reset preferenza [%s]: %s%s(%s)%s%s", keyCode, oldValue, FORWARD, pref.getType(), FORWARD, pref.getDefaultValue());
+    //                logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+    //                almenoUnaModificata = true;
+    //            }
+    //        }
+    //
+    //        if (!almenoUnaModificata) {
+    //            message = "Reset preferenze - Tutte le preferenze (escluse quelle dinamiche) avevano già il valore standard";
+    //            logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+    //        }
+    //
+    //        grid.setItems(backend.findAll());
+    //        Avviso.message("Reset preferenze non dinamiche").success().open();
+    //    }
+    //
 
     /**
      * Primo ingresso dopo il click sul bottone del dialogo <br>

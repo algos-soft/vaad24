@@ -99,6 +99,7 @@ public class UtilityView extends VerticalLayout {
         this.titolo();
 
         this.paragrafoReset();
+        this.paragrafoPreferenze();
 
         //--spazio per distanziare i paragrafi
         this.add(new H3());
@@ -173,6 +174,55 @@ public class UtilityView extends VerticalLayout {
             message = String.format("Nel modulo %s non ci sono classi che implementino il metodo %s", nomeModulo, TAG_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.reset));
         }
+    }
+
+
+    public void paragrafoPreferenze() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setPadding(false);
+        layout.setSpacing(false);
+        String message;
+        List<String> lista;
+        H3 paragrafo = new H3("Reset delle preferenze");
+        paragrafo.getElement().getStyle().set("color", "blue");
+
+        message = String.format("Esegue il reset/refresh di tutte le preferenze");
+        layout.add(ASpan.text(message));
+        message="Refresh -> ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche.";
+        layout.add(ASpan.text(message));
+        message="Delete -> ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche.";
+        layout.add(ASpan.text(message));
+
+        Button bottone = new Button("Refresh");
+        bottone.getElement().setAttribute("theme", "primary");
+        bottone.addClickListener(event -> AReset.reset(this::refresh));
+
+        Button bottone2 = new Button("Delete");
+        bottone2.getElement().setAttribute("theme", "primary");
+        bottone2.addClickListener(event -> AReset.reset(this::delete));
+
+        this.add(paragrafo);
+        layout.add(new HorizontalLayout(bottone,bottone2));
+        this.add(layout);
+    }
+
+
+    private void refresh() {
+        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
+        resetSingoloModulo(VaadVar.moduloVaadin24);
+        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
+        resetSingoloModulo(VaadVar.projectNameModulo);
+        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
+    }
+
+
+    private void delete() {
+        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
+        resetSingoloModulo(VaadVar.moduloVaadin24);
+        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
+        resetSingoloModulo(VaadVar.projectNameModulo);
+        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
     }
 
 }

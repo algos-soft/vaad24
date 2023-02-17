@@ -7,9 +7,12 @@ import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
+import it.algos.vaad24.ui.dialog.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
+
+import java.util.*;
 
 /**
  * Project vaadin23
@@ -30,6 +33,8 @@ import org.springframework.stereotype.*;
 public class PreferenzaBackend extends CrudBackend {
 
     public PreferenzaRepository repository;
+
+    public Runnable refreshHandler;
 
     /**
      * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
@@ -181,6 +186,38 @@ public class PreferenzaBackend extends CrudBackend {
         }
 
         return modificato;
+    }
+
+
+    protected void refreshDialog(Runnable refreshHandler) {
+        this.refreshHandler = refreshHandler;
+        appContext.getBean(DialogRefreshPreferenza.class).open(this::refreshAll);
+    }
+
+    protected void refreshAll() {
+        List<AIGenPref> listaPref = VaadVar.prefList;
+        boolean almenoUnaModificata = false;
+        String message;
+        String keyCode;
+        Object oldValue;
+
+        for (AIGenPref pref : listaPref) {
+            oldValue = this.getValore(pref);
+            if (this.resetStandard(pref)) {
+                keyCode = pref.getKeyCode();
+                message = String.format("Reset preferenza [%s]: %s%s(%s)%s%s", keyCode, oldValue, FORWARD, pref.getType(), FORWARD, pref.getDefaultValue());
+                logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+                almenoUnaModificata = true;
+            }
+        }
+
+        if (!almenoUnaModificata) {
+            message = "Reset preferenze - Tutte le preferenze (escluse quelle dinamiche) avevano già il valore standard";
+            logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+        }
+
+        refreshHandler.run();
+        Avviso.message("Reset preferenze non dinamiche").success().open();
     }
 
 
