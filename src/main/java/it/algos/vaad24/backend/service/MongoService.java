@@ -162,34 +162,26 @@ public class MongoService<capture> extends AbstractService {
     }
 
     /**
-     *
+     * Versione corrente del database mongoDB <br>
      */
     public String versione() {
+        String versione;
+        List results = new ArrayList<>();
+        Document query;
+        Document doc;
         MongoDatabase dataBase = getDBAdmin();
-        List<String> lista = listCollectionNames(dataBase);
-        collection = dataBase.getCollection("system");
-        MongoNamespace fullName = collection.getNamespace();
-        String collectionName = fullName.getCollectionName();
+        collection = dataBase.getCollection("system.version");
 
-//        MongoDatabase alfa2=  mongoClient.getDatabase("system");
-//        DB alfa3=  mongoClient.getDatabase("system");
-//        MongoDatabase database = client.getDatabase("admin");
-        Document documentA = dataBase.runCommand(new Document("enablesharding", "test"));
-        Document documentB = dataBase.runCommand(new Document("shardcollection", "testDB.x").append("key", new Document("userId", 1)));
-
-        long alfa=collection.estimatedDocumentCount();
-        FindIterable iterable = collection.find();
-        MongoCursor iterator = iterable.iterator();
-        int num=iterator.available();
-        while (iterator.hasNext()) {
-            Object document = iterator.next();
-            lista.add(document.toString());
+        if (collection == null) {
+            return "Collection non trovata";
         }
 
-        if (collection.countDocuments() > 1) {
-        }
+        query = new Document("_id", "featureCompatibilityVersion");
+        collection.find(query).into(results);
+        doc = (Document) results.get(0);
+        versione = (String) doc.get("version");
 
-        return "Collection non trovata";
+        return versione;
     }
 
 

@@ -3,8 +3,9 @@ package it.algos.service;
 import com.mongodb.client.*;
 import it.algos.*;
 import it.algos.base.*;
-import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.boot.*;
+import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.service.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +37,9 @@ public class MongoServiceTest extends AlgosIntegrationTest {
 
     private MongoCollection collection;
 
-    private List<String> listaCollections;
+    private List<String> listaCollectionsName;
+
+    private List<MongoCollection> listaCollections;
 
 
     /**
@@ -89,41 +92,60 @@ public class MongoServiceTest extends AlgosIntegrationTest {
 
     @Test
     @Order(2)
-    @DisplayName("2 - listCollectionNames")
+    @DisplayName("2 - listCollectionNames di sistema")
     void listCollectionNames() {
-        System.out.println("2 - listCollectionNames");
+        System.out.println("2 - listCollectionNames di sistema");
         System.out.println(VUOTA);
 
         dataBase = service.getDBAdmin();
         assertNotNull(dataBase);
-        listaCollections = service.listCollectionNames(dataBase);
+        listaCollectionsName = service.listCollectionNames(dataBase);
         message = String.format("Collezioni del database '%s'", dataBase.getName());
-        print(listaCollections, message);
+        print(listaCollectionsName, message);
     }
 
     @Test
     @Order(3)
-    @DisplayName("3 - listCollectionNamesVaad24")
+    @DisplayName("3 - listCollectionNames correnti")
     void listCollectionNamesVaad24() {
-        System.out.println("3 - listCollectionNamesVaad24");
+        System.out.println("3 - listCollectionNames correnti");
         System.out.println(VUOTA);
 
-        sorgente= VaadVar.moduloVaadin24;
+        sorgente = VaadVar.moduloVaadin24;
         dataBase = service.getDB(sorgente);
         assertNotNull(dataBase);
-        listaCollections = service.listCollectionNames(dataBase);
+        listaCollectionsName = service.listCollectionNames(dataBase);
         message = String.format("Collezioni del database '%s'", dataBase.getName());
-        print(listaCollections, message);
+        print(listaCollectionsName, message);
     }
+
     @Test
-    @Order(4)
+    @Order(42)
     @DisplayName("4 - versione")
     void versione() {
         System.out.println("4 - versione");
         System.out.println(VUOTA);
 
         ottenuto = service.versione();
-        System.out.println(ottenuto);
+        System.out.println(VUOTA);
+        message = String.format("Versione corrente del mongoDb installato: %s", ottenuto);
+        System.out.println(message);
+    }
+
+    @Test
+    @Order(52)
+    @DisplayName("5 - count (senza repository)")
+    void count() {
+        System.out.println("5 - count (senza repository)");
+        System.out.println(VUOTA);
+
+        sorgenteClasse = Via.class;
+
+        ottenutoIntero = service.count(sorgenteClasse);
+        assertTrue(ottenutoIntero > 0);
+
+        message = String.format("Nella classe/collection %s ci sono %d entities", sorgenteClasse.getSimpleName(), ottenutoIntero);
+        System.out.println(message);
     }
 
     /**

@@ -1,6 +1,5 @@
 package it.algos.vaad24.backend.boot;
 
-import com.mongodb.client.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -228,6 +227,8 @@ public class VaadBoot implements ServletContextListener {
         printInfo("VaadVar.projectNameModulo", VaadVar.projectNameModulo);
         printInfo("VaadVar.projectCurrentMainApplication", VaadVar.projectCurrentMainApplication);
 
+        printInfo("VaadVar.mongoDatabaseName", VaadVar.mongoDatabaseName);
+        printInfo("VaadVar.mongoDatabaseVersion", VaadVar.mongoDatabaseVersion);
         printInfo("VaadVar.projectDate", VaadVar.projectDate);
         printInfo("VaadVar.projectNote", VaadVar.projectNote);
     }
@@ -260,14 +261,14 @@ public class VaadBoot implements ServletContextListener {
             allDebugSetup = true;
         }
 
-        databaseName = environment.getProperty("spring.data.mongodb.database");
-        message = String.format("Database mongo in uso: %s", databaseName);
-        logger.info(new WrapLog().message(message).type(AETypeLog.info));
-
-        MongoDatabase db = mongoService.getDataBase();
-        MongoDatabase dbAdmin = mongoService.getDBAdmin();
-        message = String.format("Database mongo versione: %s", databaseVersion);
-        logger.info(new WrapLog().message(message).type(AETypeLog.info));
+        //        databaseName = environment.getProperty("spring.data.mongodb.database");
+        //        message = String.format("Database mongo in uso: %s", databaseName);
+        //        logger.info(new WrapLog().message(message).type(AETypeLog.info));
+        //
+        //        MongoDatabase db = mongoService.getDataBase();
+        //        MongoDatabase dbAdmin = mongoService.getDBAdmin();
+        //        message = String.format("Database mongo versione: %s", databaseVersion);
+        //        logger.info(new WrapLog().message(message).type(AETypeLog.info));
 
         autoIndexCreation = environment.getProperty("spring.data.mongodb.auto-index-creation");
         message = String.format("Auto creazione degli indici (per la classi @Document): %s", autoIndexCreation);
@@ -409,7 +410,7 @@ public class VaadBoot implements ServletContextListener {
          */
         VaadVar.usaSecurity = false;
 
-        /*
+        /**
          * Titolo del banner <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
@@ -462,8 +463,7 @@ public class VaadBoot implements ServletContextListener {
             logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
         }
 
-
-        /*
+        /**
          * Nome identificativo minuscolo del progetto corrente <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
@@ -476,8 +476,7 @@ public class VaadBoot implements ServletContextListener {
             VaadVar.projectCurrent = "simple";
         }
 
-
-        /*
+        /**
          * Versione dell' applicazione <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
@@ -490,7 +489,7 @@ public class VaadBoot implements ServletContextListener {
             logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
         }
 
-        /*
+        /**
          * Data di rilascio della versione <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
@@ -503,7 +502,7 @@ public class VaadBoot implements ServletContextListener {
             logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
         }
 
-        /*
+        /**
          * Note di rilascio della versione <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
@@ -526,7 +525,28 @@ public class VaadBoot implements ServletContextListener {
          * File name per i logger nella directory 'log' <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
-        VaadVar.logbackName = "pippo" + "-admin";
+//        VaadVar.logbackName = "pippo" + "-admin";
+
+        /**
+         * Nome del database mongo collegato <br>
+         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         */
+        try {
+            property = "spring.data.mongodb.database";
+            VaadVar.mongoDatabaseName = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
+
+        /**
+         * Versione del database mongo collegato <br>
+         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         */
+        if (mongoService != null) {
+            VaadVar.mongoDatabaseVersion = mongoService.versione();
+        }
+
     }
 
     /**

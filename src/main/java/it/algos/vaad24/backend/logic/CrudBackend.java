@@ -134,7 +134,12 @@ public abstract class CrudBackend extends AbstractService {
                 property = order.getProperty();
                 esiste = reflectionService.isEsiste(entityClazz, property);
                 if (esiste) {
-                    return crudRepository.findAll(sort);
+                    if (crudRepository == null) {
+                        return mongoService.query(entityClazz);
+                    }
+                    else {
+                        return crudRepository.findAll(sort);
+                    }
                 }
                 else {
                     message = String.format("Non esiste la property %s per l'ordinamento della classe %s", property, entityClazz.getSimpleName());
@@ -181,7 +186,12 @@ public abstract class CrudBackend extends AbstractService {
     }
 
     public int count() {
-        return ((Long) crudRepository.count()).intValue();
+        if (crudRepository == null) {
+            return mongoService.count(entityClazz);
+        }
+        else {
+            return ((Long) crudRepository.count()).intValue();
+        }
     }
 
     public List findByDescrizione(final String value) {

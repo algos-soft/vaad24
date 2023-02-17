@@ -3,8 +3,6 @@ package it.algos.vaad24simple.backend.packages.prova;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
 /**
@@ -24,7 +22,6 @@ import org.springframework.stereotype.*;
 @Service
 public class ProvaBackend extends CrudBackend {
 
-    public ProvaRepository repository;
 
     /**
      * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
@@ -37,9 +34,8 @@ public class ProvaBackend extends CrudBackend {
      * @param crudRepository per la persistenza dei dati
      */
     //@todo registrare eventualmente come costante in VaadCost il valore del Qualifier
-    public ProvaBackend(@Autowired @Qualifier("Prova") final MongoRepository crudRepository) {
-        super(crudRepository, Prova.class);
-        this.repository = (ProvaRepository) crudRepository;
+    public ProvaBackend() {
+        super(null, Prova.class);
     }
 
 
