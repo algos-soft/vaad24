@@ -103,12 +103,12 @@ public class MeseBackend extends CrudBackend {
     }
 
     @Override
-    public List<Mese> findAll() {
+    public List<Mese> findAllSortCorrente() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "ordine"));
     }
 
     public List<String> findNomi() {
-        return findAll().stream()
+        return findAllSortCorrente().stream()
                 .map(giorno -> giorno.nome)
                 .collect(Collectors.toList());
     }

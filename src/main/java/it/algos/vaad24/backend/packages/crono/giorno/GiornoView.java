@@ -101,7 +101,7 @@ public class GiornoView extends CrudView {
         comboMese.setPlaceholder("Mese");
         comboMese.getElement().setProperty("title", "Filtro di selezione");
         comboMese.setClearButtonVisible(true);
-        comboMese.setItems(meseBackend.findAll());
+        comboMese.setItems(meseBackend.findAllSortCorrente());
         comboMese.addValueChangeListener(event -> sincroFiltri());
         topPlaceHolder.add(comboMese);
 
@@ -111,7 +111,7 @@ public class GiornoView extends CrudView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected void sincroFiltri() {
-        List<Giorno> items = backend.findAll(sortOrder);
+        List<Giorno> items = backend.findAllSort(sortOrder);
 
         if (comboMese != null && comboMese.getValue() != null) {
             if (comboMese.getValue() instanceof Mese mese) {

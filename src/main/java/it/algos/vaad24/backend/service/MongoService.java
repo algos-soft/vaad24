@@ -15,6 +15,7 @@ import org.bson.conversions.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
@@ -289,7 +290,8 @@ public class MongoService<capture> extends AbstractService {
      * @return true if the collection is null or empty
      */
     public boolean isCollectionNullOrEmpty(final Class<? extends AEntity> entityClazz) {
-        return entityClazz == null ? false : isCollectionNullOrEmpty(textService.primaMinuscola(entityClazz.getSimpleName()));
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        return entityClazz == null ? false : isCollectionNullOrEmpty(collectionName);
     }
 
     /**
@@ -316,7 +318,8 @@ public class MongoService<capture> extends AbstractService {
      * @return true if the collection exist
      */
     public boolean isExistsCollection(final Class<? extends AEntity> entityClazz) {
-        return entityClazz == null ? false : isExistsCollection(textService.primaMinuscola(entityClazz.getSimpleName()));
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        return entityClazz == null ? false : isExistsCollection(collectionName);
     }
 
 
@@ -401,7 +404,7 @@ public class MongoService<capture> extends AbstractService {
      */
     public int count(final Class entityClazz) {
         Long entities;
-        String collectionName;
+        String collectionName = annotationService.getCollectionName(entityClazz);
         String message;
         Query query = new Query();
 
@@ -417,7 +420,7 @@ public class MongoService<capture> extends AbstractService {
             return 0;
         }
 
-        entities = mongoOp.count(query, entityClazz);
+        entities = mongoOp.count(query, entityClazz, collectionName);
 
         return entities > 0 ? entities.intValue() : 0;
     }
@@ -461,8 +464,19 @@ public class MongoService<capture> extends AbstractService {
     public List<AEntity> query(Class<? extends AEntity> entityClazz) {
         List<AEntity> listaEntities;
         Query query = new Query();
+        String collectionName = annotationService.getCollectionName(entityClazz);
 
-        listaEntities = (List<AEntity>) mongoOp.find(query, entityClazz);
+        listaEntities = (List<AEntity>) mongoOp.find(query, entityClazz, collectionName);
+
+        return listaEntities;
+    }
+
+    public List<AEntity> query(Class<? extends AEntity> entityClazz, Sort sort) {
+        List<AEntity> listaEntities;
+        Query query = new Query();
+        String collectionName = annotationService.getCollectionName(entityClazz);
+
+        listaEntities = (List<AEntity>) mongoOp.find(query.with(sort), entityClazz, collectionName);
 
         return listaEntities;
     }

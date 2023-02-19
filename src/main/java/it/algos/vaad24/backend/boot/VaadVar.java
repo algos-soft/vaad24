@@ -222,5 +222,9 @@ public class VaadVar {
      */
     public static String mongoDatabaseVersion;
 
-
+    /**
+     * Creazione automatica degli indici del database mongo collegato <br>
+     * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+     */
+    public static boolean usaCreazioneAutomaticaIndiciMongoDB;
 }

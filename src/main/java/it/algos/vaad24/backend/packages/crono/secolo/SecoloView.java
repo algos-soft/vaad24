@@ -103,7 +103,7 @@ public class SecoloView extends CrudView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected void sincroFiltri() {
-        List<Secolo> items = backend.findAll(sortOrder);
+        List<Secolo> items = backend.findAllSort(sortOrder);
 
         if (boxBox != null && !boxBox.isIndeterminate()) {
             items = items.stream().filter(sec -> sec.anteCristo == boxBox.getValue()).toList();

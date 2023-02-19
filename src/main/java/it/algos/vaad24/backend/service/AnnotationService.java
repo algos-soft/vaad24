@@ -479,18 +479,21 @@ public class AnnotationService extends AbstractService {
     public String getReset(final Class<? extends AEntity> entityClazz) {
         String ancestorReset = VUOTA;
         AIEntity annotation = this.getAIEntity(entityClazz);
-        String collectionName = getCollectionName(entityClazz);
+        String collectionName = VUOTA;
 
         if (annotation != null && annotation.preReset().length() > 0) {
             ancestorReset = annotation.preReset();
         }
 
         if (textService.isValid(ancestorReset)) {
+            collectionName = entityClazz.getSimpleName().toLowerCase();
             collectionName += VIRGOLA;
             collectionName += ancestorReset;
+            return collectionName;
         }
-
-        return collectionName;
+        else {
+            return entityClazz.getSimpleName().toLowerCase();
+        }
     }
 
 
@@ -553,7 +556,7 @@ public class AnnotationService extends AbstractService {
      *
      * @return the status
      */
-    public boolean usaKeyIdSenzaSpazi(final Class<? extends AEntity> entityClazz)  {
+    public boolean usaKeyIdSenzaSpazi(final Class<? extends AEntity> entityClazz) {
         boolean usaKeyIdSenzaSpazi = true;
         AIEntity annotation = this.getAIEntity(entityClazz);
 
@@ -567,8 +570,6 @@ public class AnnotationService extends AbstractService {
 
         return usaKeyIdSenzaSpazi;
     }
-
-
 
     //==========================================================================
     // @AIField

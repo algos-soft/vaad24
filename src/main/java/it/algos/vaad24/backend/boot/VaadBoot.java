@@ -229,6 +229,7 @@ public class VaadBoot implements ServletContextListener {
 
         printInfo("VaadVar.mongoDatabaseName", VaadVar.mongoDatabaseName);
         printInfo("VaadVar.mongoDatabaseVersion", VaadVar.mongoDatabaseVersion);
+        printInfo("VaadVar.usaCreazioneAutomaticaIndiciMongoDB", VaadVar.usaCreazioneAutomaticaIndiciMongoDB?"vero":"falso");
         printInfo("VaadVar.projectDate", VaadVar.projectDate);
         printInfo("VaadVar.projectNote", VaadVar.projectNote);
     }
@@ -525,7 +526,7 @@ public class VaadBoot implements ServletContextListener {
          * File name per i logger nella directory 'log' <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
-//        VaadVar.logbackName = "pippo" + "-admin";
+        //        VaadVar.logbackName = "pippo" + "-admin";
 
         /**
          * Nome del database mongo collegato <br>
@@ -545,6 +546,18 @@ public class VaadBoot implements ServletContextListener {
          */
         if (mongoService != null) {
             VaadVar.mongoDatabaseVersion = mongoService.versione();
+        }
+
+        /**
+         * Creazione automatica degli indici del database mongo collegato <br>
+         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         */
+        try {
+            property = "spring.data.mongodb.auto-index-creation";
+            VaadVar.usaCreazioneAutomaticaIndiciMongoDB = Objects.requireNonNull(environment.getProperty(property) == "true");
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
         }
 
     }

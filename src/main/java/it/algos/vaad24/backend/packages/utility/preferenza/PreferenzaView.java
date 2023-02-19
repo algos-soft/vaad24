@@ -258,7 +258,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         grid = new Grid<>(Preferenza.class, false);
 
         // Pass all Preferenza objects to a grid from a Spring Data repository object
-        grid.setItems(backend.findAll());
+        grid.setItems(backend.findAllSortCorrente());
 
         // The row-stripes theme produces a background color for every other row.
         grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
@@ -402,7 +402,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
     //    }
 
     protected void sincroFiltri() {
-        List<Preferenza> items = backend.findAll();
+        List<Preferenza> items = backend.findAllSortCorrente();
 
         final String textSearch = filter != null ? filter.getValue() : VUOTA;
         if (textService.isValid(textSearch)) {
@@ -461,7 +461,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
 
         backend.deleteAll();
         backend.creaAll();
-        grid.setItems(backend.findAll());
+        grid.setItems(backend.findAllSortCorrente());
 
         Avviso.message("Reset di tutte le preferenze").success().open();
         message = "Tutte le preferenze sono state ricostruite col valore standard";
@@ -473,7 +473,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
     }
 
     protected void refreshList() {
-        grid.setItems(backend.findAll());
+        grid.setItems(backend.findAllSortCorrente());
     }
 
 
@@ -481,12 +481,12 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
      * Primo ingresso dopo il click sul bottone del dialogo <br>
      */
     protected void saveHandler(final Preferenza entityBean, final CrudOperation operation) {
-        grid.setItems(backend.findAll());
+        grid.setItems(backend.findAllSortCorrente());
     }
 
     public void deleteHandler(final Preferenza entityBean) {
         backend.delete(entityBean);
-        grid.setItems(backend.findAll());
+        grid.setItems(backend.findAllSortCorrente());
         Avviso.message(String.format("%s successfully deleted", entityBean.code)).success().open();
     }
 

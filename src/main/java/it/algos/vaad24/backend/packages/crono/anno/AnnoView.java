@@ -106,7 +106,7 @@ public class AnnoView extends CrudView {
         comboSecolo.setPlaceholder("Secolo");
         comboSecolo.getElement().setProperty("title", "Filtro di selezione");
         comboSecolo.setClearButtonVisible(true);
-        comboSecolo.setItems(secoloBackend.findAll());
+        comboSecolo.setItems(secoloBackend.findAllSortCorrente());
         comboSecolo.addValueChangeListener(event -> sincroFiltri());
         topPlaceHolder.add(comboSecolo);
 
@@ -132,7 +132,7 @@ public class AnnoView extends CrudView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected void sincroFiltri() {
-        List<Anno> items = backend.findAll(sortOrder);
+        List<Anno> items = backend.findAllSort(sortOrder);
 
         if (comboSecolo != null && comboSecolo.getValue() != null) {
             if (comboSecolo.getValue() instanceof Secolo secolo) {

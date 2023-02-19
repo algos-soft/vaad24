@@ -21,6 +21,7 @@ import java.util.*;
 public class VaadCost {
 
     public static final boolean DEBUG = true;
+    public static final boolean USA_REPOSITORY = false;
 
     public static final String TAG_STORE = ".DS_Store";
 

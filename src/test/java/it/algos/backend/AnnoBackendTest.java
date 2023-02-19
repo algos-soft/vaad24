@@ -152,7 +152,7 @@ public class AnnoBackendTest extends AlgosUnitTest {
         System.out.println("11 - findAll (entity)");
         String message;
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         message = String.format("Ci sono in totale %s entities di %s in ordine di default", textService.format(listaBeans.size()), "Anno");
         System.out.println(message);
@@ -237,7 +237,7 @@ public class AnnoBackendTest extends AlgosUnitTest {
     void findAllBySecolo() {
         System.out.println("31 - findAllBySecolo (entity)");
 
-        for (Secolo sorgente : secoloBackend.findAll()) {
+        for (Secolo sorgente : secoloBackend.findAllSortCorrente()) {
             listaBeans = backend.findAllBySecolo(sorgente);
             assertNotNull(listaBeans);
             message = String.format("Nel secolo %s ci sono %s anni", sorgente, textService.format(listaBeans.size()));
@@ -291,7 +291,7 @@ public class AnnoBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetOnlyEmpty();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
@@ -311,7 +311,7 @@ public class AnnoBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetOnlyEmpty();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
@@ -329,7 +329,7 @@ public class AnnoBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetForcing();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
@@ -349,7 +349,7 @@ public class AnnoBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetForcing();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);

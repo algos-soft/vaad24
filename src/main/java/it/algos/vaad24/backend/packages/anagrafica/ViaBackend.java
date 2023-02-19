@@ -48,12 +48,18 @@ public class ViaBackend extends CrudBackend {
 
     public boolean crea(final String nome) {
         Via via = newEntity(nome);
+        String collectionName = annotationService.getCollectionName(entityClazz);
 
-        if (crudRepository == null) { //@todo noRepository
-            return mongoService.mongoOp.insert(via) != null;
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+            return crudRepository.insert(via) != null;
         }
         else {
-            return crudRepository.insert(via) != null;
+            if (textService.isValid(collectionName)) {
+                return mongoService.mongoOp.insert(via, collectionName) != null;
+            }
+            else {
+                return mongoService.mongoOp.insert(via) != null;
+            }
         }
     }
 

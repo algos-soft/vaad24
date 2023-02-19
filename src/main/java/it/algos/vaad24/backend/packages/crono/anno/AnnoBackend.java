@@ -105,7 +105,7 @@ public class AnnoBackend extends CrudBackend {
     }
 
     @Override
-    public List<Anno> findAll() {
+    public List<Anno> findAllSortCorrente() {
         return findAllDiscendente();
     }
 

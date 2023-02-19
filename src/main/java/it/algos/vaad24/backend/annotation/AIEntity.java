@@ -53,5 +53,4 @@ public @interface AIEntity {
      */
     boolean usaKeyIdSenzaSpazi() default true;
 
-
 }// end of interface annotation

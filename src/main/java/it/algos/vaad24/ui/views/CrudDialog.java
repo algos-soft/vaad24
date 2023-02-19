@@ -301,7 +301,7 @@ public abstract class CrudDialog extends Dialog {
                                 linkClazz = annotationService.getLinkClazz(currentItem.getClass(), key);
                                 Object obj = appContext.getBean(linkClazz);
                                 if (obj instanceof CrudBackend backend) {
-                                    items = backend.findAll();
+                                    items = backend.findAllSortCorrente();
                                     if (items != null) {
                                         combo.setItems(items);
                                     }

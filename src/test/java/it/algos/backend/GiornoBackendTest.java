@@ -152,7 +152,7 @@ public class GiornoBackendTest extends AlgosUnitTest {
         System.out.println("2 - findAll (entity)");
         String message;
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), "Giorno");
         System.out.println(message);
@@ -179,7 +179,7 @@ public class GiornoBackendTest extends AlgosUnitTest {
     void findAllByMese() {
         System.out.println("4 - findAllByMese (entity)");
 
-        for (Mese sorgente : meseBackend.findAll()) {
+        for (Mese sorgente : meseBackend.findAllSortCorrente()) {
             listaBeans = backend.findAllByMese(sorgente);
             assertNotNull(listaBeans);
             message = String.format("Nel mese di %s ci sono %s giorni", sorgente, textService.format(listaBeans.size()));
@@ -247,7 +247,7 @@ public class GiornoBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetOnlyEmpty();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
@@ -267,7 +267,7 @@ public class GiornoBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetOnlyEmpty();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
@@ -285,7 +285,7 @@ public class GiornoBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetForcing();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
@@ -305,7 +305,7 @@ public class GiornoBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetForcing();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);

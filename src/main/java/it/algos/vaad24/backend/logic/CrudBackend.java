@@ -149,25 +149,29 @@ public abstract class CrudBackend extends AbstractService {
     }
 
 
-    public List findAll() {
-        if (crudRepository != null) { //@todo noRepository
+    public List findAllNoSort() {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
             return crudRepository.findAll();
         }
         else {
-            return mongoService.mongoOp.find(new Query(), entityClazz);
+            return mongoService.mongoOp.find(new Query(), entityClazz, collectionName);
         }
     }
 
-    public List findAllSort() {
+    public List findAllSortCorrente() {
+        String collectionName = annotationService.getCollectionName(entityClazz);
         Query query = new Query();
-        if (crudRepository != null) { //@todo noRepository
+
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
             return crudRepository.findAll();
         }
         else {
             if (sortOrder != null) {
                 query.with(sortOrder);
             }
-            return mongoService.mongoOp.find(query, entityClazz);
+            return mongoService.mongoOp.find(query, entityClazz, collectionName);
         }
     }
 
@@ -176,14 +180,15 @@ public abstract class CrudBackend extends AbstractService {
      * La lista funziona anche se la property del sort è errata <br>
      * Ma ovviamente il sort non viene effettuato <br>
      */
-    public List findAll(Sort sort) {
+    public List findAllSort(Sort sort) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
         boolean esiste;
         Sort.Order order;
         String property;
         String message;
 
         if (sort == null) {
-            return crudRepository.findAll();
+            return findAllNoSort();
         }
         else {
             if (sort.stream().count() == 1) {
@@ -191,21 +196,31 @@ public abstract class CrudBackend extends AbstractService {
                 property = order.getProperty();
                 esiste = reflectionService.isEsiste(entityClazz, property);
                 if (esiste) {
-                    if (crudRepository == null) {
-                        return mongoService.query(entityClazz);
+                    if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+                        return crudRepository.findAll(sort);
                     }
                     else {
-                        return crudRepository.findAll(sort);
+                        return mongoService.query(entityClazz, sort);
                     }
                 }
                 else {
                     message = String.format("Non esiste la property %s per l'ordinamento della classe %s", property, entityClazz.getSimpleName());
                     logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
-                    return crudRepository.findAll();
+                    if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+                        return crudRepository.findAll(sort);
+                    }
+                    else {
+                        return mongoService.query(entityClazz, sort);
+                    }
                 }
             }
             else {
-                return crudRepository.findAll(sort);
+                if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+                    return crudRepository.findAll(sort);
+                }
+                else {
+                    return mongoService.query(entityClazz, sort);
+                }
             }
         }
     }
@@ -235,27 +250,27 @@ public abstract class CrudBackend extends AbstractService {
     public boolean deleteAll() {
         String collectionName;
 
-        if (crudRepository == null) { //@todo noRepository
-            collectionName = annotationService.getCollectionName(entityClazz);
-            mongoService.mongoOp.dropCollection(collectionName);
-        }
-        else {
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
             try {
                 crudRepository.deleteAll();
             } catch (Exception unErrore) {
                 logger.error(unErrore);
             }
         }
+        else {
+            collectionName = annotationService.getCollectionName(entityClazz);
+            mongoService.mongoOp.dropCollection(collectionName);
+        }
 
         return !isExistsCollection();
     }
 
     public int count() {
-        if (crudRepository == null) { //@todo noRepository
-            return mongoService.count(entityClazz);
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+            return ((Long) crudRepository.count()).intValue();
         }
         else {
-            return ((Long) crudRepository.count()).intValue();
+            return mongoService.count(entityClazz);
         }
     }
 

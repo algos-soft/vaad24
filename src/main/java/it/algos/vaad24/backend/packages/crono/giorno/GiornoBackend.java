@@ -110,25 +110,25 @@ public class GiornoBackend extends CrudBackend {
     }
 
     @Override
-    public List<Giorno> findAll() {
+    public List<Giorno> findAllSortCorrente() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "ordine"));
     }
 
     public List<String> findNomi() {
-        return findAll().stream()
+        return findAllSortCorrente().stream()
                 .map(giorno -> giorno.nome)
                 .collect(Collectors.toList());
     }
 
     public List<Giorno> findAllByMese(Mese mese) {
-        return findAll().stream()
+        return findAllSortCorrente().stream()
                 .filter(giorno -> giorno.mese.nome.equals(mese.nome))
                 .collect(Collectors.toList());
     }
 
 
     public List<String> findNomiByMese(String nomeMese) {
-        return findAll().stream()
+        return findAllSortCorrente().stream()
                 .filter(giorno -> giorno.mese.nome.equals(nomeMese))
                 .map(giorno -> giorno.nome)
                 .collect(Collectors.toList());

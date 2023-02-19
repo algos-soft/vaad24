@@ -137,7 +137,7 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
         System.out.println("2 - findAll");
         String message;
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
         System.out.println(message);
@@ -312,7 +312,7 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetOnlyEmpty();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
@@ -332,7 +332,7 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetOnlyEmpty();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
@@ -350,7 +350,7 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetForcing();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
@@ -370,7 +370,7 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetForcing();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);

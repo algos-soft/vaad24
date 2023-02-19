@@ -99,12 +99,12 @@ public class SecoloBackend extends CrudBackend {
     }
 
     @Override
-    public List<Secolo> findAll() {
+    public List<Secolo> findAllSortCorrente() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "ordine"));
     }
 
     public List<String> findNomi() {
-        return findAll().stream()
+        return findAllSortCorrente().stream()
                 .map(secolo -> secolo.nome)
                 .collect(Collectors.toList());
     }
