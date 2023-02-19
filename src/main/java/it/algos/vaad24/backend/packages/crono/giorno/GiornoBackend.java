@@ -1,6 +1,7 @@
 package it.algos.vaad24.backend.packages.crono.giorno;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
@@ -158,7 +159,7 @@ public class GiornoBackend extends CrudBackend {
             return result;
         }
 
-        if (result.isValido()) {
+        if (result.isValido() && result.getTypeResult() == AETypeResult.collectionVuota) {
             //costruisce i 366 records
             lista = dateService.getAllGiorni();
             for (HashMap mappaGiorno : lista) {

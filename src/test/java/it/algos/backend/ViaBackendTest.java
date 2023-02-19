@@ -50,7 +50,7 @@ public class ViaBackendTest extends AlgosUnitTest {
 
     private List<Via> listaBeans;
 
-    private String dbName = "Via";
+    private String dbName;
 
     private String backendName = "ViaBackend";
 
@@ -73,8 +73,12 @@ public class ViaBackendTest extends AlgosUnitTest {
         backend.resourceService = resourceService;
         backend.reflectionService = reflectionService;
         backend.mongoService = mongoService;
+        backend.annotationService = annotationService;
+        backend.logger = logger;
         backend.repository = null;
         backend.crudRepository = null;
+
+        dbName = annotationService.getCollectionName(entityClazz);
     }
 
 
@@ -120,6 +124,18 @@ public class ViaBackendTest extends AlgosUnitTest {
         System.out.println(message);
         assertTrue(ottenutoBooleano);
     }
+    @Test
+    @Order(18)
+    @DisplayName("18 - collection")
+    void collection2() {
+        System.out.println("18 - Esistenza della collection");
+        System.out.println(VUOTA);
+
+        ottenutoBooleano = backend.isExistsCollection();
+        message = String.format("%s la collection della classe %s", ottenutoBooleano ? "Esiste" : "Non esiste", backend.entityClazz.getSimpleName());
+        System.out.println(message);
+        assertTrue(ottenutoBooleano);
+    }
 
     @Test
     @Order(2)
@@ -130,7 +146,7 @@ public class ViaBackendTest extends AlgosUnitTest {
 
         ottenutoIntero = backend.count();
         if (ottenutoIntero > 0) {
-            message = String.format("Ci sono in totale %s entities di '%s' nel database mongoDB", textService.format(ottenutoIntero), dbName);
+            message = String.format("La collection '%s' ha in totale %s entities nel database mongoDB", dbName, textService.format(ottenutoIntero));
         }
         else {
             if (reflectionService.isEsisteMetodo(backend.getClass(), TAG_RESET_ONLY)) {
@@ -145,13 +161,47 @@ public class ViaBackendTest extends AlgosUnitTest {
 
 
     @Test
-    @Order(3)
-    @DisplayName("3 - findAll")
+    @Order(10)
+    @DisplayName("10 - findAll unsorted")
     void findAll() {
-        System.out.println("3 - findAll");
+        System.out.println("10 - findAll unsorted");
 
         listaBeans = backend.findAll();
         assertNotNull(listaBeans);
+        ottenutoIntero = listaBeans.size();
+        message = String.format("La collection '%s' ha in totale %s entities nel database mongoDB", dbName, textService.format(ottenutoIntero));
+        System.out.println(message);
+        printSubLista(listaBeans);
+    }
+
+
+    @Test
+    @Order(11)
+    @DisplayName("11 - findAll getSortKeyID")
+    void findAllSort() {
+        System.out.println("11 - findAll getSortKeyID");
+
+        listaBeans = backend.findAllSort();
+        assertNotNull(listaBeans);
+        ottenutoIntero = listaBeans.size();
+        message = String.format("La collection '%s' ha in totale %s entities nel database mongoDB", dbName, textService.format(ottenutoIntero));
+        System.out.println(message);
+        printSubLista(listaBeans);
+    }
+
+    @Test
+    @Order(91)
+    @DisplayName("91 - resetOnlyEmpty")
+    void resetOnlyEmptyPieno() {
+        System.out.println("91 - resetOnlyEmpty");
+        String message;
+
+        ottenutoRisultato = backend.resetOnlyEmpty();
+        printRisultato(ottenutoRisultato);
+
+        listaBeans = backend.findAll();
+        assertNotNull(listaBeans);
+        System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
         System.out.println(message);
         printSubLista(listaBeans);
@@ -159,83 +209,12 @@ public class ViaBackendTest extends AlgosUnitTest {
 
 
     @Test
-    @Order(4)
-    @DisplayName("4 - findAllSort")
-    void findAllSort() {
-        System.out.println("4 - findAllSort");
-
-        listaBeans = backend.findAllSort();
-        assertNotNull(listaBeans);
-        message = String.format("Ci sono in totale %s entities ordinate di %s", textService.format(listaBeans.size()), dbName);
-        System.out.println(message);
-        printSubLista(listaBeans);
-    }
-
-    //    @Test
-    @Order(91)
-    @DisplayName("91 - resetOnlyEmpty pieno")
-    void resetOnlyEmptyPieno() {
-        System.out.println("91 - resetOnlyEmpty pieno");
-        String message;
-
-        ottenutoRisultato = backend.resetOnlyEmpty();
-        printRisultato(ottenutoRisultato);
-
-        listaBeans = backend.findAll();
-        assertNotNull(listaBeans);
-        System.out.println(VUOTA);
-        message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
-        System.out.println(message);
-        printSubLista(listaBeans);
-    }
-
-
-    //    @Test
     @Order(92)
-    @DisplayName("92 - resetOnlyEmpty vuoto")
+    @DisplayName("92 - resetForcing")
     void resetOnlyEmptyVuoto() {
-        System.out.println("92 - resetOnlyEmpty vuoto");
+        System.out.println("92 - resetForcing");
         String message;
 
-        mongoService.deleteAll(entityClazz);
-        ottenutoRisultato = backend.resetOnlyEmpty();
-        printRisultato(ottenutoRisultato);
-
-        listaBeans = backend.findAll();
-        assertNotNull(listaBeans);
-        System.out.println(VUOTA);
-        message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
-        System.out.println(message);
-        printSubLista(listaBeans);
-    }
-
-    //    @Test
-    @Order(93)
-    @DisplayName("93 - resetForcing pieno")
-    void resetForcingPieno() {
-        System.out.println("93 - resetForcing pieno");
-        String message;
-
-        ottenutoRisultato = backend.resetForcing();
-        printRisultato(ottenutoRisultato);
-
-        listaBeans = backend.findAll();
-        assertNotNull(listaBeans);
-        System.out.println(VUOTA);
-        message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
-        System.out.println(message);
-        printSubLista(listaBeans);
-    }
-
-
-    //    @Test
-    @Order(94)
-    @DisplayName("94 - resetForcing vuoto")
-    void resetForcingVuoto() {
-        System.out.println("94 - resetForcing vuoto");
-        String message;
-
-        mongoService.deleteAll(entityClazz);
         ottenutoRisultato = backend.resetForcing();
         printRisultato(ottenutoRisultato);
 

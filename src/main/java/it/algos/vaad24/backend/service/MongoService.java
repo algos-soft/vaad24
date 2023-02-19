@@ -185,8 +185,6 @@ public class MongoService<capture> extends AbstractService {
     }
 
 
-
-
     /**
      * Recupera il valore di un parametro
      *
@@ -403,6 +401,7 @@ public class MongoService<capture> extends AbstractService {
      */
     public int count(final Class entityClazz) {
         Long entities;
+        String collectionName;
         String message;
         Query query = new Query();
 
@@ -412,7 +411,8 @@ public class MongoService<capture> extends AbstractService {
             return 0;
         }
         if (!isExistsCollection(entityClazz)) {
-            message = String.format("La entityClazz '%s' non ha una collection", entityClazz.getSimpleName());
+            collectionName = annotationService.getCollectionName(entityClazz);
+            message = String.format("La entityClazz '%s' non ha una corrispondente collection '%s'", entityClazz.getSimpleName(), collectionName);
             logger.info(new WrapLog().exception(new AlgosException(message)).usaDb());
             return 0;
         }

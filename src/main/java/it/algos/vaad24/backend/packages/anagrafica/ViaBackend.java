@@ -1,6 +1,7 @@
 package it.algos.vaad24.backend.packages.anagrafica;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -47,7 +48,13 @@ public class ViaBackend extends CrudBackend {
 
     public boolean crea(final String nome) {
         Via via = newEntity(nome);
-        return crudRepository.insert(via) != null;
+
+        if (crudRepository == null) { //@todo noRepository
+            return mongoService.mongoOp.insert(via) != null;
+        }
+        else {
+            return crudRepository.insert(via) != null;
+        }
     }
 
     /**
@@ -90,13 +97,13 @@ public class ViaBackend extends CrudBackend {
     @Override
     public AResult resetOnlyEmpty() {
         AResult result = super.resetOnlyEmpty();
-        String nomeFile = "vie";
+        String nomeFileCSVSulServerAlgos = "vie";
         Map<String, List<String>> mappa;
         List<String> riga;
         String nome;
 
-        if (result.isValido()) {
-            mappa = resourceService.leggeMappa(nomeFile);
+        if (result.isValido() && result.getTypeResult() == AETypeResult.collectionVuota) {
+            mappa = resourceService.leggeMappa(nomeFileCSVSulServerAlgos);
             if (mappa != null) {
                 for (String key : mappa.keySet()) {
                     riga = mappa.get(key);
@@ -119,7 +126,7 @@ public class ViaBackend extends CrudBackend {
             return result;
         }
 
-        return fixResult(result);
+        return fixResult(result.typeResult(AETypeResult.collectionCreata));
     }
 
 }// end of crud backend class

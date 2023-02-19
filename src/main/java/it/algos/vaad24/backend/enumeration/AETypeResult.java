@@ -40,6 +40,11 @@ public enum AETypeResult implements AIType {
     moduloSovrascritto("Il modulo è stato completamente riscritto"),
 
 
+    collectionPiena("La collection esiste ed ha dei valori"), //dopo isCollectionNullOrEmpty
+    collectionVuota("La collection esiste ma è vuota"), //dopo isCollectionNullOrEmpty
+    collectionCreata("La collection è stata creata"), //dopo isCollectionNullOrEmpty
+
+
     error("Errore"),
     mancaResult("Manca il Result"),
     mancaTypeLog("Manca il typeLog");

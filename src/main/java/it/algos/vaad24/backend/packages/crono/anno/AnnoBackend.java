@@ -1,6 +1,7 @@
 package it.algos.vaad24.backend.packages.crono.anno;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
@@ -162,7 +163,7 @@ public class AnnoBackend extends CrudBackend {
             return result;
         }
 
-        if (result.isValido()) {
+        if (result.isValido() && result.getTypeResult() == AETypeResult.collectionVuota) {
             //--costruisce gli anni prima di cristo partendo da ANTE_CRISTO_MAX che coincide con DELTA_ANNI
             for (int k = 1; k <= ANTE_CRISTO_MAX; k++) {
                 creaPrima(k);

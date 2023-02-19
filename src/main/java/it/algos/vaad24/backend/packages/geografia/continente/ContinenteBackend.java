@@ -1,6 +1,7 @@
 package it.algos.vaad24.backend.packages.geografia.continente;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -104,7 +105,7 @@ public class ContinenteBackend extends CrudBackend {
         Continente continenteNew;
         Continente continenteSalvato;
 
-        if (result.isValido()) {
+        if (result.isValido() && result.getTypeResult() == AETypeResult.collectionVuota) {
             mappa = resourceService.leggeMappa(nomeFile);
             if (mappa != null) {
                 for (String key : mappa.keySet()) {

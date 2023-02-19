@@ -233,13 +233,21 @@ public abstract class CrudBackend extends AbstractService {
     }
 
     public boolean deleteAll() {
-        try {
-            crudRepository.deleteAll();
-        } catch (Exception unErrore) {
-            logger.error(unErrore);
+        String collectionName;
+
+        if (crudRepository == null) { //@todo noRepository
+            collectionName = annotationService.getCollectionName(entityClazz);
+            mongoService.mongoOp.dropCollection(collectionName);
+        }
+        else {
+            try {
+                crudRepository.deleteAll();
+            } catch (Exception unErrore) {
+                logger.error(unErrore);
+            }
         }
 
-        return crudRepository.count() == 0;
+        return !isExistsCollection();
     }
 
     public int count() {
@@ -313,7 +321,7 @@ public abstract class CrudBackend extends AbstractService {
             if (deleteAll()) {
                 message = String.format("La collection [%s] esisteva ma è stata cancellata e i dati sono stati ricreati.", entityClazz.getSimpleName().toLowerCase());
                 result = resetOnlyEmpty().method("resetForcing").validMessage(message).addValidMessage(String.format(" %d elementi.", count()));
-                return result;
+                return result.eseguito();
             }
             else {
                 message = String.format("Non sono riuscito a cancellare la collection [%s]", entityClazz.getSimpleName().toLowerCase());
@@ -336,11 +344,11 @@ public abstract class CrudBackend extends AbstractService {
 
         if (mongoService.isCollectionNullOrEmpty(entityClazz)) {
             message = String.format("La collection [%s] era vuota e sono stati creati i nuovi dati.", entityClazz.getSimpleName().toLowerCase());
-            return result.validMessage(message);
+            return result.validMessage(message).typeResult(AETypeResult.collectionVuota);
         }
         else {
             message = String.format("La collection [%s] esisteva già, non era vuota e non è stata toccata.", entityClazz.getSimpleName().toLowerCase());
-            return result.errorMessage(message).intValue(count());
+            return result.validMessage(message).typeResult(AETypeResult.collectionPiena).intValue(count());
         }
     }
 
@@ -374,7 +382,7 @@ public abstract class CrudBackend extends AbstractService {
         return Sort.unsorted();
     }
 
-    public Sort getSortIdKey() {
+    public Sort getSortKeyID() {
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
 
         if (textService.isValid(keyPropertyName)) {

@@ -1,6 +1,7 @@
 package it.algos.vaad24.backend.packages.crono.secolo;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -164,7 +165,7 @@ public class SecoloBackend extends CrudBackend {
         boolean anteCristo = false;
         String anteCristoText;
 
-        if (result.isValido()) {
+        if (result.isValido() && result.getTypeResult() == AETypeResult.collectionVuota) {
             mappa = resourceService.leggeMappa(nomeFile);
             if (mappa != null) {
                 for (String key : mappa.keySet()) {
