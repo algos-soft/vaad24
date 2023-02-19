@@ -1,5 +1,6 @@
 package it.algos.vaad24.backend.logic;
 
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -9,6 +10,7 @@ import org.bson.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.repository.*;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.*;
 
@@ -26,6 +28,8 @@ import java.util.*;
  * cast in uscita <br>
  */
 public abstract class CrudBackend extends AbstractService {
+
+    protected Sort sortOrder;
 
     /**
      * The Entity Class  (obbligatoria sempre e final)
@@ -83,6 +87,7 @@ public abstract class CrudBackend extends AbstractService {
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
+        this.sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_CON);
     }
 
     public AEntity newEntity(Document doc) {
@@ -109,9 +114,61 @@ public abstract class CrudBackend extends AbstractService {
         return newEntityBean;
     }
 
+    /**
+     * Regola la chiave se esiste il campo keyPropertyName. <br>
+     *
+     * @param newEntityBean to be checked
+     *
+     * @return the checked entity
+     */
+    public AEntity fixKey(AEntity newEntityBean) {
+        String keyPropertyValue;
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        boolean usaKeyIdSenzaSpazi = annotationService.usaKeyIdSenzaSpazi(newEntityBean.getClass()); ;
+        boolean usaKeyIdMinuscolaCaseInsensitive = annotationService.usaKeyIdMinuscolaCaseInsensitive(newEntityBean.getClass()); ;
+
+        if (textService.isEmpty(newEntityBean.id) && textService.isValid(keyPropertyName)) {
+            keyPropertyValue = reflectionService.getPropertyValueStr(newEntityBean, keyPropertyName);
+            if (textService.isValid(keyPropertyValue)) {
+                keyPropertyValue = usaKeyIdSenzaSpazi ? textService.levaSpazi(keyPropertyValue) : keyPropertyValue;
+                keyPropertyValue = usaKeyIdMinuscolaCaseInsensitive ? keyPropertyValue.toLowerCase() : keyPropertyValue;
+                newEntityBean.id = keyPropertyValue;
+            }
+        }
+
+        return newEntityBean;
+    }
+
+    /**
+     * Check the existence of a collection. <br>
+     *
+     * @return true if the collection exist
+     */
+    public boolean isExistsCollection() {
+        return mongoService.isExistsCollection(entityClazz);
+    }
+
 
     public List findAll() {
-        return crudRepository.findAll();
+        if (crudRepository != null) { //@todo noRepository
+            return crudRepository.findAll();
+        }
+        else {
+            return mongoService.mongoOp.find(new Query(), entityClazz);
+        }
+    }
+
+    public List findAllSort() {
+        Query query = new Query();
+        if (crudRepository != null) { //@todo noRepository
+            return crudRepository.findAll();
+        }
+        else {
+            if (sortOrder != null) {
+                query.with(sortOrder);
+            }
+            return mongoService.mongoOp.find(query, entityClazz);
+        }
     }
 
     /**
@@ -186,7 +243,7 @@ public abstract class CrudBackend extends AbstractService {
     }
 
     public int count() {
-        if (crudRepository == null) {
+        if (crudRepository == null) { //@todo noRepository
             return mongoService.count(entityClazz);
         }
         else {
@@ -307,6 +364,31 @@ public abstract class CrudBackend extends AbstractService {
      * @param wikiTitle della pagina sul web
      */
     public void download(final String wikiTitle) {
+    }
+
+    public Sort getSortOrder() {
+        return sortOrder;
+    }
+
+    public Sort getSortMongo() {
+        return Sort.unsorted();
+    }
+
+    public Sort getSortIdKey() {
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+
+        if (textService.isValid(keyPropertyName)) {
+            return Sort.by(Sort.Direction.ASC, keyPropertyName);
+        }
+
+        return sortOrder;
+    }
+
+    public Sort getSort(String property) {
+        if (textService.isValid(property)) {
+            return Sort.by(Sort.Direction.ASC, property);
+        }
+        return sortOrder;
     }
 
 }

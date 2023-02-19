@@ -72,9 +72,11 @@ public class ViaBackend extends CrudBackend {
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
     public Via newEntity(final String nome) {
-        return Via.builder()
+        Via newEntityBean = Via.builder()
                 .nome(textService.isValid(nome) ? nome : null)
                 .build();
+
+        return (Via) fixKey(newEntityBean);
     }
 
 

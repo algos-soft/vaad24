@@ -445,6 +445,7 @@ public class AnnotationService extends AbstractService {
 
     /**
      * Get the name (lowerCase) of the collection on mongoDB  <br>
+     * Controlla che esista l'annotation specifica <br>
      *
      * @param entityClazz the class of type AEntity
      *
@@ -469,6 +470,7 @@ public class AnnotationService extends AbstractService {
 
     /**
      * Get the name of the EntityClass that is a preReset <br>
+     * Controlla che esista l'annotation specifica <br>
      *
      * @param entityClazz the class of type AEntity
      *
@@ -490,6 +492,83 @@ public class AnnotationService extends AbstractService {
 
         return collectionName;
     }
+
+
+    /**
+     * Restituisce il nome della property chiave <br>
+     * Controlla che esista l'annotation specifica <br>
+     * Se non la trova, usa il valore di default '_id' <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return the key property name
+     */
+    public String getKeyPropertyName(final Class<? extends AEntity> entityClazz) {
+        String keyName = VUOTA;
+        AIEntity annotation = this.getAIEntity(entityClazz);
+
+        if (annotation != null && annotation.keyPropertyName().length() > 0) {
+            annotation = getAIEntity(entityClazz);
+        }
+
+        if (annotation != null) {
+            keyName = annotation.keyPropertyName();
+        }
+        else {
+            keyName = FIELD_NAME_ID_CON;
+        }
+
+        return keyName;
+    }
+
+
+    /**
+     * Flag per usare solo le lettere minuscole nel campo chiave keyId. <br>
+     * Uppercase and lowercase letters are treated equivalent (case-insensitive) and NOT as distinct (case-sensitive) <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return the status
+     */
+    public boolean usaKeyIdMinuscolaCaseInsensitive(final Class<? extends AEntity> entityClazz) {
+        boolean usaKeyIdMinuscolaCaseInsensitive = true;
+        AIEntity annotation = this.getAIEntity(entityClazz);
+
+        if (annotation != null && annotation.keyPropertyName().length() > 0) {
+            annotation = getAIEntity(entityClazz);
+        }
+
+        if (annotation != null) {
+            usaKeyIdMinuscolaCaseInsensitive = annotation.usaKeyIdMinuscolaCaseInsensitive();
+        }
+
+        return usaKeyIdMinuscolaCaseInsensitive;
+    }
+
+
+    /**
+     * Flag per non usare lo spazio nel campo chiave keyId. <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return the status
+     */
+    public boolean usaKeyIdSenzaSpazi(final Class<? extends AEntity> entityClazz)  {
+        boolean usaKeyIdSenzaSpazi = true;
+        AIEntity annotation = this.getAIEntity(entityClazz);
+
+        if (annotation != null && annotation.keyPropertyName().length() > 0) {
+            annotation = getAIEntity(entityClazz);
+        }
+
+        if (annotation != null) {
+            usaKeyIdSenzaSpazi = annotation.usaKeyIdSenzaSpazi();
+        }
+
+        return usaKeyIdSenzaSpazi;
+    }
+
+
 
     //==========================================================================
     // @AIField

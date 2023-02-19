@@ -254,6 +254,25 @@ public class TextService extends AbstractService {
         return levaTesto(testoIn, PUNTO);
     }
 
+
+    /**
+     * Elimina gli spazi della stringa <br>
+     *
+     * @param stringaIn ingresso
+     *
+     * @return etichetta visualizzata
+     */
+    public String levaSpazi(String stringaIn) {
+        String stringaOut = stringaIn;
+        String tag = SPAZIO;
+
+        if (stringaIn.contains(tag)) {
+            stringaOut = stringaIn.replaceAll(tag, VUOTA);
+        }
+
+        return stringaOut;
+    }
+
     /**
      * Sostituisce gli slash con punti. <br>
      * NON sostituisce lo slash iniziale (se esiste) <br>

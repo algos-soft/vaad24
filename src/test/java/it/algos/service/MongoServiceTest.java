@@ -134,7 +134,7 @@ public class MongoServiceTest extends AlgosIntegrationTest {
 
     @Test
     @Order(52)
-    @DisplayName("5 - count (senza repository)")
+    @DisplayName("52 - count (senza repository)")
     void count() {
         System.out.println("5 - count (senza repository)");
         System.out.println(VUOTA);
@@ -146,6 +146,33 @@ public class MongoServiceTest extends AlgosIntegrationTest {
 
         message = String.format("Nella classe/collection %s ci sono %d entities", sorgenteClasse.getSimpleName(), ottenutoIntero);
         System.out.println(message);
+    }
+
+
+    @Test
+    @Order(61)
+    @DisplayName("61 - esistenza di una collection")
+    void collection() {
+        System.out.println("61 - esistenza di una collection");
+        System.out.println(VUOTA);
+
+        sorgenteClasse = Via.class;
+        ottenutoBooleano = service.isExistsCollection(sorgenteClasse);
+        message = String.format("%s la collection della classe %s", ottenutoBooleano ? "Esiste" : "Non esiste", sorgenteClasse.getSimpleName());
+        System.out.println(message);
+        assertTrue(ottenutoBooleano);
+
+        sorgente = sorgenteClasse.getSimpleName();
+        ottenutoBooleano = service.isExistsCollection(sorgente);
+        message = String.format("%s la collection della classe di nome %s", ottenutoBooleano ? "Esiste" : "Non esiste", sorgente);
+        System.out.println(message);
+        assertTrue(ottenutoBooleano);
+
+        sorgenteClasse = VaadBoot.class;
+        ottenutoBooleano = service.isExistsCollection(sorgenteClasse);
+        message = String.format("%s la collection della classe %s", ottenutoBooleano ? "Esiste" : "Non esiste", sorgenteClasse.getSimpleName());
+        System.out.println(message);
+        assertFalse(ottenutoBooleano);
     }
 
     /**

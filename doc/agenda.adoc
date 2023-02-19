@@ -86,3 +86,17 @@ are needed after this. See Date/Time conversion below.
 == BSon
 
 * Baeldung [https://www.baeldung.com/mongodb-bson]
+
+== Annotation
+Annotation type:
+
+- A primitive type
+- String
+- Class or an invocation of Class
+- An enum type
+- An annotation type
+- An array type whose component type is one of the preceding types
+
+- Oracle [https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.6.1]
+
+

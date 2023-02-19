@@ -1,5 +1,6 @@
 package it.algos.vaad24.backend.packages.anagrafica;
 
+import it.algos.vaad24.backend.annotation.*;
 import it.algos.vaad24.backend.entity.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -28,6 +29,7 @@ import javax.validation.constraints.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
+@AIEntity(keyPropertyName = "nome")
 public class Via extends AEntity {
 
 

@@ -93,6 +93,31 @@ public class ReflectionService extends AbstractService {
 
 
     /**
+     * Valore stringa della property corrente di una entity. <br>
+     *
+     * @param entityBean      oggetto su cui operare la riflessione
+     * @param publicFieldName property statica e pubblica
+     *
+     * @return the string value
+     */
+    public String getPropertyValueStr(final AEntity entityBean, final String publicFieldName) {
+        String value = VUOTA;
+        Object objValue = getPropertyValue(entityBean, publicFieldName);
+
+        if (objValue != null) {
+            if (objValue instanceof String) {
+                value = (String) objValue;
+            }
+            else {
+                value = objValue.toString();
+            }
+        }
+
+        return value;
+    }
+
+
+    /**
      * Lista dei fields statici PUBBLICI dichiarati in una classe di tipo AEntity. <br>
      * Controlla che il parametro in ingresso non sia nullo <br>
      * Ricorsivo. Comprende la entity e tutte le sue superClassi (fino a ACEntity e AEntity) <br>

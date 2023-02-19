@@ -18,6 +18,19 @@ import java.util.*;
  * User: gac
  * Date: Tue, 13-Dec-2022
  * Time: 09:20
+ * Test senza repository <br>
+ * <p>
+ * isExistsCollection()
+ * Count()
+ * FindAll()
+ * FindAllSort(), se esiste un ordine
+ * FindByID()
+ * FindByKey(), se esiste una key
+ * Reset(), se esiste resetForcing()
+ * isExist()
+ * DeleteAll(), se esiste resetForcing()
+ * Delete()
+ * New() o Insert() o Update() o Save()
  */
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -60,6 +73,8 @@ public class ViaBackendTest extends AlgosUnitTest {
         backend.resourceService = resourceService;
         backend.reflectionService = reflectionService;
         backend.mongoService = mongoService;
+        backend.repository = null;
+        backend.crudRepository = null;
     }
 
 
@@ -95,9 +110,23 @@ public class ViaBackendTest extends AlgosUnitTest {
 
     @Test
     @Order(1)
-    @DisplayName("1 - count")
-    void count() {
-        System.out.println("1 - count");
+    @DisplayName("1 - collection")
+    void collection() {
+        System.out.println("1 - Esistenza della collection");
+        System.out.println(VUOTA);
+
+        ottenutoBooleano = backend.isExistsCollection();
+        message = String.format("%s la collection della classe %s", ottenutoBooleano ? "Esiste" : "Non esiste", backend.entityClazz.getSimpleName());
+        System.out.println(message);
+        assertTrue(ottenutoBooleano);
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("2 - count")
+    void count2() {
+        System.out.println("2 - count");
+        System.out.println(VUOTA);
 
         ottenutoIntero = backend.count();
         if (ottenutoIntero > 0) {
@@ -116,10 +145,10 @@ public class ViaBackendTest extends AlgosUnitTest {
 
 
     @Test
-    @Order(2)
-    @DisplayName("2 - findAll")
+    @Order(3)
+    @DisplayName("3 - findAll")
     void findAll() {
-        System.out.println("2 - findAll");
+        System.out.println("3 - findAll");
 
         listaBeans = backend.findAll();
         assertNotNull(listaBeans);
@@ -128,7 +157,21 @@ public class ViaBackendTest extends AlgosUnitTest {
         printSubLista(listaBeans);
     }
 
-//    @Test
+
+    @Test
+    @Order(4)
+    @DisplayName("4 - findAllSort")
+    void findAllSort() {
+        System.out.println("4 - findAllSort");
+
+        listaBeans = backend.findAllSort();
+        assertNotNull(listaBeans);
+        message = String.format("Ci sono in totale %s entities ordinate di %s", textService.format(listaBeans.size()), dbName);
+        System.out.println(message);
+        printSubLista(listaBeans);
+    }
+
+    //    @Test
     @Order(91)
     @DisplayName("91 - resetOnlyEmpty pieno")
     void resetOnlyEmptyPieno() {
@@ -147,7 +190,7 @@ public class ViaBackendTest extends AlgosUnitTest {
     }
 
 
-//    @Test
+    //    @Test
     @Order(92)
     @DisplayName("92 - resetOnlyEmpty vuoto")
     void resetOnlyEmptyVuoto() {
@@ -166,7 +209,7 @@ public class ViaBackendTest extends AlgosUnitTest {
         printSubLista(listaBeans);
     }
 
-//    @Test
+    //    @Test
     @Order(93)
     @DisplayName("93 - resetForcing pieno")
     void resetForcingPieno() {
@@ -185,7 +228,7 @@ public class ViaBackendTest extends AlgosUnitTest {
     }
 
 
-//    @Test
+    //    @Test
     @Order(94)
     @DisplayName("94 - resetForcing vuoto")
     void resetForcingVuoto() {

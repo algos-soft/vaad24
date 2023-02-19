@@ -4,6 +4,7 @@ import com.vaadin.flow.component.icon.*;
 import com.vaadin.flow.spring.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.*;
 
 import java.time.*;
 import java.util.*;
@@ -569,5 +570,7 @@ public class VaadCost {
     public static final String TASK_FLAG_ATTIVA = "=acceso";
 
     public static final String TASK_FLAG_DISATTIVA = "=spento";
+    public static final String SORT_ASC = Sort.Direction.ASC.name();
+    public static final String SORT_DESC = Sort.Direction.DESC.name();
 
 }

@@ -20,6 +20,7 @@ import org.mockito.*;
 import org.slf4j.Logger;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
 
 import java.lang.reflect.*;
 import java.time.*;
@@ -159,6 +160,8 @@ public abstract class AlgosUnitTest {
     protected StreamResource streamResource;
 
     protected long inizio;
+
+    protected Sort sort;
 
     @InjectMocks
     protected TextService textService;
@@ -409,6 +412,7 @@ public abstract class AlgosUnitTest {
         inizio = System.currentTimeMillis();
         message = VUOTA;
         listaClazz = null;
+        sort = null;
     }
 
 
@@ -619,7 +623,7 @@ public abstract class AlgosUnitTest {
         System.out.println(String.format("TypeText: %s", result.getTypeTxt()));
         System.out.println(String.format("Message code: %s", result.getCodeMessage()));
         System.out.println(String.format("Message: %s", result.getMessage()));
-        System.out.println(String.format("Exception: %s", result.getException() != null ? result.getException().getMessage():VUOTA));
+        System.out.println(String.format("Exception: %s", result.getException() != null ? result.getException().getMessage() : VUOTA));
         System.out.println(String.format("Error code: %s", result.getErrorCode()));
         System.out.println(String.format("Error message: %s", result.getErrorMessage()));
         System.out.println(String.format("Valid message: %s", result.getValidMessage()));
