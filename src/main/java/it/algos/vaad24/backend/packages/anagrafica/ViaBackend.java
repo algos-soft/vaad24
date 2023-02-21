@@ -1,11 +1,15 @@
 package it.algos.vaad24.backend.packages.anagrafica;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.mongodb.core.*;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
@@ -45,23 +49,52 @@ public class ViaBackend extends CrudBackend {
         this.repository = (ViaRepository) crudRepository;
     }
 
+    public boolean creaIfNotExist(final String nome) {
+        return checkAndSave(newEntity(nome)) != null;
+    }
 
-    public boolean crea(final String nome) {
-        Via via = newEntity(nome);
+
+    public Via checkAndSave(final Via via) {
         String collectionName = annotationService.getCollectionName(entityClazz);
 
-        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
-            return crudRepository.insert(via) != null;
-        }
-        else {
-            if (textService.isValid(collectionName)) {
-                return mongoService.mongoOp.insert(via, collectionName) != null;
+        if (!isExistProperty(via.nome)) {
+            if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+                return (Via) repository.insert(via);
             }
             else {
-                return mongoService.mongoOp.insert(via) != null;
+                if (textService.isValid(collectionName)) {
+                    return (Via) mongoService.mongoOp.insert(via, collectionName);
+                }
+                else {
+                    return (Via) mongoService.mongoOp.insert(via);
+                }
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    public boolean isExistProperty(final String keyPropertyValue) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        Query query = new Query();
+
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+            return repository.findById(keyPropertyName) != null;
+        }
+        else {
+            query.addCriteria(Criteria.where(keyPropertyName).is(keyPropertyValue));
+            if (textService.isValid(collectionName)) {
+                return mongoService.mongoOp.exists(query, entityClazz.getClass(), collectionName);
+            }
+            else {
+                return mongoService.mongoOp.exists(query, entityClazz.getClass());
             }
         }
     }
+
+
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -93,6 +126,106 @@ public class ViaBackend extends CrudBackend {
     }
 
 
+    public boolean isExistId(final String keyIdValue) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        Query query = new Query();
+
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+            return repository.findById(keyPropertyName) != null;
+        }
+        else {
+            query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(keyIdValue));
+            if (textService.isValid(collectionName)) {
+                return mongoService.mongoOp.exists(query, entityClazz.getClass(), collectionName);
+            }
+            else {
+                return mongoService.mongoOp.exists(query, entityClazz.getClass());
+            }
+        }
+    }
+
+    public Via findById(final String keyID) {
+        Via entity;
+        String collectionName = annotationService.getCollectionName(entityClazz);
+
+        if (textService.isValid(collectionName)) {
+            entity = (Via) mongoService.mongoOp.findById(keyID, entityClazz, collectionName);
+        }
+        else {
+            entity = (Via) mongoService.mongoOp.findById(keyID, entityClazz);
+        }
+
+        return entity;
+    }
+
+    public Via findByKeyCode(final String keyCodeValue) {
+        Via entity;
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        Query query = new Query();
+        query.addCriteria(Criteria.where(keyPropertyName).is(keyCodeValue));
+
+        if (textService.isValid(collectionName)) {
+            entity = (Via) mongoService.mongoOp.findOne(query, entityClazz, collectionName);
+        }
+        else {
+            entity = (Via) mongoService.mongoOp.findOne(query, entityClazz);
+        }
+
+        return entity;
+    }
+
+
+    public Via save(Via entity) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Query query = new Query();
+
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+            try {
+                return (Via) crudRepository.save(entity);
+            } catch (Exception unErrore) {
+                logger.error(unErrore);
+            }
+            return entity;
+        }
+        else {
+            query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(entity.id));
+            FindAndReplaceOptions options = new FindAndReplaceOptions();
+            options.returnNew();
+            if (textService.isValid(collectionName)) {
+                return mongoService.mongoOp.findAndReplace(query, entity, options, collectionName);
+            }
+            else {
+                return mongoService.mongoOp.findAndReplace(query, entity, options);
+            }
+        }
+    }
+
+    public boolean delete(AEntity entity) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Query query = new Query();
+
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+            try {
+                crudRepository.delete(entity);
+            } catch (Exception unErrore) {
+                logger.error(unErrore);
+            }
+            return false;
+        }
+        else {
+            query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(entity.id));
+            if (textService.isValid(collectionName)) {
+                mongoService.mongoOp.findAndRemove(query, entity.getClass(), collectionName);
+            }
+            else {
+                mongoService.mongoOp.findAndRemove(query, entity.getClass());
+            }
+            return true;
+        }
+    }
+
     /**
      * Creazione di alcuni dati <br>
      * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
@@ -119,7 +252,7 @@ public class ViaBackend extends CrudBackend {
                     else {
                         return result.errorMessage("I dati non sono congruenti");
                     }
-                    if (!crea(nome)) {
+                    if (!creaIfNotExist(nome)) {
                         logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
                     }
                 }

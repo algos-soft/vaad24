@@ -100,3 +100,27 @@ Annotation type:
 - Oracle [https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.6.1]
 
 
+== CRUD
+CRUD stands for Create, Read, Update, and Delete. These are the four basic operations that are commonly used in databases and data storage systems to manage data. Here is a brief explanation of each CRUD operation:
+
+* Create:
+
+ This operation is used to create new data records in a database or data storage system. This can be done using an INSERT statement in
+SQL or an equivalent method in other data storage systems.
+
+* Read:
+
+ This operation is used to retrieve data from a database or data storage system. This can be done using a SELECT statement in SQL
+or an equivalent method in other data storage systems.
+
+* Update:
+
+ This operation is used to modify existing data records in a database or data storage system. This can be done using an UPDATE
+statement in SQL or an equivalent method in other data storage systems.
+
+* Delete:
+
+ This operation is used to remove data records from a database or data storage system. This can be done using a DELETE statement
+in SQL or an equivalent method in other data storage systems.
+
+These four operations are fundamental to the management of data in any data storage system, and are used extensively in various software applications and websites.
