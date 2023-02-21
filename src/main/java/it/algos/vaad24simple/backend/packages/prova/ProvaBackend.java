@@ -37,8 +37,6 @@ public class ProvaBackend extends CrudBackend {
      * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
      * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
      * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
-     * @param crudRepository per la persistenza dei dati
      */
     //@todo registrare eventualmente come costante in VaadCost il valore del Qualifier
     public ProvaBackend() {
@@ -124,18 +122,6 @@ public class ProvaBackend extends CrudBackend {
     }
 
 
-    public boolean isExistId(final String keyIdValue) {
-        String collectionName = annotationService.getCollectionName(entityClazz);
-        Query query = new Query();
-
-        query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(keyIdValue));
-        if (textService.isValid(collectionName)) {
-            return mongoService.mongoOp.exists(query, entityClazz.getClass(), collectionName);
-        }
-        else {
-            return mongoService.mongoOp.exists(query, entityClazz.getClass());
-        }
-    }
 
     public Prova findById(final String keyID) {
         Prova entity;

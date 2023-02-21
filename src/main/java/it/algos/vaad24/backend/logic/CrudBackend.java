@@ -9,8 +9,10 @@ import it.algos.vaad24.backend.wrapper.*;
 import org.bson.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
-import org.springframework.data.mongodb.repository.*;
+import org.springframework.data.mongodb.core.*;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.*;
+import org.springframework.data.mongodb.repository.*;
 
 import java.util.*;
 
@@ -90,6 +92,47 @@ public abstract class CrudBackend extends AbstractService {
         this.sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_CON);
     }
 
+
+    public AEntity checkAndSave(final AEntity entityBean) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+
+        if (!isExistId(entityBean.id)) {
+            if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+                return (AEntity)crudRepository.insert(entityBean);
+            }
+            else {
+                if (textService.isValid(collectionName)) {
+                    return mongoService.mongoOp.insert(entityBean, collectionName);
+                }
+                else {
+                    return mongoService.mongoOp.insert(entityBean);
+                }
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    public boolean isExistProperty(final String keyPropertyValue) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        Query query = new Query();
+
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+            return crudRepository.findById(keyPropertyName) != null;
+        }
+        else {
+            query.addCriteria(Criteria.where(keyPropertyName).is(keyPropertyValue));
+            if (textService.isValid(collectionName)) {
+                return mongoService.mongoOp.exists(query, entityClazz.getClass(), collectionName);
+            }
+            else {
+                return mongoService.mongoOp.exists(query, entityClazz.getClass());
+            }
+        }
+    }
+
     public AEntity newEntity(Document doc) {
         return null;
     }
@@ -137,6 +180,105 @@ public abstract class CrudBackend extends AbstractService {
         }
 
         return newEntityBean;
+    }
+
+    public boolean isExistId(final String keyIdValue) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        Query query = new Query();
+
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+            return crudRepository.findById(keyPropertyName) != null;
+        }
+        else {
+            query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(keyIdValue));
+            if (textService.isValid(collectionName)) {
+                return mongoService.mongoOp.exists(query, entityClazz.getClass(), collectionName);
+            }
+            else {
+                return mongoService.mongoOp.exists(query, entityClazz.getClass());
+            }
+        }
+    }
+
+    public AEntity findById(final String keyID) {
+        AEntity entity;
+        String collectionName = annotationService.getCollectionName(entityClazz);
+
+        if (textService.isValid(collectionName)) {
+            entity = mongoService.mongoOp.findById(keyID, entityClazz, collectionName);
+        }
+        else {
+            entity = mongoService.mongoOp.findById(keyID, entityClazz);
+        }
+
+        return entity;
+    }
+    public AEntity findByKeyCode(final String keyCodeValue) {
+        AEntity entity;
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        Query query = new Query();
+        query.addCriteria(Criteria.where(keyPropertyName).is(keyCodeValue));
+
+        if (textService.isValid(collectionName)) {
+            entity = mongoService.mongoOp.findOne(query, entityClazz, collectionName);
+        }
+        else {
+            entity = mongoService.mongoOp.findOne(query, entityClazz);
+        }
+
+        return entity;
+    }
+
+    public AEntity save(AEntity entity) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Query query = new Query();
+
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+            try {
+                return (AEntity)crudRepository.save(entity);
+            } catch (Exception unErrore) {
+                logger.error(unErrore);
+            }
+            return entity;
+        }
+        else {
+            query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(entity.id));
+            FindAndReplaceOptions options = new FindAndReplaceOptions();
+            options.returnNew();
+            if (textService.isValid(collectionName)) {
+                return mongoService.mongoOp.findAndReplace(query, entity, options, collectionName);
+            }
+            else {
+                return mongoService.mongoOp.findAndReplace(query, entity, options);
+            }
+        }
+    }
+
+
+    public boolean delete(AEntity entity) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Query query = new Query();
+
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+            try {
+                crudRepository.delete(entity);
+            } catch (Exception unErrore) {
+                logger.error(unErrore);
+            }
+            return false;
+        }
+        else {
+            query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(entity.id));
+            if (textService.isValid(collectionName)) {
+                mongoService.mongoOp.findAndRemove(query, entity.getClass(), collectionName);
+            }
+            else {
+                mongoService.mongoOp.findAndRemove(query, entity.getClass());
+            }
+            return true;
+        }
     }
 
     /**
