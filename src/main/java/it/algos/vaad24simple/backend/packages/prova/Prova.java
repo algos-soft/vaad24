@@ -23,10 +23,11 @@ import org.springframework.data.mongodb.core.mapping.*;
 @AllArgsConstructor
 @Builder()
 @EqualsAndHashCode(callSuper = false)
+@AIEntity(collectionName = "test", keyPropertyName = "nome")
 public class Prova extends AEntity {
 
 
-    public String descrizione;
+    public String nome;
 
     //    @AIField(type = AETypeField.combolinkato, linkClazz = ContinenteBackend.class, caption = "continente")
     @DBRef

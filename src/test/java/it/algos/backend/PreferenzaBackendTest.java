@@ -68,6 +68,7 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
         backend.arrayService = arrayService;
         backend.dateService = dateService;
         backend.textService = textService;
+        backend.annotationService = annotationService;
         backend.resourceService = resourceService;
         backend.reflectionService = reflectionService;
         backend.mongoService = mongoService;

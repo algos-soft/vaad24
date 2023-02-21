@@ -25,7 +25,7 @@ import java.util.stream.*;
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
-@Tag("backend")
+@Tag("backend-no")
 @DisplayName("Giorno Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GiornoBackendTest extends AlgosUnitTest {

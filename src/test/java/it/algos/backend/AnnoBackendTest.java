@@ -26,7 +26,7 @@ import java.util.stream.*;
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
-@Tag("backend")
+@Tag("backend-no")
 @DisplayName("Anno Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AnnoBackendTest extends AlgosUnitTest {

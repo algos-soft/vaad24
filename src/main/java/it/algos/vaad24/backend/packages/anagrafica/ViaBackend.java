@@ -95,7 +95,6 @@ public class ViaBackend extends CrudBackend {
     }
 
 
-
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>

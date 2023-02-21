@@ -1,8 +1,11 @@
 package it.algos.vaad24simple.backend.packages.prova;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
+import org.springframework.data.mongodb.core.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 /**
@@ -39,6 +42,42 @@ public class ProvaBackend extends CrudBackend {
     }
 
 
+    public boolean creaIfNotExist(final String nome) {
+        return checkAndSave(newEntity(nome, null)) != null;
+    }
+
+
+    public Prova checkAndSave(final Prova entityBean) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+
+        if (!isExistProperty(entityBean.nome)) {
+            if (textService.isValid(collectionName)) {
+                return (Prova) mongoService.mongoOp.insert(entityBean, collectionName);
+            }
+            else {
+                return (Prova) mongoService.mongoOp.insert(entityBean);
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    public boolean isExistProperty(final String keyPropertyValue) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        Query query = new Query();
+
+        query.addCriteria(Criteria.where(keyPropertyName).is(keyPropertyValue));
+        if (textService.isValid(collectionName)) {
+            return mongoService.mongoOp.exists(query, entityClazz.getClass(), collectionName);
+        }
+        else {
+            return mongoService.mongoOp.exists(query, entityClazz.getClass());
+        }
+    }
+
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
@@ -49,6 +88,16 @@ public class ProvaBackend extends CrudBackend {
     public Prova newEntity() {
         return newEntity(VUOTA, null);
     }
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Usa il @Builder di Lombok <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Prova newEntity(String nome) {
+        return newEntity(nome, null);
+    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -56,15 +105,93 @@ public class ProvaBackend extends CrudBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param descrizione (obbligatorio)
+     * @param nome (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public Prova newEntity(final String descrizione, Continente continente) {
-        return Prova.builder()
-                .descrizione(textService.isValid(descrizione) ? descrizione : null)
+    public Prova newEntity(final String nome, Continente continente) {
+        Prova newEntityBean = Prova.builder()
+                .nome(textService.isValid(nome) ? nome : null)
                 .continenti(continente)
                 .build();
+
+        return (Prova) fixKey(newEntityBean);
+    }
+
+
+    public boolean isExistId(final String keyIdValue) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        Query query = new Query();
+
+        query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(keyIdValue));
+        if (textService.isValid(collectionName)) {
+            return mongoService.mongoOp.exists(query, entityClazz.getClass(), collectionName);
+        }
+        else {
+            return mongoService.mongoOp.exists(query, entityClazz.getClass());
+        }
+    }
+
+    public Prova findById(final String keyID) {
+        Prova entity;
+        String collectionName = annotationService.getCollectionName(entityClazz);
+
+        if (textService.isValid(collectionName)) {
+            entity = (Prova) mongoService.mongoOp.findById(keyID, entityClazz, collectionName);
+        }
+        else {
+            entity = (Prova) mongoService.mongoOp.findById(keyID, entityClazz);
+        }
+
+        return entity;
+    }
+
+    public Prova findByKeyCode(final String keyCodeValue) {
+        Prova entity;
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        Query query = new Query();
+        query.addCriteria(Criteria.where(keyPropertyName).is(keyCodeValue));
+
+        if (textService.isValid(collectionName)) {
+            entity = (Prova) mongoService.mongoOp.findOne(query, entityClazz, collectionName);
+        }
+        else {
+            entity = (Prova) mongoService.mongoOp.findOne(query, entityClazz);
+        }
+
+        return entity;
+    }
+
+
+    public Prova save(Prova entity) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Query query = new Query();
+
+        query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(entity.id));
+        FindAndReplaceOptions options = new FindAndReplaceOptions();
+        options.returnNew();
+        if (textService.isValid(collectionName)) {
+            return mongoService.mongoOp.findAndReplace(query, entity, options, collectionName);
+        }
+        else {
+            return mongoService.mongoOp.findAndReplace(query, entity, options);
+        }
+    }
+
+    public boolean delete(AEntity entity) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Query query = new Query();
+
+        query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(entity.id));
+        if (textService.isValid(collectionName)) {
+            mongoService.mongoOp.findAndRemove(query, entity.getClass(), collectionName);
+        }
+        else {
+            mongoService.mongoOp.findAndRemove(query, entity.getClass());
+        }
+        return true;
     }
 
 }// end of crud backend class
