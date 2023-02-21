@@ -18,7 +18,7 @@ import java.util.*;
  * Created by Algos
  * User: gac
  * Date: Tue, 21-Feb-2023
- * Time: 10:30
+ * Time: 19:06
  */
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -34,11 +34,11 @@ public class ProvaBackendTest extends AlgosUnitTest {
     @InjectMocks
     private ProvaBackend backend;
 
-    private String backendName;
-
     private Prova entityBean;
 
     private List<Prova> listaBeans;
+
+    private String backendName;
 
     private Class entityClazz;
 
@@ -281,13 +281,13 @@ public class ProvaBackendTest extends AlgosUnitTest {
         message = String.format("8) isExistProperty -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
         System.out.println(message);
 
-        reflectionService.setPropertyValue(entityBean,keyPropertyName,nomeModificato);
+        reflectionService.setPropertyValue(entityBean, keyPropertyName, nomeModificato);
         entityBean = backend.save(entityBean);
         assertNotNull(entityBean);
-        assertEquals(nomeModificato, reflectionService.getPropertyValue(entityBean,keyPropertyName));
+        assertEquals(nomeModificato, reflectionService.getPropertyValue(entityBean, keyPropertyName));
         entityBean = backend.findById(keyID);
         assertNotNull(entityBean);
-        assertEquals(nomeModificato, reflectionService.getPropertyValue(entityBean,keyPropertyName));
+        assertEquals(nomeModificato, reflectionService.getPropertyValue(entityBean, keyPropertyName));
         message = String.format("9) save -> Modifica la entity [%s].%s in [%s].%s", keyID, nomeOriginale, keyID, nomeModificato);
         System.out.println(message);
 
@@ -350,6 +350,7 @@ public class ProvaBackendTest extends AlgosUnitTest {
             logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
         }
     }
+
 
     /**
      * Qui passa al termine di ogni singolo test <br>
