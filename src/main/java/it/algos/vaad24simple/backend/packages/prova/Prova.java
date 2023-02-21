@@ -7,6 +7,9 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.*;
+import org.springframework.stereotype.*;
+
+import javax.persistence.*;
 
 /**
  * Project vaad24
@@ -18,16 +21,20 @@ import org.springframework.data.mongodb.core.mapping.*;
  * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
  */
 //Lombok
+@Component
+@Document
+//Lombok
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder()
 @EqualsAndHashCode(callSuper = false)
-@AIEntity(collectionName = "test", keyPropertyName = "nome")
+@MappedSuperclass()
+@AIEntity(collectionName = "test", keyPropertyName = "descrizione")
 public class Prova extends AEntity {
 
 
-    public String nome;
+    public String descrizione;
 
     //    @AIField(type = AETypeField.combolinkato, linkClazz = ContinenteBackend.class, caption = "continente")
     @DBRef
@@ -45,7 +52,7 @@ public class Prova extends AEntity {
 
     @Override
     public String toString() {
-        return VUOTA;
+        return descrizione;
     }
 
 }// end of crud entity class

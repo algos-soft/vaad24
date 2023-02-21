@@ -4,6 +4,7 @@ import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
+import it.algos.vaad24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.mockito.*;
@@ -43,13 +44,15 @@ public class ViaBackendTest extends AlgosUnitTest {
     @InjectMocks
     private ViaBackend backend;
 
+    private String backendName;
+
     private Via entityBean;
 
     private List<Via> listaBeans;
 
-    private String backendName = "ViaBackend";
-
     private Class entityClazz;
+
+    private String clazzName;
 
     private String collectionName;
 
@@ -76,6 +79,8 @@ public class ViaBackendTest extends AlgosUnitTest {
         backend.crudRepository = null;
 
         entityClazz = Via.class;
+        clazzName = entityClazz.getSimpleName();
+        backendName = "Via" + SUFFIX_BACKEND;
         collectionName = annotationService.getCollectionName(entityClazz);
         keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
     }
@@ -116,14 +121,13 @@ public class ViaBackendTest extends AlgosUnitTest {
     @DisplayName("1 - collection")
     void collection() {
         System.out.println("1 - Esistenza della collection");
-        System.out.println(VUOTA);
 
         ottenutoBooleano = backend.isExistsCollection();
         if (ottenutoBooleano) {
-            message = String.format("Esiste la collection della classe [%s] e si chiama '%s'", backend.entityClazz.getSimpleName(), collectionName);
+            message = String.format("Esiste la collection della classe [%s] e si chiama '%s'", clazzName, collectionName);
         }
         else {
-            message = String.format("Non esiste la collection '%s' della classe [%s]", collectionName, backend.entityClazz.getSimpleName());
+            message = String.format("Non esiste la collection '%s' della classe [%s]", collectionName, clazzName);
         }
         System.out.println(message);
     }
@@ -134,18 +138,17 @@ public class ViaBackendTest extends AlgosUnitTest {
     @DisplayName("2 - count")
     void count2() {
         System.out.println("2 - count");
-        System.out.println(VUOTA);
 
         ottenutoIntero = backend.count();
         if (ottenutoIntero > 0) {
-            message = String.format("La collection '%s' ha in totale %s entities nel database mongoDB", collectionName, textService.format(ottenutoIntero));
+            message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
         }
         else {
             if (reflectionService.isEsisteMetodo(backend.getClass(), TAG_RESET_ONLY)) {
-                message = String.format("La collection '%s' è ancora vuota. Usa il metodo %s.%s()", collectionName, backendName, TAG_RESET_ONLY);
+                message = String.format("La collection '%s' della classe [%s] è ancora vuota. Usa il metodo %s.%s()", collectionName, clazzName, backendName, TAG_RESET_ONLY);
             }
             else {
-                message = String.format("Nel database mongoDB la collection '%s' è ancora vuota", collectionName);
+                message = String.format("Nel database mongoDB la collection '%s' della classe [%s] è ancora vuota", collectionName, clazzName);
             }
         }
         System.out.println(message);
@@ -161,7 +164,7 @@ public class ViaBackendTest extends AlgosUnitTest {
         listaBeans = backend.findAllNoSort();
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
-        message = String.format("La collection '%s' ha in totale %s entities nel database mongoDB", collectionName, textService.format(ottenutoIntero));
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
         System.out.println(message);
         printSubLista(listaBeans);
     }
@@ -176,7 +179,7 @@ public class ViaBackendTest extends AlgosUnitTest {
         listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
-        message = String.format("La collection '%s' ha in totale %s entities nel database mongoDB", collectionName, textService.format(ottenutoIntero));
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
         System.out.println(message);
         printSubLista(listaBeans);
     }
@@ -188,11 +191,11 @@ public class ViaBackendTest extends AlgosUnitTest {
     void findAllSort() {
         System.out.println("22 - findAll con sort specifico (discendente)");
 
-        sort = Sort.by(Sort.Direction.DESC, "nome");
+        sort = Sort.by(Sort.Direction.DESC, keyPropertyName);
         listaBeans = backend.findAllSort(sort);
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
-        message = String.format("La collection '%s' ha in totale %s entities nel database mongoDB", collectionName, textService.format(ottenutoIntero));
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
         System.out.println(message);
         printSubLista(listaBeans);
     }
@@ -203,10 +206,13 @@ public class ViaBackendTest extends AlgosUnitTest {
     @DisplayName("31 - newEntity vuota senza ID")
     void newEntityVuota() {
         System.out.println("31 - newEntity vuota senza ID");
+        System.out.println(VUOTA);
 
         entityBean = backend.newEntity();
         assertNotNull(entityBean);
         assertNull(entityBean.id);
+        message = String.format("Creata (in memoria) una entity (vuota) e senza ID, della classe [%s]", clazzName);
+        System.out.println(message);
     }
 
     @Test
@@ -214,16 +220,19 @@ public class ViaBackendTest extends AlgosUnitTest {
     @DisplayName("32 - newEntity con ID ma non registrata")
     void newEntity() {
         System.out.println("32 - newEntity con ID ma non registrata");
+        System.out.println(VUOTA);
 
-        sorgente = "Mario Lino";
-        previsto = "mariolino";
-        previsto2 = "Mario Lino";
+        sorgente = "Topo Lino";
+        previsto = "topolino";
+        previsto2 = "Topo Lino";
         entityBean = backend.newEntity(sorgente);
         assertNotNull(entityBean);
         ottenuto = entityBean.id;
-        ottenuto2 = entityBean.nome;
+        ottenuto2 = reflectionService.getPropertyValueStr(entityBean, keyPropertyName);
         assertEquals(previsto, ottenuto);
         assertEquals(previsto2, ottenuto2);
+        message = String.format("Creata (in memoria) una entity con ID e %s, della classe [%s]", keyPropertyName, clazzName);
+        System.out.println(message);
     }
 
     @Test
@@ -233,8 +242,14 @@ public class ViaBackendTest extends AlgosUnitTest {
         System.out.println("33 - CRUD operations");
         System.out.println(VUOTA);
 
-        String nomeOriginale = "Mario Lino";
-        String keyID = "mariolino";
+        if (!backend.isExistsCollection()) {
+            message = String.format("Non esiste la collection '%s' della classe [%s]", collectionName, clazzName);
+            System.out.println(message);
+            return;
+        }
+
+        String nomeOriginale = "Topo Lino";
+        String keyID = "topolino";
         String nomeModificato = "Giuseppe";
 
         ottenutoBooleano = backend.isExistId(nomeOriginale);
@@ -276,23 +291,23 @@ public class ViaBackendTest extends AlgosUnitTest {
         message = String.format("8) isExistProperty -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
         System.out.println(message);
 
-        entityBean.nome = nomeModificato;
+        reflectionService.setPropertyValue(entityBean, keyPropertyName, nomeModificato);
         entityBean = backend.save(entityBean);
         assertNotNull(entityBean);
-        assertEquals(nomeModificato, entityBean.nome);
+        assertEquals(nomeModificato, reflectionService.getPropertyValue(entityBean, keyPropertyName));
         entityBean = backend.findById(keyID);
         assertNotNull(entityBean);
-        assertEquals(nomeModificato, entityBean.nome);
+        assertEquals(nomeModificato, reflectionService.getPropertyValue(entityBean, keyPropertyName));
         message = String.format("9) save -> Modifica la entity [%s].%s in [%s].%s", keyID, nomeOriginale, keyID, nomeModificato);
         System.out.println(message);
 
         ottenutoBooleano = backend.isExistProperty(nomeOriginale);
-        message = String.format("7) isExistProperty -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        message = String.format("10) isExistProperty -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
         assertFalse(ottenutoBooleano);
         System.out.println(message);
         ottenutoBooleano = backend.isExistProperty(nomeModificato);
         assertTrue(ottenutoBooleano);
-        message = String.format("8) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
+        message = String.format("11) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
         System.out.println(message);
 
         ottenutoBooleano = backend.delete(entityBean);
@@ -305,41 +320,45 @@ public class ViaBackendTest extends AlgosUnitTest {
         System.out.println(message);
     }
 
-    //    @Test
+    @Test
     @Order(91)
     @DisplayName("91 - resetOnlyEmpty")
-    void resetOnlyEmptyPieno() {
+    void resetOnlyEmpty() {
         System.out.println("91 - resetOnlyEmpty");
-        String message;
+        System.out.println(VUOTA);
 
         ottenutoRisultato = backend.resetOnlyEmpty();
-        printRisultato(ottenutoRisultato);
+        assertNotNull(ottenutoRisultato);
 
-        listaBeans = backend.findAllSortCorrente();
-        assertNotNull(listaBeans);
-        System.out.println(VUOTA);
-        message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), collectionName);
-        System.out.println(message);
-        printSubLista(listaBeans);
+        if (ottenutoRisultato.isValido()) {
+            System.out.println(ottenutoRisultato.getMessage());
+            printRisultato(ottenutoRisultato);
+        }
+        else {
+            logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
+        }
     }
 
 
-    //    @Test
+    @Test
     @Order(92)
     @DisplayName("92 - resetForcing")
-    void resetOnlyEmptyVuoto() {
+    void resetForcing() {
         System.out.println("92 - resetForcing");
-        String message;
+        System.out.println(VUOTA);
 
         ottenutoRisultato = backend.resetForcing();
-        printRisultato(ottenutoRisultato);
+        assertNotNull(ottenutoRisultato);
+        if (ottenutoRisultato.isValido()) {
+            System.out.println(ottenutoRisultato.getMessage());
+            printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAllSortCorrente();
-        assertNotNull(listaBeans);
-        System.out.println(VUOTA);
-        message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), collectionName);
-        System.out.println(message);
-        printSubLista(listaBeans);
+            System.out.println(VUOTA);
+            printSubLista(ottenutoRisultato.getLista());
+        }
+        else {
+            logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
+        }
     }
 
 

@@ -327,19 +327,23 @@ public abstract class CrudBackend extends AbstractService {
      */
     public AResult resetForcing() {
         AResult result = AResult.build();
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String clazzName = entityClazz.getSimpleName();
         String message;
+        String elementi;
 
         if (mongoService.isCollectionNullOrEmpty(entityClazz)) {
             return resetOnlyEmpty().method("resetForcing");
         }
         else {
             if (deleteAll()) {
-                message = String.format("La collection [%s] esisteva ma è stata cancellata e i dati sono stati ricreati.", entityClazz.getSimpleName().toLowerCase());
-                result = resetOnlyEmpty().method("resetForcing").validMessage(message).addValidMessage(String.format(" %d elementi.", count()));
-                return result.eseguito();
+                result = resetOnlyEmpty().method("resetForcing");
+                elementi = textService.format(result.getIntValue());
+                message = String.format("La collection '%s' della classe [%s] esisteva ma è stata cancellata e i dati sono stati ricreati. Contiene %s elementi.", collectionName, clazzName, elementi);
+                return result.validMessage(message);
             }
             else {
-                message = String.format("Non sono riuscito a cancellare la collection [%s]", entityClazz.getSimpleName().toLowerCase());
+                message = String.format("Non sono riuscito a cancellare la collection '%s' della classe [%s]", collectionName, clazzName);
                 return result.errorMessage(message);
             }
         }
@@ -349,25 +353,33 @@ public abstract class CrudBackend extends AbstractService {
     /**
      * Creazione di alcuni dati <br>
      * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-     * Viene invocato alla creazione del programma <br>
+     * Viene invocato: <br>
+     * 1) alla creazione del programma da VaadData.resetData() <br>
+     * 2) dal buttonDeleteReset -> CrudView.reset() <br>
+     * 3) da UtilityView.reset() <br>
      * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public AResult resetOnlyEmpty() {
-        AResult result = AResult.build().method("resetOnlyEmpty").target(entityClazz.getSimpleName());
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        AResult result = AResult.build().method("resetOnlyEmpty").target(collectionName);
+        String clazzName = entityClazz.getSimpleName();
+        String backendName = clazzName + SUFFIX_BACKEND;
+        String elementi;
         String message;
 
         if (mongoService.isCollectionNullOrEmpty(entityClazz)) {
-            message = String.format("La collection [%s] era vuota e sono stati creati i nuovi dati.", entityClazz.getSimpleName().toLowerCase());
-            return result.validMessage(message).typeResult(AETypeResult.collectionVuota);
+            message = String.format("La collection '%s' della classe [%s] era vuota ma non sono riuscito a crearla. Probabilmente manca il metodo [%s].resetOnlyEmpty()", collectionName, clazzName, backendName);
+            return result.errorMessage(message).typeResult(AETypeResult.collectionVuota).typeLog(AETypeLog.reset);
         }
         else {
-            message = String.format("La collection [%s] esisteva già, non era vuota e non è stata toccata.", entityClazz.getSimpleName().toLowerCase());
+            elementi = textService.format(count());
+            message = String.format("La collection '%s' della classe [%s] esisteva già, non era vuota e non è stata toccata. Contiene %s elementi.", collectionName, clazzName, elementi);
             return result.validMessage(message).typeResult(AETypeResult.collectionPiena).intValue(count());
         }
     }
 
-
+    @Deprecated
     public AResult fixResult(AResult result) {
         String message = String.format(" %d elementi.", count());
         return result.addValidMessage(message).intValue(count());

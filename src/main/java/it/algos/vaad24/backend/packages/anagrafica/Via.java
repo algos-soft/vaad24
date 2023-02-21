@@ -29,7 +29,7 @@ import javax.validation.constraints.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "paperino", keyPropertyName = "nome")
+@AIEntity(keyPropertyName = "nome")
 public class Via extends AEntity {
 
 

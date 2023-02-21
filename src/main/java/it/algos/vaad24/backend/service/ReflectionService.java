@@ -304,4 +304,28 @@ public class ReflectionService extends AbstractService {
 //        return eseguito;
 //    }
 
+
+    /**
+     * Valore della property di una classe
+     *
+     * @param entityBean      oggetto su cui operare la riflessione
+     * @param publicFieldName property statica e pubblica
+     * @param value           da inserire nella property
+     */
+    public boolean setPropertyValue(final AEntity entityBean, final String publicFieldName, final Object value) {
+        boolean status = false;
+        Field field = getField(entityBean.getClass(), publicFieldName);
+
+        if (field != null) {
+            try {
+                field.set(entityBean, value);
+                status = true;
+            } catch (Exception unErrore) {
+                logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            }
+        }
+
+        return status;
+    }
+
 }

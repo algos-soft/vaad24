@@ -2,11 +2,15 @@ package it.algos.vaad24simple.backend.packages.prova;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
+import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.data.mongodb.core.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
+
+import java.util.*;
 
 /**
  * Project vaad24
@@ -50,12 +54,12 @@ public class ProvaBackend extends CrudBackend {
     public Prova checkAndSave(final Prova entityBean) {
         String collectionName = annotationService.getCollectionName(entityClazz);
 
-        if (!isExistProperty(entityBean.nome)) {
+        if (!isExistProperty(entityBean.descrizione)) {
             if (textService.isValid(collectionName)) {
-                return (Prova) mongoService.mongoOp.insert(entityBean, collectionName);
+                return mongoService.mongoOp.insert(entityBean, collectionName);
             }
             else {
-                return (Prova) mongoService.mongoOp.insert(entityBean);
+                return mongoService.mongoOp.insert(entityBean);
             }
         }
         else {
@@ -88,6 +92,7 @@ public class ProvaBackend extends CrudBackend {
     public Prova newEntity() {
         return newEntity(VUOTA, null);
     }
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
@@ -95,8 +100,8 @@ public class ProvaBackend extends CrudBackend {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public Prova newEntity(String nome) {
-        return newEntity(nome, null);
+    public Prova newEntity(String descrizione) {
+        return newEntity(descrizione, null);
     }
 
     /**
@@ -105,13 +110,13 @@ public class ProvaBackend extends CrudBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param nome (obbligatorio)
+     * @param descrizione (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public Prova newEntity(final String nome, Continente continente) {
+    public Prova newEntity(final String descrizione, Continente continente) {
         Prova newEntityBean = Prova.builder()
-                .nome(textService.isValid(nome) ? nome : null)
+                .descrizione(textService.isValid(descrizione) ? descrizione : null)
                 .continenti(continente)
                 .build();
 
@@ -121,7 +126,6 @@ public class ProvaBackend extends CrudBackend {
 
     public boolean isExistId(final String keyIdValue) {
         String collectionName = annotationService.getCollectionName(entityClazz);
-        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         Query query = new Query();
 
         query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(keyIdValue));
@@ -192,6 +196,41 @@ public class ProvaBackend extends CrudBackend {
             mongoService.mongoOp.findAndRemove(query, entity.getClass());
         }
         return true;
+    }
+
+
+    /**
+     * Creazione di alcuni dati <br>
+     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
+     * Viene invocato: <br>
+     * 1) alla creazione del programma da VaadData.resetData() <br>
+     * 2) dal buttonDeleteReset -> CrudView.reset() <br>
+     * 3) da UtilityView.reset() <br>
+     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    public AResult resetOnlyEmpty() {
+        AResult result = super.resetOnlyEmpty();
+        String clazzName = entityClazz.getSimpleName();
+        String collectionName = result.getTarget();
+        List<AEntity> lista;
+        String message;
+
+        if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            lista = new ArrayList<>();
+            lista.add(checkAndSave(newEntity("Aldo")));
+            lista.add(checkAndSave(newEntity("Giovanni")));
+            lista.add(checkAndSave(newEntity("Giacomo")));
+            result.setIntValue(lista.size());
+            result.setLista(lista);
+        }
+        else {
+            return result;
+        }
+
+        message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
+        return result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
     }
 
 }// end of crud backend class

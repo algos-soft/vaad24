@@ -228,21 +228,31 @@ public class ViaBackend extends CrudBackend {
     /**
      * Creazione di alcuni dati <br>
      * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-     * Viene invocato alla creazione del programma <br>
+     * Viene invocato: <br>
+     * 1) alla creazione del programma da VaadData.resetData() <br>
+     * 2) dal buttonDeleteReset -> CrudView.reset() <br>
+     * 3) da UtilityView.reset() <br>
      * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
     public AResult resetOnlyEmpty() {
         AResult result = super.resetOnlyEmpty();
+        String clazzName = entityClazz.getSimpleName();
+        String collectionName = result.getTarget();
         String nomeFileCSVSulServerAlgos = "vie";
         Map<String, List<String>> mappa;
         List<String> riga;
         String nome;
+        List<AEntity> lista;
+        AEntity entityBean;
+        String message ;
 
-        if (result.isValido() && result.getTypeResult() == AETypeResult.collectionVuota) {
+        if (result.getTypeResult() == AETypeResult.collectionVuota) {
             mappa = resourceService.leggeMappa(nomeFileCSVSulServerAlgos);
             if (mappa != null) {
+                lista = new ArrayList<>();
+
                 for (String key : mappa.keySet()) {
                     riga = mappa.get(key);
                     if (riga.size() == 1) {
@@ -251,10 +261,16 @@ public class ViaBackend extends CrudBackend {
                     else {
                         return result.errorMessage("I dati non sono congruenti");
                     }
-                    if (!creaIfNotExist(nome)) {
+                    entityBean = checkAndSave(newEntity(nome));
+                    if (entityBean != null) {
+                        lista.add(entityBean);
+                    }
+                    else {
                         logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
                     }
                 }
+                result.setIntValue(lista.size());
+                result.setLista(lista);
             }
             else {
                 return result.errorMessage("Non ho trovato il file sul server");
@@ -263,8 +279,8 @@ public class ViaBackend extends CrudBackend {
         else {
             return result;
         }
-
-        return fixResult(result.typeResult(AETypeResult.collectionCreata));
+        message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
+        return result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
     }
 
 }// end of crud backend class
