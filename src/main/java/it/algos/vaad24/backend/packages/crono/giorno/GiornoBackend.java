@@ -185,7 +185,7 @@ public class GiornoBackend extends CrudBackend {
             for (HashMap mappaGiorno : mappa) {
                 nome = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
                 meseTxt = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO);
-                mese = meseBackend.findByNome(meseTxt);
+                mese = meseBackend.findByKey(meseTxt);
                 if (mese == null) {
                     message = String.format("Manca il mese di %s", meseTxt);
                     logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());

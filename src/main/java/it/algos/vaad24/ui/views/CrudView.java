@@ -35,6 +35,11 @@ import java.util.stream.*;
  * User: gac
  * Date: ven, 01-apr-2022
  * Time: 06:41
+ * Vista iniziale e principale di un package <br>
+ * Superclasse astratta <br>
+ * Presenta la Grid <br>
+ * Su richiesta apre un Dialogo per gestire la singola entity <br>
+ * La sottoclasse concreta usa @Route e viene chiamata dal menu generale <br>
  */
 public abstract class CrudView extends VerticalLayout implements AfterNavigationObserver {
 

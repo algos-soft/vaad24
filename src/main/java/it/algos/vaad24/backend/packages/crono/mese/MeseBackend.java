@@ -16,42 +16,15 @@ import java.util.*;
  * User: gac
  * Date: dom, 01-mag-2022
  * Time: 08:51
- * <p>
- * Service di una entityClazz specifica e di un package <br>
- * Garantisce i metodi di collegamento per accedere al database <br>
- * Non mantiene lo stato di una istanza entityBean <br>
- * Mantiene lo stato della entityClazz <br>
- * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
 public class MeseBackend extends CrudBackend {
 
 
-    /**
-     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
-     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
-     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     */
     public MeseBackend() {
-        super(null, Mese.class);
+        super( Mese.class);
     }
 
-    public boolean creaIfNotExist(final String nome) {
-        return insert(newEntity(0, VUOTA, nome, 0, 0, 0)) != null;
-    }
-
-    //    public boolean creaIfNotExist(final String nome) {
-    //        return checkAndSave(newEntity(nome)) != null;
-    //    }
-
-    //    public Mese crea(final int ordine, final String breve, final String nome, final int giorni, int primo, int ultimo) {
-    //        Mese mese = newEntity(ordine, breve, nome, giorni, primo, ultimo);
-    //        return repository.insert(mese);
-    //    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -60,13 +33,11 @@ public class MeseBackend extends CrudBackend {
      *
      * @return la nuova entity appena creata (non salvata)
      */
+    @Override
     public Mese newEntity() {
         return newEntity(0, VUOTA, VUOTA, 0, 0, 0);
     }
 
-    //    public Mese newEntity(Document doc) {
-    //        return newEntity(27, doc.getString("breve"), doc.getString("nome"), 0, 0, 0);
-    //    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -75,22 +46,20 @@ public class MeseBackend extends CrudBackend {
      *
      * @return la nuova entity appena creata (non salvata)
      */
+    @Override
     public Mese newEntity(String nome) {
         return newEntity(0, VUOTA, nome, 0, 0, 0);
     }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
-     * All properties <br>
      *
      * @param ordine (obbligatorio, unico)
      * @param breve  (obbligatorio, unico)
      * @param nome   (obbligatorio, unico)
      * @param giorni (obbligatorio)
-     * @param primo  giorno dell'anno
-     * @param ultimo giorno dell'anno
+     * @param primo  giorno dell'anno (facoltativo)
+     * @param ultimo giorno dell'anno (facoltativo)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
@@ -113,36 +82,21 @@ public class MeseBackend extends CrudBackend {
     }
 
     @Override
-    public Mese findByKey(final String keyCodeValue) {
-        return (Mese) super.findByKey(keyCodeValue);
+    public Mese findByKey(final String keyValue) {
+        return (Mese) super.findByKey(keyValue);
     }
 
-    public Mese findByNome(final String nome) {
-        return findByKey(nome);
+    @Override
+    public Mese findByProperty(final String propertyName, final Object propertyValue) {
+        return (Mese) super.findByProperty(propertyName, propertyValue);
     }
 
-    //    public Mese findFirstByOrdine(final int ordine) {
-    //        return repository.findFirstByOrdine(ordine);
-    //    }
-
-
-    //    public int getOrdine(final String nomeMaiuscoloMinuscolo) {
-    //        Mese mese = findByNome(textService.primaMinuscola(nomeMaiuscoloMinuscolo));
-    //        return mese != null ? mese.ordine : 0;
-    //    }
 
     @Override
     public Mese save(AEntity entity) {
         return (Mese) super.save(entity);
     }
 
-    /**
-     * Creazione di alcuni dati <br>
-     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-     * Viene invocato alla creazione del programma <br>
-     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
     @Override
     public AResult resetOnlyEmpty() {
         AResult result = super.resetOnlyEmpty();

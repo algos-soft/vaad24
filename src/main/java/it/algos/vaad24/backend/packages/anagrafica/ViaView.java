@@ -14,20 +14,10 @@ import java.util.*;
  * User: gac
  * Date: Thu, 02-Jun-2022
  * Time: 08:02
- * <p>
- * Vista iniziale e principale di un package <br>
- *
- * @Route chiamata dal menu generale <br>
- * Presenta la Grid <br>
- * Su richiesta apre un Dialogo per gestire la singola entity <br>
  */
 @PageTitle("Vie")
 @Route(value = "via", layout = MainLayout.class)
 public class ViaView extends CrudView {
-
-
-    //--per eventuali metodi specifici
-    private ViaBackend backend;
 
 
     /**
@@ -40,7 +30,6 @@ public class ViaView extends CrudView {
      */
     public ViaView(@Autowired final ViaBackend crudBackend) {
         super(crudBackend, Via.class);
-        this.backend = crudBackend;
     }
 
     /**

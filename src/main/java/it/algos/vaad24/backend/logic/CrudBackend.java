@@ -25,10 +25,16 @@ import java.util.*;
  * Time: 21:02
  * Layer di collegamento del backend con mongoDB <br>
  * Classe astratta di servizio per la Entity di un package <br>
- * Le sottoclassi concrete sono SCOPE_SINGLETON e non mantengono dati <br>
+ * Garantisce i metodi di collegamento per accedere al database <br>
+ * Service di una entityClazz specifica e di un package <br>
  * L'unico dato mantenuto nelle sottoclassi concrete: la property final entityClazz <br>
- * Se la sottoclasse xxxService non esiste (non è indispensabile), usa la classe generica GenericService; i metodi esistono ma occorre un
- * cast in uscita <br>
+ * Se la sottoclasse xxxService non esiste (non è indispensabile), usa la classe generica GenericService; <br>
+ * i metodi esistono ma occorre un cast in uscita <br>
+ * <p>
+ * Le sottoclassi concrete: <br>
+ * Non mantengono lo stato di una istanza entityBean <br>
+ * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
+ * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 public abstract class CrudBackend extends AbstractService {
 
@@ -67,14 +73,11 @@ public abstract class CrudBackend extends AbstractService {
     public MongoRepository crudRepository;
 
 
+
     /**
-     * Constructor @Autowired. <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * L' @Autowired (esplicito o implicito) funziona SOLO per UN costruttore <br>
-     * Se ci sono DUE o più costruttori, va in errore <br>
-     * Se ci sono DUE costruttori, di cui uno senza parametri, inietta quello senza parametri <br>
+     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
      */
-    public CrudBackend( final Class<? extends AEntity> entityClazz) {
+    public CrudBackend(final Class<? extends AEntity> entityClazz) {
         this.entityClazz = entityClazz;
 
         //--Preferenze usate da questa 'logic'
@@ -116,6 +119,7 @@ public abstract class CrudBackend extends AbstractService {
     public AEntity newEntity(String keyPropertyValue) {
         return null;
     }
+
     public AEntity newEntity(Document doc) {
         return null;
     }
@@ -232,12 +236,12 @@ public abstract class CrudBackend extends AbstractService {
      * Ricerca della singola entity <br>
      * Può essere sovrascritto nella sottoclasse specifica per il casting di ritorno <br>
      *
-     * @param propertyName (obbligatorio, unico)
+     * @param propertyName  (obbligatorio, unico)
      * @param propertyValue (obbligatorio)
      *
      * @return la entity trovata
      */
-    public AEntity findByProperty(final String propertyName, final String propertyValue) {
+    public AEntity findByProperty(final String propertyName, final Object propertyValue) {
         AEntity entity;
         String collectionName = annotationService.getCollectionName(entityClazz);
         Query query = new Query();
@@ -399,7 +403,7 @@ public abstract class CrudBackend extends AbstractService {
                 order = sort.stream().toList().get(0);
                 property = order.getProperty();
                 esiste = reflectionService.isEsiste(entityClazz, property);
-                if (esiste||property.equals(FIELD_NAME_ID_CON)) {
+                if (esiste || property.equals(FIELD_NAME_ID_CON)) {
                     if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
                         return crudRepository.findAll(sort);
                     }
@@ -438,6 +442,10 @@ public abstract class CrudBackend extends AbstractService {
     public List<String> findAllKeyReverseOrder() {
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         return mongoService.projectionStringReverseOrder(entityClazz, keyPropertyName);
+    }
+
+    public List<String> findAllProperty(String keyPropertyName) {
+        return mongoService.projectionString(entityClazz, keyPropertyName);
     }
 
     @Deprecated

@@ -6,6 +6,8 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
+import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -16,66 +18,31 @@ import java.util.*;
  * User: gac
  * Date: dom, 01-mag-2022
  * Time: 21:24
- * <p>
- * Service di una entityClazz specifica e di un package <br>
- * Garantisce i metodi di collegamento per accedere al database <br>
- * Non mantiene lo stato di una istanza entityBean <br>
- * Mantiene lo stato della entityClazz <br>
- * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
 public class SecoloBackend extends CrudBackend {
 
 
-    /**
-     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
-     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
-     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     */
     public SecoloBackend() {
-        super(null, Secolo.class);
+        super(Secolo.class);
     }
 
-
-    public boolean creaIfNotExist(final String nome) {
-        return insert(newEntity(0, nome, 0, 0, false)) != null;
+    @Override
+    protected void fixPreferenze() {
+        this.sortOrder = Sort.by(Sort.Direction.DESC, "ordine");
     }
 
-    public boolean crea(final int ordine, final String nome, final int inizio, final int fine, final boolean anteCristo) {
-        Secolo secolo = newEntity(ordine, nome, inizio, fine, anteCristo);
-        return crudRepository.insert(secolo) != null;
-    }
-
-    /**
-     * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
-     *
-     * @return la nuova entity appena creata (non salvata)
-     */
     public Secolo newEntity() {
         return newEntity(0, VUOTA, 0, 0, false);
     }
-    /**
-     * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
-     *
-     * @return la nuova entity appena creata (non salvata)
-     */
+
+
     public Secolo newEntity(String nome) {
         return newEntity(0, nome, 0, 0, false);
     }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
-     * All properties <br>
      *
      * @param ordine     di presentazione nel popup/combobox (obbligatorio, unico)
      * @param nome       descrittivo e visualizzabile
@@ -97,37 +64,32 @@ public class SecoloBackend extends CrudBackend {
         return (Secolo) fixKey(newEntityBean);
     }
 
-//    /**
-//     * Seleziona un secolo dall'anno indicato <br>
-//     *
-//     * @param nome descrittivo
-//     *
-//     * @return secolo selezionato
-//     */
-//    public Secolo findByNome(final String nome) {
-//        return repository.findFirstByNome(nome);
-//    }
 
-//    @Override
-//    public List findAllSortCorrente() {
-//        return repository.findAll(Sort.by(Sort.Direction.DESC, "ordine"));
-//    }
+    @Override
+    public Secolo findById(final String keyID) {
+        return (Secolo) super.findById(keyID);
+    }
 
-//    public List<String> findNomi() {
-//        return findAllSortCorrente().stream()
-//                .map(secolo -> secolo.nome)
-//                .collect(Collectors.toList());
-//    }
+    @Override
+    public Secolo findByKey(final String keyValue) {
+        return (Secolo) super.findByKey(keyValue);
+    }
 
-//    public List<String> findNomiAscendenti() {
-//        List<Secolo> secoli = repository.findAll(Sort.by(Sort.Direction.ASC, "ordine"));
-//        return secoli.stream()
-//                .map(secolo -> secolo.nome)
-//                .collect(Collectors.toList());
-//    }
+    @Override
+    public Secolo findByProperty(final String propertyName, final Object propertyValue) {
+        return (Secolo) super.findByProperty(propertyName, propertyValue);
+    }
+
+    public List<String> findAllNomi() {
+        return super.findAllKeyReverseOrder();
+    }
+
+    public Secolo getSecolo(final int ordine) {
+        return findByProperty(FIELD_NAME_ORDINE, ordine);
+    }
 
     /**
-     * Seleziona un secolo dall'anno indicato <br>
+     * Seleziona un secolo dato l'anno <br>
      * SOLO per secoli AC <br>
      *
      * @param anno indicato per la selezione del secolo
@@ -135,13 +97,12 @@ public class SecoloBackend extends CrudBackend {
      * @return secolo Ante Cristo selezionato
      */
     public Secolo getSecoloAC(final int anno) {
-        return null;
-//        return repository.findFirstByInizioGreaterThanEqualAndFineLessThanEqualAndAnteCristo(anno, anno, true);
+        return getSecolo(anno, true);
     }
 
 
     /**
-     * Seleziona un secolo dall'anno indicato <br>
+     * Seleziona un secolo dato l'anno <br>
      * SOLO per secoli DC <br>
      *
      * @param anno indicato per la selezione del secolo
@@ -149,22 +110,35 @@ public class SecoloBackend extends CrudBackend {
      * @return secolo Dopo Cristo selezionato
      */
     public Secolo getSecoloDC(int anno) {
-        return null;
-//        return repository.findFirstByInizioLessThanEqualAndFineGreaterThanEqualAndAnteCristo(anno, anno, false);
+        return getSecolo(anno, false);
     }
 
-    public Secolo getSecolo(int ordine) {
-        return null;
-//        return repository.findFirstByOrdine(ordine);
+    private Secolo getSecolo(final int anno, final boolean anteCristo) {
+        Secolo entity;
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Query query = new Query();
+
+        if (anteCristo) {
+            query.addCriteria(Criteria.where("inizio").gte(anno));
+            query.addCriteria(Criteria.where("fine").lte(anno));
+            query.addCriteria(Criteria.where("anteCristo").is(anteCristo));
+        }
+        else {
+            query.addCriteria(Criteria.where("inizio").lte(anno));
+            query.addCriteria(Criteria.where("fine").gte(anno));
+            query.addCriteria(Criteria.where("anteCristo").is(anteCristo));
+        }
+
+        if (textService.isValid(collectionName)) {
+            entity = (Secolo)mongoService.mongoOp.findOne(query, entityClazz, collectionName);
+        }
+        else {
+            entity = (Secolo)mongoService.mongoOp.findOne(query, entityClazz);
+        }
+
+        return entity;
     }
 
-    /**
-     * Creazione di alcuni dati <br>
-     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-     * Viene invocato alla creazione del programma <br>
-     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
     @Override
     public AResult resetOnlyEmpty() {
         AResult result = super.resetOnlyEmpty();
@@ -218,7 +192,7 @@ public class SecoloBackend extends CrudBackend {
                     }
                     nome += anteCristo ? " secolo a.C." : " secolo";
 
-                    entityBean = insert(newEntity(++ordine, nome, inizio, fine, anteCristo));
+                    entityBean = insert(newEntity(ordine, nome, inizio, fine, anteCristo));
                     if (entityBean != null) {
                         lista.add(entityBean);
                     }

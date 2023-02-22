@@ -14,20 +14,12 @@ import java.util.*;
  * User: gac
  * Date: dom, 01-mag-2022
  * Time: 08:51
- * <p>
- * Vista iniziale e principale di un package <br>
- *
- * @Route chiamata dal menu generale <br>
- * Presenta la Grid <br>
- * Su richiesta apre un Dialogo per gestire la singola entity <br>
  */
 @PageTitle("Mesi")
 @Route(value = TAG_MESE, layout = MainLayout.class)
 public class MeseView extends CrudView {
 
 
-    //--per eventuali metodi specifici
-    private MeseBackend backend;
 
 
     /**
@@ -40,8 +32,8 @@ public class MeseView extends CrudView {
      */
     public MeseView(@Autowired final MeseBackend crudBackend) {
         super(crudBackend, Mese.class);
-        this.backend = crudBackend;
     }
+
 
     /**
      * Preferenze usate da questa 'view' <br>

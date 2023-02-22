@@ -392,6 +392,113 @@ public class SecoloBackendTest extends AlgosUnitTest {
         System.out.println(message);
     }
 
+
+    @Test
+    @Order(51)
+    @DisplayName("51 - getSecolo")
+    void getSecolo() {
+        System.out.println("51 - getSecolo");
+        System.out.println(VUOTA);
+        System.out.println("Secolo ricavato dal numero d'ordine che parte dal X secolo a.C.");
+        System.out.println(VUOTA);
+
+        sorgenteIntero = 857;
+        entityBean = backend.getSecolo(sorgenteIntero);
+        assertNull(entityBean);
+
+        sorgenteIntero = 4;
+        entityBean = backend.getSecolo(sorgenteIntero);
+        assertNotNull(entityBean);
+        ottenuto = entityBean.toString();
+        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
+        System.out.println(message);
+
+        sorgenteIntero = 27;
+        entityBean = backend.getSecolo(sorgenteIntero);
+        assertNotNull(entityBean);
+        ottenuto = entityBean.toString();
+        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
+        System.out.println(message);
+
+        sorgenteIntero = 35;
+        entityBean = backend.getSecolo(sorgenteIntero);
+        assertNull(entityBean);
+
+        sorgenteIntero = -4;
+        entityBean = backend.getSecolo(sorgenteIntero);
+        assertNull(entityBean);
+    }
+
+    @Test
+    @Order(52)
+    @DisplayName("52 - getSecoloAC")
+    void getSecoloAC() {
+        System.out.println("52 - getSecoloAC");
+        System.out.println(VUOTA);
+        System.out.println("Secolo ricavato dall'anno a.C. (senza segno meno)");
+        System.out.println(VUOTA);
+
+        sorgenteIntero = 4;
+        entityBean = backend.getSecoloAC(sorgenteIntero);
+        assertNotNull(entityBean);
+        ottenuto = entityBean.toString();
+        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
+        System.out.println(message);
+    }
+
+
+    @Test
+    @Order(53)
+    @DisplayName("53 - getSecoloDC")
+    void getSecoloDC() {
+        System.out.println("53 - getSecoloDC");
+        System.out.println(VUOTA);
+        System.out.println("Secolo ricavato dall'anno d.C. (senza segno più)");
+        System.out.println(VUOTA);
+
+        sorgenteIntero = 4;
+        entityBean = backend.getSecoloDC(sorgenteIntero);
+        assertNotNull(entityBean);
+        ottenuto = entityBean.toString();
+        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
+        System.out.println(message);
+
+        sorgenteIntero = 1900;
+        entityBean = backend.getSecoloDC(sorgenteIntero);
+        assertNotNull(entityBean);
+        ottenuto = entityBean.toString();
+        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
+        System.out.println(message);
+
+        sorgenteIntero = 1901;
+        entityBean = backend.getSecoloDC(sorgenteIntero);
+        assertNotNull(entityBean);
+        ottenuto = entityBean.toString();
+        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
+        System.out.println(message);
+
+        sorgenteIntero = 1999;
+        entityBean = backend.getSecoloDC(sorgenteIntero);
+        assertNotNull(entityBean);
+        ottenuto = entityBean.toString();
+        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
+        System.out.println(message);
+
+        sorgenteIntero = 2000;
+        entityBean = backend.getSecoloDC(sorgenteIntero);
+        assertNotNull(entityBean);
+        ottenuto = entityBean.toString();
+        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
+        System.out.println(message);
+
+        sorgenteIntero = 2001;
+        entityBean = backend.getSecoloDC(sorgenteIntero);
+        assertNotNull(entityBean);
+        ottenuto = entityBean.toString();
+        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
+        System.out.println(message);
+    }
+
     @Test
     @Order(91)
     @DisplayName("91 - resetOnlyEmpty")
