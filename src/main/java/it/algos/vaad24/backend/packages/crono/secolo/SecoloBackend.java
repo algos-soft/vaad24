@@ -6,13 +6,9 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.domain.*;
-import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 /**
  * Project vaadin23
@@ -31,7 +27,6 @@ import java.util.stream.*;
 @Service
 public class SecoloBackend extends CrudBackend {
 
-    public SecoloRepository repository;
 
     /**
      * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
@@ -40,12 +35,9 @@ public class SecoloBackend extends CrudBackend {
      * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
      * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
      * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
-     * @param crudRepository per la persistenza dei dati
      */
-    public SecoloBackend(@Autowired @Qualifier(TAG_SECOLO) final MongoRepository crudRepository) {
-        super(crudRepository, Secolo.class);
-        this.repository = (SecoloRepository) crudRepository;
+    public SecoloBackend() {
+        super(null, Secolo.class);
     }
 
 
@@ -105,16 +97,16 @@ public class SecoloBackend extends CrudBackend {
         return (Secolo) fixKey(newEntityBean);
     }
 
-    /**
-     * Seleziona un secolo dall'anno indicato <br>
-     *
-     * @param nome descrittivo
-     *
-     * @return secolo selezionato
-     */
-    public Secolo findByNome(final String nome) {
-        return repository.findFirstByNome(nome);
-    }
+//    /**
+//     * Seleziona un secolo dall'anno indicato <br>
+//     *
+//     * @param nome descrittivo
+//     *
+//     * @return secolo selezionato
+//     */
+//    public Secolo findByNome(final String nome) {
+//        return repository.findFirstByNome(nome);
+//    }
 
 //    @Override
 //    public List findAllSortCorrente() {
@@ -127,12 +119,12 @@ public class SecoloBackend extends CrudBackend {
 //                .collect(Collectors.toList());
 //    }
 
-    public List<String> findNomiAscendenti() {
-        List<Secolo> secoli = repository.findAll(Sort.by(Sort.Direction.ASC, "ordine"));
-        return secoli.stream()
-                .map(secolo -> secolo.nome)
-                .collect(Collectors.toList());
-    }
+//    public List<String> findNomiAscendenti() {
+//        List<Secolo> secoli = repository.findAll(Sort.by(Sort.Direction.ASC, "ordine"));
+//        return secoli.stream()
+//                .map(secolo -> secolo.nome)
+//                .collect(Collectors.toList());
+//    }
 
     /**
      * Seleziona un secolo dall'anno indicato <br>
@@ -143,7 +135,8 @@ public class SecoloBackend extends CrudBackend {
      * @return secolo Ante Cristo selezionato
      */
     public Secolo getSecoloAC(final int anno) {
-        return repository.findFirstByInizioGreaterThanEqualAndFineLessThanEqualAndAnteCristo(anno, anno, true);
+        return null;
+//        return repository.findFirstByInizioGreaterThanEqualAndFineLessThanEqualAndAnteCristo(anno, anno, true);
     }
 
 
@@ -156,11 +149,13 @@ public class SecoloBackend extends CrudBackend {
      * @return secolo Dopo Cristo selezionato
      */
     public Secolo getSecoloDC(int anno) {
-        return repository.findFirstByInizioLessThanEqualAndFineGreaterThanEqualAndAnteCristo(anno, anno, false);
+        return null;
+//        return repository.findFirstByInizioLessThanEqualAndFineGreaterThanEqualAndAnteCristo(anno, anno, false);
     }
 
     public Secolo getSecolo(int ordine) {
-        return repository.findFirstByOrdine(ordine);
+        return null;
+//        return repository.findFirstByOrdine(ordine);
     }
 
     /**

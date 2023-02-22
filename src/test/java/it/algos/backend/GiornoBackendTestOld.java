@@ -50,8 +50,6 @@ public class GiornoBackendTestOld extends AlgosUnitTest {
     @InjectMocks
     private MeseBackend meseBackend;
 
-    @Autowired
-    private MeseRepository meseRepository;
 
     private Class entityClazz = Giorno.class;
 
@@ -88,7 +86,7 @@ public class GiornoBackendTestOld extends AlgosUnitTest {
         backend.mongoService = mongoService;
         backend.meseBackend = meseBackend;
 //        backend.meseBackend.repository = meseRepository;
-        backend.meseBackend.crudRepository = meseRepository;
+//        backend.meseBackend.crudRepository = meseRepository;
     }
 
 

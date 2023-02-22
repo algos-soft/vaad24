@@ -48,8 +48,6 @@ public class AnnoBackendTest extends AlgosUnitTest {
     @InjectMocks
     private SecoloBackend secoloBackend;
 
-    @Autowired
-    private SecoloRepository secoloRepository;
 
     private Class entityClazz = Anno.class;
 
@@ -84,8 +82,8 @@ public class AnnoBackendTest extends AlgosUnitTest {
         backend.reflectionService = reflectionService;
         backend.mongoService = mongoService;
         backend.secoloBackend = secoloBackend;
-        backend.secoloBackend.repository = secoloRepository;
-        backend.secoloBackend.crudRepository = secoloRepository;
+//        backend.secoloBackend.repository = secoloRepository;
+//        backend.secoloBackend.crudRepository = secoloRepository;
     }
 
 
@@ -254,14 +252,14 @@ public class AnnoBackendTest extends AlgosUnitTest {
     void findNomiBySecolo() {
         System.out.println("32 - findNomiBySecolo (nome)");
 
-        for (String sorgente : secoloBackend.findNomiAscendenti()) {
-            listaStr = backend.findNomiBySecolo(sorgente);
-            assertNotNull(listaStr);
-            message = String.format("Nel secolo %s ci sono %s anni", sorgente, textService.format(listaStr.size()));
-            System.out.println(VUOTA);
-            System.out.println(message);
-            printNomiAnni(listaStr);
-        }
+//        for (String sorgente : secoloBackend.findNomiAscendenti()) {
+//            listaStr = backend.findNomiBySecolo(sorgente);
+//            assertNotNull(listaStr);
+//            message = String.format("Nel secolo %s ci sono %s anni", sorgente, textService.format(listaStr.size()));
+//            System.out.println(VUOTA);
+//            System.out.println(message);
+//            printNomiAnni(listaStr);
+//        }
     }
 
 

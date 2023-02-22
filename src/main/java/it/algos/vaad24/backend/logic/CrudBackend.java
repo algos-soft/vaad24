@@ -74,6 +74,22 @@ public abstract class CrudBackend extends AbstractService {
      * Se ci sono DUE o più costruttori, va in errore <br>
      * Se ci sono DUE costruttori, di cui uno senza parametri, inietta quello senza parametri <br>
      */
+    public CrudBackend( final Class<? extends AEntity> entityClazz) {
+        this.entityClazz = entityClazz;
+
+        //--Preferenze usate da questa 'logic'
+        this.fixPreferenze();
+
+    }// end of constructor
+
+
+    /**
+     * Constructor @Autowired. <br>
+     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
+     * L' @Autowired (esplicito o implicito) funziona SOLO per UN costruttore <br>
+     * Se ci sono DUE o più costruttori, va in errore <br>
+     * Se ci sono DUE costruttori, di cui uno senza parametri, inietta quello senza parametri <br>
+     */
     public CrudBackend(final MongoRepository crudRepository, final Class<? extends AEntity> entityClazz) {
         this.crudRepository = crudRepository;
         this.entityClazz = entityClazz;
@@ -93,7 +109,13 @@ public abstract class CrudBackend extends AbstractService {
         this.sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_CON);
     }
 
+    public boolean creaIfNotExist(final String keyPropertyValue) {
+        return insert(newEntity(keyPropertyValue)) != null;
+    }
 
+    public AEntity newEntity(String keyPropertyValue) {
+        return null;
+    }
     public AEntity newEntity(Document doc) {
         return null;
     }
@@ -181,15 +203,40 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
+    /**
+     * Ricerca della singola entity <br>
+     * Può essere sovrascritto nella sottoclasse specifica per il casting di ritorno <br>
+     *
+     * @param keyID (obbligatorio, unico)
+     *
+     * @return la entity trovata
+     */
     public AEntity findById(final String keyID) {
         return findByProperty(FIELD_NAME_ID_CON, keyID);
     }
 
+    /**
+     * Ricerca della singola entity <br>
+     * Può essere sovrascritto nella sottoclasse specifica per il casting di ritorno <br>
+     *
+     * @param keyValue (obbligatorio, unico) della keyPropertyName
+     *
+     * @return la entity trovata
+     */
     public AEntity findByKey(final String keyValue) {
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         return findByProperty(keyPropertyName, keyValue);
     }
 
+    /**
+     * Ricerca della singola entity <br>
+     * Può essere sovrascritto nella sottoclasse specifica per il casting di ritorno <br>
+     *
+     * @param propertyName (obbligatorio, unico)
+     * @param propertyValue (obbligatorio)
+     *
+     * @return la entity trovata
+     */
     public AEntity findByProperty(final String propertyName, final String propertyValue) {
         AEntity entity;
         String collectionName = annotationService.getCollectionName(entityClazz);
@@ -480,7 +527,7 @@ public abstract class CrudBackend extends AbstractService {
 
 
     /**
-     * Creazione di alcuni dati <br>
+     * Reset/creazione di alcuni dati <br>
      * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
      * Viene invocato: <br>
      * 1) alla creazione del programma da VaadData.resetData() <br>

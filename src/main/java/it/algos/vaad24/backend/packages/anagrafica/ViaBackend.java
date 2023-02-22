@@ -33,29 +33,12 @@ public class ViaBackend extends CrudBackend {
      * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
      * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
      * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
      * Regola la entityClazz (final nella superclasse) associata a questo service <br>
      */
     public ViaBackend() {
-        super(null, Via.class);
+        super(Via.class);
     }
 
-
-    public boolean creaIfNotExist(final String nome) {
-        return insert(newEntity(nome)) != null;
-    }
-
-
-    /**
-     * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
-     *
-     * @return la nuova entity appena creata (non salvata)
-     */
-    public Via newEntity() {
-        return newEntity(VUOTA);
-    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -82,8 +65,8 @@ public class ViaBackend extends CrudBackend {
     }
 
     @Override
-    public Via findByKey(final String keyCodeValue) {
-        return (Via) super.findByKey(keyCodeValue);
+    public Via findByKey(final String keyValue) {
+        return (Via) super.findByKey(keyValue);
     }
 
     @Override
@@ -97,16 +80,6 @@ public class ViaBackend extends CrudBackend {
     }
 
 
-    /**
-     * Creazione di alcuni dati <br>
-     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-     * Viene invocato: <br>
-     * 1) alla creazione del programma da VaadData.resetData() <br>
-     * 2) dal buttonDeleteReset -> CrudView.reset() <br>
-     * 3) da UtilityView.reset() <br>
-     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
     @Override
     public AResult resetOnlyEmpty() {
         AResult result = super.resetOnlyEmpty();

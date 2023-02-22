@@ -8,7 +8,6 @@ import it.algos.vaad24.backend.service.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.test.context.junit.jupiter.*;
 
@@ -33,8 +32,6 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
      */
     private ReflectionService service;
 
-    @Autowired
-    private SecoloRepository secoloRepository;
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
