@@ -153,13 +153,13 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
 
         sorgente = "debug";
         objPrevisto = false;
-        objOttenuto = backend.findByKeyCode(sorgente).getValore();
+        objOttenuto = backend.findByKey(sorgente).getValore();
         assertNotNull(objOttenuto);
         assertEquals(objPrevisto, objOttenuto);
 
         sorgente = "nonBreaking";
         objPrevisto = SPAZIO_NON_BREAKING;
-        objOttenuto = backend.findByKeyCode(sorgente).getValore();
+        objOttenuto = backend.findByKey(sorgente).getValore();
         assertNotNull(objOttenuto);
         assertEquals(objPrevisto, objOttenuto);
     }

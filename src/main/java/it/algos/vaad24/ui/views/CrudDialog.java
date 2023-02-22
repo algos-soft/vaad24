@@ -502,7 +502,7 @@ public abstract class CrudDialog extends Dialog {
             logger.error(error);
             return;
         }
-        crudBackend.update(currentItem);
+        crudBackend.save(currentItem);
         switch (operation) {
             case ADD -> Avviso.message("Aggiunto un elemento").success().open();
             case UPDATE -> Avviso.message("Registrata la modifica").success().open();

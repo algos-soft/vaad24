@@ -93,50 +93,9 @@ public abstract class CrudBackend extends AbstractService {
     }
 
 
-    public AEntity checkAndSave(final AEntity entityBean) {
-        String collectionName = annotationService.getCollectionName(entityClazz);
-
-        if (!isExistId(entityBean.id)) {
-            if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
-                return (AEntity)crudRepository.insert(entityBean);
-            }
-            else {
-                if (textService.isValid(collectionName)) {
-                    return mongoService.mongoOp.insert(entityBean, collectionName);
-                }
-                else {
-                    return mongoService.mongoOp.insert(entityBean);
-                }
-            }
-        }
-        else {
-            return null;
-        }
-    }
-
-    public boolean isExistProperty(final String keyPropertyValue) {
-        String collectionName = annotationService.getCollectionName(entityClazz);
-        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-        Query query = new Query();
-
-        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
-            return crudRepository.findById(keyPropertyName) != null;
-        }
-        else {
-            query.addCriteria(Criteria.where(keyPropertyName).is(keyPropertyValue));
-            if (textService.isValid(collectionName)) {
-                return mongoService.mongoOp.exists(query, entityClazz.getClass(), collectionName);
-            }
-            else {
-                return mongoService.mongoOp.exists(query, entityClazz.getClass());
-            }
-        }
-    }
-
     public AEntity newEntity(Document doc) {
         return null;
     }
-
 
     /**
      * Creazione in memoria di una nuova entityBean che NON viene salvata <br>
@@ -183,6 +142,16 @@ public abstract class CrudBackend extends AbstractService {
     }
 
     public boolean isExistId(final String keyIdValue) {
+        return isExistProperty(FIELD_NAME_ID_CON, keyIdValue);
+    }
+
+
+    public boolean isExistKey(final String keyValue) {
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        return isExistProperty(keyPropertyName, keyValue);
+    }
+
+    public boolean isExistProperty(final String propertyName, final String propertyValue) {
         String collectionName = annotationService.getCollectionName(entityClazz);
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         Query query = new Query();
@@ -191,7 +160,7 @@ public abstract class CrudBackend extends AbstractService {
             return crudRepository.findById(keyPropertyName) != null;
         }
         else {
-            query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(keyIdValue));
+            query.addCriteria(Criteria.where(propertyName).is(propertyValue));
             if (textService.isValid(collectionName)) {
                 return mongoService.mongoOp.exists(query, entityClazz.getClass(), collectionName);
             }
@@ -202,24 +171,19 @@ public abstract class CrudBackend extends AbstractService {
     }
 
     public AEntity findById(final String keyID) {
-        AEntity entity;
-        String collectionName = annotationService.getCollectionName(entityClazz);
-
-        if (textService.isValid(collectionName)) {
-            entity = mongoService.mongoOp.findById(keyID, entityClazz, collectionName);
-        }
-        else {
-            entity = mongoService.mongoOp.findById(keyID, entityClazz);
-        }
-
-        return entity;
+        return findByProperty(FIELD_NAME_ID_CON, keyID);
     }
-    public AEntity findByKeyCode(final String keyCodeValue) {
+
+    public AEntity findByKey(final String keyValue) {
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        return findByProperty(keyPropertyName, keyValue);
+    }
+
+    public AEntity findByProperty(final String propertyName, final String propertyValue) {
         AEntity entity;
         String collectionName = annotationService.getCollectionName(entityClazz);
-        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         Query query = new Query();
-        query.addCriteria(Criteria.where(keyPropertyName).is(keyCodeValue));
+        query.addCriteria(Criteria.where(propertyName).is(propertyValue));
 
         if (textService.isValid(collectionName)) {
             entity = mongoService.mongoOp.findOne(query, entityClazz, collectionName);
@@ -231,53 +195,93 @@ public abstract class CrudBackend extends AbstractService {
         return entity;
     }
 
-    public AEntity save(AEntity entity) {
-        String collectionName = annotationService.getCollectionName(entityClazz);
-        Query query = new Query();
-
-        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
-            try {
-                return (AEntity)crudRepository.save(entity);
-            } catch (Exception unErrore) {
-                logger.error(unErrore);
-            }
-            return entity;
+    public AEntity save(AEntity entityBean) {
+        if (!isExistId(entityBean.id)) {
+            return insert(entityBean);
         }
         else {
-            query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(entity.id));
-            FindAndReplaceOptions options = new FindAndReplaceOptions();
-            options.returnNew();
-            if (textService.isValid(collectionName)) {
-                return mongoService.mongoOp.findAndReplace(query, entity, options, collectionName);
+            return update(entityBean);
+        }
+    }
+
+    public AEntity insert(final AEntity entityBean) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+
+        if (!isExistId(entityBean.id)) {
+            if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+                return (AEntity) crudRepository.insert(entityBean);
             }
             else {
-                return mongoService.mongoOp.findAndReplace(query, entity, options);
+                if (textService.isValid(collectionName)) {
+                    return mongoService.mongoOp.insert(entityBean, collectionName);
+                }
+                else {
+                    return mongoService.mongoOp.insert(entityBean);
+                }
             }
+        }
+        else {
+            return null;
         }
     }
 
 
-    public boolean delete(AEntity entity) {
+    public AEntity update(final AEntity entityBean) {
         String collectionName = annotationService.getCollectionName(entityClazz);
         Query query = new Query();
 
-        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
-            try {
-                crudRepository.delete(entity);
-            } catch (Exception unErrore) {
-                logger.error(unErrore);
-            }
-            return false;
-        }
-        else {
-            query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(entity.id));
-            if (textService.isValid(collectionName)) {
-                mongoService.mongoOp.findAndRemove(query, entity.getClass(), collectionName);
+        if (isExistId(entityBean.id)) {
+            if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+                try {
+                    return (AEntity) crudRepository.save(entityBean);
+                } catch (Exception unErrore) {
+                    logger.error(unErrore);
+                }
+                return entityBean;
             }
             else {
-                mongoService.mongoOp.findAndRemove(query, entity.getClass());
+                query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(entityBean.id));
+                FindAndReplaceOptions options = new FindAndReplaceOptions();
+                options.returnNew();
+                if (textService.isValid(collectionName)) {
+                    return mongoService.mongoOp.findAndReplace(query, entityBean, options, collectionName);
+                }
+                else {
+                    return mongoService.mongoOp.findAndReplace(query, entityBean, options);
+                }
             }
-            return true;
+        }
+        else {
+            return null;
+        }
+    }
+
+    public boolean delete(AEntity entityBean) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Query query = new Query();
+
+        if (isExistId(entityBean.id)) {
+            if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+                try {
+                    crudRepository.delete(entityBean);
+                } catch (Exception unErrore) {
+                    logger.error(unErrore);
+                }
+                return false;
+            }
+            else {
+                query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(entityBean.id));
+                if (textService.isValid(collectionName)) {
+                    mongoService.mongoOp.findAndRemove(query, entityBean.getClass(), collectionName);
+                }
+                else {
+                    mongoService.mongoOp.findAndRemove(query, entityBean.getClass());
+                }
+                return true;
+            }
+        }
+        else {
+            return false;
         }
     }
 
@@ -366,21 +370,24 @@ public abstract class CrudBackend extends AbstractService {
             }
         }
     }
-
+    @Deprecated
     public AEntity add(Object objEntity) {
         AEntity entity = (AEntity) objEntity;
 
         return (AEntity) crudRepository.insert(entity);
     }
 
+    @Deprecated
     public AEntity save(Object entity) {
         return (AEntity) crudRepository.save(entity);
     }
 
+    @Deprecated
     public AEntity update(Object entity) {
         return (AEntity) crudRepository.save(entity);
     }
 
+    @Deprecated
     public void delete(Object entity) {
         try {
             crudRepository.delete(entity);
@@ -416,48 +423,7 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
-    public List findByDescrizione(final String value) {
-        return null;
-    }
 
-    public List findByDescrizioneAndLivelloAndType(final String value, final AENotaLevel level, final AETypeLog type) {
-        return null;
-    }
-
-    public List findByDescrizioneAndType(final String value, final AETypeLog type) {
-        return null;
-    }
-
-    //    /**
-    //     * Creazione di alcuni dati iniziali <br>
-    //     * Viene invocato alla creazione del programma <br>
-    //     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-    //     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-    //     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-    //     */
-    //    public boolean resetStartUp() {
-    //        String message;
-    //
-    //        if (mongoService.isCollectionNullOrEmpty(entityClazz)) {
-    //            message = String.format("Creati i dati iniziale della collection %s che era vuota", entityClazz.getSimpleName());
-    //            logger.info(new WrapLog().message(message).type(AETypeLog.checkData).usaDb());
-    //            return reset();
-    //        }
-    //        else {
-    //            return false;
-    //        }
-    //    }
-
-    //    /**
-    //     * Creazione di alcuni dati <br>
-    //     * Viene invocato alla creazione del programma e dal bottone Reset della lista <br>
-    //     * La collezione viene svuotata <br>
-    //     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-    //     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-    //     */
-    //    public boolean reset() {
-    //        return this.deleteAll();
-    //    }
 
 
     /**

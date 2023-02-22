@@ -6,8 +6,6 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -29,7 +27,6 @@ import java.util.*;
 @Service
 public class ViaBackend extends CrudBackend {
 
-    public ViaRepository repository;
 
     /**
      * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
@@ -38,16 +35,14 @@ public class ViaBackend extends CrudBackend {
      * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
      * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
      * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
-     * @param crudRepository per la persistenza dei dati
      */
-    public ViaBackend(@Autowired @Qualifier(TAG_VIA) final MongoRepository crudRepository) {
-        super(crudRepository, Via.class);
-        this.repository = (ViaRepository) crudRepository;
+    public ViaBackend() {
+        super(null, Via.class);
     }
 
+
     public boolean creaIfNotExist(final String nome) {
-        return checkAndSave(newEntity(nome)) != null;
+        return insert(newEntity(nome)) != null;
     }
 
 
@@ -81,20 +76,24 @@ public class ViaBackend extends CrudBackend {
     }
 
 
-
     @Override
     public Via findById(final String keyID) {
-        return (Via)super.findById(keyID);
+        return (Via) super.findById(keyID);
     }
 
     @Override
-    public Via findByKeyCode(final String keyCodeValue) {
-        return (Via)super.findByKeyCode(keyCodeValue);
+    public Via findByKey(final String keyCodeValue) {
+        return (Via) super.findByKey(keyCodeValue);
+    }
+
+    @Override
+    public Via findByProperty(final String propertyName, final String propertyValue) {
+        return (Via) super.findByProperty(propertyName, propertyValue);
     }
 
     @Override
     public Via save(AEntity entity) {
-        return (Via)super.save(entity);
+        return (Via) super.save(entity);
     }
 
 
@@ -119,7 +118,7 @@ public class ViaBackend extends CrudBackend {
         String nome;
         List<AEntity> lista;
         AEntity entityBean;
-        String message ;
+        String message;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             mappa = resourceService.leggeMappa(nomeFileCSVSulServerAlgos);
@@ -134,7 +133,7 @@ public class ViaBackend extends CrudBackend {
                     else {
                         return result.errorMessage("I dati non sono congruenti");
                     }
-                    entityBean = checkAndSave(newEntity(nome));
+                    entityBean = insert(newEntity(nome));
                     if (entityBean != null) {
                         lista.add(entityBean);
                     }

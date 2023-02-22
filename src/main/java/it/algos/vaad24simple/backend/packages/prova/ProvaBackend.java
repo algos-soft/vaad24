@@ -6,8 +6,6 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.wrapper.*;
-import org.springframework.data.mongodb.core.*;
-import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -45,51 +43,9 @@ public class ProvaBackend extends CrudBackend {
 
 
     public boolean creaIfNotExist(final String nome) {
-        return checkAndSave(newEntity(nome, null)) != null;
+        return insert(newEntity(nome, null)) != null;
     }
 
-
-    public Prova checkAndSave(final Prova entityBean) {
-        String collectionName = annotationService.getCollectionName(entityClazz);
-
-        if (!isExistProperty(entityBean.descrizione)) {
-            if (textService.isValid(collectionName)) {
-                return mongoService.mongoOp.insert(entityBean, collectionName);
-            }
-            else {
-                return mongoService.mongoOp.insert(entityBean);
-            }
-        }
-        else {
-            return null;
-        }
-    }
-
-    public boolean isExistProperty(final String keyPropertyValue) {
-        String collectionName = annotationService.getCollectionName(entityClazz);
-        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-        Query query = new Query();
-
-        query.addCriteria(Criteria.where(keyPropertyName).is(keyPropertyValue));
-        if (textService.isValid(collectionName)) {
-            return mongoService.mongoOp.exists(query, entityClazz.getClass(), collectionName);
-        }
-        else {
-            return mongoService.mongoOp.exists(query, entityClazz.getClass());
-        }
-    }
-
-
-    /**
-     * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
-     *
-     * @return la nuova entity appena creata (non salvata)
-     */
-    public Prova newEntity() {
-        return newEntity(VUOTA, null);
-    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -122,69 +78,6 @@ public class ProvaBackend extends CrudBackend {
     }
 
 
-
-    public Prova findById(final String keyID) {
-        Prova entity;
-        String collectionName = annotationService.getCollectionName(entityClazz);
-
-        if (textService.isValid(collectionName)) {
-            entity = (Prova) mongoService.mongoOp.findById(keyID, entityClazz, collectionName);
-        }
-        else {
-            entity = (Prova) mongoService.mongoOp.findById(keyID, entityClazz);
-        }
-
-        return entity;
-    }
-
-    public Prova findByKeyCode(final String keyCodeValue) {
-        Prova entity;
-        String collectionName = annotationService.getCollectionName(entityClazz);
-        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-        Query query = new Query();
-        query.addCriteria(Criteria.where(keyPropertyName).is(keyCodeValue));
-
-        if (textService.isValid(collectionName)) {
-            entity = (Prova) mongoService.mongoOp.findOne(query, entityClazz, collectionName);
-        }
-        else {
-            entity = (Prova) mongoService.mongoOp.findOne(query, entityClazz);
-        }
-
-        return entity;
-    }
-
-
-    public Prova save(Prova entity) {
-        String collectionName = annotationService.getCollectionName(entityClazz);
-        Query query = new Query();
-
-        query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(entity.id));
-        FindAndReplaceOptions options = new FindAndReplaceOptions();
-        options.returnNew();
-        if (textService.isValid(collectionName)) {
-            return mongoService.mongoOp.findAndReplace(query, entity, options, collectionName);
-        }
-        else {
-            return mongoService.mongoOp.findAndReplace(query, entity, options);
-        }
-    }
-
-    public boolean delete(AEntity entity) {
-        String collectionName = annotationService.getCollectionName(entityClazz);
-        Query query = new Query();
-
-        query.addCriteria(Criteria.where(FIELD_NAME_ID_CON).is(entity.id));
-        if (textService.isValid(collectionName)) {
-            mongoService.mongoOp.findAndRemove(query, entity.getClass(), collectionName);
-        }
-        else {
-            mongoService.mongoOp.findAndRemove(query, entity.getClass());
-        }
-        return true;
-    }
-
-
     /**
      * Creazione di alcuni dati <br>
      * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
@@ -205,9 +98,9 @@ public class ProvaBackend extends CrudBackend {
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             lista = new ArrayList<>();
-            lista.add(checkAndSave(newEntity("Aldo")));
-            lista.add(checkAndSave(newEntity("Giovanni")));
-            lista.add(checkAndSave(newEntity("Giacomo")));
+            lista.add(insert(newEntity("Aldo", null)));
+            lista.add(insert(newEntity("Giovanni", null)));
+            lista.add(insert(newEntity("Giacomo", null)));
             result.setIntValue(lista.size());
             result.setLista(lista);
         }

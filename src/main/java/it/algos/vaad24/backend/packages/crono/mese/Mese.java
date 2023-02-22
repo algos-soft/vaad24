@@ -29,6 +29,7 @@ import javax.persistence.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
+@AIEntity(keyPropertyName = "nome")
 public class Mese extends AEntity {
 
     @AIField(type = AETypeField.integer, widthEM = 6)

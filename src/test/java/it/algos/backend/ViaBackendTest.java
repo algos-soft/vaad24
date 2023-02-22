@@ -75,7 +75,6 @@ public class ViaBackendTest extends AlgosUnitTest {
         backend.mongoService = mongoService;
         backend.annotationService = annotationService;
         backend.logger = logger;
-        backend.repository = null;
         backend.crudRepository = null;
 
         entityClazz = Via.class;
@@ -251,6 +250,7 @@ public class ViaBackendTest extends AlgosUnitTest {
         String nomeOriginale = "Topo Lino";
         String keyID = "topolino";
         String nomeModificato = "Giuseppe";
+        String propertyName = "nome";
 
         ottenutoBooleano = backend.isExistId(nomeOriginale);
         assertFalse(ottenutoBooleano);
@@ -259,37 +259,56 @@ public class ViaBackendTest extends AlgosUnitTest {
 
         ottenutoBooleano = backend.creaIfNotExist(nomeOriginale);
         assertTrue(ottenutoBooleano);
-        message = String.format("2) creaIfNotExist -> Adesso nella collection '%s' è stata creata la entity [%s].%s che prima non esisteva", collectionName, keyID, nomeOriginale);
+        message = String.format("2) creaIfNotExist -> Nella collection '%s' è stata creata (true) la entity [%s].%s che prima non esisteva", collectionName, keyID, nomeOriginale);
         System.out.println(message);
 
         ottenutoBooleano = backend.isExistId(keyID);
         assertTrue(ottenutoBooleano);
-        message = String.format("3) isExistId -> Controllo l'esistenza (true) della entity [%s].%s", keyID, nomeOriginale);
+        message = String.format("3) isExistId -> Controllo l'esistenza (true) della entity [%s].%s tramite l'ID", keyID, nomeOriginale);
         System.out.println(message);
+
+        System.out.println(VUOTA);
 
         ottenutoBooleano = backend.creaIfNotExist(nomeOriginale);
         assertFalse(ottenutoBooleano);
         message = String.format("4) creaIfNotExist -> La entity [%s].%s esisteva già e non è stata creata (false)", keyID, nomeOriginale);
         System.out.println(message);
 
-        entityBean = backend.findById(keyID);
-        assertNotNull(entityBean);
-        message = String.format("5) findById -> Recupero la entity [%s].%s dalla keyID", keyID, nomeOriginale);
-        System.out.println(message);
+        System.out.println(VUOTA);
 
-        entityBean = backend.findByKeyCode(nomeOriginale);
-        assertNotNull(entityBean);
-        message = String.format("6) findByKeyCode -> Recupero la entity [%s].%s dal valore '%s' della property [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        ottenutoBooleano = backend.isExistId(keyID);
+        assertTrue(ottenutoBooleano);
+        message = String.format("5) isExistId -> Controllo l'esistenza (true) della entity [%s].%s tramite l'ID", keyID, nomeOriginale);
         System.out.println(message);
-
-        ottenutoBooleano = backend.isExistProperty(nomeOriginale);
-        message = String.format("7) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        ottenutoBooleano = backend.isExistKey(nomeOriginale);
+        message = String.format("6) isExistKey -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
         assertTrue(ottenutoBooleano);
         System.out.println(message);
-        ottenutoBooleano = backend.isExistProperty(nomeModificato);
+        ottenutoBooleano = backend.isExistKey(nomeModificato);
         assertFalse(ottenutoBooleano);
-        message = String.format("8) isExistProperty -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
+        message = String.format("7) isExistKey -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
         System.out.println(message);
+        ottenutoBooleano = backend.isExistProperty(propertyName, nomeOriginale);
+        message = String.format("8) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", keyID, nomeModificato, nomeOriginale, propertyName);
+        assertTrue(ottenutoBooleano);
+        System.out.println(message);
+
+        entityBean = backend.findById(keyID);
+        assertNotNull(entityBean);
+        message = String.format("9) findById -> Recupero la entity [%s].%s dalla keyID", keyID, nomeOriginale);
+        System.out.println(message);
+
+        entityBean = backend.findByKey(nomeOriginale);
+        assertNotNull(entityBean);
+        message = String.format("10) findByKey -> Recupero la entity [%s].%s dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        System.out.println(message);
+        entityBean = backend.findByProperty(propertyName,nomeOriginale);
+        assertNotNull(entityBean);
+        message = String.format("11) findByProperty -> Recupero la entity [%s].%s dal valore '%s' della property [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        System.out.println(message);
+
+
+        System.out.println(VUOTA);
 
         reflectionService.setPropertyValue(entityBean, keyPropertyName, nomeModificato);
         entityBean = backend.save(entityBean);
@@ -298,25 +317,31 @@ public class ViaBackendTest extends AlgosUnitTest {
         entityBean = backend.findById(keyID);
         assertNotNull(entityBean);
         assertEquals(nomeModificato, reflectionService.getPropertyValue(entityBean, keyPropertyName));
-        message = String.format("9) save -> Modifica la entity [%s].%s in [%s].%s", keyID, nomeOriginale, keyID, nomeModificato);
+        message = String.format("12) save -> Modifica la entity [%s].%s in [%s].%s", keyID, nomeOriginale, keyID, nomeModificato);
         System.out.println(message);
 
-        ottenutoBooleano = backend.isExistProperty(nomeOriginale);
-        message = String.format("10) isExistProperty -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        ottenutoBooleano = backend.isExistKey(nomeOriginale);
+        message = String.format("13) isExistKey -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
         assertFalse(ottenutoBooleano);
         System.out.println(message);
-        ottenutoBooleano = backend.isExistProperty(nomeModificato);
+        ottenutoBooleano = backend.isExistKey(nomeModificato);
         assertTrue(ottenutoBooleano);
-        message = String.format("11) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
+        message = String.format("14) isExistKey -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
         System.out.println(message);
+        ottenutoBooleano = backend.isExistProperty(propertyName, nomeModificato);
+        message = String.format("15) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", keyID, nomeModificato, nomeModificato, propertyName);
+        assertTrue(ottenutoBooleano);
+        System.out.println(message);
+
+        System.out.println(VUOTA);
 
         ottenutoBooleano = backend.delete(entityBean);
         assertTrue(ottenutoBooleano);
-        message = String.format("12) delete -> Cancello la entity [%s].%s", keyID, nomeModificato);
+        message = String.format("16) delete -> Cancello la entity [%s].%s", keyID, nomeModificato);
         System.out.println(message);
 
         ottenutoBooleano = backend.isExistId(keyID);
-        message = String.format("13) isExistId -> Alla fine, nella collection '%s' non esiste più la entity [%s] che è stata cancellata", collectionName, keyID);
+        message = String.format("17) isExistId -> Alla fine, nella collection '%s' non esiste più la entity [%s] che è stata cancellata", collectionName, keyID);
         System.out.println(message);
     }
 

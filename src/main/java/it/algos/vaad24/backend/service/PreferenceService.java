@@ -40,7 +40,7 @@ public class PreferenceService extends AbstractService {
             return;
         }
 
-        preferenza = preferenzaBackend.findByKeyCode(keyCode);
+        preferenza = preferenzaBackend.findByKey(keyCode);
         if (preferenza == null) {
             return;
         }
@@ -58,7 +58,7 @@ public class PreferenceService extends AbstractService {
             return null;
         }
 
-        preferenza = preferenzaBackend.findByKeyCode(keyCode);
+        preferenza = preferenzaBackend.findByKey(keyCode);
         javaValue = preferenza != null ? type.bytesToObject(preferenza.getValue()) : null;
 
         return javaValue;
@@ -229,7 +229,7 @@ public class PreferenceService extends AbstractService {
 
     public boolean isStandard(final String keyCode) {
         boolean valoreCorrenteStandard = false;
-        Object valoreCorrenteDataBase = preferenzaBackend.findByKeyCode(keyCode).getValore();
+        Object valoreCorrenteDataBase = preferenzaBackend.findByKey(keyCode).getValore();
         AIGenPref prefEnum = preferenceService.getPref(keyCode);
         Object valoreDefaultEnumeration = prefEnum.getDefaultValue();
 

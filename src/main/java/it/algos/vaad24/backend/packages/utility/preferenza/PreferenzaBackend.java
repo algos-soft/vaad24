@@ -52,11 +52,11 @@ public class PreferenzaBackend extends CrudBackend {
     }
 
     public boolean existsByKeyCode(final String code) {
-        return findByKeyCode(code) != null;
+        return findByKey(code) != null;
     }
 
 
-    public Preferenza findByKeyCode(final String keyCode) {
+    public Preferenza findByKey(final String keyCode) {
         return repository.findFirstByCode(keyCode);
     }
 
@@ -66,7 +66,7 @@ public class PreferenzaBackend extends CrudBackend {
     }
 
     public Object getValore(final String keyCode) {
-        Preferenza preferenza = findByKeyCode(keyCode);
+        Preferenza preferenza = findByKey(keyCode);
         return preferenza != null ? preferenza.getValore() : null;
     }
 
@@ -79,7 +79,7 @@ public class PreferenzaBackend extends CrudBackend {
     public boolean setValore(final String keyCode, final Object newJavaValue) {
         boolean modificato = false;
         Object oldJavaValue;
-        Preferenza preferenza = findByKeyCode(keyCode);
+        Preferenza preferenza = findByKey(keyCode);
 
         if (preferenza != null) {
             oldJavaValue = preferenza.getValore();
@@ -169,7 +169,7 @@ public class PreferenzaBackend extends CrudBackend {
         }
         keyCode = prefEnum.getKeyCode();
 
-        preferenza = findByKeyCode(keyCode);
+        preferenza = findByKey(keyCode);
         if (preferenza == null) {
             return false;
         }

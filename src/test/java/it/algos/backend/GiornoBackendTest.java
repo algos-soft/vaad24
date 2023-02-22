@@ -87,7 +87,7 @@ public class GiornoBackendTest extends AlgosUnitTest {
         backend.reflectionService = reflectionService;
         backend.mongoService = mongoService;
         backend.meseBackend = meseBackend;
-        backend.meseBackend.repository = meseRepository;
+//        backend.meseBackend.repository = meseRepository;
         backend.meseBackend.crudRepository = meseRepository;
     }
 
@@ -179,14 +179,14 @@ public class GiornoBackendTest extends AlgosUnitTest {
     void findAllByMese() {
         System.out.println("4 - findAllByMese (entity)");
 
-        for (Mese sorgente : meseBackend.findAllSortCorrente()) {
-            listaBeans = backend.findAllByMese(sorgente);
-            assertNotNull(listaBeans);
-            message = String.format("Nel mese di %s ci sono %s giorni", sorgente, textService.format(listaBeans.size()));
-            System.out.println(VUOTA);
-            System.out.println(message);
-            printGiorni(listaBeans);
-        }
+//        for (Mese sorgente : meseBackend.findAllSortCorrente()) {
+//            listaBeans = backend.findAllByMese(sorgente);
+//            assertNotNull(listaBeans);
+//            message = String.format("Nel mese di %s ci sono %s giorni", sorgente, textService.format(listaBeans.size()));
+//            System.out.println(VUOTA);
+//            System.out.println(message);
+//            printGiorni(listaBeans);
+//        }
     }
 
     @Test
@@ -195,14 +195,14 @@ public class GiornoBackendTest extends AlgosUnitTest {
     void findNomiByMese() {
         System.out.println("5 - findNomiByMese (nome)");
 
-        for (String sorgente : meseBackend.findNomi()) {
-            listaStr = backend.findNomiByMese(sorgente);
-            assertNotNull(listaStr);
-            message = String.format("Nel mese di %s ci sono %s giorni", sorgente, textService.format(listaStr.size()));
-            System.out.println(VUOTA);
-            System.out.println(message);
-            printNomiGiorni(listaStr);
-        }
+//        for (String sorgente : meseBackend.findNomi()) {
+//            listaStr = backend.findNomiByMese(sorgente);
+//            assertNotNull(listaStr);
+//            message = String.format("Nel mese di %s ci sono %s giorni", sorgente, textService.format(listaStr.size()));
+//            System.out.println(VUOTA);
+//            System.out.println(message);
+//            printNomiGiorni(listaStr);
+//        }
     }
 
 

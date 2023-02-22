@@ -558,7 +558,7 @@ public class PreferenzaDialog extends Dialog {
 
     public void saveHandler() {
         String message;
-        Preferenza oldEntity = preferenzaBackend.findByKeyCode(currentItem.code);
+        Preferenza oldEntity = preferenzaBackend.findByKey(currentItem.code);
 
         try {
             if (binder.writeBeanIfValid(currentItem) && sincroValueToModel()) {
