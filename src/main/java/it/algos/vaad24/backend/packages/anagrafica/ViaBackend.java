@@ -65,7 +65,7 @@ public class ViaBackend extends CrudBackend {
      *
      * @param nome (obbligatorio, unico)
      *
-     * @return la nuova entity appena creata (non salvata e senza keyID)
+     * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Via newEntity(final String nome) {
         Via newEntityBean = Via.builder()

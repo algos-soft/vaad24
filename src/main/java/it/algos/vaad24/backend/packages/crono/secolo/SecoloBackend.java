@@ -1,6 +1,7 @@
 package it.algos.vaad24.backend.packages.crono.secolo;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
@@ -47,6 +48,11 @@ public class SecoloBackend extends CrudBackend {
         this.repository = (SecoloRepository) crudRepository;
     }
 
+
+    public boolean creaIfNotExist(final String nome) {
+        return insert(newEntity(0, nome, 0, 0, false)) != null;
+    }
+
     public boolean crea(final int ordine, final String nome, final int inizio, final int fine, final boolean anteCristo) {
         Secolo secolo = newEntity(ordine, nome, inizio, fine, anteCristo);
         return crudRepository.insert(secolo) != null;
@@ -62,6 +68,16 @@ public class SecoloBackend extends CrudBackend {
     public Secolo newEntity() {
         return newEntity(0, VUOTA, 0, 0, false);
     }
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Usa il @Builder di Lombok <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Secolo newEntity(String nome) {
+        return newEntity(0, nome, 0, 0, false);
+    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -75,16 +91,18 @@ public class SecoloBackend extends CrudBackend {
      * @param fine       ultimo anno del secolo
      * @param anteCristo secolo prima o dopo Cristo
      *
-     * @return la nuova entity appena creata (non salvata e senza keyID)
+     * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Secolo newEntity(final int ordine, final String nome, final int inizio, final int fine, final boolean anteCristo) {
-        return Secolo.builder()
+        Secolo newEntityBean = Secolo.builder()
                 .ordine(ordine)
                 .nome(textService.isValid(nome) ? nome : null)
                 .inizio(inizio)
                 .fine(fine)
                 .anteCristo(anteCristo)
                 .build();
+
+        return (Secolo) fixKey(newEntityBean);
     }
 
     /**
@@ -98,16 +116,16 @@ public class SecoloBackend extends CrudBackend {
         return repository.findFirstByNome(nome);
     }
 
-    @Override
-    public List<Secolo> findAllSortCorrente() {
-        return repository.findAll(Sort.by(Sort.Direction.DESC, "ordine"));
-    }
+//    @Override
+//    public List findAllSortCorrente() {
+//        return repository.findAll(Sort.by(Sort.Direction.DESC, "ordine"));
+//    }
 
-    public List<String> findNomi() {
-        return findAllSortCorrente().stream()
-                .map(secolo -> secolo.nome)
-                .collect(Collectors.toList());
-    }
+//    public List<String> findNomi() {
+//        return findAllSortCorrente().stream()
+//                .map(secolo -> secolo.nome)
+//                .collect(Collectors.toList());
+//    }
 
     public List<String> findNomiAscendenti() {
         List<Secolo> secoli = repository.findAll(Sort.by(Sort.Direction.ASC, "ordine"));
@@ -155,19 +173,25 @@ public class SecoloBackend extends CrudBackend {
     @Override
     public AResult resetOnlyEmpty() {
         AResult result = super.resetOnlyEmpty();
+        String clazzName = entityClazz.getSimpleName();
+        String collectionName = result.getTarget();
         String nomeFile = "secoli";
         Map<String, List<String>> mappa;
         List<String> riga;
+        List<AEntity> lista;
+        AEntity entityBean;
         int ordine;
         String nome;
         int inizio;
         int fine;
         boolean anteCristo = false;
         String anteCristoText;
+        String message;
 
-        if (result.isValido() && result.getTypeResult() == AETypeResult.collectionVuota) {
+        if (result.getTypeResult() == AETypeResult.collectionVuota) {
             mappa = resourceService.leggeMappa(nomeFile);
             if (mappa != null) {
+                lista = new ArrayList<>();
                 for (String key : mappa.keySet()) {
                     riga = mappa.get(key);
                     if (riga.size() == 5) {
@@ -199,10 +223,16 @@ public class SecoloBackend extends CrudBackend {
                     }
                     nome += anteCristo ? " secolo a.C." : " secolo";
 
-                    if (!crea(ordine, nome, inizio, fine, anteCristo)) {
+                    entityBean = insert(newEntity(++ordine, nome, inizio, fine, anteCristo));
+                    if (entityBean != null) {
+                        lista.add(entityBean);
+                    }
+                    else {
                         logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
                     }
                 }
+                result.setIntValue(lista.size());
+                result.setLista(lista);
             }
             else {
                 logger.error(new WrapLog().exception(new AlgosException("Non ho trovato il file sul server")).usaDb());
@@ -213,7 +243,8 @@ public class SecoloBackend extends CrudBackend {
             return result;
         }
 
-        return fixResult(result);
+        message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
+        return result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
     }
 
 }// end of crud backend class

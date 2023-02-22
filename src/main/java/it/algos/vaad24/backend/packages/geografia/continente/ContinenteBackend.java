@@ -70,7 +70,7 @@ public class ContinenteBackend extends CrudBackend {
      * @param abitato (obbligatorio)
      * @param reset   (obbligatorio)
      *
-     * @return la nuova entity appena creata (non salvata e senza keyID)
+     * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Continente newEntity(final String id, final int ordine, final String nome, final boolean abitato, final boolean reset) {
         Continente continente = Continente.builder()

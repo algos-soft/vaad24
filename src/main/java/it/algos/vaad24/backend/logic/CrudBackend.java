@@ -7,6 +7,7 @@ import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.bson.*;
+import org.bson.types.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.*;
@@ -125,17 +126,27 @@ public abstract class CrudBackend extends AbstractService {
      */
     public AEntity fixKey(AEntity newEntityBean) {
         String keyPropertyValue;
-        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-        boolean usaKeyIdSenzaSpazi = annotationService.usaKeyIdSenzaSpazi(newEntityBean.getClass()); ;
-        boolean usaKeyIdMinuscolaCaseInsensitive = annotationService.usaKeyIdMinuscolaCaseInsensitive(newEntityBean.getClass()); ;
+        String keyPropertyName;
+        boolean usaKeyIdSenzaSpazi;
+        boolean usaKeyIdMinuscolaCaseInsensitive;
 
-        if (textService.isEmpty(newEntityBean.id) && textService.isValid(keyPropertyName)) {
+        if (textService.isValid(newEntityBean.id)) {
+            return newEntityBean;
+        }
+
+        keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        if (textService.isValid(keyPropertyName) && !keyPropertyName.equals(FIELD_NAME_ID_CON)) {
             keyPropertyValue = reflectionService.getPropertyValueStr(newEntityBean, keyPropertyName);
             if (textService.isValid(keyPropertyValue)) {
+                usaKeyIdSenzaSpazi = annotationService.usaKeyIdSenzaSpazi(newEntityBean.getClass()); ;
+                usaKeyIdMinuscolaCaseInsensitive = annotationService.usaKeyIdMinuscolaCaseInsensitive(newEntityBean.getClass()); ;
                 keyPropertyValue = usaKeyIdSenzaSpazi ? textService.levaSpazi(keyPropertyValue) : keyPropertyValue;
                 keyPropertyValue = usaKeyIdMinuscolaCaseInsensitive ? keyPropertyValue.toLowerCase() : keyPropertyValue;
                 newEntityBean.id = keyPropertyValue;
             }
+        }
+        else {
+            newEntityBean.id = new ObjectId().toString();
         }
 
         return newEntityBean;
@@ -341,7 +352,7 @@ public abstract class CrudBackend extends AbstractService {
                 order = sort.stream().toList().get(0);
                 property = order.getProperty();
                 esiste = reflectionService.isEsiste(entityClazz, property);
-                if (esiste) {
+                if (esiste||property.equals(FIELD_NAME_ID_CON)) {
                     if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
                         return crudRepository.findAll(sort);
                     }
@@ -370,6 +381,18 @@ public abstract class CrudBackend extends AbstractService {
             }
         }
     }
+
+
+    public List<String> findAllKey() {
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        return mongoService.projectionString(entityClazz, keyPropertyName);
+    }
+
+    public List<String> findAllKeyReverseOrder() {
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        return mongoService.projectionStringReverseOrder(entityClazz, keyPropertyName);
+    }
+
     @Deprecated
     public AEntity add(Object objEntity) {
         AEntity entity = (AEntity) objEntity;
@@ -422,8 +445,6 @@ public abstract class CrudBackend extends AbstractService {
             return mongoService.count(entityClazz);
         }
     }
-
-
 
 
     /**

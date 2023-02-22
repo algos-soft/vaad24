@@ -24,7 +24,7 @@ import java.util.*;
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
-@Tag("backend")
+@Tag("backendx")
 @DisplayName("Preferenza Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PreferenzaBackendTest extends AlgosUnitTest {

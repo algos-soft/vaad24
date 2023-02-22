@@ -124,3 +124,8 @@ statement in SQL or an equivalent method in other data storage systems.
 in SQL or an equivalent method in other data storage systems.
 
 These four operations are fundamental to the management of data in any data storage system, and are used extensively in various software applications and websites.
+
+
+== Auto-Generated Field
+
+* * Baeldung [https://www.baeldung.com/spring-boot-mongodb-auto-generated-field]

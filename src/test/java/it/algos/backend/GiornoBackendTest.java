@@ -5,69 +5,59 @@ import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
+import it.algos.vaad24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
-
-import java.util.*;
-import java.util.stream.*;
+import org.springframework.data.domain.*;
 
 /**
  * Project vaad24
  * Created by Algos
  * User: gac
- * Date: Tue, 13-Dec-2022
- * Time: 09:35
+ * Date: Wed, 22-Feb-2023
+ * Time: 13:46
+ * Test senza repository <br>
+ * <p>
+ * isExistId()
+ * isExistKey(), se esiste una key
+ * isExistProperty()
+ * findByID()
+ * findByKey(), se esiste una key
+ * findByProperty()
+ * creaIfNotExist()
+ * save()
+ * insert()
+ * update()
+ * delete()
+ * count()
+ * findAllNoSort()
+ * findAllSortCorrente()
+ * findAllSort()
+ * findAllKey()
+ * resetOnlyEmpty()
+ * deleteAll()
  */
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
-@Tag("backend-no")
+@Tag("backend2")
 @DisplayName("Giorno Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GiornoBackendTest extends AlgosUnitTest {
 
-    /**
-     * The Service.
-     */
     @InjectMocks
     private GiornoBackend backend;
 
-    @Autowired
-    private GiornoRepository repository;
+    private String backendName;
 
-    private Giorno entityBean;
+    private String collectionName;
 
-    private List<Giorno> listaBeans;
-
-    private String dbName = "Giorno";
-
-    private String backendName = "GiornoBackend";
+    private String keyPropertyName;
 
     @InjectMocks
     private MeseBackend meseBackend;
-
-    @Autowired
-    private MeseRepository meseRepository;
-
-    private Class entityClazz = Giorno.class;
-
-
-    //--giorno
-    //--esistente
-    protected static Stream<Arguments> GIORNI() {
-        return Stream.of(
-                Arguments.of(null, false),
-                Arguments.of(VUOTA, false),
-                Arguments.of("23 febbraio", true),
-                Arguments.of("43 marzo", false),
-                Arguments.of("19 dicembra", false),
-                Arguments.of("4 gennaio", true)
-        );
-    }
 
     /**
      * Qui passa una volta sola <br>
@@ -76,19 +66,13 @@ public class GiornoBackendTest extends AlgosUnitTest {
     protected void setUpAll() {
         super.setUpAll();
 
-        Assertions.assertNotNull(backend);
+        assertNotNull(backend);
 
-        backend.repository = repository;
-        backend.crudRepository = repository;
-        backend.arrayService = arrayService;
-        backend.dateService = dateService;
-        backend.textService = textService;
-        backend.resourceService = resourceService;
-        backend.reflectionService = reflectionService;
-        backend.mongoService = mongoService;
-        backend.meseBackend = meseBackend;
-//        backend.meseBackend.repository = meseRepository;
-        backend.meseBackend.crudRepository = meseRepository;
+        entityClazz = Giorno.class;
+        clazzName = entityClazz.getSimpleName();
+        backendName = "Giorno" + SUFFIX_BACKEND;
+        collectionName = annotationService.getCollectionName(entityClazz);
+        keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
     }
 
 
@@ -99,6 +83,9 @@ public class GiornoBackendTest extends AlgosUnitTest {
      */
     protected void initMocks() {
         super.initMocks();
+
+        assertNotNull(backend);
+        assertNotNull(meseBackend);
     }
 
 
@@ -110,36 +97,42 @@ public class GiornoBackendTest extends AlgosUnitTest {
      */
     protected void fixRiferimentiIncrociati() {
         super.fixRiferimentiIncrociati();
+
+        backend.arrayService = arrayService;
+        backend.dateService = dateService;
+        backend.textService = textService;
+        backend.resourceService = resourceService;
+        backend.reflectionService = reflectionService;
+        backend.mongoService = mongoService;
+        backend.annotationService = annotationService;
+        backend.logger = logger;
+        backend.crudRepository = null;
+
+        meseBackend.annotationService = annotationService;
+        backend.meseBackend = meseBackend;
+        backend.meseBackend.textService = textService;
+        backend.meseBackend.mongoService = mongoService;
     }
 
 
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();
-
-        this.entityBean = null;
-        this.listaBeans = null;
     }
 
 
     @Test
     @Order(1)
-    @DisplayName("1 - count")
-    void count() {
-        System.out.println("1 - count");
-        String message;
+    @DisplayName("1 - collection")
+    void collection() {
+        System.out.println("1 - Esistenza della collection");
 
-        ottenutoIntero = backend.count();
-        if (ottenutoIntero > 0) {
-            message = String.format("Ci sono in totale %s entities di '%s' nel database mongoDB", textService.format(ottenutoIntero), dbName);
+        ottenutoBooleano = backend.isExistsCollection();
+        if (ottenutoBooleano) {
+            message = String.format("Esiste la collection della classe [%s] e si chiama '%s'", clazzName, collectionName);
         }
         else {
-            if (reflectionService.isEsisteMetodo(backend.getClass(), TAG_RESET_ONLY)) {
-                message = String.format("La collection '%s' è ancora vuota. Usa il metodo %s.%s()", dbName, backendName, TAG_RESET_ONLY);
-            }
-            else {
-                message = String.format("Nel database mongoDB la collection '%s' è ancora vuota", dbName);
-            }
+            message = String.format("Non esiste la collection '%s' della classe [%s]", collectionName, clazzName);
         }
         System.out.println(message);
     }
@@ -147,171 +140,312 @@ public class GiornoBackendTest extends AlgosUnitTest {
 
     @Test
     @Order(2)
-    @DisplayName("2 - findAll (entity)")
-    void findAll() {
-        System.out.println("2 - findAll (entity)");
-        String message;
+    @DisplayName("2 - count")
+    void count2() {
+        System.out.println("2 - count");
 
-        listaBeans = backend.findAllSortCorrente();
-        assertNotNull(listaBeans);
-        message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), "Giorno");
-        System.out.println(message);
-        printGiorni(listaBeans);
-    }
-
-    @Test
-    @Order(3)
-    @DisplayName("3 - findNomi (nome)")
-    void findNomi() {
-        System.out.println("3 - findNomi (nome)");
-        String message;
-
-        listaStr = backend.findNomi();
-        assertNotNull(listaStr);
-        message = String.format("Ci sono in totale %s giorni", textService.format(listaStr.size()));
-        System.out.println(message);
-        printNomiGiorni(listaStr);
-    }
-
-    @Test
-    @Order(4)
-    @DisplayName("4 - findAllByMese (entity)")
-    void findAllByMese() {
-        System.out.println("4 - findAllByMese (entity)");
-
-//        for (Mese sorgente : meseBackend.findAllSortCorrente()) {
-//            listaBeans = backend.findAllByMese(sorgente);
-//            assertNotNull(listaBeans);
-//            message = String.format("Nel mese di %s ci sono %s giorni", sorgente, textService.format(listaBeans.size()));
-//            System.out.println(VUOTA);
-//            System.out.println(message);
-//            printGiorni(listaBeans);
-//        }
-    }
-
-    @Test
-    @Order(5)
-    @DisplayName("5 - findNomiByMese (nome)")
-    void findNomiByMese() {
-        System.out.println("5 - findNomiByMese (nome)");
-
-//        for (String sorgente : meseBackend.findNomi()) {
-//            listaStr = backend.findNomiByMese(sorgente);
-//            assertNotNull(listaStr);
-//            message = String.format("Nel mese di %s ci sono %s giorni", sorgente, textService.format(listaStr.size()));
-//            System.out.println(VUOTA);
-//            System.out.println(message);
-//            printNomiGiorni(listaStr);
-//        }
-    }
-
-
-    @Test
-    @Order(11)
-    @DisplayName("11 - giorni esistenti")
-    void isEsisteCiclo() {
-        System.out.println("11 - giorni esistenti");
-
-        //--giorno
-        //--esistente
-        System.out.println(VUOTA);
-        GIORNI().forEach(this::isEsisteBase);
-    }
-
-
-    //--giorno
-    //--esistente
-    void isEsisteBase(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[1];
-
-        ottenutoBooleano = backend.isEsiste(sorgente);
-        assertEquals(previstoBooleano, ottenutoBooleano);
-        if (ottenutoBooleano) {
-            System.out.println(String.format("Il giorno %s esiste", sorgente));
+        ottenutoIntero = backend.count();
+        if (ottenutoIntero > 0) {
+            message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
         }
         else {
-            System.out.println(String.format("Il giorno %s non esiste", sorgente));
+            if (reflectionService.isEsisteMetodo(backend.getClass(), TAG_RESET_ONLY)) {
+                message = String.format("La collection '%s' della classe [%s] è ancora vuota. Usa il metodo %s.%s()", collectionName, clazzName, backendName, TAG_RESET_ONLY);
+            }
+            else {
+                message = String.format("Nel database mongoDB la collection '%s' della classe [%s] è ancora vuota", collectionName, clazzName);
+            }
         }
-        System.out.println(VUOTA);
+        System.out.println(message);
     }
 
-    //    @Test
+
+    @Test
+    @Order(21)
+    @DisplayName("21 - findAll unsorted")
+    void findAllNoSort() {
+        System.out.println("21 - findAll unsorted");
+
+        listaBeans = backend.findAllNoSort();
+        assertNotNull(listaBeans);
+        ottenutoIntero = listaBeans.size();
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
+        System.out.println(message);
+        printSubLista(listaBeans);
+    }
+
+
+    @Test
+    @Order(22)
+    @DisplayName("22 - findAll getSortKeyID")
+    void findAllSortCorrente() {
+        System.out.println("22 - findAll getSortKeyID");
+
+        listaBeans = backend.findAllSortCorrente();
+        assertNotNull(listaBeans);
+        ottenutoIntero = listaBeans.size();
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
+        System.out.println(message);
+        printSubLista(listaBeans);
+    }
+
+
+    @Test
+    @Order(23)
+    @DisplayName("23 - findAll con sort specifico (discendente)")
+    void findAllSort() {
+        System.out.println("23 - findAll con sort specifico (discendente)");
+
+        sort = Sort.by(Sort.Direction.DESC, keyPropertyName);
+        listaBeans = backend.findAllSort(sort);
+        assertNotNull(listaBeans);
+        ottenutoIntero = listaBeans.size();
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
+        System.out.println(message);
+        printSubLista(listaBeans);
+    }
+
+    @Test
+    @Order(31)
+    @DisplayName("31 - findAllKey")
+    void findAllKey() {
+        System.out.println("31 - findAllKey");
+        System.out.println(VUOTA);
+
+        if (!annotationService.isKeyPropertyName(entityClazz)) {
+            System.out.println("Il metodo usato da questo test presuppone che esista una keyProperty");
+
+            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
+            System.out.println(message);
+            return;
+        }
+
+        listaStr = backend.findAllKey();
+        assertNotNull(listaStr);
+        ottenutoIntero = listaStr.size();
+        sorgente = textService.format(ottenutoIntero);
+        sorgente2 = annotationService.getKeyPropertyName(entityClazz);
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
+        System.out.println(message);
+
+        print(listaStr);
+    }
+
+    @Test
+    @Order(32)
+    @DisplayName("32 - findAllKeyReverseOrder")
+    void findAllKeyReverseOrder() {
+        System.out.println("32 - findAllKeyReverseOrder");
+        System.out.println(VUOTA);
+
+        if (!annotationService.isKeyPropertyName(entityClazz)) {
+            System.out.println("Il metodo usato da questo test presuppone che esista una keyProperty");
+
+            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
+            System.out.println(message);
+            return;
+        }
+
+        listaStr = backend.findAllKeyReverseOrder();
+        assertNotNull(listaStr);
+        ottenutoIntero = listaStr.size();
+        sorgente = textService.format(ottenutoIntero);
+        sorgente2 = annotationService.getKeyPropertyName(entityClazz);
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s' in ordine inverso:", collectionName, clazzName, sorgente, sorgente2);
+        System.out.println(message);
+
+        print(listaStr);
+    }
+
+
+    @Test
+    @Order(41)
+    @DisplayName("41 - newEntity con ID ma non registrata")
+    void newEntity() {
+        System.out.println("41 - newEntity con ID ma non registrata");
+        System.out.println(VUOTA);
+
+        sorgente = "Topo Lino";
+        previsto = "topolino";
+        previsto2 = "Topo Lino";
+        entityBean = backend.newEntity(sorgente);
+        assertNotNull(entityBean);
+        ottenuto = entityBean.id;
+        ottenuto2 = reflectionService.getPropertyValueStr(entityBean, keyPropertyName);
+        if (annotationService.isKeyPropertyName(entityClazz)) {
+            assertEquals(previsto, ottenuto);
+            assertEquals(previsto2, ottenuto2);
+        }
+
+        message = String.format("Creata (in memoria) una entity con ID e %s, della classe [%s]", keyPropertyName, clazzName);
+        System.out.println(message);
+    }
+
+    @Test
+    @Order(42)
+    @DisplayName("42 - CRUD operations")
+    void crud() {
+        System.out.println("42 - CRUD operations");
+        System.out.println(VUOTA);
+
+        if (!annotationService.isKeyPropertyName(entityClazz)) {
+            System.out.println("Le operazioni CRUD standard di questo test presuppongono che esista una keyProperty");
+
+            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
+            System.out.println(message);
+            return;
+        }
+
+        String nomeOriginale = "Topo Lino";
+        String keyID = "topolino";
+        String nomeModificato = "Giuseppe";
+        String propertyName = "nome";
+
+        ottenutoBooleano = backend.isExistId(nomeOriginale);
+        assertFalse(ottenutoBooleano);
+        message = String.format("1) isExistId -> Nella collection '%s' non esiste (false) la entity [%s]", collectionName, nomeOriginale);
+        System.out.println(message);
+
+        ottenutoBooleano = backend.creaIfNotExist(nomeOriginale);
+        assertTrue(ottenutoBooleano);
+        message = String.format("2) creaIfNotExist -> Nella collection '%s' è stata creata (true) la entity [%s].%s che prima non esisteva", collectionName, keyID, nomeOriginale);
+        System.out.println(message);
+
+        ottenutoBooleano = backend.isExistId(keyID);
+        assertTrue(ottenutoBooleano);
+        message = String.format("3) isExistId -> Controllo l'esistenza (true) della entity [%s].%s tramite l'ID", keyID, nomeOriginale);
+        System.out.println(message);
+
+        System.out.println(VUOTA);
+
+        ottenutoBooleano = backend.creaIfNotExist(nomeOriginale);
+        assertFalse(ottenutoBooleano);
+        message = String.format("4) creaIfNotExist -> La entity [%s].%s esisteva già e non è stata creata (false)", keyID, nomeOriginale);
+        System.out.println(message);
+
+        System.out.println(VUOTA);
+
+        ottenutoBooleano = backend.isExistId(keyID);
+        assertTrue(ottenutoBooleano);
+        message = String.format("5) isExistId -> Controllo l'esistenza (true) della entity [%s].%s tramite l'ID", keyID, nomeOriginale);
+        System.out.println(message);
+        ottenutoBooleano = backend.isExistKey(nomeOriginale);
+        message = String.format("6) isExistKey -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        assertTrue(ottenutoBooleano);
+        System.out.println(message);
+        ottenutoBooleano = backend.isExistKey(nomeModificato);
+        assertFalse(ottenutoBooleano);
+        message = String.format("7) isExistKey -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
+        System.out.println(message);
+        ottenutoBooleano = backend.isExistProperty(propertyName, nomeOriginale);
+        message = String.format("8) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", keyID, nomeModificato, nomeOriginale, propertyName);
+        assertTrue(ottenutoBooleano);
+        System.out.println(message);
+
+        entityBean = backend.findById(keyID);
+        assertNotNull(entityBean);
+        message = String.format("9) findById -> Recupero la entity [%s].%s dalla keyID", keyID, nomeOriginale);
+        System.out.println(message);
+
+        entityBean = backend.findByKey(nomeOriginale);
+        assertNotNull(entityBean);
+        message = String.format("10) findByKey -> Recupero la entity [%s].%s dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        System.out.println(message);
+        entityBean = backend.findByProperty(propertyName, nomeOriginale);
+        assertNotNull(entityBean);
+        message = String.format("11) findByProperty -> Recupero la entity [%s].%s dal valore '%s' della property [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        System.out.println(message);
+
+        System.out.println(VUOTA);
+
+        reflectionService.setPropertyValue(entityBean, keyPropertyName, nomeModificato);
+        entityBean = backend.save(entityBean);
+        assertNotNull(entityBean);
+        assertEquals(nomeModificato, reflectionService.getPropertyValue(entityBean, keyPropertyName));
+        entityBean = backend.findById(keyID);
+        assertNotNull(entityBean);
+        assertEquals(nomeModificato, reflectionService.getPropertyValue(entityBean, keyPropertyName));
+        message = String.format("12) save -> Modifica la entity [%s].%s in [%s].%s", keyID, nomeOriginale, keyID, nomeModificato);
+        System.out.println(message);
+
+        ottenutoBooleano = backend.isExistKey(nomeOriginale);
+        message = String.format("13) isExistKey -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        assertFalse(ottenutoBooleano);
+        System.out.println(message);
+        ottenutoBooleano = backend.isExistKey(nomeModificato);
+        assertTrue(ottenutoBooleano);
+        message = String.format("14) isExistKey -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
+        System.out.println(message);
+        ottenutoBooleano = backend.isExistProperty(propertyName, nomeModificato);
+        message = String.format("15) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", keyID, nomeModificato, nomeModificato, propertyName);
+        assertTrue(ottenutoBooleano);
+        System.out.println(message);
+
+        System.out.println(VUOTA);
+
+        ottenutoBooleano = backend.delete(entityBean);
+        assertTrue(ottenutoBooleano);
+        message = String.format("16) delete -> Cancello la entity [%s].%s", keyID, nomeModificato);
+        System.out.println(message);
+
+        ottenutoBooleano = backend.isExistId(keyID);
+        message = String.format("17) isExistId -> Alla fine, nella collection '%s' non esiste più la entity [%s] che è stata cancellata", collectionName, keyID);
+        System.out.println(message);
+    }
+
+    @Test
     @Order(91)
-    @DisplayName("91 - resetOnlyEmpty pieno")
-    void resetOnlyEmptyPieno() {
-        System.out.println("91 - resetOnlyEmpty pieno");
-        String message;
+    @DisplayName("91 - resetOnlyEmpty")
+    void resetOnlyEmpty() {
+        System.out.println("91 - resetOnlyEmpty");
+        System.out.println(VUOTA);
 
         ottenutoRisultato = backend.resetOnlyEmpty();
-        printRisultato(ottenutoRisultato);
+        assertNotNull(ottenutoRisultato);
 
-        listaBeans = backend.findAllSortCorrente();
-        assertNotNull(listaBeans);
-        System.out.println(VUOTA);
-        message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
-        System.out.println(message);
-        printSubLista(listaBeans);
+        if (ottenutoRisultato.isValido()) {
+            System.out.println(ottenutoRisultato.getMessage());
+            printRisultato(ottenutoRisultato);
+        }
+        else {
+            logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
+        }
     }
 
 
-    //    @Test
+    @Test
     @Order(92)
-    @DisplayName("92 - resetOnlyEmpty vuoto")
-    void resetOnlyEmptyVuoto() {
-        System.out.println("92 - resetOnlyEmpty vuoto");
-        String message;
-
-        mongoService.deleteAll(entityClazz);
-        ottenutoRisultato = backend.resetOnlyEmpty();
-        printRisultato(ottenutoRisultato);
-
-        listaBeans = backend.findAllSortCorrente();
-        assertNotNull(listaBeans);
+    @DisplayName("92 - resetForcing")
+    void resetForcing() {
+        System.out.println("92 - resetForcing");
         System.out.println(VUOTA);
-        message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
-        System.out.println(message);
-        printSubLista(listaBeans);
-    }
-
-    //    @Test
-    @Order(93)
-    @DisplayName("93 - resetForcing pieno")
-    void resetForcingPieno() {
-        System.out.println("93 - resetForcing pieno");
-        String message;
 
         ottenutoRisultato = backend.resetForcing();
-        printRisultato(ottenutoRisultato);
+        assertNotNull(ottenutoRisultato);
+        if (ottenutoRisultato.isValido()) {
+            System.out.println(ottenutoRisultato.getMessage());
+            printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAllSortCorrente();
-        assertNotNull(listaBeans);
-        System.out.println(VUOTA);
-        message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
-        System.out.println(message);
-        printSubLista(listaBeans);
+            System.out.println(VUOTA);
+            printSubLista(ottenutoRisultato.getLista());
+        }
+        else {
+            logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
+        }
     }
 
-
-    //    @Test
-    @Order(94)
-    @DisplayName("94 - resetForcing vuoto")
-    void resetForcingVuoto() {
-        System.out.println("94 - resetForcing vuoto");
-        String message;
-
-        mongoService.deleteAll(entityClazz);
-        ottenutoRisultato = backend.resetForcing();
-        printRisultato(ottenutoRisultato);
-
-        listaBeans = backend.findAllSortCorrente();
-        assertNotNull(listaBeans);
-        System.out.println(VUOTA);
-        message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
-        System.out.println(message);
-        printSubLista(listaBeans);
-    }
 
     /**
      * Qui passa al termine di ogni singolo test <br>
@@ -326,45 +460,6 @@ public class GiornoBackendTest extends AlgosUnitTest {
      */
     @AfterAll
     void tearDownAll() {
-    }
-
-
-    void printGiorni(List<Giorno> listaGiorni) {
-        int k = 0;
-
-        for (Giorno giorno : listaGiorni) {
-            System.out.print(++k);
-            System.out.print(PARENTESI_TONDA_END);
-            System.out.print(SPAZIO);
-            System.out.print(giorno.nome);
-            System.out.print(SPAZIO);
-            System.out.print(giorno.trascorsi);
-            System.out.print(SPAZIO);
-            System.out.println(giorno.mancanti);
-        }
-    }
-
-    void printNomiGiorni(List<String> listaGiorni) {
-        int k = 0;
-
-        for (String giorno : listaGiorni) {
-            System.out.print(++k);
-            System.out.print(PARENTESI_TONDA_END);
-            System.out.print(SPAZIO);
-            System.out.println(giorno);
-        }
-    }
-
-    void printBeans(List<Giorno> listaBeans) {
-        System.out.println(VUOTA);
-        int k = 0;
-
-        for (Giorno bean : listaBeans) {
-            System.out.print(++k);
-            System.out.print(PARENTESI_TONDA_END);
-            System.out.print(SPAZIO);
-            System.out.println(bean);
-        }
     }
 
 }

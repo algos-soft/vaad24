@@ -1,7 +1,6 @@
 package it.algos.vaad24simple.backend.packages.prova;
 
 import it.algos.vaad24.backend.annotation.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;

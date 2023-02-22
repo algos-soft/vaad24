@@ -3,7 +3,6 @@ package it.algos.simpleOnly;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24simple.backend.packages.prova.*;
 import org.junit.jupiter.api.*;
@@ -12,14 +11,32 @@ import org.mockito.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.data.domain.*;
 
-import java.util.*;
-
 /**
  * Project vaad24
  * Created by Algos
  * User: gac
  * Date: Tue, 21-Feb-2023
  * Time: 19:06
+ * Test senza repository <br>
+ * <p>
+ * isExistId()
+ * isExistKey(), se esiste una key
+ * isExistProperty()
+ * findByID()
+ * findByKey(), se esiste una key
+ * findByProperty()
+ * creaIfNotExist()
+ * save()
+ * insert()
+ * update()
+ * delete()
+ * count()
+ * findAllNoSort()
+ * findAllSortCorrente()
+ * findAllSort()
+ * findAllKey()
+ * resetOnlyEmpty()
+ * deleteAll()
  */
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -29,21 +46,10 @@ import java.util.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ProvaBackendTest extends AlgosUnitTest {
 
-    /**
-     * The Service.
-     */
     @InjectMocks
     private ProvaBackend backend;
 
-    private AEntity entityBean;
-
-    private List<Prova> listaBeans;
-
     private String backendName;
-
-    private Class entityClazz;
-
-    private String clazzName;
 
     private String collectionName;
 
@@ -56,17 +62,7 @@ public class ProvaBackendTest extends AlgosUnitTest {
     protected void setUpAll() {
         super.setUpAll();
 
-        Assertions.assertNotNull(backend);
-
-        backend.arrayService = arrayService;
-        backend.dateService = dateService;
-        backend.textService = textService;
-        backend.resourceService = resourceService;
-        backend.reflectionService = reflectionService;
-        backend.mongoService = mongoService;
-        backend.annotationService = annotationService;
-        backend.logger = logger;
-        backend.crudRepository = null;
+        assertNotNull(backend);
 
         entityClazz = Prova.class;
         clazzName = entityClazz.getSimpleName();
@@ -94,15 +90,22 @@ public class ProvaBackendTest extends AlgosUnitTest {
      */
     protected void fixRiferimentiIncrociati() {
         super.fixRiferimentiIncrociati();
+
+        backend.arrayService = arrayService;
+        backend.dateService = dateService;
+        backend.textService = textService;
+        backend.resourceService = resourceService;
+        backend.reflectionService = reflectionService;
+        backend.mongoService = mongoService;
+        backend.annotationService = annotationService;
+        backend.logger = logger;
+        backend.crudRepository = null;
     }
 
 
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();
-
-        this.entityBean = null;
-        this.listaBeans = null;
     }
 
 
@@ -146,10 +149,10 @@ public class ProvaBackendTest extends AlgosUnitTest {
 
 
     @Test
-    @Order(20)
-    @DisplayName("20 - findAll unsorted")
+    @Order(21)
+    @DisplayName("21 - findAll unsorted")
     void findAllNoSort() {
-        System.out.println("20 - findAll unsorted");
+        System.out.println("21 - findAll unsorted");
 
         listaBeans = backend.findAllNoSort();
         assertNotNull(listaBeans);
@@ -161,10 +164,10 @@ public class ProvaBackendTest extends AlgosUnitTest {
 
 
     @Test
-    @Order(21)
-    @DisplayName("21 - findAll getSortKeyID")
+    @Order(22)
+    @DisplayName("22 - findAll getSortKeyID")
     void findAllSortCorrente() {
-        System.out.println("21 - findAll getSortKeyID");
+        System.out.println("22 - findAll getSortKeyID");
 
         listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
@@ -176,10 +179,10 @@ public class ProvaBackendTest extends AlgosUnitTest {
 
 
     @Test
-    @Order(22)
-    @DisplayName("22 - findAll con sort specifico (discendente)")
+    @Order(23)
+    @DisplayName("23 - findAll con sort specifico (discendente)")
     void findAllSort() {
-        System.out.println("22 - findAll con sort specifico (discendente)");
+        System.out.println("23 - findAll con sort specifico (discendente)");
 
         sort = Sort.by(Sort.Direction.DESC, keyPropertyName);
         listaBeans = backend.findAllSort(sort);
@@ -190,27 +193,73 @@ public class ProvaBackendTest extends AlgosUnitTest {
         printSubLista(listaBeans);
     }
 
-
     @Test
     @Order(31)
-    @DisplayName("31 - newEntity vuota senza ID")
-    void newEntityVuota() {
-        System.out.println("31 - newEntity vuota senza ID");
+    @DisplayName("31 - findAllKey")
+    void findAllKey() {
+        System.out.println("31 - findAllKey");
         System.out.println(VUOTA);
 
-        entityBean = backend.newEntity();
-        assertNotNull(entityBean);
-        assertNull(entityBean.id);
-        message = String.format("Creata (in memoria) una entity (vuota) e senza ID, della classe [%s]", clazzName);
-        System.out.println(message);
-    }
+        if (!annotationService.isKeyPropertyName(entityClazz)) {
+            System.out.println("Il metodo usato da questo test presuppone che esista una keyProperty");
 
+            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
+            System.out.println(message);
+            return;
+        }
+
+        listaStr = backend.findAllKey();
+        assertNotNull(listaStr);
+        ottenutoIntero = listaStr.size();
+        sorgente = textService.format(ottenutoIntero);
+        sorgente2 = keyPropertyName;
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
+        System.out.println(message);
+
+        print(listaStr);
+    }
 
     @Test
     @Order(32)
-    @DisplayName("32 - newEntity con ID ma non registrata")
+    @DisplayName("32 - findAllKeyReverseOrder")
+    void findAllKeyReverseOrder() {
+        System.out.println("32 - findAllKeyReverseOrder");
+        System.out.println(VUOTA);
+
+        if (!annotationService.isKeyPropertyName(entityClazz)) {
+            System.out.println("Il metodo usato da questo test presuppone che esista una keyProperty");
+
+            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
+            System.out.println(message);
+            return;
+        }
+
+        listaStr = backend.findAllKeyReverseOrder();
+        assertNotNull(listaStr);
+        ottenutoIntero = listaStr.size();
+        sorgente = textService.format(ottenutoIntero);
+        sorgente2 = keyPropertyName;
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s' in ordine inverso:", collectionName, clazzName, sorgente, sorgente2);
+        System.out.println(message);
+
+        print(listaStr);
+    }
+
+
+
+    @Test
+    @Order(41)
+    @DisplayName("41 - newEntity con ID ma non registrata")
     void newEntity() {
-        System.out.println("32 - newEntity con ID ma non registrata");
+        System.out.println("41 - newEntity con ID ma non registrata");
         System.out.println(VUOTA);
 
         sorgente = "Topo Lino";
@@ -220,21 +269,30 @@ public class ProvaBackendTest extends AlgosUnitTest {
         assertNotNull(entityBean);
         ottenuto = entityBean.id;
         ottenuto2 = reflectionService.getPropertyValueStr(entityBean, keyPropertyName);
-        assertEquals(previsto, ottenuto);
-        assertEquals(previsto2, ottenuto2);
+        if (annotationService.isKeyPropertyName(entityClazz)) {
+            assertEquals(previsto, ottenuto);
+            assertEquals(previsto2, ottenuto2);
+        }
+
         message = String.format("Creata (in memoria) una entity con ID e %s, della classe [%s]", keyPropertyName, clazzName);
         System.out.println(message);
     }
 
     @Test
-    @Order(33)
-    @DisplayName("33 - CRUD operations")
+    @Order(42)
+    @DisplayName("42 - CRUD operations")
     void crud() {
-        System.out.println("33 - CRUD operations");
+        System.out.println("42 - CRUD operations");
         System.out.println(VUOTA);
 
-        if (!backend.isExistsCollection()) {
-            message = String.format("Non esiste la collection '%s' della classe [%s]", collectionName, clazzName);
+        if (!annotationService.isKeyPropertyName(entityClazz)) {
+            System.out.println("Le operazioni CRUD standard di questo test presuppongono che esista una keyProperty");
+
+            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
             System.out.println(message);
             return;
         }
@@ -242,7 +300,6 @@ public class ProvaBackendTest extends AlgosUnitTest {
         String nomeOriginale = "Topo Lino";
         String keyID = "topolino";
         String nomeModificato = "Giuseppe";
-        String propertyName = "descrizione";
 
         ottenutoBooleano = backend.isExistId(nomeOriginale);
         assertFalse(ottenutoBooleano);
@@ -280,8 +337,8 @@ public class ProvaBackendTest extends AlgosUnitTest {
         assertFalse(ottenutoBooleano);
         message = String.format("7) isExistKey -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
         System.out.println(message);
-        ottenutoBooleano = backend.isExistProperty(propertyName, nomeOriginale);
-        message = String.format("8) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", keyID, nomeModificato, nomeOriginale, propertyName);
+        ottenutoBooleano = backend.isExistProperty(keyPropertyName, nomeOriginale);
+        message = String.format("8) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", keyID, nomeModificato, nomeOriginale, keyPropertyName);
         assertTrue(ottenutoBooleano);
         System.out.println(message);
 
@@ -294,11 +351,10 @@ public class ProvaBackendTest extends AlgosUnitTest {
         assertNotNull(entityBean);
         message = String.format("10) findByKey -> Recupero la entity [%s].%s dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
         System.out.println(message);
-        entityBean = backend.findByProperty(propertyName,nomeOriginale);
+        entityBean = backend.findByProperty(keyPropertyName, nomeOriginale);
         assertNotNull(entityBean);
         message = String.format("11) findByProperty -> Recupero la entity [%s].%s dal valore '%s' della property [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
         System.out.println(message);
-
 
         System.out.println(VUOTA);
 
@@ -320,8 +376,8 @@ public class ProvaBackendTest extends AlgosUnitTest {
         assertTrue(ottenutoBooleano);
         message = String.format("14) isExistKey -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
         System.out.println(message);
-        ottenutoBooleano = backend.isExistProperty(propertyName, nomeModificato);
-        message = String.format("15) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", keyID, nomeModificato, nomeModificato, propertyName);
+        ottenutoBooleano = backend.isExistProperty(keyPropertyName, nomeModificato);
+        message = String.format("15) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
         assertTrue(ottenutoBooleano);
         System.out.println(message);
 
@@ -392,18 +448,6 @@ public class ProvaBackendTest extends AlgosUnitTest {
      */
     @AfterAll
     void tearDownAll() {
-    }
-
-    void printBeans(List<Prova> listaBeans) {
-        System.out.println(VUOTA);
-        int k = 0;
-
-        for (Prova bean : listaBeans) {
-            System.out.print(++k);
-            System.out.print(PARENTESI_TONDA_END);
-            System.out.print(SPAZIO);
-            System.out.println(bean);
-        }
     }
 
 }

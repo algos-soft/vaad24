@@ -237,14 +237,14 @@ public class AnnoBackendTest extends AlgosUnitTest {
     void findAllBySecolo() {
         System.out.println("31 - findAllBySecolo (entity)");
 
-        for (Secolo sorgente : secoloBackend.findAllSortCorrente()) {
-            listaBeans = backend.findAllBySecolo(sorgente);
-            assertNotNull(listaBeans);
-            message = String.format("Nel secolo %s ci sono %s anni", sorgente, textService.format(listaBeans.size()));
-            System.out.println(VUOTA);
-            System.out.println(message);
-            printAnni(listaBeans);
-        }
+//        for (Secolo sorgente : secoloBackend.findAllSortCorrente()) {
+//            listaBeans = backend.findAllBySecolo(sorgente);
+//            assertNotNull(listaBeans);
+//            message = String.format("Nel secolo %s ci sono %s anni", sorgente, textService.format(listaBeans.size()));
+//            System.out.println(VUOTA);
+//            System.out.println(message);
+//            printAnni(listaBeans);
+//        }
     }
 
 

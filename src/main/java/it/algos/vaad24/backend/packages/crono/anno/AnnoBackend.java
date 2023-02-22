@@ -84,7 +84,7 @@ public class AnnoBackend extends CrudBackend {
      * @param dopoCristo flag per gli anni prima/dopo cristo
      * @param bisestile  flag per gli anni bisestili
      *
-     * @return la nuova entity appena creata (non salvata e senza keyID)
+     * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Anno newEntity(final int ordine, final String nome, final Secolo secolo, final boolean dopoCristo, final boolean bisestile) {
         return Anno.builder()

@@ -482,18 +482,27 @@ public class MongoService<capture> extends AbstractService {
     }
 
     public List<String> projectionString(Class<? extends AEntity> entityClazz, String property) {
+        return projectionString(entityClazz,property,1);
+    }
+    public List<String> projectionStringReverseOrder(Class<? extends AEntity> entityClazz, String property) {
+        return projectionString(entityClazz,property,-1);
+    }
+
+    public List<String> projectionString(Class<? extends AEntity> entityClazz, String property, int order) {
         List<String> listaProperty = new ArrayList();
+        String collectionName = annotationService.getCollectionName(entityClazz);
         String message;
-        collection = getCollection(textService.primaMinuscola(entityClazz.getSimpleName()));
+        BasicDBObject sort = new BasicDBObject(property, order);
+        collection = getCollection(textService.primaMinuscola(collectionName));
 
         if (collection == null) {
             message = String.format("Non esiste la collection", entityClazz.getSimpleName());
             logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
-            return null;
+            return listaProperty;
         }
 
         Bson projection = Projections.fields(Projections.include(property), Projections.excludeId());
-        FindIterable<Document> documents = collection.find().projection(projection);
+        FindIterable<Document> documents = collection.find().projection(projection).sort(sort);
 
         for (var singolo : documents) {
             listaProperty.add(singolo.get(property, String.class));

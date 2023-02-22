@@ -113,11 +113,15 @@ public abstract class AlgosUnitTest {
 
     protected Class clazz;
 
+    protected Class entityClazz;
+
     protected Class sorgenteClasse;
 
     protected Class previstoClasse;
 
     protected Class ottenutoClasse;
+
+    protected String clazzName;
 
     protected Field sorgenteField;
 
@@ -149,7 +153,9 @@ public abstract class AlgosUnitTest {
 
     protected List<Long> listaLong;
 
-    protected List<AEntity> listaBean;
+    protected AEntity entityBean;
+
+    protected List<AEntity> listaBeans;
 
     protected Map<String, List<String>> mappa;
 
@@ -385,7 +391,6 @@ public abstract class AlgosUnitTest {
         sorgenteDouble = 0;
         previstoDouble = 0;
         ottenutoDouble = 0;
-        clazz = null;
         previstoRisultato = null;
         ottenutoRisultato = null;
         sorgenteClasse = null;
@@ -402,9 +407,11 @@ public abstract class AlgosUnitTest {
         mappaSorgente = null;
         mappaPrevista = null;
         mappaOttenuta = null;
+        clazz = null;
         listaFields = null;
         listaStr = null;
-        listaBean = null;
+        listaBeans = null;
+        entityBean = null;
         mappa = null;
         bytes = null;
         streamResource = null;

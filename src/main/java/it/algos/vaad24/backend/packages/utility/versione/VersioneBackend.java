@@ -75,7 +75,7 @@ public class VersioneBackend extends CrudBackend {
      * @param company          se versione specifica in caso di multiCompany
      * @param riferitoVaadin23 se versione relativa al programma base vaadin23
      *
-     * @return la nuova entity appena creata (non salvata)
+     * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Versione newEntity(
             final String code,

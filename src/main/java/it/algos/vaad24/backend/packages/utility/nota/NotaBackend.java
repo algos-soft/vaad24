@@ -63,7 +63,7 @@ public class NotaBackend extends CrudBackend {
      * @param livello     di importanza o rilevanza della nota
      * @param descrizione dettagliata della nota
      *
-     * @return la nuova entity appena creata (non salvata)
+     * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Nota newEntity(final AETypeLog type, final AENotaLevel livello, final String descrizione) {
         return Nota.builder()

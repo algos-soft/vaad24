@@ -40,9 +40,13 @@ public class MeseBackend extends CrudBackend {
         super(null, Mese.class);
     }
 
-//    public boolean creaIfNotExist(final String nome) {
-//        return checkAndSave(newEntity(nome)) != null;
-//    }
+    public boolean creaIfNotExist(final String nome) {
+        return insert(newEntity(0, VUOTA, nome, 0, 0, 0)) != null;
+    }
+
+    //    public boolean creaIfNotExist(final String nome) {
+    //        return checkAndSave(newEntity(nome)) != null;
+    //    }
 
     //    public Mese crea(final int ordine, final String breve, final String nome, final int giorni, int primo, int ultimo) {
     //        Mese mese = newEntity(ordine, breve, nome, giorni, primo, ultimo);
@@ -68,6 +72,17 @@ public class MeseBackend extends CrudBackend {
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
      * Eventuali regolazioni iniziali delle property <br>
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    public Mese newEntity(String nome) {
+        return newEntity(0, VUOTA, nome, 0, 0, 0);
+    }
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Usa il @Builder di Lombok <br>
+     * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
      * @param ordine (obbligatorio, unico)
@@ -77,7 +92,7 @@ public class MeseBackend extends CrudBackend {
      * @param primo  giorno dell'anno
      * @param ultimo giorno dell'anno
      *
-     * @return la nuova entity appena creata (non salvata e senza keyID)
+     * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Mese newEntity(int ordine, String breve, String nome, int giorni, int primo, int ultimo) {
         Mese newEntityBean = Mese.builder()
@@ -94,41 +109,31 @@ public class MeseBackend extends CrudBackend {
 
     @Override
     public Mese findById(final String keyID) {
-        return (Mese)super.findById(keyID);
+        return (Mese) super.findById(keyID);
     }
 
     @Override
     public Mese findByKey(final String keyCodeValue) {
-        return (Mese)super.findByKey(keyCodeValue);
+        return (Mese) super.findByKey(keyCodeValue);
     }
+
     public Mese findByNome(final String nome) {
-        return null;
+        return findByKey(nome);
     }
 
+    //    public Mese findFirstByOrdine(final int ordine) {
+    //        return repository.findFirstByOrdine(ordine);
+    //    }
 
-//    public Mese findFirstByOrdine(final int ordine) {
-//        return repository.findFirstByOrdine(ordine);
-//    }
 
-//    @Override
-//    public List<Mese> findAllSortCorrente() {
-//        return repository.findAll(Sort.by(Sort.Direction.ASC, "ordine"));
-//    }
-
-//    public List<String> findNomi() {
-//        return findAllSortCorrente().stream()
-//                .map(giorno -> giorno).nome)
-//                .collect(Collectors.toList());
-//    }
-
-//    public int getOrdine(final String nomeMaiuscoloMinuscolo) {
-//        Mese mese = findByNome(textService.primaMinuscola(nomeMaiuscoloMinuscolo));
-//        return mese != null ? mese.ordine : 0;
-//    }
+    //    public int getOrdine(final String nomeMaiuscoloMinuscolo) {
+    //        Mese mese = findByNome(textService.primaMinuscola(nomeMaiuscoloMinuscolo));
+    //        return mese != null ? mese.ordine : 0;
+    //    }
 
     @Override
     public Mese save(AEntity entity) {
-        return (Mese)super.save(entity);
+        return (Mese) super.save(entity);
     }
 
     /**
@@ -145,8 +150,6 @@ public class MeseBackend extends CrudBackend {
         String collectionName = result.getTarget();
         String nomeFileCSVSulServerAlgos = "mesi";
         Map<String, List<String>> mappa;
-//        List<Mese> mesi = new ArrayList<>();
-//        Mese mese;
         List<String> riga;
         int giorni;
         String breve;
@@ -194,9 +197,7 @@ public class MeseBackend extends CrudBackend {
                         }
                     }
 
-                    entityBean = insert(newEntity(ordine, breve, nome, giorni, primo, ultimo));
-
-//                    mese = crea(++ordine, breve, nome, giorni, primo, ultimo);
+                    entityBean = insert(newEntity(++ordine, breve, nome, giorni, primo, ultimo));
                     if (entityBean != null) {
                         lista.add(entityBean);
                     }
@@ -204,6 +205,8 @@ public class MeseBackend extends CrudBackend {
                         logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
                     }
                 }
+                result.setIntValue(lista.size());
+                result.setLista(lista);
             }
             else {
                 return result.errorMessage("Non ho trovato il file sul server");

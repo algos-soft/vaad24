@@ -507,7 +507,7 @@ public class AnnotationService extends AbstractService {
      * @return the key property name
      */
     public String getKeyPropertyName(final Class<? extends AEntity> entityClazz) {
-        String keyName = VUOTA;
+        String keyPropertyName = VUOTA;
         AIEntity annotation = this.getAIEntity(entityClazz);
 
         if (annotation != null && annotation.keyPropertyName().length() > 0) {
@@ -515,15 +515,34 @@ public class AnnotationService extends AbstractService {
         }
 
         if (annotation != null) {
-            keyName = annotation.keyPropertyName();
+            keyPropertyName = annotation.keyPropertyName();
         }
         else {
-            keyName = FIELD_NAME_ID_CON;
+            keyPropertyName = FIELD_NAME_ID_CON;
         }
 
-        return keyName;
+        return keyPropertyName;
     }
 
+    /**
+     * Esiste una property chiave <br>
+     * Controlla che esista l'annotation specifica <br>
+     * Esclude usa il valore di default '_id' <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return if exists a key property
+     */
+    public boolean isKeyPropertyName(final Class<? extends AEntity> entityClazz) {
+        String keyPropertyName = getKeyPropertyName(entityClazz);
+
+        if (textService.isValid(keyPropertyName) && !keyPropertyName.equals(FIELD_NAME_ID_CON)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
     /**
      * Flag per usare solo le lettere minuscole nel campo chiave keyId. <br>

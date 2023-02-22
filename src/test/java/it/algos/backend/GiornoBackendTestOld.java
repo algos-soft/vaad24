@@ -3,45 +3,71 @@ package it.algos.backend;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.packages.geografia.continente.*;
+import it.algos.vaad24.backend.packages.crono.giorno.*;
+import it.algos.vaad24.backend.packages.crono.mese.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project vaad24
  * Created by Algos
  * User: gac
  * Date: Tue, 13-Dec-2022
- * Time: 09:30
+ * Time: 09:35
  */
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
-@Tag("backend")
-@DisplayName("Continente Backend")
+@Tag("backend-no")
+@DisplayName("Giorno Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ContinenteBackendTest extends AlgosUnitTest {
+public class GiornoBackendTestOld extends AlgosUnitTest {
 
+    /**
+     * The Service.
+     */
     @InjectMocks
-    private ContinenteBackend backend;
+    private GiornoBackend backend;
 
     @Autowired
-    private ContinenteRepository repository;
+    private GiornoRepository repository;
 
-    private Continente entityBean;
+    private Giorno entityBean;
 
-    private List<Continente> listaBeans;
+    private List<Giorno> listaBeans;
 
-    private String dbName = "Continente";
+    private String dbName = "Giorno";
 
-    private String backendName = "ContinenteBackend";
+    private String backendName = "GiornoBackend";
 
-    private Class entityClazz = Continente.class;
+    @InjectMocks
+    private MeseBackend meseBackend;
+
+    @Autowired
+    private MeseRepository meseRepository;
+
+    private Class entityClazz = Giorno.class;
+
+
+    //--giorno
+    //--esistente
+    protected static Stream<Arguments> GIORNI() {
+        return Stream.of(
+                Arguments.of(null, false),
+                Arguments.of(VUOTA, false),
+                Arguments.of("23 febbraio", true),
+                Arguments.of("43 marzo", false),
+                Arguments.of("19 dicembra", false),
+                Arguments.of("4 gennaio", true)
+        );
+    }
 
     /**
      * Qui passa una volta sola <br>
@@ -57,10 +83,12 @@ public class ContinenteBackendTest extends AlgosUnitTest {
         backend.arrayService = arrayService;
         backend.dateService = dateService;
         backend.textService = textService;
-        backend.annotationService = annotationService;
         backend.resourceService = resourceService;
         backend.reflectionService = reflectionService;
         backend.mongoService = mongoService;
+        backend.meseBackend = meseBackend;
+//        backend.meseBackend.repository = meseRepository;
+        backend.meseBackend.crudRepository = meseRepository;
     }
 
 
@@ -119,21 +147,97 @@ public class ContinenteBackendTest extends AlgosUnitTest {
 
     @Test
     @Order(2)
-    @DisplayName("2 - findAll")
+    @DisplayName("2 - findAll (entity)")
     void findAll() {
-        System.out.println("2 - findAll");
+        System.out.println("2 - findAll (entity)");
         String message;
 
         listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
-        message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
+        message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), "Giorno");
         System.out.println(message);
-        printSubLista(listaBeans);
+        printGiorni(listaBeans);
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("3 - findNomi (nome)")
+    void findNomi() {
+        System.out.println("3 - findNomi (nome)");
+        String message;
+
+//        listaStr = backend.findNomi();
+//        assertNotNull(listaStr);
+//        message = String.format("Ci sono in totale %s giorni", textService.format(listaStr.size()));
+//        System.out.println(message);
+//        printNomiGiorni(listaStr);
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("4 - findAllByMese (entity)")
+    void findAllByMese() {
+        System.out.println("4 - findAllByMese (entity)");
+
+//        for (Mese sorgente : meseBackend.findAllSortCorrente()) {
+//            listaBeans = backend.findAllByMese(sorgente);
+//            assertNotNull(listaBeans);
+//            message = String.format("Nel mese di %s ci sono %s giorni", sorgente, textService.format(listaBeans.size()));
+//            System.out.println(VUOTA);
+//            System.out.println(message);
+//            printGiorni(listaBeans);
+//        }
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("5 - findNomiByMese (nome)")
+    void findNomiByMese() {
+        System.out.println("5 - findNomiByMese (nome)");
+
+//        for (String sorgente : meseBackend.findNomi()) {
+//            listaStr = backend.findNomiByMese(sorgente);
+//            assertNotNull(listaStr);
+//            message = String.format("Nel mese di %s ci sono %s giorni", sorgente, textService.format(listaStr.size()));
+//            System.out.println(VUOTA);
+//            System.out.println(message);
+//            printNomiGiorni(listaStr);
+//        }
     }
 
 
+    @Test
+    @Order(11)
+    @DisplayName("11 - giorni esistenti")
+    void isEsisteCiclo() {
+        System.out.println("11 - giorni esistenti");
 
-//    @Test
+        //--giorno
+        //--esistente
+        System.out.println(VUOTA);
+        GIORNI().forEach(this::isEsisteBase);
+    }
+
+
+    //--giorno
+    //--esistente
+    void isEsisteBase(Arguments arg) {
+        Object[] mat = arg.get();
+        sorgente = (String) mat[0];
+        previstoBooleano = (boolean) mat[1];
+
+        ottenutoBooleano = backend.isEsiste(sorgente);
+        assertEquals(previstoBooleano, ottenutoBooleano);
+        if (ottenutoBooleano) {
+            System.out.println(String.format("Il giorno %s esiste", sorgente));
+        }
+        else {
+            System.out.println(String.format("Il giorno %s non esiste", sorgente));
+        }
+        System.out.println(VUOTA);
+    }
+
+    //    @Test
     @Order(91)
     @DisplayName("91 - resetOnlyEmpty pieno")
     void resetOnlyEmptyPieno() {
@@ -152,7 +256,7 @@ public class ContinenteBackendTest extends AlgosUnitTest {
     }
 
 
-//    @Test
+    //    @Test
     @Order(92)
     @DisplayName("92 - resetOnlyEmpty vuoto")
     void resetOnlyEmptyVuoto() {
@@ -171,7 +275,7 @@ public class ContinenteBackendTest extends AlgosUnitTest {
         printSubLista(listaBeans);
     }
 
-//    @Test
+    //    @Test
     @Order(93)
     @DisplayName("93 - resetForcing pieno")
     void resetForcingPieno() {
@@ -190,7 +294,7 @@ public class ContinenteBackendTest extends AlgosUnitTest {
     }
 
 
-//    @Test
+    //    @Test
     @Order(94)
     @DisplayName("94 - resetForcing vuoto")
     void resetForcingVuoto() {
@@ -224,11 +328,38 @@ public class ContinenteBackendTest extends AlgosUnitTest {
     void tearDownAll() {
     }
 
-    void printBeans(List<Continente> listaBeans) {
+
+    void printGiorni(List<Giorno> listaGiorni) {
+        int k = 0;
+
+        for (Giorno giorno : listaGiorni) {
+            System.out.print(++k);
+            System.out.print(PARENTESI_TONDA_END);
+            System.out.print(SPAZIO);
+            System.out.print(giorno.nome);
+            System.out.print(SPAZIO);
+            System.out.print(giorno.trascorsi);
+            System.out.print(SPAZIO);
+            System.out.println(giorno.mancanti);
+        }
+    }
+
+    void printNomiGiorni(List<String> listaGiorni) {
+        int k = 0;
+
+        for (String giorno : listaGiorni) {
+            System.out.print(++k);
+            System.out.print(PARENTESI_TONDA_END);
+            System.out.print(SPAZIO);
+            System.out.println(giorno);
+        }
+    }
+
+    void printBeans(List<Giorno> listaBeans) {
         System.out.println(VUOTA);
         int k = 0;
 
-        for (Continente bean : listaBeans) {
+        for (Giorno bean : listaBeans) {
             System.out.print(++k);
             System.out.print(PARENTESI_TONDA_END);
             System.out.print(SPAZIO);

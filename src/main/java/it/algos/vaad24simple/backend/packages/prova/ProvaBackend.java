@@ -66,7 +66,7 @@ public class ProvaBackend extends CrudBackend {
      *
      * @param descrizione (obbligatorio)
      *
-     * @return la nuova entity appena creata (non salvata e senza keyID)
+     * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Prova newEntity(final String descrizione, Continente continente) {
         Prova newEntityBean = Prova.builder()
