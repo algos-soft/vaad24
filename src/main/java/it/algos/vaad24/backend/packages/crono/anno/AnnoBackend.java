@@ -187,7 +187,7 @@ public class AnnoBackend extends CrudBackend {
         int ordine = numeroProgressivo;
         String tagPrima = " a.C.";
         String nomeVisibile = numeroAnno + tagPrima;
-        Secolo secolo = secoloBackend.getSecoloAC(numeroAnno);
+        Secolo secolo = secoloBackend.findByAnnoAC(numeroAnno);
 
         crea(ordine, nomeVisibile, secolo, false, false);
     }
@@ -197,7 +197,7 @@ public class AnnoBackend extends CrudBackend {
         int numeroAnno = numeroProgressivo;
         int ordine = numeroProgressivo + delta;
         String nomeVisibile = numeroProgressivo + VUOTA;
-        Secolo secolo = secoloBackend.getSecoloDC(numeroAnno);
+        Secolo secolo = secoloBackend.findByAnnoDC(numeroAnno);
         boolean bisestile = dateService.isBisestile(numeroAnno);
 
         crea(ordine, nomeVisibile, secolo, true, bisestile);

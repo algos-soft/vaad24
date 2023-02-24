@@ -1,5 +1,6 @@
 package it.algos.vaad24.backend.packages.crono.mese;
 
+import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -22,7 +23,7 @@ public class MeseBackend extends CrudBackend {
 
 
     public MeseBackend() {
-        super( Mese.class);
+        super(Mese.class);
     }
 
 
@@ -91,6 +92,18 @@ public class MeseBackend extends CrudBackend {
         return (Mese) super.findByProperty(propertyName, propertyValue);
     }
 
+
+    @Override
+    public List<Mese> findAllSortCorrente() {
+        return (List<Mese>) super.findAllSortCorrente();
+    }
+
+    public List<String> findAllStringKey() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
+    }
+    public List<String> findAllStringKeyReverseOrder() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
+    }
 
     @Override
     public Mese save(AEntity entity) {

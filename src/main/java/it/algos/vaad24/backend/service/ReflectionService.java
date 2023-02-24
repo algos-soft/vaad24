@@ -208,6 +208,16 @@ public class ReflectionService extends AbstractService {
         }
     }
 
+
+    public List<Method> getMetodi(Class clazz) {
+        return Arrays.stream(clazz.getDeclaredMethods()).collect(Collectors.toList());
+    }
+
+
+    public List<String> getMetodiName(Class clazz) {
+        return getMetodi(clazz).stream().map(method -> method.getName()).collect(Collectors.toList());
+    }
+
     public boolean isEsisteMetodo(String publicClassName, String publicMethodName) {
         Class clazz = null;
 
@@ -215,31 +225,49 @@ public class ReflectionService extends AbstractService {
             return false;
         }
         publicClassName = textService.slashToPoint(publicClassName);
-
-        try {
-            clazz = Class.forName(publicClassName.toString());
-        } catch (Exception unErrore) {
-            logger.info(new WrapLog().exception(AlgosException.crea(unErrore)));
-        }
+        clazz = classService.getClazzFromName(publicClassName);
 
         return clazz != null && isEsisteMetodo(clazz, publicMethodName);
     }
 
     public boolean isEsisteMetodo(Class clazz, String publicMethodName) {
-        Method[] methods = null;
-        List<String> nomiMetodi;
-
-        publicMethodName = textService.primaMinuscola(publicMethodName);
-
-        try {
-            methods = clazz.getDeclaredMethods();
-        } catch (Exception unErrore) {
-            logger.info(new WrapLog().exception(AlgosException.crea(unErrore)));
-        }
-
-        nomiMetodi = Arrays.stream(methods).map(method -> method.getName()).collect(Collectors.toList());
+        List<String> nomiMetodi = getMetodiName(clazz);
         return nomiMetodi.contains(publicMethodName);
     }
+
+    public boolean isEsisteMetodoSenzaParametri(Class clazz, String publicMethodName) {
+        return isEsisteMetodoConParametri(clazz, publicMethodName, 0);
+    }
+
+    public boolean isEsisteMetodoConParametri(Class clazz, String publicMethodName) {
+        return isEsisteMetodoConParametri(clazz, publicMethodName, -1);
+    }
+
+    public boolean isEsisteMetodoConParametri(Class clazz, String publicMethodName, int parametri) {
+        List<Method> metodi = getMetodi(clazz);
+
+        for (Method method : metodi) {
+            if (method.getName().equals(publicMethodName)) {
+                if (parametri == -1 || method.getParameterCount() == parametri) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public Method getMetodo(Class clazz, String publicMethodName) {
+        List<Method> metodi = getMetodi(clazz);
+
+        for (Method method : metodi) {
+            if (method.getName().equals(publicMethodName)) {
+                return method;
+            }
+        }
+
+        return null;
+    }
+
 
     public boolean isEsisteMetodoAncheSovrascritto(String publicClassName, String publicMethodName) {
         Class clazz = null;
@@ -271,38 +299,37 @@ public class ReflectionService extends AbstractService {
         return nomiMetodi.contains(publicMethodName);
     }
 
-
-//    public boolean esegueMetodo(String publicClassName, String publicMethodName) {
-//        boolean eseguito = false;
-//        Class clazz = null;
-//        Method method;
-//        Object istanza;
-//
-//        if (!isEsisteMetodoAncheSovrascritto(publicClassName, publicMethodName)) {
-//            return false;
-//        }
-//        publicClassName = textService.slashToPoint(publicClassName);
-//        publicMethodName = textService.primaMinuscola(publicMethodName);
-//
-//        try {
-//            clazz = Class.forName(publicClassName.toString());
-//        } catch (Exception unErrore) {
-//            logger.info(new WrapLog().exception(AlgosException.crea(unErrore)));
-//        }
-//        if (clazz == null) {
-//            return false;
-//        }
-//
-//        try {
-//            method = clazz.getMethod(publicMethodName);
-//            istanza = appContext.getBean(clazz);
-//            eseguito = (Boolean) method.invoke(istanza);
-//        } catch (Exception unErrore) {
-//            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
-//        }
-//
-//        return eseguito;
-//    }
+    //    public boolean esegueMetodo(String publicClassName, String publicMethodName) {
+    //        boolean eseguito = false;
+    //        Class clazz = null;
+    //        Method method;
+    //        Object istanza;
+    //
+    //        if (!isEsisteMetodoAncheSovrascritto(publicClassName, publicMethodName)) {
+    //            return false;
+    //        }
+    //        publicClassName = textService.slashToPoint(publicClassName);
+    //        publicMethodName = textService.primaMinuscola(publicMethodName);
+    //
+    //        try {
+    //            clazz = Class.forName(publicClassName.toString());
+    //        } catch (Exception unErrore) {
+    //            logger.info(new WrapLog().exception(AlgosException.crea(unErrore)));
+    //        }
+    //        if (clazz == null) {
+    //            return false;
+    //        }
+    //
+    //        try {
+    //            method = clazz.getMethod(publicMethodName);
+    //            istanza = appContext.getBean(clazz);
+    //            eseguito = (Boolean) method.invoke(istanza);
+    //        } catch (Exception unErrore) {
+    //            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+    //        }
+    //
+    //        return eseguito;
+    //    }
 
 
     /**

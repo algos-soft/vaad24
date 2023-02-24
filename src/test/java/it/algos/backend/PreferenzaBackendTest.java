@@ -120,8 +120,8 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
             message = String.format("Ci sono in totale %s entities di '%s' nel database mongoDB", textService.format(ottenutoIntero), dbName);
         }
         else {
-            if (reflectionService.isEsisteMetodo(backend.getClass(), TAG_RESET_ONLY)) {
-                message = String.format("La collection '%s' è ancora vuota. Usa il metodo %s.%s()", dbName, backendName, TAG_RESET_ONLY);
+            if (reflectionService.isEsisteMetodo(backend.getClass(), METHOD_NAME_RESET_ONLY)) {
+                message = String.format("La collection '%s' è ancora vuota. Usa il metodo %s.%s()", dbName, backendName, METHOD_NAME_RESET_ONLY);
             }
             else {
                 message = String.format("Nel database mongoDB la collection '%s' è ancora vuota", dbName);

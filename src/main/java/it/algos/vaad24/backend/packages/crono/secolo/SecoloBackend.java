@@ -81,10 +81,10 @@ public class SecoloBackend extends CrudBackend {
     }
 
     public List<String> findAllNomi() {
-        return super.findAllKeyReverseOrder();
+        return super.findAllStringKeyReverseOrder();
     }
 
-    public Secolo getSecolo(final int ordine) {
+    public Secolo findByOrdine(final int ordine) {
         return findByProperty(FIELD_NAME_ORDINE, ordine);
     }
 
@@ -96,8 +96,8 @@ public class SecoloBackend extends CrudBackend {
      *
      * @return secolo Ante Cristo selezionato
      */
-    public Secolo getSecoloAC(final int anno) {
-        return getSecolo(anno, true);
+    public Secolo findByAnnoAC(final int anno) {
+        return findByAnno(anno, true);
     }
 
 
@@ -109,11 +109,11 @@ public class SecoloBackend extends CrudBackend {
      *
      * @return secolo Dopo Cristo selezionato
      */
-    public Secolo getSecoloDC(int anno) {
-        return getSecolo(anno, false);
+    public Secolo findByAnnoDC(final int anno) {
+        return findByAnno(anno, false);
     }
 
-    private Secolo getSecolo(final int anno, final boolean anteCristo) {
+    private Secolo findByAnno(final int anno, final boolean anteCristo) {
         Secolo entity;
         String collectionName = annotationService.getCollectionName(entityClazz);
         Query query = new Query();
@@ -130,10 +130,10 @@ public class SecoloBackend extends CrudBackend {
         }
 
         if (textService.isValid(collectionName)) {
-            entity = (Secolo)mongoService.mongoOp.findOne(query, entityClazz, collectionName);
+            entity = (Secolo) mongoService.mongoOp.findOne(query, entityClazz, collectionName);
         }
         else {
-            entity = (Secolo)mongoService.mongoOp.findOne(query, entityClazz);
+            entity = (Secolo) mongoService.mongoOp.findOne(query, entityClazz);
         }
 
         return entity;

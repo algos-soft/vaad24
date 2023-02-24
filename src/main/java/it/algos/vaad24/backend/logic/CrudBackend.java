@@ -73,7 +73,6 @@ public abstract class CrudBackend extends AbstractService {
     public MongoRepository crudRepository;
 
 
-
     /**
      * Regola la entityClazz (final nella superclasse) associata a questo service <br>
      */
@@ -434,17 +433,31 @@ public abstract class CrudBackend extends AbstractService {
     }
 
 
-    public List<String> findAllKey() {
+    public List findAllBeanProperty(final String propertyName, final Object propertyValue) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Query query = new Query();
+
+        query.addCriteria(Criteria.where(propertyName).is(propertyValue));
+
+        if (textService.isValid(collectionName)) {
+            return mongoService.mongoOp.find(query, entityClazz, collectionName);
+        }
+        else {
+            return mongoService.mongoOp.find(query, entityClazz);
+        }
+    }
+
+    public List<String> findAllStringKey() {
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         return mongoService.projectionString(entityClazz, keyPropertyName);
     }
 
-    public List<String> findAllKeyReverseOrder() {
+    public List<String> findAllStringKeyReverseOrder() {
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         return mongoService.projectionStringReverseOrder(entityClazz, keyPropertyName);
     }
 
-    public List<String> findAllProperty(String keyPropertyName) {
+    public List<String> findAllStringProperty(String keyPropertyName) {
         return mongoService.projectionString(entityClazz, keyPropertyName);
     }
 

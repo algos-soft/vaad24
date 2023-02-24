@@ -25,7 +25,6 @@ import org.springframework.data.domain.*;
  * findByID()
  * findByKey(), se esiste una key
  * findByProperty()
- * creaIfNotExist()
  * save()
  * insert()
  * update()
@@ -137,8 +136,8 @@ public class SecoloBackendTest extends AlgosUnitTest {
             message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
         }
         else {
-            if (reflectionService.isEsisteMetodo(backend.getClass(), TAG_RESET_ONLY)) {
-                message = String.format("La collection '%s' della classe [%s] è ancora vuota. Usa il metodo %s.%s()", collectionName, clazzName, backendName, TAG_RESET_ONLY);
+            if (reflectionService.isEsisteMetodo(backend.getClass(), METHOD_NAME_RESET_ONLY)) {
+                message = String.format("La collection '%s' della classe [%s] è ancora vuota. Usa il metodo %s.%s()", collectionName, clazzName, backendName, METHOD_NAME_RESET_ONLY);
             }
             else {
                 message = String.format("Nel database mongoDB la collection '%s' della classe [%s] è ancora vuota", collectionName, clazzName);
@@ -195,9 +194,9 @@ public class SecoloBackendTest extends AlgosUnitTest {
 
     @Test
     @Order(31)
-    @DisplayName("31 - findAllKey")
-    void findAllKey() {
-        System.out.println("31 - findAllKey");
+    @DisplayName("31 - findAllStringKey")
+    void findAllStringKey() {
+        System.out.println("31 - findAllStringKey");
         System.out.println(VUOTA);
 
         if (!annotationService.isKeyPropertyName(entityClazz)) {
@@ -212,7 +211,7 @@ public class SecoloBackendTest extends AlgosUnitTest {
             return;
         }
 
-        listaStr = backend.findAllKey();
+        listaStr = backend.findAllStringKey();
         assertNotNull(listaStr);
         ottenutoIntero = listaStr.size();
         sorgente = textService.format(ottenutoIntero);
@@ -225,9 +224,9 @@ public class SecoloBackendTest extends AlgosUnitTest {
 
     @Test
     @Order(32)
-    @DisplayName("32 - findAllKeyReverseOrder")
-    void findAllKeyReverseOrder() {
-        System.out.println("32 - findAllKeyReverseOrder");
+    @DisplayName("32 - findAllStringKeyReverseOrder")
+    void findAllStringKeyReverseOrder() {
+        System.out.println("32 - findAllStringKeyReverseOrder");
         System.out.println(VUOTA);
 
         if (!annotationService.isKeyPropertyName(entityClazz)) {
@@ -242,7 +241,7 @@ public class SecoloBackendTest extends AlgosUnitTest {
             return;
         }
 
-        listaStr = backend.findAllKeyReverseOrder();
+        listaStr = backend.findAllStringKeyReverseOrder();
         assertNotNull(listaStr);
         ottenutoIntero = listaStr.size();
         sorgente = textService.format(ottenutoIntero);
@@ -395,108 +394,105 @@ public class SecoloBackendTest extends AlgosUnitTest {
 
     @Test
     @Order(51)
-    @DisplayName("51 - getSecolo")
-    void getSecolo() {
-        System.out.println("51 - getSecolo");
+    @DisplayName("51 - findByOrdine")
+    void findByOrdine() {
+        System.out.println("51 - findByOrdine");
         System.out.println(VUOTA);
         System.out.println("Secolo ricavato dal numero d'ordine che parte dal X secolo a.C.");
         System.out.println(VUOTA);
 
         sorgenteIntero = 857;
-        entityBean = backend.getSecolo(sorgenteIntero);
+        entityBean = backend.findByOrdine(sorgenteIntero);
         assertNull(entityBean);
+        ottenuto = VUOTA;
+        printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 4;
-        entityBean = backend.getSecolo(sorgenteIntero);
+        entityBean = backend.findByOrdine(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
-        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
-        System.out.println(message);
+        printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 27;
-        entityBean = backend.getSecolo(sorgenteIntero);
+        entityBean = backend.findByOrdine(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
-        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
-        System.out.println(message);
+        printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 35;
-        entityBean = backend.getSecolo(sorgenteIntero);
+        entityBean = backend.findByOrdine(sorgenteIntero);
         assertNull(entityBean);
+        ottenuto = VUOTA;
+        printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = -4;
-        entityBean = backend.getSecolo(sorgenteIntero);
+        entityBean = backend.findByOrdine(sorgenteIntero);
         assertNull(entityBean);
+        ottenuto = VUOTA;
+        printValue(sorgenteIntero, ottenuto);
     }
 
     @Test
     @Order(52)
-    @DisplayName("52 - getSecoloAC")
-    void getSecoloAC() {
-        System.out.println("52 - getSecoloAC");
+    @DisplayName("52 - findByAnnoAC")
+    void findByAnnoAC() {
+        System.out.println("52 - findByAnnoAC");
         System.out.println(VUOTA);
         System.out.println("Secolo ricavato dall'anno a.C. (senza segno meno)");
         System.out.println(VUOTA);
 
         sorgenteIntero = 4;
-        entityBean = backend.getSecoloAC(sorgenteIntero);
+        entityBean = backend.findByAnnoAC(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
-        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
-        System.out.println(message);
+        printValue(sorgenteIntero, ottenuto);
     }
 
 
     @Test
     @Order(53)
-    @DisplayName("53 - getSecoloDC")
-    void getSecoloDC() {
-        System.out.println("53 - getSecoloDC");
+    @DisplayName("53 - findByAnnoDC")
+    void findByAnnoDC() {
+        System.out.println("53 - findByAnnoDC");
         System.out.println(VUOTA);
         System.out.println("Secolo ricavato dall'anno d.C. (senza segno più)");
         System.out.println(VUOTA);
 
         sorgenteIntero = 4;
-        entityBean = backend.getSecoloDC(sorgenteIntero);
+        entityBean = backend.findByAnnoDC(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
-        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
-        System.out.println(message);
+        printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 1900;
-        entityBean = backend.getSecoloDC(sorgenteIntero);
+        entityBean = backend.findByAnnoDC(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
-        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
-        System.out.println(message);
+        printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 1901;
-        entityBean = backend.getSecoloDC(sorgenteIntero);
+        entityBean = backend.findByAnnoDC(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
-        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
-        System.out.println(message);
+        printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 1999;
-        entityBean = backend.getSecoloDC(sorgenteIntero);
+        entityBean = backend.findByAnnoDC(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
-        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
-        System.out.println(message);
+        printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 2000;
-        entityBean = backend.getSecoloDC(sorgenteIntero);
+        entityBean = backend.findByAnnoDC(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
-        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
-        System.out.println(message);
+        printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 2001;
-        entityBean = backend.getSecoloDC(sorgenteIntero);
+        entityBean = backend.findByAnnoDC(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
-        message = String.format("%d%s%s", sorgenteIntero, FORWARD, ottenuto);
-        System.out.println(message);
+        printValue(sorgenteIntero, ottenuto);
     }
 
     @Test

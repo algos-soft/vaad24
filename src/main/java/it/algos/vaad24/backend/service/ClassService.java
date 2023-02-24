@@ -290,6 +290,19 @@ public class ClassService extends AbstractService {
     }
 
     /**
+     * Recupera la clazz dal simpleName <br>
+     * Il simpleName termina SENZA JAVA_SUFFIX <br>
+     *
+     * @param clazzName della classe
+     *
+     * @return classe individuata
+     */
+    public Class getClazzFromName(String clazzName) {
+        return getClazzFromSimpleName(clazzName);
+    }
+
+
+    /**
      * Spazzola tutta la directory package del modulo in esame e recupera
      * tutte le classi contenute nella directory e nelle sue sottoclassi
      *
@@ -461,7 +474,7 @@ public class ClassService extends AbstractService {
 
         return allModuleBackendClass(moduleName)
                 .stream()
-                .filter(clazz -> reflectionService.isEsisteMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY))
+                .filter(clazz -> reflectionService.isEsisteMetodo(clazz.getCanonicalName(), METHOD_NAME_RESET_ONLY))
                 .collect(Collectors.toList());
     }
 

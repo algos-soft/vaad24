@@ -57,7 +57,7 @@ public class ResetTest extends AlgosIntegrationTest {
         System.out.println("1 - resetOnlyEmpty (ordinato) di alcune classi backend");
 
         sorgente = "vaad24";
-        message = String.format("Reset (ordinato) di tutte le classi backend del package '%s' che implementano il metodo %s()", sorgente, TAG_RESET_ONLY);
+        message = String.format("Reset (ordinato) di tutte le classi backend del package '%s' che implementano il metodo %s()", sorgente, METHOD_NAME_RESET_ONLY);
         System.out.println(message);
 
         listaClazz = classService.allModuleBackendResetOrderedClass(sorgente);
@@ -74,7 +74,7 @@ public class ResetTest extends AlgosIntegrationTest {
 
         if (listaClazz != null && listaClazz.size() > 0) {
             for (Class clazz : listaClazz) {
-                ottenutoRisultato = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY);
+                ottenutoRisultato = classService.esegueMetodo(clazz.getCanonicalName(), METHOD_NAME_RESET_ONLY);
                 printRisultato(ottenutoRisultato);
             }
         }
@@ -88,7 +88,7 @@ public class ResetTest extends AlgosIntegrationTest {
         System.out.println("2 - resetOnlyEmpty (ordinato) di alcune classi 'backend'");
 
         sorgente = "vaad24";
-        message = String.format("Reset (ordinato) di tutte le classi 'backend' del package '%s' che implementano il metodo %s()", sorgente, TAG_RESET_ONLY);
+        message = String.format("Reset (ordinato) di tutte le classi 'backend' del package '%s' che implementano il metodo %s()", sorgente, METHOD_NAME_RESET_ONLY);
         System.out.println(message);
 
         listaClazz = classService.allModuleBackendResetOrderedClass(sorgente);
@@ -115,7 +115,7 @@ public class ResetTest extends AlgosIntegrationTest {
 
         if (listaClazz != null && listaClazz.size() > 0) {
             for (Class backendClazz : listaClazz) {
-                ottenutoRisultato = classService.esegueMetodo(backendClazz.getCanonicalName(), TAG_RESET_ONLY);
+                ottenutoRisultato = classService.esegueMetodo(backendClazz.getCanonicalName(), METHOD_NAME_RESET_ONLY);
                 printRisultato(ottenutoRisultato);
             }
         }
@@ -129,7 +129,7 @@ public class ResetTest extends AlgosIntegrationTest {
         System.out.println("3 - resetForcing (ordinato) di alcune classi backend");
 
         sorgente = "vaad24";
-        message = String.format("Reset (ordinato) di tutte le classi backend del package '%s' che implementano il metodo %s()", sorgente, TAG_RESET_ONLY);
+        message = String.format("Reset (ordinato) di tutte le classi backend del package '%s' che implementano il metodo %s()", sorgente, METHOD_NAME_RESET_ONLY);
         System.out.println(message);
 
         listaClazz = classService.allModuleBackendResetOrderedClass(sorgente);
@@ -158,7 +158,7 @@ public class ResetTest extends AlgosIntegrationTest {
 
         if (listaClazz != null && listaClazz.size() > 0) {
             for (Class clazz : listaClazz) {
-                ottenutoRisultato = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_FORCING);
+                ottenutoRisultato = classService.esegueMetodo(clazz.getCanonicalName(), METHOD_NAME_RESET_FORCING);
                 printRisultato(ottenutoRisultato);
             }
         }
@@ -172,7 +172,7 @@ public class ResetTest extends AlgosIntegrationTest {
         System.out.println("4 - resetForcing (ordinato) di alcune classi backend");
 
         sorgente = "vaad24";
-        message = String.format("Reset (ordinato) di tutte le classi backend del package '%s' che implementano il metodo %s()", sorgente, TAG_RESET_ONLY);
+        message = String.format("Reset (ordinato) di tutte le classi backend del package '%s' che implementano il metodo %s()", sorgente, METHOD_NAME_RESET_ONLY);
         System.out.println(message);
 
         listaClazz = classService.allModuleBackendResetOrderedClass(sorgente);
@@ -189,7 +189,7 @@ public class ResetTest extends AlgosIntegrationTest {
 
         if (listaClazz != null && listaClazz.size() > 0) {
             for (Class clazz : listaClazz) {
-                ottenutoRisultato = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_FORCING);
+                ottenutoRisultato = classService.esegueMetodo(clazz.getCanonicalName(), METHOD_NAME_RESET_FORCING);
                 printRisultato(ottenutoRisultato);
             }
         }

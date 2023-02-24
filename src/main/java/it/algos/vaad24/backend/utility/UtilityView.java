@@ -125,7 +125,7 @@ public class UtilityView extends VerticalLayout {
         H3 paragrafo = new H3("Reset di tutte le collection [ordinate]");
         paragrafo.getElement().getStyle().set("color", "blue");
 
-        message = String.format("Esegue il %s() su tutte le collection [ordinate] che implementano %s()", TAG_RESET_FORCING, TAG_RESET_ONLY);
+        message = String.format("Esegue il %s() su tutte le collection [ordinate] che implementano %s()", METHOD_NAME_RESET_FORCING, METHOD_NAME_RESET_ONLY);
         layout.add(ASpan.text(message));
         lista = classService.allModuleEntityResetOrderedClassName(VaadVar.moduloVaadin24);
         message = String.format("%s%s%s", VaadVar.moduloVaadin24, DUE_PUNTI_SPAZIO, lista.toString());
@@ -166,15 +166,15 @@ public class UtilityView extends VerticalLayout {
 
         listaClazz = classService.allModuleBackendResetOrderedClass(nomeModulo);
         if (listaClazz != null && listaClazz.size() > 0) {
-            message = String.format("Nel modulo %s ci sono %d classi che implementano il metodo %s", nomeModulo, listaClazz.size(), TAG_RESET_ONLY);
+            message = String.format("Nel modulo %s ci sono %d classi che implementano il metodo %s", nomeModulo, listaClazz.size(), METHOD_NAME_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.reset));
             for (Class clazz : listaClazz) {
-                risultato = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_FORCING);
+                risultato = classService.esegueMetodo(clazz.getCanonicalName(), METHOD_NAME_RESET_FORCING);
                 logger.info(new WrapLog().message(risultato.getValidMessage()).type(AETypeLog.reset));
             }
         }
         else {
-            message = String.format("Nel modulo %s non ci sono classi che implementino il metodo %s", nomeModulo, TAG_RESET_ONLY);
+            message = String.format("Nel modulo %s non ci sono classi che implementino il metodo %s", nomeModulo, METHOD_NAME_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.reset));
         }
     }

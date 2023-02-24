@@ -482,17 +482,17 @@ public class MongoService<capture> extends AbstractService {
     }
 
     public List<String> projectionString(Class<? extends AEntity> entityClazz, String property) {
-        return projectionString(entityClazz,property,1);
-    }
-    public List<String> projectionStringReverseOrder(Class<? extends AEntity> entityClazz, String property) {
-        return projectionString(entityClazz,property,-1);
+        return projectionString(entityClazz, property, new BasicDBObject(property, 1));
     }
 
-    public List<String> projectionString(Class<? extends AEntity> entityClazz, String property, int order) {
+    public List<String> projectionStringReverseOrder(Class<? extends AEntity> entityClazz, String property) {
+        return projectionString(entityClazz, property, new BasicDBObject(property, -1));
+    }
+
+    public List<String> projectionString(Class<? extends AEntity> entityClazz, String property, BasicDBObject sort) {
         List<String> listaProperty = new ArrayList();
         String collectionName = annotationService.getCollectionName(entityClazz);
         String message;
-        BasicDBObject sort = new BasicDBObject(property, order);
         collection = getCollection(textService.primaMinuscola(collectionName));
 
         if (collection == null) {

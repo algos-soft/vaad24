@@ -1,5 +1,6 @@
 package it.algos.vaad24.backend.packages.crono.giorno;
 
+import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -8,10 +9,10 @@ import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project vaadin23
@@ -30,39 +31,22 @@ import java.util.*;
 @Service
 public class GiornoBackend extends CrudBackend {
 
-    public GiornoRepository repository;
 
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
     @Autowired
     public MeseBackend meseBackend;
 
-    /**
-     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
-     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
-     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
-     * @param crudRepository per la persistenza dei dati
-     */
-    public GiornoBackend(@Autowired @Qualifier(TAG_GIORNO) final MongoRepository crudRepository) {
-        super(crudRepository, Giorno.class);
-        this.repository = (GiornoRepository) crudRepository;
+    public GiornoBackend() {
+        super(Giorno.class);
     }
 
-    public boolean crea(final int ordine, final String nome, final Mese mese, final int trascorsi, final int mancanti) {
-        Giorno giorno = newEntity(ordine, nome, mese, trascorsi, mancanti);
-        return crudRepository.insert(giorno) != null;
-    }
-
-    public boolean creaIfNotExist(final String keyPropertyValue) {
-        return insert(newEntity(0, keyPropertyValue, null, 0, 0)) != null;
-    }
+    //    public boolean crea(final int ordine, final String nome, final Mese mese, final int trascorsi, final int mancanti) {
+    //        Giorno giorno = newEntity(ordine, nome, mese, trascorsi, mancanti);
+    //        return crudRepository.insert(giorno) != null;
+    //    }
+    //
+    //    public boolean creaIfNotExist(final String keyPropertyValue) {
+    //        return insert(newEntity(0, keyPropertyValue, null, 0, 0)) != null;
+    //    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -112,42 +96,46 @@ public class GiornoBackend extends CrudBackend {
         return (Giorno) fixKey(newEntityBean);
     }
 
-    public Giorno findByNome(final String nome) {
-        return repository.findFirstByNome(nome);
+    @Override
+    public Giorno findById(final String keyID) {
+        return (Giorno) super.findById(keyID);
     }
 
-    public boolean isEsiste(final String nome) {
-        return repository.findFirstByNome(nome) != null;
+    @Override
+    public Giorno findByKey(final String keyValue) {
+        return (Giorno) super.findByKey(keyValue);
+    }
+
+    @Override
+    public Giorno findByProperty(final String propertyName, final Object propertyValue) {
+        return (Giorno) super.findByProperty(propertyName, propertyValue);
+    }
+
+    public List<String> findAllStringKey() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
+    }
+    public List<String> findAllStringKeyReverseOrder() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
+    }
+
+    public List<String> findAllNomi() {
+        return this.findAllStringKey();
     }
 
     public Giorno findByOrdine(final int ordine) {
-        return repository.findFirstByOrdine(ordine);
+        return findByProperty(FIELD_NAME_ORDINE, ordine);
     }
 
-//    @Override
-//    public List<Giorno> findAllSortCorrente() {
-//        return repository.findAll(Sort.by(Sort.Direction.ASC, "ordine"));
-//    }
+    public List<Giorno> findAllByMese(Mese mese) {
+        return findAllBeanProperty("mese", mese);
+    }
 
-//    public List<String> findNomi() {
-//        return findAllSortCorrente().stream()
-//                .map(giorno -> giorno.nome)
-//                .collect(Collectors.toList());
-//    }
+    public List<String> findAllNomiByMese(Mese mese) {
+        return findAllByMese(mese).stream()
+                .map(giorno -> giorno.nome)
+                .collect(Collectors.toList());
+    }
 
-//    public List<Giorno> findAllByMese(Mese mese) {
-//        return findAllSortCorrente().stream()
-//                .filter(giorno -> giorno.mese.nome.equals(mese.nome))
-//                .collect(Collectors.toList());
-//    }
-
-
-//    public List<String> findNomiByMese(String nomeMese) {
-//        return findAllSortCorrente().stream()
-//                .filter(giorno -> giorno.mese.nome.equals(nomeMese))
-//                .map(giorno -> giorno.nome)
-//                .collect(Collectors.toList());
-//    }
 
     /**
      * Creazione di alcuni dati <br>
@@ -166,7 +154,7 @@ public class GiornoBackend extends CrudBackend {
         String nome;
         String meseTxt;
         Mese mese;
-        int trascorsi ;
+        int trascorsi;
         int mancanti;
         int tot = 365;
         String message;

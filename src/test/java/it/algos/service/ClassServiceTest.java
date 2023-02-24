@@ -149,12 +149,12 @@ public class ClassServiceTest extends AlgosIntegrationTest {
 
     @ParameterizedTest
     @MethodSource(value = "CLAZZ_FOR_NAME")
-    @Order(10)
-    @DisplayName("10 - getClazzFromCanonicalName")
+    @Order(11)
+    @DisplayName("11 - getClazzFromCanonicalName")
         //--clazz
         //--simpleName
     void getClazzFromCanonicalName(final Class clazzFromStream, String simpleNameNonUsato) {
-        System.out.println("10 - getClazzFromCanonicalName");
+        System.out.println("11 - getClazzFromCanonicalName");
         System.out.println(VUOTA);
 
         sorgente = clazzFromStream.getCanonicalName();
@@ -172,12 +172,12 @@ public class ClassServiceTest extends AlgosIntegrationTest {
 
     @ParameterizedTest
     @MethodSource(value = "CLAZZ_FOR_NAME")
-    @Order(11)
-    @DisplayName("11 - getClazzFromSimpleName")
+    @Order(12)
+    @DisplayName("12 - getClazzFromSimpleName")
         //--clazz
         //--simpleName
     void getClazzFromSimpleName(final Class clazzNonUsata, final String simpleName) {
-        System.out.println("11 - getClazzFromSimpleName");
+        System.out.println("12 - getClazzFromSimpleName");
         System.out.println(VUOTA);
 
         sorgente = simpleName;
@@ -192,6 +192,33 @@ public class ClassServiceTest extends AlgosIntegrationTest {
         System.out.println(String.format("Canonical: %s", clazz.getCanonicalName()));
     }
 
+
+    @ParameterizedTest
+    @MethodSource(value = "CLAZZ_FOR_NAME")
+    @Order(13)
+    @DisplayName("13 - getClazz")
+        //--clazz
+        //--simpleName
+    void getClazz(final Class clazzFromStream, final String simpleName) {
+        System.out.println("13 - getClazz");
+        System.out.println(VUOTA);
+
+        sorgente = simpleName;
+        sorgente2 = clazzFromStream.getCanonicalName();
+        System.out.println(sorgente);
+        System.out.println(VUOTA);
+
+        clazz = service.getClazzFromName(sorgente);
+        assertNotNull(clazz);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la classe %s, tramite il simpleName %s", clazzFromStream.getSimpleName(),sorgente));
+
+
+        clazz = service.getClazzFromName(sorgente2);
+        assertNotNull(clazz);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la classe %s, tramite il canonicalName %s", clazzFromStream.getSimpleName(),sorgente2));
+    }
 
     @ParameterizedTest
     @MethodSource(value = "MODULI")

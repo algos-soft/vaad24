@@ -125,7 +125,7 @@ public class VaadData extends AbstractService {
         //--seleziono solo le classi di tipo 'backend' che implementano il metodo resetOnlyEmpty()
         allResetOrderedClass = classService.allModuleBackendResetOrderedClass(moduleName);
         if (allResetOrderedClass != null && allResetOrderedClass.size() > 0) {
-            message = String.format("Nel modulo %s sono state trovate %d classi di tipo 'backend' che implementano il metodo %s():", moduleName, allResetOrderedClass.size(), TAG_RESET_ONLY);
+            message = String.format("Nel modulo %s sono state trovate %d classi di tipo 'backend' che implementano il metodo %s():", moduleName, allResetOrderedClass.size(), METHOD_NAME_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
             nomi = allResetOrderedClass.stream().map(clazz -> clazz.getSimpleName()).collect(Collectors.toList());
             message = arrayService.toStringaVirgolaSpazio(nomi);
@@ -135,7 +135,7 @@ public class VaadData extends AbstractService {
         //--esegue il metodo resetOnlyEmpty() per tutte le classi di tipo 'backend' che lo implementano
         if (allResetOrderedClass != null) {
             for (Class clazz : allResetOrderedClass) {
-                result = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY);
+                result = classService.esegueMetodo(clazz.getCanonicalName(), METHOD_NAME_RESET_ONLY);
                 if (result.isValido()) {
                     logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.checkData).usaDb());
                 }

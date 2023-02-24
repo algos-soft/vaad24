@@ -25,7 +25,6 @@ import org.springframework.data.domain.*;
  * findByID()
  * findByKey(), se esiste una key
  * findByProperty()
- * creaIfNotExist()
  * save()
  * insert()
  * update()
@@ -137,8 +136,8 @@ public class ViaBackendTest extends AlgosUnitTest {
             message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
         }
         else {
-            if (reflectionService.isEsisteMetodo(backend.getClass(), TAG_RESET_ONLY)) {
-                message = String.format("La collection '%s' della classe [%s] è ancora vuota. Usa il metodo %s.%s()", collectionName, clazzName, backendName, TAG_RESET_ONLY);
+            if (reflectionService.isEsisteMetodo(backend.getClass(), METHOD_NAME_RESET_ONLY)) {
+                message = String.format("La collection '%s' della classe [%s] è ancora vuota. Usa il metodo %s.%s()", collectionName, clazzName, backendName, METHOD_NAME_RESET_ONLY);
             }
             else {
                 message = String.format("Nel database mongoDB la collection '%s' della classe [%s] è ancora vuota", collectionName, clazzName);
@@ -195,9 +194,9 @@ public class ViaBackendTest extends AlgosUnitTest {
 
     @Test
     @Order(31)
-    @DisplayName("31 - findAllKey")
-    void findAllKey() {
-        System.out.println("31 - findAllKey");
+    @DisplayName("31 - findAllStringKey")
+    void findAllStringKey() {
+        System.out.println("31 - findAllStringKey");
         System.out.println(VUOTA);
 
         if (!annotationService.isKeyPropertyName(entityClazz)) {
@@ -212,7 +211,7 @@ public class ViaBackendTest extends AlgosUnitTest {
             return;
         }
 
-        listaStr = backend.findAllKey();
+        listaStr = backend.findAllStringKey();
         assertNotNull(listaStr);
         ottenutoIntero = listaStr.size();
         sorgente = textService.format(ottenutoIntero);
@@ -225,9 +224,9 @@ public class ViaBackendTest extends AlgosUnitTest {
 
     @Test
     @Order(32)
-    @DisplayName("32 - findAllKeyReverseOrder")
-    void findAllKeyReverseOrder() {
-        System.out.println("32 - findAllKeyReverseOrder");
+    @DisplayName("32 - findAllStringKeyReverseOrder")
+    void findAllStringKeyReverseOrder() {
+        System.out.println("32 - findAllStringKeyReverseOrder");
         System.out.println(VUOTA);
 
         if (!annotationService.isKeyPropertyName(entityClazz)) {
@@ -242,7 +241,7 @@ public class ViaBackendTest extends AlgosUnitTest {
             return;
         }
 
-        listaStr = backend.findAllKeyReverseOrder();
+        listaStr = backend.findAllStringKeyReverseOrder();
         assertNotNull(listaStr);
         ottenutoIntero = listaStr.size();
         sorgente = textService.format(ottenutoIntero);

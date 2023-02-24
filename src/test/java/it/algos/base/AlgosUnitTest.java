@@ -357,6 +357,7 @@ public abstract class AlgosUnitTest {
         resourceService.webService = webService;
         resourceService.logger = logService;
         reflectionService.textService = textService;
+        reflectionService.classService = classService;
         reflectionService.logger = logService;
         classService.textService = textService;
         classService.fileService = fileService;
@@ -668,5 +669,11 @@ public abstract class AlgosUnitTest {
             }
         }
     }
+
+    protected void printValue(Object sinistra, String destra) {
+        message = String.format("%s%s%s", sinistra, FORWARD, destra);
+        System.out.println(message);
+    }
+
 
 }

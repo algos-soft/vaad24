@@ -3,7 +3,7 @@ package it.algos.backend;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.packages.crono.mese.*;
+import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,8 +17,8 @@ import java.util.*;
  * Project vaad24
  * Created by Algos
  * User: gac
- * Date: Wed, 22-Feb-2023
- * Time: 18:27
+ * Date: Thu, 23-Feb-2023
+ * Time: 09:58
  * Test senza repository <br>
  * <p>
  * isExistId()
@@ -43,12 +43,12 @@ import java.util.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
 @Tag("backend")
-@DisplayName("Mese Backend")
+@DisplayName("Continente Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MeseBackendTest extends AlgosUnitTest {
+public class ContinenteBackendTest extends AlgosUnitTest {
 
     @InjectMocks
-    private MeseBackend backend;
+    private ContinenteBackend backend;
 
     private String backendName;
 
@@ -56,7 +56,7 @@ public class MeseBackendTest extends AlgosUnitTest {
 
     private String keyPropertyName;
 
-    private List<Mese> listaEntityBeans;
+    private List<Continente> listaEntityBeans;
 
     /**
      * Qui passa una volta sola <br>
@@ -67,9 +67,9 @@ public class MeseBackendTest extends AlgosUnitTest {
 
         assertNotNull(backend);
 
-        entityClazz = Mese.class;
+        entityClazz = Continente.class;
         clazzName = entityClazz.getSimpleName();
-        backendName = "Mese" + SUFFIX_BACKEND;
+        backendName = "Continente" + SUFFIX_BACKEND;
         collectionName = annotationService.getCollectionName(entityClazz);
         keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
     }
@@ -174,12 +174,12 @@ public class MeseBackendTest extends AlgosUnitTest {
     void findAllSortCorrente() {
         System.out.println("22 - findAll getSortKeyID");
 
-        listaEntityBeans = backend.findAllSortCorrente();
-        assertNotNull(listaEntityBeans);
-        ottenutoIntero = listaEntityBeans.size();
+        listaBeans = backend.findAllSortCorrente();
+        assertNotNull(listaBeans);
+        ottenutoIntero = listaBeans.size();
         message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
         System.out.println(message);
-        printSubLista(listaEntityBeans);
+        printSubLista(listaBeans);
     }
 
 
@@ -265,10 +265,20 @@ public class MeseBackendTest extends AlgosUnitTest {
     void newEntity() {
         System.out.println("41 - newEntity con ID ma non registrata");
         System.out.println(VUOTA);
+        boolean esiste;
 
         sorgente = "Topo Lino";
         previsto = "topolino";
         previsto2 = "Topo Lino";
+
+        if (reflectionService.isEsisteMetodo(backendName,"newEntity")) {
+             esiste=true;
+        }
+        else {
+            esiste=false;
+        }
+
+
         entityBean = backend.newEntity(sorgente);
         assertNotNull(entityBean);
         ottenuto = entityBean.id;
