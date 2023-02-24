@@ -80,6 +80,10 @@ public class SecoloBackend extends CrudBackend {
         return (Secolo) super.findByProperty(propertyName, propertyValue);
     }
 
+    public List<Secolo> findAllSortCorrente() {
+        return (List<Secolo>) super.findAllSortCorrente();
+    }
+
     public List<String> findAllNomi() {
         return super.findAllStringKeyReverseOrder();
     }
@@ -197,7 +201,7 @@ public class SecoloBackend extends CrudBackend {
                         lista.add(entityBean);
                     }
                     else {
-                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
+                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
                     }
                 }
                 result.setIntValue(lista.size());

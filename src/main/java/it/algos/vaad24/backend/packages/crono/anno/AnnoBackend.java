@@ -1,6 +1,8 @@
 package it.algos.vaad24.backend.packages.crono.anno;
 
+import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
@@ -8,7 +10,7 @@ import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
-import org.springframework.data.mongodb.repository.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -20,46 +22,18 @@ import java.util.stream.*;
  * User: gac
  * Date: lun, 02-mag-2022
  * Time: 16:05
- * <p>
- * Service di una entityClazz specifica e di un package <br>
- * Garantisce i metodi di collegamento per accedere al database <br>
- * Non mantiene lo stato di una istanza entityBean <br>
- * Mantiene lo stato della entityClazz <br>
- * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
 public class AnnoBackend extends CrudBackend {
 
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
     @Autowired
     public SecoloBackend secoloBackend;
 
-    public AnnoRepository repository;
 
-    /**
-     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
-     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
-     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
-     * @param crudRepository per la persistenza dei dati
-     */
-    public AnnoBackend(@Autowired @Qualifier(TAG_ANNO) final MongoRepository crudRepository) {
-        super(crudRepository, Anno.class);
-        this.repository = (AnnoRepository) crudRepository;
+    public AnnoBackend() {
+        super(Anno.class);
     }
 
-    public boolean crea(final int ordine, final String nome, final Secolo secolo, final boolean dopoCristo, final boolean bisestile) {
-        Anno anno = newEntity(ordine, nome, secolo, dopoCristo, bisestile);
-        return crudRepository.insert(anno) != null;
-    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -74,9 +48,6 @@ public class AnnoBackend extends CrudBackend {
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
-     * All properties <br>
      *
      * @param ordine     di presentazione nel popup/combobox (obbligatorio, unico)
      * @param nome       corrente
@@ -87,62 +58,86 @@ public class AnnoBackend extends CrudBackend {
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Anno newEntity(final int ordine, final String nome, final Secolo secolo, final boolean dopoCristo, final boolean bisestile) {
-        return Anno.builder()
+        Anno newEntityBean = Anno.builder()
                 .ordine(ordine)
                 .nome(textService.isValid(nome) ? nome : null)
                 .secolo(secolo)
                 .dopoCristo(dopoCristo)
                 .bisestile(bisestile)
                 .build();
+
+        return (Anno) fixKey(newEntityBean);
     }
 
-    public Anno findByNome(final String nome) {
-        return repository.findFirstByNome(nome);
+    @Override
+    public Anno findById(final String keyID) {
+        return (Anno) super.findById(keyID);
+    }
+
+    @Override
+    public Anno findByKey(final String keyValue) {
+        return (Anno) super.findByKey(keyValue);
+    }
+
+    @Override
+    public Anno findByProperty(final String propertyName, final Object propertyValue) {
+        return (Anno) super.findByProperty(propertyName, propertyValue);
     }
 
     public Anno findByOrdine(final int ordine) {
-        return repository.findFirstByOrdine(ordine);
+        return findByProperty(FIELD_NAME_ORDINE, ordine);
     }
 
     @Override
     public List<Anno> findAllSortCorrente() {
-        return findAllDiscendente();
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Query query = new Query();
+
+        if (sortOrder != null) {
+            query.with(sortOrder);
+        }
+        return (List<Anno>) mongoService.mongoOp.find(query, entityClazz, collectionName);
     }
 
     public List<Anno> findAllDiscendente() {
-        return repository.findAll(Sort.by(Sort.Direction.DESC, "ordine"));
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Sort sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
+        Query query = new Query();
+        query.with(sort);
+
+        return (List<Anno>) mongoService.mongoOp.find(query, entityClazz, collectionName);
     }
 
     public List<Anno> findAllAscendente() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "ordine"));
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
+        Query query = new Query();
+        query.with(sort);
+
+        return (List<Anno>) mongoService.mongoOp.find(query, entityClazz, collectionName);
     }
 
-    public List<String> findNomi() {
-        return findNomiDiscendente();
+    public List<String> findAllStringKey() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
     }
 
-    public List<String> findNomiDiscendente() {
-        return findAllDiscendente().stream()
-                .map(anno -> anno.nome)
-                .collect(Collectors.toList());
+    public List<String> findAllStringKeyReverseOrder() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
     }
 
-    public List<String> findNomiAscendente() {
-        return findAllAscendente().stream()
-                .map(anno -> anno.nome)
-                .collect(Collectors.toList());
-    }
+    //    public List<Anno> findAllBySecolo(Secolo secolo) {
+    //        return findAllAscendente().stream()
+    //                .filter(anno -> anno.secolo.nome.equals(secolo.nome))
+    //                .collect(Collectors.toList());
+    //    }
 
     public List<Anno> findAllBySecolo(Secolo secolo) {
-        return findAllAscendente().stream()
-                .filter(anno -> anno.secolo.nome.equals(secolo.nome))
-                .collect(Collectors.toList());
+        return findAllBeanProperty("secolo", secolo);
     }
 
 
-    public List<String> findNomiBySecolo(String secolo) {
-        return findAllAscendente().stream()
-                .filter(anno -> anno.secolo.nome.equals(secolo))
+    public List<String> findNomiBySecolo(Secolo secolo) {
+        return findAllBySecolo(secolo).stream()
                 .map(anno -> anno.nome)
                 .collect(Collectors.toList());
     }
@@ -157,31 +152,53 @@ public class AnnoBackend extends CrudBackend {
     @Override
     public AResult resetOnlyEmpty() {
         AResult result = super.resetOnlyEmpty();
+        String clazzName = entityClazz.getSimpleName();
+        String collectionName = result.getTarget();
+        AEntity entityBean;
+        List<AEntity> lista;
+        String message;
 
         if (secoloBackend.count() < 1) {
             logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Secolo'")).usaDb());
             return result;
         }
 
-        if (result.isValido() && result.getTypeResult() == AETypeResult.collectionVuota) {
+        if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            lista = new ArrayList<>();
+
             //--costruisce gli anni prima di cristo partendo da ANTE_CRISTO_MAX che coincide con DELTA_ANNI
             for (int k = 1; k <= ANTE_CRISTO_MAX; k++) {
-                creaPrima(k);
+                entityBean = creaPrima(k);
+                if (entityBean != null) {
+                    lista.add(entityBean);
+                }
+                else {
+                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", k))));
+                }
             }
 
             //--costruisce gli anni dopo cristo fino all'anno DOPO_CRISTO_MAX
             for (int k = 1; k <= DOPO_CRISTO_MAX; k++) {
-                creaDopo(k);
+                entityBean = creaDopo(k);
+                if (entityBean != null) {
+                    lista.add(entityBean);
+                }
+                else {
+                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", k))));
+                }
             }
+            result.setIntValue(lista.size());
+            result.setLista(lista);
         }
         else {
             return result;
         }
 
-        return fixResult(result);
+        message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
+        return result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
     }
 
-    public void creaPrima(int numeroProgressivo) {
+    public AEntity creaPrima(int numeroProgressivo) {
         int delta = DELTA_ANNI;
         int numeroAnno = delta - numeroProgressivo + 1;
         int ordine = numeroProgressivo;
@@ -189,10 +206,11 @@ public class AnnoBackend extends CrudBackend {
         String nomeVisibile = numeroAnno + tagPrima;
         Secolo secolo = secoloBackend.findByAnnoAC(numeroAnno);
 
-        crea(ordine, nomeVisibile, secolo, false, false);
+        return insert(newEntity(ordine, nomeVisibile, secolo, false, false));
+
     }
 
-    public void creaDopo(int numeroProgressivo) {
+    public AEntity creaDopo(int numeroProgressivo) {
         int delta = DELTA_ANNI;
         int numeroAnno = numeroProgressivo;
         int ordine = numeroProgressivo + delta;
@@ -200,7 +218,7 @@ public class AnnoBackend extends CrudBackend {
         Secolo secolo = secoloBackend.findByAnnoDC(numeroAnno);
         boolean bisestile = dateService.isBisestile(numeroAnno);
 
-        crea(ordine, nomeVisibile, secolo, true, bisestile);
+        return insert(newEntity(ordine, nomeVisibile, secolo, true, bisestile));
     }
 
 }// end of crud backend class

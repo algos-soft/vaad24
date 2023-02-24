@@ -111,6 +111,10 @@ public class GiornoBackend extends CrudBackend {
         return (Giorno) super.findByProperty(propertyName, propertyValue);
     }
 
+    public Giorno findByOrdine(final int ordine) {
+        return findByProperty(FIELD_NAME_ORDINE, ordine);
+    }
+
     public List<String> findAllStringKey() {
         return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
     }
@@ -122,9 +126,6 @@ public class GiornoBackend extends CrudBackend {
         return this.findAllStringKey();
     }
 
-    public Giorno findByOrdine(final int ordine) {
-        return findByProperty(FIELD_NAME_ORDINE, ordine);
-    }
 
     public List<Giorno> findAllByMese(Mese mese) {
         return findAllBeanProperty("mese", mese);
@@ -188,7 +189,7 @@ public class GiornoBackend extends CrudBackend {
                     lista.add(entityBean);
                 }
                 else {
-                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
+                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
                 }
             }
             result.setIntValue(lista.size());

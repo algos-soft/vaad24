@@ -174,12 +174,12 @@ public class ContinenteBackendTest extends AlgosUnitTest {
     void findAllSortCorrente() {
         System.out.println("22 - findAll getSortKeyID");
 
-        listaBeans = backend.findAllSortCorrente();
-        assertNotNull(listaBeans);
-        ottenutoIntero = listaBeans.size();
+        listaEntityBeans = backend.findAllSortCorrente();
+        assertNotNull(listaEntityBeans);
+        ottenutoIntero = listaEntityBeans.size();
         message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
         System.out.println(message);
-        printSubLista(listaBeans);
+        printSubLista(listaEntityBeans);
     }
 
 
@@ -280,18 +280,14 @@ public class ContinenteBackendTest extends AlgosUnitTest {
             System.out.println(message);
             return;
         }
-        else {
-            entityBean = backend.newEntity(sorgente);
-            assertNotNull(entityBean);
-            ottenuto = entityBean.id;
-            ottenuto2 = reflectionService.getPropertyValueStr(entityBean, keyPropertyName);
-            if (annotationService.isKeyPropertyName(entityClazz)) {
-                assertEquals(previsto, ottenuto);
-                assertEquals(previsto2, ottenuto2);
-            }
 
-            message = String.format("Creata (in memoria) una entity con ID e %s, della classe [%s]", keyPropertyName, clazzName);
-            System.out.println(message);
+        entityBean = backend.newEntity(sorgente);
+        assertNotNull(entityBean);
+        ottenuto = entityBean.id;
+        ottenuto2 = reflectionService.getPropertyValueStr(entityBean, keyPropertyName);
+        if (annotationService.isKeyPropertyName(entityClazz)) {
+            assertEquals(previsto, ottenuto);
+            assertEquals(previsto2, ottenuto2);
         }
     }
 
@@ -302,6 +298,15 @@ public class ContinenteBackendTest extends AlgosUnitTest {
         System.out.println("42 - CRUD operations");
         System.out.println(VUOTA);
 
+        if (!reflectionService.isEsisteMetodoConParametri(backend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
+            message = String.format("Questo test presuppone che esista il metodo '%s' nella classe [%s] con un parametro", METHOD_NAME_NEW_ENTITY, backendName);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la classe [%s]", backendName);
+            System.out.println(message);
+            message = String.format("Aggiungendo il metodo '%s' con un parametro", METHOD_NAME_NEW_ENTITY);
+            System.out.println(message);
+            return;
+        }
         if (!annotationService.isKeyPropertyName(entityClazz)) {
             System.out.println("Le operazioni CRUD standard di questo test presuppongono che esista una keyProperty");
 

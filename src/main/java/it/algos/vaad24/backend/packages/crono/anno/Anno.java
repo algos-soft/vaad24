@@ -31,7 +31,7 @@ import javax.persistence.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "anno", preReset = "secolo")
+@AIEntity(keyPropertyName = "nome", preReset = "secolo")
 public class Anno extends AEntity {
 
     @Indexed(unique = true, direction = IndexDirection.ASCENDING)
