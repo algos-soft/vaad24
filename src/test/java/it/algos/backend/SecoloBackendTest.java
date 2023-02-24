@@ -263,17 +263,29 @@ public class SecoloBackendTest extends AlgosUnitTest {
         sorgente = "Topo Lino";
         previsto = "topolino";
         previsto2 = "Topo Lino";
-        entityBean = backend.newEntity(sorgente);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.id;
-        ottenuto2 = reflectionService.getPropertyValueStr(entityBean, keyPropertyName);
-        if (annotationService.isKeyPropertyName(entityClazz)) {
-            assertEquals(previsto, ottenuto);
-            assertEquals(previsto2, ottenuto2);
-        }
 
-        message = String.format("Creata (in memoria) una entity con ID e %s, della classe [%s]", keyPropertyName, clazzName);
-        System.out.println(message);
+        if (!reflectionService.isEsisteMetodoConParametri(backend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
+            message = String.format("Questo test presuppone che esista il metodo '%s' nella classe [%s] con un parametro", METHOD_NAME_NEW_ENTITY, backendName);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la classe [%s]", backendName);
+            System.out.println(message);
+            message = String.format("Aggiungendo il metodo '%s' con un parametro", METHOD_NAME_NEW_ENTITY);
+            System.out.println(message);
+            return;
+        }
+        else {
+            entityBean = backend.newEntity(sorgente);
+            assertNotNull(entityBean);
+            ottenuto = entityBean.id;
+            ottenuto2 = reflectionService.getPropertyValueStr(entityBean, keyPropertyName);
+            if (annotationService.isKeyPropertyName(entityClazz)) {
+                assertEquals(previsto, ottenuto);
+                assertEquals(previsto2, ottenuto2);
+            }
+
+            message = String.format("Creata (in memoria) una entity con ID e %s, della classe [%s]", keyPropertyName, clazzName);
+            System.out.println(message);
+        }
     }
 
     @Test
