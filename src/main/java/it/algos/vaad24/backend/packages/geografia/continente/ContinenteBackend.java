@@ -1,12 +1,11 @@
 package it.algos.vaad24.backend.packages.geografia.continente;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -28,7 +27,6 @@ import java.util.*;
 @Service
 public class ContinenteBackend extends CrudBackend {
 
-    public ContinenteRepository repository;
 
     /**
      * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
@@ -38,12 +36,10 @@ public class ContinenteBackend extends CrudBackend {
      * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
      * Regola la entityClazz (final nella superclasse) associata a questo service <br>
      *
-     * @param crudRepository per la persistenza dei dati
      */
     //@todo registrare eventualmente come costante in VaadCost il valore del Qualifier
-    public ContinenteBackend(@Autowired @Qualifier(TAG_CONTINENTE) final MongoRepository crudRepository) {
-        super(crudRepository, Continente.class);
-        this.repository = (ContinenteRepository) crudRepository;
+    public ContinenteBackend() {
+        super( Continente.class);
     }
 
 
@@ -94,6 +90,8 @@ public class ContinenteBackend extends CrudBackend {
     @Override
     public AResult resetOnlyEmpty() {
         AResult result = super.resetOnlyEmpty();
+        String clazzName = entityClazz.getSimpleName();
+        String collectionName = result.getTarget();
         String nomeFile = "continenti";
         Map<String, List<String>> mappa;
         List<String> riga;
@@ -102,12 +100,15 @@ public class ContinenteBackend extends CrudBackend {
         String nome;
         boolean abitato;
         boolean reset;
-        Continente continenteNew;
-        Continente continenteSalvato;
+        List<AEntity> lista;
+        AEntity entityBean;
+        String message;
 
-        if (result.isValido() && result.getTypeResult() == AETypeResult.collectionVuota) {
+        if (result.getTypeResult() == AETypeResult.collectionVuota) {
             mappa = resourceService.leggeMappa(nomeFile);
             if (mappa != null) {
+                lista = new ArrayList<>();
+
                 for (String key : mappa.keySet()) {
                     riga = mappa.get(key);
                     if (riga.size() == 4) {
@@ -126,17 +127,17 @@ public class ContinenteBackend extends CrudBackend {
                         logger.error(new WrapLog().exception(new AlgosException("I dati non sono congruenti")).usaDb());
                         return result;
                     }
-                    if (repository.existsById(id)) {
-                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s esiste già", id))).usaDb());
+
+                    entityBean = insert(newEntity(id, ordine, nome, abitato, reset));
+                    if (entityBean != null) {
+                        lista.add(entityBean);
                     }
                     else {
-                        continenteNew = newEntity(id, ordine, nome, abitato, reset);
-                        continenteSalvato = repository.insert(continenteNew);
-                        if (continenteSalvato == null) {
-                            logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", id))).usaDb());
-                        }
+                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
                     }
                 }
+                result.setIntValue(lista.size());
+                result.setLista(lista);
             }
             else {
                 return result;
@@ -146,7 +147,8 @@ public class ContinenteBackend extends CrudBackend {
             return result;
         }
 
-        return fixResult(result);
+        message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
+        return result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
     }
 
 }// end of crud backend class

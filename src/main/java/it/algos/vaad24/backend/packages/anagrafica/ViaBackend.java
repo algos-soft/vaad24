@@ -90,6 +90,7 @@ public class ViaBackend extends CrudBackend {
                     else {
                         return result.errorMessage("I dati non sono congruenti");
                     }
+
                     entityBean = insert(newEntity(nome));
                     if (entityBean != null) {
                         lista.add(entityBean);
