@@ -30,6 +30,7 @@ import java.time.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
+@AIEntity(keyPropertyName = "code")
 public class Versione extends AEntity {
 
     @AIField(type = AETypeField.integer)
@@ -62,7 +63,7 @@ public class Versione extends AEntity {
 
     @Override
     public String toString() {
-        return descrizione;
+        return code;
     }
 
 

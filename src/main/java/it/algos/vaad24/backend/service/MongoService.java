@@ -505,7 +505,8 @@ public class MongoService<capture> extends AbstractService {
         FindIterable<Document> documents = collection.find().projection(projection).sort(sort);
 
         for (var singolo : documents) {
-            listaProperty.add(singolo.get(property, String.class));
+            Object obj = singolo.get(property);
+            listaProperty.add(obj.toString());
         }
         return listaProperty;
     }

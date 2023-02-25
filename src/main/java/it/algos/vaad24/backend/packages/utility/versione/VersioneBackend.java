@@ -1,11 +1,10 @@
 package it.algos.vaad24.backend.packages.utility.versione;
 
-import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.logic.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
 import java.time.*;
@@ -29,27 +28,12 @@ import java.util.*;
 @Qualifier(TAG_VERSIONE)
 public class VersioneBackend extends CrudBackend {
 
-    public VersioneRepository repository;
 
-    /**
-     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
-     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
-     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
-     * @param crudRepository per la persistenza dei dati
-     */
-    public VersioneBackend(@Autowired @Qualifier(TAG_VERSIONE) final MongoRepository crudRepository) {
-        super(crudRepository, Versione.class);
-        this.repository = (VersioneRepository) crudRepository;
+
+    public VersioneBackend() {
+        super(Versione.class);
     }
 
-    public void crea(final String key, final AETypeVers type, final String descrizione, final String company, final boolean riferitoVaadin23) {
-        Versione versione = newEntity(key, type, descrizione, company, riferitoVaadin23);
-        repository.insert(versione);
-    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -86,7 +70,7 @@ public class VersioneBackend extends CrudBackend {
         String tag = " del ";
         double release = riferitoVaadin23 ? VaadVar.vaadin24Version : VaadVar.projectVersion;
 
-        return Versione.builder()
+        Versione newEntityBean = Versione.builder()
                 .ordine(nextOrdine())
                 .code(textService.isValid(code) ? code : null)
                 .type(type != null ? type : AETypeVers.addition)
@@ -97,68 +81,10 @@ public class VersioneBackend extends CrudBackend {
                 .company(textService.isValid(company) ? company : null)
                 .vaadin23(riferitoVaadin23)
                 .build();
+
+        return (Versione) fixKey(newEntityBean);
     }
 
-    //    /**
-    //     * Ordine messo in automatico (progressivo) <br>
-    //     */
-    //    public void crea(final String key, final AETypeVers type, final String descrizione, final String company, final boolean riferitoVaadin23) {
-    //        Versione versione = new Versione();
-    //        String tag = " del ";
-    //
-    //        versione.id = key;
-    //        versione.ordine = this.nextOrdine();
-    //        versione.type = type;
-    //        versione.release = riferitoVaadin23 ? VaadVar.vaadin23Version : VaadVar.projectVersion;
-    //        versione.titolo = String.format("%s%s%s", versione.release, tag, dateService.get());
-    //        versione.giorno = LocalDate.now();
-    //        versione.descrizione = textService.isValid(descrizione) ? descrizione : null;
-    //        ;
-    //        versione.company = textService.isValid(company) ? company : null;
-    //        versione.vaadin23 = riferitoVaadin23;
-    //
-    //        try {
-    //            this.add(versione);
-    //        } catch (Exception unErrore) {
-    //            logger.error(unErrore);
-    //        }
-    //    }
-
-    public int nextOrdine() {
-        //        int nextOrdine = 1;
-        //        List<Versione> listaDiUnSoloElemento = null;
-        Versione versione = repository.findFirstByCodeIsNotNullOrderByOrdineDesc();
-
-        //        try {
-        //            listaDiUnSoloElemento = repository.findFirstVersioneByTitoloIsNotNullOrderByOrdineAsc();
-        //        } catch (Exception unErrore) {
-        //            logger.error(unErrore);
-        //            return nextOrdine;
-        //        }
-        //
-        //        if (listaDiUnSoloElemento != null && listaDiUnSoloElemento.size() == 1) {
-        //            versione = listaDiUnSoloElemento.get(0);
-        //        }
-
-        //        if (versione != null) {
-        //            nextOrdine = versione.getOrdine();
-        //            nextOrdine = nextOrdine + 1;
-        //        }
-
-        return versione != null ? versione.getOrdine() + 1 : 1;
-    }
-
-    public boolean isEsiste(final String titolo, final String descrizione) {
-        Versione versione = null;
-
-        try {
-            versione = repository.findFirstByTitoloAndDescrizioneOrderByOrdineAsc(titolo, descrizione);
-        } catch (Exception unErrore) {
-            logger.error(unErrore);
-        }
-
-        return versione != null;
-    }
 
     /**
      * Recupera una istanza della Entity usando la query della property specifica (obbligatoria e unica) <br>
@@ -180,7 +106,7 @@ public class VersioneBackend extends CrudBackend {
      * @return istanza della Entity, null se non trovata
      */
     public Versione findByCode(final String keyCode) {
-        return repository.findFirstByCode(keyCode);
+        return (Versione)super.findByProperty(FIELD_NAME_CODE,keyCode);
     }
 
     /**
@@ -193,25 +119,25 @@ public class VersioneBackend extends CrudBackend {
      * @param newOrdine progressivo della versione (transient, obbligatorio) <br>
      */
     public String getIdKey(final String sigla, int newOrdine) {
-        List<Versione> lista;
+        List<Versione> lista=null;
         String idKey = "0";
 
-        if (newOrdine == 0) {
-            lista = repository.findByIdRegexOrderByOrdineAsc(sigla);
-            if (lista != null && lista.size() > 0) {
-                idKey = lista.get(0).getId();
-                idKey = idKey.substring(1);
-                idKey = idKey.startsWith(PUNTO) ? textService.levaTesta(idKey, PUNTO) : idKey;
-                idKey = idKey.startsWith(PUNTO) ? textService.levaTesta(idKey, PUNTO) : idKey;//doppio per numeri sopra i 10 e fino a 100
-            }
-
-            try {
-                newOrdine = Integer.decode(idKey);
-                newOrdine++;
-            } catch (Exception unErrore) {
-                logger.error(unErrore);
-            }
-        }
+//        if (newOrdine == 0) {
+////            lista = repository.findByIdRegexOrderByOrdineAsc(sigla);
+//            if (lista != null && lista.size() > 0) {
+//                idKey = lista.get(0).getId();
+//                idKey = idKey.substring(1);
+//                idKey = idKey.startsWith(PUNTO) ? textService.levaTesta(idKey, PUNTO) : idKey;
+//                idKey = idKey.startsWith(PUNTO) ? textService.levaTesta(idKey, PUNTO) : idKey;//doppio per numeri sopra i 10 e fino a 100
+//            }
+//
+//            try {
+//                newOrdine = Integer.decode(idKey);
+//                newOrdine++;
+//            } catch (Exception unErrore) {
+//                logger.error(unErrore);
+//            }
+//        }
 
         return sigla + newOrdine;
     }

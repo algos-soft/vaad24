@@ -17,7 +17,7 @@ public @interface AIEntity {
 
     /**
      * (Optional) nome della collection (minuscolo) solo se diverso dal nome della EntityClass <br>
-     * Di default lo stesso nome della classe Entity <br>
+     * Di default lo stesso nome della classe Entity con iniziale minuscola <br>
      */
     String collectionName() default VUOTA;
 
@@ -52,5 +52,14 @@ public @interface AIEntity {
      * @return the status
      */
     boolean usaKeyIdSenzaSpazi() default true;
+
+
+    /**
+     * (Optional) usa il metodo resetOnlyEmpty() nella classe xxxBackend <br>
+     * Di default false <br>
+     *
+     * @return the status
+     */
+    boolean usaReset() default false;
 
 }// end of interface annotation

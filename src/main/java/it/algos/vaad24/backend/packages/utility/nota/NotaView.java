@@ -125,12 +125,12 @@ public class NotaView extends CrudView {
 
         final AETypeLog type = comboTypeLog != null ? comboTypeLog.getValue() : null;
         if (type != null) {
-            items = items.stream().filter(nota -> nota.type == type).toList();
+            items = items.stream().filter(nota -> nota.type.equals(type.name())).toList();
         }
 
         final AENotaLevel level = comboLivello != null ? comboLivello.getValue() : null;
         if (level != null) {
-            items = items.stream().filter(nota -> nota.livello == level).toList();
+            items = items.stream().filter(nota -> nota.livello.equals(level.name())).toList();
         }
 
         if (boxBox != null && !boxBox.isIndeterminate()) {

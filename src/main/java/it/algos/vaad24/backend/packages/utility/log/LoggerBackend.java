@@ -5,7 +5,6 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
 import java.time.*;
@@ -28,22 +27,9 @@ import java.time.*;
 @Qualifier(TAG_LOGGER)
 public class LoggerBackend extends CrudBackend {
 
-    public LoggerRepository repository;
 
-    /**
-     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
-     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
-     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
-     * @param crudRepository per la persistenza dei dati
-     */
-    //@todo registrare eventualmente come costante in VaadCost il valore del Qualifier
-    public LoggerBackend(@Autowired @Qualifier(TAG_LOGGER) final MongoRepository crudRepository) {
-        super(crudRepository, Logger.class);
-        this.repository = (LoggerRepository) crudRepository;
+    public LoggerBackend() {
+        super(Logger.class);
     }
 
 
@@ -71,13 +57,13 @@ public class LoggerBackend extends CrudBackend {
         entity.descrizione = textService.isValid(message) ? message : null;
         entity.company = textService.isValid(companySigla) ? companySigla : null;
         entity.user = textService.isValid(userName) ? userName : null;
-//        entity.address = textService.isValid(addressIP) ? addressIP : null;
+        //        entity.address = textService.isValid(addressIP) ? addressIP : null;
         entity.classe = textService.isValid(classe) ? classe : null;
         entity.metodo = textService.isValid(metodo) ? metodo : null;
         entity.linea = linea;
 
         try {
-            repository.insert(entity);
+            insert(entity);
         } catch (Exception unErrore) {
             System.out.println(unErrore);
         }

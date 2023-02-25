@@ -142,6 +142,36 @@ public abstract class CrudBackend extends AbstractService {
         return newEntityBean;
     }
 
+
+    public int nextOrdine() {
+        int nextOrdine = 1;
+        AEntity entityBean = null;
+        List<AEntity> lista;
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Sort sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
+        Query query = new Query();
+        query.addCriteria(Criteria.where("code").exists(true));
+        query.with(sort);
+
+        if (textService.isValid(collectionName)) {
+            lista = (List<AEntity>) mongoService.mongoOp.find(query, entityClazz, collectionName);
+        }
+        else {
+            lista = (List<AEntity>) mongoService.mongoOp.find(query, entityClazz);
+        }
+        if (lista != null && lista.size() > 0) {
+            entityBean = lista.get(0);
+        }
+        if (entityBean != null) {
+            Object obj = reflectionService.getPropertyValue(entityBean, FIELD_NAME_ORDINE);
+            if (obj instanceof Integer oldOrdine) {
+                nextOrdine = oldOrdine + 1;
+            }
+        }
+
+        return nextOrdine;
+    }
+
     /**
      * Regola la chiave se esiste il campo keyPropertyName. <br>
      *
@@ -152,8 +182,6 @@ public abstract class CrudBackend extends AbstractService {
     public AEntity fixKey(AEntity newEntityBean) {
         String keyPropertyValue;
         String keyPropertyName;
-        boolean usaKeyIdSenzaSpazi;
-        boolean usaKeyIdMinuscolaCaseInsensitive;
 
         if (textService.isValid(newEntityBean.id)) {
             return newEntityBean;
@@ -163,10 +191,7 @@ public abstract class CrudBackend extends AbstractService {
         if (textService.isValid(keyPropertyName) && !keyPropertyName.equals(FIELD_NAME_ID_CON)) {
             keyPropertyValue = reflectionService.getPropertyValueStr(newEntityBean, keyPropertyName);
             if (textService.isValid(keyPropertyValue)) {
-                usaKeyIdSenzaSpazi = annotationService.usaKeyIdSenzaSpazi(newEntityBean.getClass()); ;
-                usaKeyIdMinuscolaCaseInsensitive = annotationService.usaKeyIdMinuscolaCaseInsensitive(newEntityBean.getClass()); ;
-                keyPropertyValue = usaKeyIdSenzaSpazi ? textService.levaSpazi(keyPropertyValue) : keyPropertyValue;
-                keyPropertyValue = usaKeyIdMinuscolaCaseInsensitive ? keyPropertyValue.toLowerCase() : keyPropertyValue;
+                keyPropertyValue = getIdKey(keyPropertyValue);
                 newEntityBean.id = keyPropertyValue;
             }
         }
@@ -175,6 +200,23 @@ public abstract class CrudBackend extends AbstractService {
         }
 
         return newEntityBean;
+    }
+
+    public String getIdKey(String keyPropertyValue) {
+        boolean usaKeyIdSenzaSpazi;
+        boolean usaKeyIdMinuscolaCaseInsensitive;
+
+        if (textService.isValid(keyPropertyValue)) {
+            usaKeyIdSenzaSpazi = annotationService.usaKeyIdSenzaSpazi(entityClazz); ;
+            usaKeyIdMinuscolaCaseInsensitive = annotationService.usaKeyIdMinuscolaCaseInsensitive(entityClazz); ;
+            keyPropertyValue = usaKeyIdSenzaSpazi ? textService.levaSpazi(keyPropertyValue) : keyPropertyValue;
+            keyPropertyValue = usaKeyIdMinuscolaCaseInsensitive ? keyPropertyValue.toLowerCase() : keyPropertyValue;
+        }
+        else {
+            keyPropertyValue = new ObjectId().toString();
+        }
+
+        return keyPropertyValue;
     }
 
     public boolean isExistId(final String keyIdValue) {

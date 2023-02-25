@@ -2,6 +2,7 @@ package it.algos.vaad24.backend.packages.utility.nota;
 
 import com.vaadin.flow.component.icon.*;
 import it.algos.vaad24.backend.annotation.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import lombok.*;
@@ -31,13 +32,14 @@ import java.time.format.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
+@AIEntity(keyPropertyName = "descrizione")
 public class Nota extends AEntity {
 
     @AIField(type = AETypeField.enumerationType, enumClazz = AETypeLog.class)
-    public AETypeLog type;
+    public String type;
 
     @AIField(type = AETypeField.enumerationType, enumClazz = AENotaLevel.class)
-    public AENotaLevel livello;
+    public String livello;
 
     @AIField(type = AETypeField.localDate)
     public LocalDate inizio;
@@ -54,7 +56,7 @@ public class Nota extends AEntity {
 
     @Override
     public String toString() {
-        return DateTimeFormatter.ofPattern("d-MMM-yy").format(inizio);
+        return inizio != null ? DateTimeFormatter.ofPattern("d-MMM-yy").format(inizio) : VUOTA;
     }
 
 }// end of crud entity class

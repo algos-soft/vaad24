@@ -29,7 +29,7 @@ import javax.persistence.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(keyPropertyName = "nome")
+@AIEntity(keyPropertyName = "nome", usaReset = true)
 public class Mese extends AEntity {
 
     @AIField(type = AETypeField.integer, widthEM = 6)

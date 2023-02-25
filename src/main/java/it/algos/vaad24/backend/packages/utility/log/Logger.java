@@ -30,6 +30,7 @@ import java.time.format.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
+@AIEntity(keyPropertyName = "evento")
 public class Logger extends AEntity {
 
     @AIField(type = AETypeField.enumerationType, enumClazz = AETypeLog.class)

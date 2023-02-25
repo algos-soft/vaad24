@@ -467,6 +467,18 @@ public class AnnotationService extends AbstractService {
         return collectionName;
     }
 
+    /**
+     * Usa il metodo resetOnlyEmpty() nella classe xxxBackend <br>
+     * Controlla che esista l'annotation specifica <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return if exists the method xxxBackend.resetOnlyEmpty()
+     */
+    public boolean usaReset(final Class<? extends AEntity> entityClazz) {
+        AIEntity annotation = this.getAIEntity(entityClazz);
+        return annotation != null ? annotation.usaReset() : false;
+    }
 
     /**
      * Get the name of the EntityClass that is a preReset <br>
@@ -533,7 +545,7 @@ public class AnnotationService extends AbstractService {
      *
      * @return if exists a key property
      */
-    public boolean isKeyPropertyName(final Class<? extends AEntity> entityClazz) {
+    public boolean usaKeyPropertyName(final Class<? extends AEntity> entityClazz) {
         String keyPropertyName = getKeyPropertyName(entityClazz);
 
         if (textService.isValid(keyPropertyName) && !keyPropertyName.equals(FIELD_NAME_ID_CON)) {

@@ -128,4 +128,8 @@ These four operations are fundamental to the management of data in any data stor
 
 == Auto-Generated Field
 
-* * Baeldung [https://www.baeldung.com/spring-boot-mongodb-auto-generated-field]
+* Baeldung [https://www.baeldung.com/spring-boot-mongodb-auto-generated-field]
+
+== Criteria
+* Baeldung [https://www.baeldung.com/queries-in-spring-data-mongodb]
+* mongodb [https://www.mongodb.com/docs/manual/reference/operator/query/]

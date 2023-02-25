@@ -115,6 +115,10 @@ public class VaadVers implements AIVers {
         if (installa(++k)) {
             this.crea(k, AETypeVers.addition, "Aggiunto checkBox a 3 vie");
         }
+
+        if (installa(++k)) {
+            this.crea(k, AETypeVers.addition, "Eliminate le repositories");
+        }
     }
 
     /**
@@ -134,7 +138,7 @@ public class VaadVers implements AIVers {
     protected void crea(final int k, final AETypeVers type, final String descrizione) {
         String key = codeProject + k;
         boolean riferitoVaadin23 = codeProject.equals(CODE_PROJECT_VAADIN);
-        backend.crea(key, type, descrizione, ALGOS, riferitoVaadin23);
+        backend.insert(backend.newEntity(key, type, descrizione, ALGOS, riferitoVaadin23));
     }
 
 }

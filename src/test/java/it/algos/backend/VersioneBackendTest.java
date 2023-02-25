@@ -2,7 +2,7 @@ package it.algos.backend;
 
 import it.algos.*;
 import it.algos.base.*;
-import it.algos.vaad24.backend.packages.crono.mese.*;
+import it.algos.vaad24.backend.packages.utility.versione.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
@@ -12,19 +12,19 @@ import org.springframework.boot.test.context.*;
  * Project vaad24
  * Created by Algos
  * User: gac
- * Date: Wed, 22-Feb-2023
- * Time: 18:27
+ * Date: Sat, 25-Feb-2023
+ * Time: 12:00
  */
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
 @Tag("backend")
-@DisplayName("Mese Backend")
+@DisplayName("Versione Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MeseBackendTest extends BackendTest {
+public class VersioneBackendTest extends BackendTest {
 
     @InjectMocks
-    private MeseBackend backend;
+    private VersioneBackend backend;
 
     /**
      * Qui passa una volta sola <br>
@@ -32,10 +32,9 @@ public class MeseBackendTest extends BackendTest {
     @BeforeAll
     protected void setUpAll() {
         assertNotNull(backend);
-        super.entityClazz = Mese.class;
+        super.entityClazz = Versione.class;
         super.crudBackend = backend;
         super.setUpAll();
     }
-
 
 }

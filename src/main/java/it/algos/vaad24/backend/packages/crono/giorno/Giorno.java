@@ -32,7 +32,7 @@ import javax.persistence.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(keyPropertyName = "nome", preReset = "mese")
+@AIEntity(keyPropertyName = "nome", usaReset = true, preReset = "mese")
 public class Giorno extends AEntity {
 
     @Indexed(unique = true, direction = IndexDirection.ASCENDING)

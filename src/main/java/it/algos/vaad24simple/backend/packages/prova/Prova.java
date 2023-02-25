@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 /**
  * Project vaad24
@@ -29,13 +30,14 @@ import javax.persistence.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "test", keyPropertyName = "descrizione")
+@AIEntity(collectionName = "test", keyPropertyName = "descrizione", usaReset = true)
 public class Prova extends AEntity {
 
 
+    @NotEmpty
+    @AIField(type = AETypeField.text, flexGrow = true, focus = true, search = true)
     public String descrizione;
 
-    //    @AIField(type = AETypeField.combolinkato, linkClazz = ContinenteBackend.class, caption = "continente")
     @DBRef
     @AIField(type = AETypeField.link, linkClazz = ContinenteBackend.class)
     public Continente continenti;

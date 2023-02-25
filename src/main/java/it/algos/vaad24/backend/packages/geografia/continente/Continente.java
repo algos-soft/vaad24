@@ -30,6 +30,7 @@ import javax.validation.constraints.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
+@AIEntity(keyPropertyName = "nome",usaReset = true)
 public class Continente extends AREntity {
 
     @Indexed(unique = true, direction = IndexDirection.DESCENDING)

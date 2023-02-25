@@ -63,7 +63,8 @@ public class VersioneView extends CrudView {
             super.gridPropertyNamesList = Arrays.asList("code", "type", "titolo", "descrizione", "vaadin23");
             super.formPropertyNamesList = Arrays.asList("code", "type", "titolo", "descrizione", "vaadin23");
         }
-        super.sortOrder = Sort.by(Sort.Direction.ASC, "ordine");
+
+        super.sortOrder = Sort.by(Sort.Direction.DESC, "ordine");
         super.usaBottoneDeleteReset = false;
         super.usaBottoneNew = false;
         super.usaBottoneEdit = false;

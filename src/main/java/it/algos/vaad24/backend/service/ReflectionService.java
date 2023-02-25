@@ -243,8 +243,21 @@ public class ReflectionService extends AbstractService {
         return isEsisteMetodoConParametri(clazz, publicMethodName, -1);
     }
 
+
+    public List<Method> getMetodiByName(Class clazz, String publicMethodName) {
+        List<Method> metodi = new ArrayList<>();
+        List<Method> metodiAll = getMetodi(clazz);
+
+        for (Method method : metodiAll) {
+            if (method.getName().equals(publicMethodName)) {
+                metodi.add(method);
+            }
+        }
+        return metodi;
+    }
+
     public boolean isEsisteMetodoConParametri(Class clazz, String publicMethodName, int parametri) {
-        List<Method> metodi = getMetodi(clazz);
+        List<Method> metodi = getMetodiByName(clazz,publicMethodName);
 
         for (Method method : metodi) {
             if (method.getName().equals(publicMethodName)) {
