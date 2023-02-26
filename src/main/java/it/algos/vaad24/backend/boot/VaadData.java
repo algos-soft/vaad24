@@ -115,21 +115,39 @@ public class VaadData extends AbstractService {
         //--seleziono solo le classi di tipo 'backend'
         allBackendClasses = classService.allModuleBackendClass(moduleName);
         if (allBackendClasses != null && allBackendClasses.size() > 0) {
-            message = String.format("Nel modulo %s sono stati trovati %d packages con classi di tipo 'backend'", moduleName, allBackendClasses.size());
+            if (allBackendClasses.size() == 1) {
+                message = String.format("Nel modulo %s è stato trovato 1 package con la classe %s", moduleName, allBackendClasses.get(0).getSimpleName());
+            }
+            else {
+                message = String.format("Nel modulo %s sono stati trovati %d packages con classi di tipo 'backend'", moduleName, allBackendClasses.size());
+            }
+            logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
         }
         else {
             message = String.format("Nel modulo %s non è stato trovato nessun package con classi di tipo 'backend'", moduleName);
+            logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
+            return;
         }
-        logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
 
         //--seleziono solo le classi di tipo 'backend' che implementano il metodo resetOnlyEmpty()
         allResetOrderedClass = classService.allModuleBackendResetOrderedClass(moduleName);
         if (allResetOrderedClass != null && allResetOrderedClass.size() > 0) {
-            message = String.format("Nel modulo %s sono state trovate %d classi di tipo 'backend' che implementano il metodo %s():", moduleName, allResetOrderedClass.size(), METHOD_NAME_RESET_ONLY);
+            if (allResetOrderedClass.size() == 1) {
+                message = String.format("Nel modulo %s è stata trovata solo la classe %s che implementa il metodo %s()", moduleName, allResetOrderedClass.get(0).getSimpleName(),METHOD_NAME_RESET_ONLY);
+                logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
+            }
+            else {
+                message = String.format("Nel modulo %s sono state trovate %d classi di tipo 'backend' che implementano il metodo %s():", moduleName, allResetOrderedClass.size(), METHOD_NAME_RESET_ONLY);
+                logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
+                nomi = allResetOrderedClass.stream().map(clazz -> clazz.getSimpleName()).collect(Collectors.toList());
+                message = arrayService.toStringaVirgolaSpazio(nomi);
+                logger.info(new WrapLog().message(message.trim()).type(AETypeLog.checkData));
+            }
+        }
+        else {
+            message = String.format("Nel modulo %s non è stata trovata nessuna classe di tipo 'backend' che implementa il metodo %s()", moduleName, METHOD_NAME_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
-            nomi = allResetOrderedClass.stream().map(clazz -> clazz.getSimpleName()).collect(Collectors.toList());
-            message = arrayService.toStringaVirgolaSpazio(nomi);
-            logger.info(new WrapLog().message(message.trim()).type(AETypeLog.checkData));
+            return;
         }
 
         //--esegue il metodo resetOnlyEmpty() per tutte le classi di tipo 'backend' che lo implementano
