@@ -164,8 +164,8 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         span.add(ASpan.text("Default=true se la preferenza (non dinamica) ha lo stesso valore originario della Enumeration").verde());
         span.add(ASpan.text("Dinamica=true se la preferenza viene modificata automaticamente dalle task (scheduled) del programma").verde());
         span.add(ASpan.text("Le preferenze sono create/cancellate solo via hardcoded (tramite una Enumeration)").rosso());
-        span.add(ASpan.text("Refresh -> ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche").rosso());
-        span.add(ASpan.text("Delete -> ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche").rosso());
+        span.add(ASpan.text("Refresh -> ripristina nel database i valori di default delle preferenze non dinamiche, annullando le successive modifiche").rosso());
+        span.add(ASpan.text("Delete -> ripristina nel database i valori di default di tutte le preferenze, annullando le successive modifiche").rosso());
     }
 
     /**

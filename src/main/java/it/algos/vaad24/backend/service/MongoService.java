@@ -414,9 +414,9 @@ public class MongoService<capture> extends AbstractService {
             return 0;
         }
         if (!isExistsCollection(entityClazz)) {
-            collectionName = annotationService.getCollectionName(entityClazz);
-            message = String.format("La entityClazz '%s' non ha una corrispondente collection '%s'", entityClazz.getSimpleName(), collectionName);
-            logger.info(new WrapLog().exception(new AlgosException(message)).usaDb());
+//            collectionName = annotationService.getCollectionName(entityClazz);
+//            message = String.format("La entityClazz '%s' non ha una corrispondente collection '%s'", entityClazz.getSimpleName(), collectionName);
+//            logger.info(new WrapLog().exception(new AlgosException(message)).usaDb());
             return 0;
         }
 
