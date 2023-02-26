@@ -592,7 +592,6 @@ public class ClassService extends AbstractService {
         String simpleName;
         String pathName;
         List<String> keyCollectionList;
-        String backendName;
 
         if (textService.isEmpty(moduleName)) {
             return null;
@@ -608,7 +607,7 @@ public class ClassService extends AbstractService {
             pathName = textService.levaCoda(pathName, SUFFIX_BACKEND);
             entityClazz = this.getClazzFromCanonicalName(pathName);
             simpleName = entityClazz.getSimpleName();
-            mappaClazz.put(simpleName, backendClazz);
+            mappaClazz.put(simpleName.toLowerCase(), backendClazz);
         }
 
         keyCollectionList = this.allModuleEntityResetName(moduleName);
@@ -619,8 +618,7 @@ public class ClassService extends AbstractService {
         }
 
         for (String key : keyCollectionList) {
-            backendName = textService.primaMaiuscola(key);
-            allOrderedClazz.add(mappaClazz.get(backendName));
+            allOrderedClazz.add(mappaClazz.get(key));
         }
 
         return allOrderedClazz;
