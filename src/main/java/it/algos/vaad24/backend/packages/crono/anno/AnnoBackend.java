@@ -189,8 +189,15 @@ public class AnnoBackend extends CrudBackend {
                     result.setValido(false);
                 }
             }
-            result.setIntValue(lista.size());
-            result.setLista(lista);
+            if (lista.size()>0) {
+                result.setIntValue(lista.size());
+                result.setLista(lista);
+            }
+            else {
+                result.typeResult(AETypeResult.error);
+                message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetOnlyEmpty()", collectionName, clazzName);
+                return result.errorMessage(message);
+            }
         }
         else {
             return result;

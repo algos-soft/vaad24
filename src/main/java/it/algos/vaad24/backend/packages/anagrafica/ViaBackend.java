@@ -74,7 +74,7 @@ public class ViaBackend extends CrudBackend {
         List<String> riga;
         String nome;
         List<AEntity> lista;
-        AEntity entityBean;
+        AEntity entityBean = null;
         String message;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
@@ -101,8 +101,15 @@ public class ViaBackend extends CrudBackend {
                         result.setValido(false);
                     }
                 }
-                result.setIntValue(lista.size());
-                result.setLista(lista);
+                if (lista.size()>0) {
+                    result.setIntValue(lista.size());
+                    result.setLista(lista);
+                }
+                else {
+                    result.typeResult(AETypeResult.error);
+                    message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetOnlyEmpty()", collectionName, clazzName);
+                    return result.errorMessage(message);
+                }
             }
             else {
                 return result.errorMessage("Non ho trovato il file sul server");
