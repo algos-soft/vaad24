@@ -170,7 +170,9 @@ public class GiornoBackend extends CrudBackend {
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             //costruisce i 366 records
             mappa = dateService.getAllGiorni();
+            result.setValido(true);
             lista = new ArrayList<>();
+
             for (HashMap mappaGiorno : mappa) {
                 nome = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
                 meseTxt = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO);
@@ -190,6 +192,7 @@ public class GiornoBackend extends CrudBackend {
                 }
                 else {
                     logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
+                    result.setValido(false);
                 }
             }
             result.setIntValue(lista.size());
@@ -199,8 +202,15 @@ public class GiornoBackend extends CrudBackend {
             return result;
         }
 
-        message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
-        return result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
+        if (result.isValido()) {
+            message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
+            result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
+        }
+        else {
+            result.typeResult(AETypeResult.error);
+        }
+
+        return result;
     }
 
 }// end of crud backend class

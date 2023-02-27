@@ -164,6 +164,7 @@ public class AnnoBackend extends CrudBackend {
         }
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            result.setValido(true);
             lista = new ArrayList<>();
 
             //--costruisce gli anni prima di cristo partendo da ANTE_CRISTO_MAX che coincide con DELTA_ANNI
@@ -185,6 +186,7 @@ public class AnnoBackend extends CrudBackend {
                 }
                 else {
                     logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", k))));
+                    result.setValido(false);
                 }
             }
             result.setIntValue(lista.size());
@@ -194,8 +196,15 @@ public class AnnoBackend extends CrudBackend {
             return result;
         }
 
-        message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
-        return result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
+        if (result.isValido()) {
+            message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
+            result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
+        }
+        else {
+            result.typeResult(AETypeResult.error);
+        }
+
+        return result;
     }
 
     public AEntity creaPrima(int numeroProgressivo) {

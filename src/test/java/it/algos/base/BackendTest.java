@@ -556,6 +556,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         else {
             logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
         }
+        assertTrue(ottenutoRisultato.isValido());
     }
 
 

@@ -579,7 +579,10 @@ public abstract class CrudBackend extends AbstractService {
                 result = resetOnlyEmpty().method("resetForcing");
                 elementi = textService.format(result.getIntValue());
                 message = String.format("La collection '%s' della classe [%s] esisteva ma è stata cancellata e i dati sono stati ricreati. Contiene %s elementi.", collectionName, clazzName, elementi);
-                return result.validMessage(message);
+                if (result.isValido()) {
+                    result.validMessage(message);
+                }
+                return result;
             }
             else {
                 message = String.format("Non sono riuscito a cancellare la collection '%s' della classe [%s]", collectionName, clazzName);

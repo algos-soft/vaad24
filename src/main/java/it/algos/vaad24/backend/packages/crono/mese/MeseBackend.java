@@ -134,6 +134,7 @@ public class MeseBackend extends CrudBackend {
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             mappa = resourceService.leggeMappa(nomeFileCSVSulServerAlgos);
             if (mappa != null) {
+                result.setValido(true);
                 lista = new ArrayList<>();
 
                 for (String key : mappa.keySet()) {
@@ -173,6 +174,7 @@ public class MeseBackend extends CrudBackend {
                     }
                     else {
                         logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
+                        result.setValido(false);
                     }
                 }
                 result.setIntValue(lista.size());
@@ -186,8 +188,15 @@ public class MeseBackend extends CrudBackend {
             return result;
         }
 
-        message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
-        return result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
+        if (result.isValido()) {
+            message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
+            result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
+        }
+        else {
+            result.typeResult(AETypeResult.error);
+        }
+
+        return result;
     }
 
 }// end of crud backend class
