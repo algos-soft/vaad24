@@ -4,7 +4,6 @@ import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
-import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -26,7 +25,6 @@ import java.util.*;
  * Date: Tue, 13-Dec-2022
  * Time: 11:36
  */
-@SpringComponent
 @Route(value = VaadCost.TAG_UTILITY, layout = MainLayout.class)
 //@RouteAlias(value = TAG_ROUTE_ALIAS_PARTE_PER_PRIMA, layout = MainLayout.class)
 //@CssImport("./styles/shared-styles.css")

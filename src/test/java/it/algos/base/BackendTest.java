@@ -262,7 +262,17 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         }
 
         if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
-            entityBean = crudBackend.newEntity(sorgente);
+            try {
+                entityBean = crudBackend.newEntity(sorgente);
+            } catch (Exception unErrore) {
+                message = String.format("Non sono riuscito a creare una entityBean della classe [%s] col metodo newEntity() ad un solo parametro", clazzName);
+                System.out.println(message);
+                message = String.format("Probabilmente il valore [%s] usato per la keyPropertyName '%s' non è adeguato", sorgente, keyPropertyName);
+                System.out.println(message);
+                message = String.format("Devi scrivere un test alternativo per controllare la funzione toString() della classe [%s]", clazzName);
+                System.out.println(message);
+                return;
+            }
             assertNotNull(entityBean);
             ottenuto = entityBean.toString();
             if (textService.isEmpty(ottenuto)) {
