@@ -327,7 +327,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         }
 
         if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
-            entityBean = crudBackend.newEntity(sorgente);
+            entityBean = crudBackend.newEntity(getParamEsistente());
             assertNotNull(entityBean);
             ottenuto = entityBean.id;
             ottenuto2 = reflectionService.getPropertyValueStr(entityBean, keyPropertyName);
@@ -400,87 +400,87 @@ public abstract class BackendTest extends AlgosIntegrationTest {
             return;
         }
 
-        String nomeOriginale = "Topo Lino";
-        String keyID = "topolino";
-        String nomeModificato = "Giuseppe";
+        sorgente = "Topo Lino";
+        previsto = "topolino";
+        previsto2 = "Giuseppe";
 
-        ottenutoBooleano = crudBackend.isExistId(nomeOriginale);
+        ottenutoBooleano = crudBackend.isExistId(sorgente);
         assertFalse(ottenutoBooleano);
-        message = String.format("1) isExistId -> Nella collection '%s' non esiste (false) la entity [%s]", collectionName, nomeOriginale);
+        message = String.format("1) isExistId -> Nella collection '%s' non esiste (false) la entity [%s]", collectionName, sorgente);
         System.out.println(message);
 
-        ottenutoBooleano = crudBackend.creaIfNotExist(nomeOriginale);
+        ottenutoBooleano = crudBackend.creaIfNotExist(sorgente);
         assertTrue(ottenutoBooleano);
-        message = String.format("2) creaIfNotExist -> Nella collection '%s' è stata creata (true) la entity [%s].%s che prima non esisteva", collectionName, keyID, nomeOriginale);
+        message = String.format("2) creaIfNotExist -> Nella collection '%s' è stata creata (true) la entity [%s].%s che prima non esisteva", collectionName, previsto, sorgente);
         System.out.println(message);
 
-        ottenutoBooleano = crudBackend.isExistId(keyID);
+        ottenutoBooleano = crudBackend.isExistId(previsto);
         assertTrue(ottenutoBooleano);
-        message = String.format("3) isExistId -> Controllo l'esistenza (true) della entity [%s].%s tramite l'ID", keyID, nomeOriginale);
+        message = String.format("3) isExistId -> Controllo l'esistenza (true) della entity [%s].%s tramite l'ID", previsto, sorgente);
         System.out.println(message);
 
         System.out.println(VUOTA);
 
-        ottenutoBooleano = crudBackend.creaIfNotExist(nomeOriginale);
+        ottenutoBooleano = crudBackend.creaIfNotExist(sorgente);
         assertFalse(ottenutoBooleano);
-        message = String.format("4) creaIfNotExist -> La entity [%s].%s esisteva già e non è stata creata (false)", keyID, nomeOriginale);
+        message = String.format("4) creaIfNotExist -> La entity [%s].%s esisteva già e non è stata creata (false)", previsto, sorgente);
         System.out.println(message);
 
         System.out.println(VUOTA);
 
-        ottenutoBooleano = crudBackend.isExistId(keyID);
+        ottenutoBooleano = crudBackend.isExistId(previsto);
         assertTrue(ottenutoBooleano);
-        message = String.format("5) isExistId -> Controllo l'esistenza (true) della entity [%s].%s tramite l'ID", keyID, nomeOriginale);
+        message = String.format("5) isExistId -> Controllo l'esistenza (true) della entity [%s].%s tramite l'ID", previsto, sorgente);
         System.out.println(message);
-        ottenutoBooleano = crudBackend.isExistKey(nomeOriginale);
-        message = String.format("6) isExistKey -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        ottenutoBooleano = crudBackend.isExistKey(sorgente);
+        message = String.format("6) isExistKey -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", previsto, sorgente, sorgente, keyPropertyName);
         assertTrue(ottenutoBooleano);
         System.out.println(message);
-        ottenutoBooleano = crudBackend.isExistKey(nomeModificato);
+        ottenutoBooleano = crudBackend.isExistKey(previsto2);
         assertFalse(ottenutoBooleano);
-        message = String.format("7) isExistKey -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
+        message = String.format("7) isExistKey -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", previsto, previsto2, previsto2, keyPropertyName);
         System.out.println(message);
-        ottenutoBooleano = crudBackend.isExistProperty(keyPropertyName, nomeOriginale);
-        message = String.format("8) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", keyID, nomeModificato, nomeOriginale, keyPropertyName);
+        ottenutoBooleano = crudBackend.isExistProperty(keyPropertyName, sorgente);
+        message = String.format("8) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", previsto, previsto2, sorgente, keyPropertyName);
         assertTrue(ottenutoBooleano);
         System.out.println(message);
 
-        entityBean = crudBackend.findById(keyID);
+        entityBean = crudBackend.findById(previsto);
         assertNotNull(entityBean);
-        message = String.format("9) findById -> Recupero la entity [%s].%s dalla keyID", keyID, nomeOriginale);
+        message = String.format("9) findById -> Recupero la entity [%s].%s dalla keyID", previsto, sorgente);
         System.out.println(message);
 
-        entityBean = crudBackend.findByKey(nomeOriginale);
+        entityBean = crudBackend.findByKey(sorgente);
         assertNotNull(entityBean);
-        message = String.format("10) findByKey -> Recupero la entity [%s].%s dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        message = String.format("10) findByKey -> Recupero la entity [%s].%s dal valore '%s' della keyProperty [%s]", previsto, sorgente, sorgente, keyPropertyName);
         System.out.println(message);
-        entityBean = crudBackend.findByProperty(keyPropertyName, nomeOriginale);
+        entityBean = crudBackend.findByProperty(keyPropertyName, sorgente);
         assertNotNull(entityBean);
-        message = String.format("11) findByProperty -> Recupero la entity [%s].%s dal valore '%s' della property [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        message = String.format("11) findByProperty -> Recupero la entity [%s].%s dal valore '%s' della property [%s]", previsto, sorgente, sorgente, keyPropertyName);
         System.out.println(message);
 
         System.out.println(VUOTA);
 
-        reflectionService.setPropertyValue(entityBean, keyPropertyName, nomeModificato);
+        reflectionService.setPropertyValue(entityBean, keyPropertyName, previsto2);
         entityBean = crudBackend.save(entityBean);
         assertNotNull(entityBean);
-        assertEquals(nomeModificato, reflectionService.getPropertyValue(entityBean, keyPropertyName));
-        entityBean = crudBackend.findById(keyID);
+        assertEquals(previsto2, reflectionService.getPropertyValue(entityBean, keyPropertyName));
+        entityBean = crudBackend.findById(previsto);
         assertNotNull(entityBean);
-        assertEquals(nomeModificato, reflectionService.getPropertyValue(entityBean, keyPropertyName));
-        message = String.format("12) save -> Modifica la entity [%s].%s in [%s].%s", keyID, nomeOriginale, keyID, nomeModificato);
+        assertEquals(previsto2, reflectionService.getPropertyValue(entityBean, keyPropertyName));
+        message = String.format("12) save -> Modifica la entity [%s].%s in [%s].%s", previsto, sorgente, previsto, previsto2);
         System.out.println(message);
 
-        ottenutoBooleano = crudBackend.isExistKey(nomeOriginale);
-        message = String.format("13) isExistKey -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeOriginale, nomeOriginale, keyPropertyName);
+        ottenutoBooleano = crudBackend.isExistKey(sorgente);
+        message = String.format("13) isExistKey -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", previsto, sorgente, sorgente, keyPropertyName);
         assertFalse(ottenutoBooleano);
         System.out.println(message);
-        ottenutoBooleano = crudBackend.isExistKey(nomeModificato);
+        ottenutoBooleano = crudBackend.isExistKey(previsto2);
         assertTrue(ottenutoBooleano);
-        message = String.format("14) isExistKey -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
+        message = String.format("14) isExistKey -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", previsto, previsto2, previsto2, keyPropertyName);
         System.out.println(message);
-        ottenutoBooleano = crudBackend.isExistProperty(keyPropertyName, nomeModificato);
-        message = String.format("15) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", keyID, nomeModificato, nomeModificato, keyPropertyName);
+        ottenutoBooleano = crudBackend.isExistProperty(keyPropertyName, previsto2);
+        message = String.format("15) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", previsto, previsto2, previsto2, keyPropertyName);
         assertTrue(ottenutoBooleano);
         System.out.println(message);
 
@@ -488,11 +488,11 @@ public abstract class BackendTest extends AlgosIntegrationTest {
 
         ottenutoBooleano = crudBackend.delete(entityBean);
         assertTrue(ottenutoBooleano);
-        message = String.format("16) delete -> Cancello la entity [%s].%s", keyID, nomeModificato);
+        message = String.format("16) delete -> Cancello la entity [%s].%s", previsto, previsto2);
         System.out.println(message);
 
-        ottenutoBooleano = crudBackend.isExistId(keyID);
-        message = String.format("17) isExistId -> Alla fine, nella collection '%s' non esiste più la entity [%s] che è stata cancellata", collectionName, keyID);
+        ottenutoBooleano = crudBackend.isExistId(previsto);
+        message = String.format("17) isExistId -> Alla fine, nella collection '%s' non esiste più la entity [%s] che è stata cancellata", collectionName, previsto);
         System.out.println(message);
     }
 
@@ -516,14 +516,17 @@ public abstract class BackendTest extends AlgosIntegrationTest {
 
         ottenutoRisultato = crudBackend.resetOnlyEmpty();
         assertNotNull(ottenutoRisultato);
-
         if (ottenutoRisultato.isValido()) {
             System.out.println(ottenutoRisultato.getMessage());
             printRisultato(ottenutoRisultato);
+
+            System.out.println(VUOTA);
+            printSubLista(ottenutoRisultato.getLista());
         }
         else {
             logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
         }
+        assertTrue(ottenutoRisultato.isValido());
     }
 
 
@@ -559,6 +562,9 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         assertTrue(ottenutoRisultato.isValido());
     }
 
+    protected Object getParamEsistente() {
+        return sorgente;
+    }
 
     /**
      * Qui passa al termine di ogni singolo test <br>
