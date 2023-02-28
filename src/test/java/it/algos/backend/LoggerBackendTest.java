@@ -37,4 +37,9 @@ public class LoggerBackendTest extends BackendTest {
         super.setUpAll();
     }
 
+    @BeforeEach
+    protected void setUpEach() {
+        super.setUpEach();
+    }
+
 }

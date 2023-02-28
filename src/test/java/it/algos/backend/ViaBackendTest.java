@@ -38,4 +38,9 @@ public class ViaBackendTest extends BackendTest {
         super.setUpAll();
     }
 
+    @BeforeEach
+    protected void setUpEach() {
+        super.setUpEach();
+    }
+
 }

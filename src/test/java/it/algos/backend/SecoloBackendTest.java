@@ -39,6 +39,10 @@ public class SecoloBackendTest extends BackendTest {
         super.setUpAll();
     }
 
+    @BeforeEach
+    protected void setUpEach() {
+        super.setUpEach();
+    }
 
 
     @Test

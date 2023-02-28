@@ -61,6 +61,10 @@ public class AnnoBackendTest extends BackendTest {
         backend.secoloBackend.textService = textService;
     }
 
+    @BeforeEach
+    protected void setUpEach() {
+        super.setUpEach();
+    }
 
     @Test
     @Order(51)

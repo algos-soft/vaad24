@@ -77,6 +77,10 @@ public class GiornoBackendTest extends BackendTest {
         backend.meseBackend.textService = textService;
     }
 
+    @BeforeEach
+    protected void setUpEach() {
+        super.setUpEach();
+    }
 
     @Test
     @Order(51)
