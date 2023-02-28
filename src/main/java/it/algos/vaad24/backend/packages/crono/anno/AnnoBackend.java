@@ -203,15 +203,7 @@ public class AnnoBackend extends CrudBackend {
             return result.fine();
         }
 
-        if (result.isValido()) {
-            message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
-            result.errorMessage(VUOTA).fine().eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
-        }
-        else {
-            result.typeResult(AETypeResult.error).fine();
-        }
-
-        return result.fine();
+        return super.fixResult(result, clazzName, collectionName, lista);
     }
 
     public AEntity creaPrima(int numeroProgressivo) {

@@ -1,6 +1,5 @@
 package it.algos.vaad24.backend.packages.anagrafica;
 
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -73,7 +72,7 @@ public class ViaBackend extends CrudBackend {
         Map<String, List<String>> mappa;
         List<String> riga;
         String nome;
-        List<AEntity> lista;
+        List<AEntity> lista = null;
         AEntity entityBean = null;
         String message;
 
@@ -101,7 +100,7 @@ public class ViaBackend extends CrudBackend {
                         result.setValido(false);
                     }
                 }
-                if (lista.size()>0) {
+                if (lista.size() > 0) {
                     result.setIntValue(lista.size());
                     result.setLista(lista);
                 }
@@ -119,15 +118,7 @@ public class ViaBackend extends CrudBackend {
             return result.fine();
         }
 
-        if (result.isValido()) {
-            message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
-            result.errorMessage(VUOTA).fine().eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
-        }
-        else {
-            result.typeResult(AETypeResult.error).fine();
-        }
-
-        return result.fine();
+        return super.fixResult(result, clazzName, collectionName, lista);
     }
 
 }// end of crud backend class

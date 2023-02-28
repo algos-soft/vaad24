@@ -114,13 +114,15 @@ public abstract class CrudBackend extends AbstractService {
     public boolean creaIfNotExist(final Object keyPropertyValue) {
         return insert(newEntity(keyPropertyValue)) != null;
     }
+
     public boolean creaIfNotExist(final String keyPropertyValue) {
         return insert(newEntity(keyPropertyValue)) != null;
     }
 
     public AEntity newEntity(Object keyPropertyValue) {
-        return newEntity((String)keyPropertyValue);
+        return newEntity((String) keyPropertyValue);
     }
+
     public AEntity newEntity(String keyPropertyValue) {
         return null;
     }
@@ -630,9 +632,19 @@ public abstract class CrudBackend extends AbstractService {
     }
 
     @Deprecated
-    public AResult fixResult(AResult result) {
-        String message = String.format(" %d elementi.", count());
-        return result.addValidMessage(message).intValue(count());
+    public AResult fixResult(AResult result, String clazzName, String collectionName, List<AEntity> lista) {
+        String message;
+
+        if (result.isValido()) {
+            message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. ", collectionName, clazzName);
+            message += String.format("Contiene %s elementi.", lista != null ? lista.size() : "0");
+            result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
+        }
+        else {
+            result.typeResult(AETypeResult.error);
+        }
+
+        return result.fine();
     }
 
     /**
