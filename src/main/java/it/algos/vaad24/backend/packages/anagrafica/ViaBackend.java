@@ -89,7 +89,7 @@ public class ViaBackend extends CrudBackend {
                         nome = riga.get(0);
                     }
                     else {
-                        return result.errorMessage("I dati non sono congruenti");
+                        return result.errorMessage("I dati non sono congruenti").fine();
                     }
 
                     entityBean = insert(newEntity(nome));
@@ -108,26 +108,26 @@ public class ViaBackend extends CrudBackend {
                 else {
                     result.typeResult(AETypeResult.error);
                     message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetOnlyEmpty()", collectionName, clazzName);
-                    return result.errorMessage(message);
+                    return result.errorMessage(message).fine();
                 }
             }
             else {
-                return result.errorMessage("Non ho trovato il file sul server");
+                return result.errorMessage("Non ho trovato il file sul server").fine();
             }
         }
         else {
-            return result;
+            return result.fine();
         }
 
         if (result.isValido()) {
             message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
-            result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
+            result.errorMessage(VUOTA).fine().eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
         }
         else {
-            result.typeResult(AETypeResult.error);
+            result.typeResult(AETypeResult.error).fine();
         }
 
-        return result;
+        return result.fine();
     }
 
 }// end of crud backend class

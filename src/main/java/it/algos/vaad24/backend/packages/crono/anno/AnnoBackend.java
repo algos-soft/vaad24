@@ -160,7 +160,7 @@ public class AnnoBackend extends CrudBackend {
 
         if (secoloBackend.count() < 1) {
             logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Secolo'")).usaDb());
-            return result;
+            return result.fine();
         }
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
@@ -196,22 +196,22 @@ public class AnnoBackend extends CrudBackend {
             else {
                 result.typeResult(AETypeResult.error);
                 message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetOnlyEmpty()", collectionName, clazzName);
-                return result.errorMessage(message);
+                return result.errorMessage(message).fine();
             }
         }
         else {
-            return result;
+            return result.fine();
         }
 
         if (result.isValido()) {
             message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
-            result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
+            result.errorMessage(VUOTA).fine().eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
         }
         else {
-            result.typeResult(AETypeResult.error);
+            result.typeResult(AETypeResult.error).fine();
         }
 
-        return result;
+        return result.fine();
     }
 
     public AEntity creaPrima(int numeroProgressivo) {

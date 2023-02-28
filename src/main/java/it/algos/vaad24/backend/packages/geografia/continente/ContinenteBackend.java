@@ -149,22 +149,22 @@ public class ContinenteBackend extends CrudBackend {
                 }
             }
             else {
-                return result;
+                return result.fine();
             }
         }
         else {
-            return result;
+            return result.fine();
         }
 
         if (result.isValido()) {
             message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
-            result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
+            result.errorMessage(VUOTA).fine().eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
         }
         else {
-            result.typeResult(AETypeResult.error);
+            result.typeResult(AETypeResult.error).fine();
         }
 
-        return result;
+        return result.fine();
     }
 
 }// end of crud backend class

@@ -87,7 +87,7 @@ public class VaadData extends AbstractService {
         logger.info(new WrapLog().message(message).type(AETypeLog.info));
 
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
-        resetData(VaadVar.moduloVaadin24);
+//        resetData(VaadVar.moduloVaadin24);
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
         resetData(VaadVar.projectNameModulo);
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));

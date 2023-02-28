@@ -643,7 +643,7 @@ public abstract class AlgosUnitTest {
                 System.out.println(String.format("%s%s (%d): %s", TAB, key, ((List<String>) mappa.get(key)).size(), mappa.get(key)));
             }
         }
-        System.out.println(String.format("Risultato ottenuto in %s", dateService.deltaText(inizio)));
+        System.out.println(String.format("Tempo: %s", result.deltaSec()));
     }
 
     protected String getSimpleName(final Class clazz) {

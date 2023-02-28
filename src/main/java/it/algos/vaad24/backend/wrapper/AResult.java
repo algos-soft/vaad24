@@ -20,7 +20,6 @@ import java.util.*;
 @Component
 public class AResult {
 
-    @Deprecated
     private boolean valido;
 
     private boolean eseguito;
@@ -72,6 +71,10 @@ public class AResult {
 
     private long longValue = 0;
 
+    private long inizio = 0;
+
+    private long fine = 0;
+
     private String txtValue = VUOTA;
 
     private List lista = null;
@@ -96,10 +99,11 @@ public class AResult {
             this.errorMessage = message;
         }
         this.intValue = intValue;
+        this.inizio = System.currentTimeMillis();
     }
 
     public static AResult build() {
-        return new AResult().nonEseguito().typeResult(AETypeResult.indeterminato);
+        return new AResult().inizio().nonEseguito().typeResult(AETypeResult.indeterminato);
     }
 
     public static AResult valido() {
@@ -225,6 +229,15 @@ public class AResult {
         return this;
     }
 
+    public AResult inizio() {
+        this.inizio = System.currentTimeMillis();
+        return this;
+    }
+
+    public AResult fine() {
+        this.fine = System.currentTimeMillis();
+        return this;
+    }
 
     public AResult typeLog(AETypeLog typeLog) {
         this.typeLog = typeLog;
@@ -283,6 +296,7 @@ public class AResult {
         this.setValido(false);
         return this;
     }
+
     public AResult exception(final AlgosException exception) {
         this.exception = exception;
         return this;
@@ -339,6 +353,22 @@ public class AResult {
 
     public void setIntValue(int intValue) {
         this.intValue = intValue;
+    }
+
+    public long getInizio() {
+        return inizio;
+    }
+
+    public void setInizio(long inizio) {
+        this.inizio = inizio;
+    }
+
+    public long getFine() {
+        return fine;
+    }
+
+    public void setFine(long fine) {
+        this.fine = fine;
     }
 
     public long getLongValue() {
@@ -493,6 +523,27 @@ public class AResult {
 
     public void setTagCode(String tagCode) {
         this.tagCode = tagCode;
+    }
+
+    public int durataSec() {
+        long durataLong;
+
+        if (inizio > 0 && fine > 0) {
+            durataLong = fine - inizio;
+            if (durataLong > 1000) {
+                return (int) durataLong / 1000;
+            }
+            else {
+                return 0;
+            }
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public String deltaSec() {
+        return eseguito ? String.format("Eseguito in circa %s secondi", durataSec()) : "Non eseguito.";
     }
 
     public void print(final LogService logger, final AETypeLog typeLog) {
