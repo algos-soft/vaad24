@@ -632,12 +632,12 @@ public abstract class CrudBackend extends AbstractService {
     }
 
     @Deprecated
-    public AResult fixResult(AResult result, String clazzName, String collectionName, List<AEntity> lista) {
+    public AResult fixResult(AResult result, String clazzName, String collectionName, int numeroElementi) {
         String message;
 
         if (result.isValido()) {
             message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. ", collectionName, clazzName);
-            message += String.format("Contiene %s elementi.", lista != null ? lista.size() : "0");
+            message += String.format("Contiene %s elementi.", textService.format(numeroElementi));
             result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
         }
         else {

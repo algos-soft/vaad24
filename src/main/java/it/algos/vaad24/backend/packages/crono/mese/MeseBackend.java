@@ -195,7 +195,7 @@ public class MeseBackend extends CrudBackend {
             return result.fine();
         }
 
-        return super.fixResult(result, clazzName, collectionName, lista);
+        return super.fixResult(result, clazzName, collectionName, lista.size());
     }
 
 }// end of crud backend class
