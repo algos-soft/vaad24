@@ -1,6 +1,5 @@
 package it.algos.vaad24simple.backend.packages.prova;
 
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.logic.*;
@@ -94,22 +93,18 @@ public class ProvaBackend extends CrudBackend {
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
         List<AEntity> lista;
-        String message;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             lista = new ArrayList<>();
             lista.add(insert(newEntity("Aldo", null)));
             lista.add(insert(newEntity("Giovanni", null)));
             lista.add(insert(newEntity("Giacomo", null)));
-            result.setIntValue(lista.size());
-            result.setLista(lista);
+
+            return super.fixResult(result, clazzName, collectionName, lista);
         }
         else {
-            return result;
+            return result.fine();
         }
-
-        message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, lista.size());
-        return result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
     }
 
 }// end of crud backend class
