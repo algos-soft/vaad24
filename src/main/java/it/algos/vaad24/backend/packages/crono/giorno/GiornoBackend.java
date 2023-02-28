@@ -20,13 +20,6 @@ import java.util.stream.*;
  * User: gac
  * Date: lun, 02-mag-2022
  * Time: 08:26
- * <p>
- * Service di una entityClazz specifica e di un package <br>
- * Garantisce i metodi di collegamento per accedere al database <br>
- * Non mantiene lo stato di una istanza entityBean <br>
- * Mantiene lo stato della entityClazz <br>
- * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
 public class GiornoBackend extends CrudBackend {
@@ -39,19 +32,9 @@ public class GiornoBackend extends CrudBackend {
         super(Giorno.class);
     }
 
-    //    public boolean crea(final int ordine, final String nome, final Mese mese, final int trascorsi, final int mancanti) {
-    //        Giorno giorno = newEntity(ordine, nome, mese, trascorsi, mancanti);
-    //        return crudRepository.insert(giorno) != null;
-    //    }
-    //
-    //    public boolean creaIfNotExist(final String keyPropertyValue) {
-    //        return insert(newEntity(0, keyPropertyValue, null, 0, 0)) != null;
-    //    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
      *
      * @return la nuova entity appena creata (non salvata)
      */
@@ -115,21 +98,22 @@ public class GiornoBackend extends CrudBackend {
         return findByProperty(FIELD_NAME_ORDINE, ordine);
     }
 
+    public List<Giorno> findAllByMese(Mese mese) {
+        return findAllBeanProperty("mese", mese);
+    }
+
     public List<String> findAllStringKey() {
         return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
     }
+
     public List<String> findAllStringKeyReverseOrder() {
         return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
     }
 
-    public List<String> findAllNomi() {
-        return this.findAllStringKey();
-    }
+    //    public List<String> findAllNomi() {
+    //        return this.findAllStringKey();
+    //    }
 
-
-    public List<Giorno> findAllByMese(Mese mese) {
-        return findAllBeanProperty("mese", mese);
-    }
 
     public List<String> findAllNomiByMese(Mese mese) {
         return findAllByMese(mese).stream()
@@ -195,21 +179,12 @@ public class GiornoBackend extends CrudBackend {
                     result.setValido(false);
                 }
             }
-            if (lista.size()>0) {
-                result.setIntValue(lista.size());
-                result.setLista(lista);
-            }
-            else {
-                result.typeResult(AETypeResult.error);
-                message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetOnlyEmpty()", collectionName, clazzName);
-                return result.errorMessage(message).fine();
-            }
+
+            return super.fixResult(result, clazzName, collectionName, lista);
         }
         else {
             return result.fine();
         }
-
-        return super.fixResult(result, clazzName, collectionName, lista.size());
     }
 
 }// end of crud backend class

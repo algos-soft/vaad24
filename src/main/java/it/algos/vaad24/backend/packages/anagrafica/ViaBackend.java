@@ -100,15 +100,7 @@ public class ViaBackend extends CrudBackend {
                         result.setValido(false);
                     }
                 }
-                if (lista.size() > 0) {
-                    result.setIntValue(lista.size());
-                    result.setLista(lista);
-                }
-                else {
-                    result.typeResult(AETypeResult.error);
-                    message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetOnlyEmpty()", collectionName, clazzName);
-                    return result.errorMessage(message).fine();
-                }
+                return super.fixResult(result, clazzName, collectionName, lista);
             }
             else {
                 return result.errorMessage("Non ho trovato il file sul server").fine();
@@ -117,8 +109,6 @@ public class ViaBackend extends CrudBackend {
         else {
             return result.fine();
         }
-
-        return super.fixResult(result, clazzName, collectionName, lista.size());
     }
 
 }// end of crud backend class

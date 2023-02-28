@@ -631,7 +631,22 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
-    @Deprecated
+    public AResult fixResult(AResult result, String clazzName, String collectionName, List lista) {
+        String message;
+
+        if (lista.size() > 0) {
+            result.setIntValue(lista.size());
+            result.setLista(lista);
+            return fixResult(result, clazzName, collectionName, lista.size());
+        }
+        else {
+            result.typeResult(AETypeResult.error);
+            message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetOnlyEmpty()", collectionName, clazzName);
+            return result.errorMessage(message).fine();
+        }
+
+    }
+
     public AResult fixResult(AResult result, String clazzName, String collectionName, int numeroElementi) {
         String message;
 
