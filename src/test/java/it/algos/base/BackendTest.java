@@ -496,6 +496,71 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         System.out.println(message);
     }
 
+    //Segnaposto
+    @Order(51)
+    void libero51() {
+    }
+
+    //Segnaposto
+    @Order(52)
+    void libero52() {
+    }
+
+
+    //Segnaposto
+    @Order(53)
+    void libero53() {
+    }
+
+    //Segnaposto
+    @Order(61)
+    void libero61() {
+    }
+
+    //Segnaposto
+    @Order(62)
+    void libero62() {
+    }
+
+
+    //Segnaposto
+    @Order(63)
+    void libero63() {
+    }
+
+
+    //Segnaposto
+    @Order(71)
+    void libero71() {
+    }
+
+    //Segnaposto
+    @Order(72)
+    void libero72() {
+    }
+
+
+    //Segnaposto
+    @Order(73)
+    void libero73() {
+    }
+
+
+    //Segnaposto
+    @Order(81)
+    void libero81() {
+    }
+
+    //Segnaposto
+    @Order(82)
+    void libero82() {
+    }
+
+
+    //Segnaposto
+    @Order(83)
+    void libero83() {
+    }
 
     @Test
     @Order(91)
