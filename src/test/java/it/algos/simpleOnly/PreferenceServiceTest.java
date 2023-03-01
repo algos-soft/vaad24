@@ -2,14 +2,13 @@ package it.algos.simpleOnly;
 
 import it.algos.*;
 import it.algos.base.*;
-import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24simple.backend.enumeration.*;
-import org.junit.*;
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;
 import org.springframework.boot.test.context.*;
@@ -85,7 +84,7 @@ public class PreferenceServiceTest extends AlgosIntegrationTest {
 
         matricePref = Pref.values();
 
-        Assert.assertNotNull(matricePref);
+        assertNotNull(matricePref);
         for (AIGenPref pref : matricePref) {
             System.out.println(pref.getKeyCode());
         }
@@ -128,7 +127,7 @@ public class PreferenceServiceTest extends AlgosIntegrationTest {
     @Test
     @Order(5)
     @DisplayName("5 - Pref di Simple (lista specifica getAllEnums)")
-    public void getAlddlEnums2() {
+    public void getAllEnums2() {
         System.out.println("5 - Pref di Simple (lista specifica getAllEnums)");
         System.out.println(VUOTA);
 
@@ -184,18 +183,180 @@ public class PreferenceServiceTest extends AlgosIntegrationTest {
         //        Assert.assertEquals(previsto, ottenuto);
     }
 
+    //    @Test
+    //    @Order(30)
+    //    @DisplayName("30 - Test enumeration")
+    //    public void enumeration() {
+    //        sorgente = "AEKeyFile.esistente";
+    //        Object alfa=   AEKeyFile.esistente;
+    //        Object istanza = appContext.getBean(sorgente);
+    //        Assert.assertNotNull(istanza);
+    //    }
+
+
     @Test
-    @Order(30)
-    @DisplayName("30 - Test enumeration")
-    public void enumeration() {
-        sorgente = "AEKeyFile.esistente";
-        Object alfa=   AEKeyFile.esistente;
-        Object istanza = appContext.getBean(sorgente);
-        Assert.assertNotNull(istanza);
+    @Order(51)
+    @DisplayName("51 - Preferenze dei vari type")
+    public void getString() {
+        System.out.println("51 - Preferenze dei vari type");
+        System.out.println(VUOTA);
+        List<AETypePref> listaAll;
+
+        listaPref = service.findAll();
+        assertNotNull(listaPref);
+        ottenutoIntero = listaPref.size();
+        assertTrue(ottenutoIntero > 0);
+        message = String.format("Ci sono in totale %d preferenze", ottenutoIntero);
+        System.out.println(message);
+
+        listaAll = AETypePref.getAllEnums();
+        for (AETypePref type : listaAll) {
+            listaPref = service.findAllByType(type);
+            assertNotNull(listaPref);
+            ottenutoIntero = listaPref.size();
+            message = String.format("Di cui %d di type %s", ottenutoIntero, type.name());
+            System.out.println(message);
+        }
     }
 
+    @Test
+    @Order(52)
+    @DisplayName("52 - Valori default per type")
+    public void is() {
+        System.out.println("52 - Valori default per type");
+        List<AETypePref> listaAll;
+
+        listaAll = AETypePref.getAllEnums();
+        for (AETypePref type : listaAll) {
+            listaPref = service.findAllByType(type);
+            assertNotNull(listaPref);
+            ottenutoIntero = listaPref.size();
+            System.out.println(VUOTA);
+            message = String.format("Le preferenze di type %s sono", type.name(), ottenutoIntero);
+            System.out.println(message);
+            for (AIGenPref pref : listaPref) {
+                System.out.print(pref.getKeyCode());
+                System.out.print(SPAZIO);
+                System.out.print(PARENTESI_TONDA_INI);
+                System.out.print(pref.getType().name());
+                System.out.print(PARENTESI_TONDA_END);
+                System.out.print(FORWARD);
+                message = switch (type) {
+                    case string:
+                        yield String.format("(%s) %s", "getStr", pref.getStr());
+                    case bool:
+                        yield String.format("(%s) %s", "is" , pref.is());
+                    case integer:
+                        yield String.format("(%s) %s", "getInt" , pref.getInt());
+                    case lungo:
+                        yield String.format("(%s) %s", "getDefaultValue" , pref.getDefaultValue());
+                    case decimal:
+                        yield String.format("(%s) %s", "getDecimal" , pref.getDecimal());
+                    case localdatetime:
+                        yield String.format("(%s) %s", "getDefaultValue" , pref.getDefaultValue());
+                    case localdate:
+                        yield String.format("(%s) %s", "getDefaultValue" , pref.getDefaultValue());
+                    case localtime:
+                        yield String.format("(%s) %s", "getDefaultValue" , pref.getDefaultValue());
+                    case email:
+                        yield String.format("(%s) %s", "getDefaultValue" , pref.getDefaultValue());
+                    case enumerationString:
+                        yield String.format("(%s) %s", "getDefaultValue" , pref.getDefaultValue());
+                    case enumerationType:
+                        yield String.format("(%s) %s", "getDefaultValue" , pref.getDefaultValue());
+                    case icona:
+                        yield String.format("(%s) %s", "getDefaultValue" , pref.getDefaultValue());
+                    case image:
+                        yield String.format("(%s) %s", "getDefaultValue" , pref.getDefaultValue());
+                    default:
+                        yield "Questo non c'è";
+                };
+                System.out.println(message);
+            }
+        }
+
+        //        listaPref = service.findAllByType(AETypePref.bool);
+        //        assertNotNull(listaPref);
+        //        ottenutoIntero = listaPref.size();
+        //        assertTrue(ottenutoIntero > 0);
+        //        message = String.format("Di cui %d di type boolean", ottenutoIntero);
+        //        System.out.println(message);
+
+        //        System.out.println(VUOTA);
+        //        System.out.println("Valori (Object) di default:");
+        //        for (AIGenPref pref : listaPref) {
+        //            System.out.print(pref.getKeyCode());
+        //            System.out.print(FORWARD);
+        //            System.out.println(pref.getDefaultValue());
+        //        }
+        //
+        //        System.out.println(VUOTA);
+        //        System.out.println("Valori (Object) correnti:");
+        //        for (AIGenPref pref : listaPref) {
+        //            System.out.print(pref.getKeyCode());
+        //            System.out.print(FORWARD);
+        //            System.out.println(pref.getValue());
+        //        }
+        //
+        //        System.out.println(VUOTA);
+        //        System.out.println("Valori (boolean) di default:");
+        //        for (AIGenPref pref : listaPref) {
+        //            System.out.print(pref.getKeyCode());
+        //            System.out.print(FORWARD);
+        //            System.out.println(pref.is());
+        //        }
+
+    }
+    //
+    //
+    //    @Test
+    //    @Order(53)
+    //    @DisplayName("53 - Preferenze type int")
+    //    public void getInt() {
+    //        System.out.println("53 - Preferenze type int");
+    //        System.out.println(VUOTA);
+    //
+    //        listaPref = service.findAll();
+    //        assertNotNull(listaPref);
+    //        ottenutoIntero = listaPref.size();
+    //        assertTrue(ottenutoIntero > 0);
+    //        message = String.format("Ci sono in totale %d preferenze", ottenutoIntero);
+    //        System.out.println(message);
+    //
+    //        listaPref = service.findAllByType(AETypePref.integer);
+    //        assertNotNull(listaPref);
+    //        ottenutoIntero = listaPref.size();
+    //        assertTrue(ottenutoIntero > 0);
+    //        message = String.format("Di cui %d di type Integer", ottenutoIntero);
+    //        System.out.println(message);
+    //
+    //        System.out.println(VUOTA);
+    //        System.out.println("Valori (Object) di default:");
+    //        for (AIGenPref pref : listaPref) {
+    //            System.out.print(pref.getKeyCode());
+    //            System.out.print(FORWARD);
+    //            System.out.println(pref.getDefaultValue());
+    //        }
+    //
+    //        System.out.println(VUOTA);
+    //        System.out.println("Valori (Object) correnti:");
+    //        for (AIGenPref pref : listaPref) {
+    //            System.out.print(pref.getKeyCode());
+    //            System.out.print(FORWARD);
+    //            System.out.println(pref.getValue());
+    //        }
+    //
+    //        System.out.println(VUOTA);
+    //        System.out.println("Valori (int) di default:");
+    //        for (AIGenPref pref : listaPref) {
+    //            System.out.print(pref.getKeyCode());
+    //            System.out.print(FORWARD);
+    //            System.out.println(pref.getInt());
+    //        }
+    //    }
+
     public void printPrefA(List lista) {
-        Assert.assertNotNull(lista);
+        assertNotNull(lista);
         if (lista.size() > 0) {
             message = String.format("Ci sono %s preferenze", lista.size());
             System.out.println(message);

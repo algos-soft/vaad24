@@ -12,7 +12,9 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
 
+import java.math.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project vaadin23
@@ -110,6 +112,22 @@ public class PreferenceService extends AbstractService {
         else {
             log(type, keyCode, "getInt");
             return 0;
+        }
+    }
+
+    public BigDecimal getDecimal(AETypePref type, String keyCode) {
+        Object obj;
+
+        if (type == AETypePref.decimal) {
+            obj = getValue(type, keyCode);
+            if (obj instanceof BigDecimal value) {
+                return value;
+            }
+            return null;
+        }
+        else {
+            log(type, keyCode, "getDecimal");
+            return null;
         }
     }
 
@@ -240,5 +258,12 @@ public class PreferenceService extends AbstractService {
         return valoreCorrenteStandard;
     }
 
+    public List<AIGenPref> findAll() {
+        return VaadVar.prefList;
+    }
+
+    public List<AIGenPref> findAllByType(AETypePref type) {
+        return findAll().stream().filter(pref -> pref.getType() == type).collect(Collectors.toList());
+    }
 
 }

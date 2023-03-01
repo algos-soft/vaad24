@@ -1,14 +1,15 @@
 package it.algos.vaad24simple.backend.enumeration;
 
-import static it.algos.vaad24simple.backend.boot.SimpleCost.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.service.*;
+import static it.algos.vaad24simple.backend.boot.SimpleCost.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
 import javax.annotation.*;
+import java.math.*;
 import java.util.*;
 
 /**
@@ -22,7 +23,8 @@ public enum SPref implements AIGenPref {
     string("string", AETypePref.string, "stringa", DESCRIZIONE_PREFERENZA + "stringa"),
     bool("bool", AETypePref.bool, false, DESCRIZIONE_PREFERENZA + "bool"),
     integer("integer", AETypePref.integer, 0, DESCRIZIONE_PREFERENZA + "integer", true),
-    lungo("lungo", AETypePref.lungo, 0L, DESCRIZIONE_PREFERENZA + "lungo"),
+    lungo("lungo", AETypePref.lungo, 8540L, DESCRIZIONE_PREFERENZA + "lungo"),
+    decimal("decimal", AETypePref.decimal, new BigDecimal(94.75), DESCRIZIONE_PREFERENZA + "decimal"),
     localDateTime("localDateTime", AETypePref.localdatetime, ROOT_DATA_TIME, DESCRIZIONE_PREFERENZA + "localDateTime", true),
     localDate("localDate", AETypePref.localdate, ROOT_DATA, DESCRIZIONE_PREFERENZA + "localDate", true),
     localTime("localTime", AETypePref.localtime, ROOT_TIME, DESCRIZIONE_PREFERENZA + "localTime", true),
@@ -160,6 +162,11 @@ public enum SPref implements AIGenPref {
     @Override
     public int getInt() {
         return preferenceService.getInt(type, keyCode);
+    }
+
+    @Override
+    public BigDecimal getDecimal() {
+        return preferenceService.getDecimal(type, keyCode);
     }
 
     @Override

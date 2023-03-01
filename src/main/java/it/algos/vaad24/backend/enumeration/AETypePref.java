@@ -5,6 +5,7 @@ import com.google.common.primitives.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.interfaces.*;
 
+import java.math.*;
 import java.nio.*;
 import java.nio.charset.*;
 import java.time.*;
@@ -132,6 +133,86 @@ public enum AETypePref implements AITypePref {
         }
     },// end of single enumeration
 
+//    doppio("double", "black") {
+//        @Override
+//        public byte[] objectToBytes(Object obj) {
+//            byte[] bytes = new byte[0];
+//            if (obj instanceof Long lungo) {
+//                bytes = longToByteArray(lungo);
+//            }
+//            if (obj instanceof String) {
+//                bytes = longToByteArray(Long.valueOf((String) obj));
+//            }
+//
+//            return bytes;
+//        }
+//
+//        @Override
+//        public Double bytesToObject(byte[] bytes) {
+//            return byteArrayToD(bytes);
+//        }
+//
+//        @Override
+//        public String bytesToString(byte[] bytes) {
+//            return bytesToObject(bytes) + VUOTA;
+//        }
+//    },// end of single enumeration
+
+    decimal("decimale", "black") {
+        @Override
+        public byte[] objectToBytes(Object obj) {
+            byte[] bytes = new byte[0];
+            if (obj instanceof BigDecimal) {
+                BigDecimal bd = (BigDecimal) obj;
+                bytes = bigDecimalToByteArray(bd);
+            }// end of if cycle
+            return bytes;
+        }// end of method
+
+        @Override
+        public Object bytesToObject(byte[] bytes) {
+            return byteArrayToBigDecimal(bytes);
+        }// end of method
+
+        @Override
+        public String bytesToString(byte[] bytes) {
+            return bytesToObject(bytes) + VUOTA;
+        }
+    },// end of single enumeration
+
+    localdatetime("datatime", "Fuchsia") {
+        @Override
+        public byte[] objectToBytes(Object obj) {
+            byte[] bytes = new byte[0];
+            long millis;
+
+            if (obj instanceof LocalDateTime data) {
+                millis = data.toEpochSecond(ZoneOffset.UTC);
+                bytes = Longs.toByteArray(millis);
+            }
+            return bytes;
+        }
+
+
+        @Override
+        public LocalDateTime bytesToObject(byte[] bytes) {
+            LocalDateTime data = null;
+            long millis;
+
+            if (bytes != null && bytes.length > 0) {
+                millis = Longs.fromByteArray(bytes);
+                data = bytes.length > 0 ? LocalDateTime.ofEpochSecond(millis, 0, ZoneOffset.UTC) : null;
+            }
+
+            return data;
+        }
+
+        @Override
+        public String bytesToString(byte[] bytes) {
+            return bytesToObject(bytes).format(DateTimeFormatter.ofPattern("d-M-yy H:mm"));
+        }
+    },// end of single enumeration
+
     localdate("data", "Olive") {
         @Override
         public byte[] objectToBytes(Object obj) {
@@ -162,40 +243,6 @@ public enum AETypePref implements AITypePref {
         @Override
         public String bytesToString(byte[] bytes) {
             return bytesToObject(bytes).format(DateTimeFormatter.ofPattern("d MMM yyyy"));
-        }
-    },// end of single enumeration
-
-    localdatetime("datatime", "Fuchsia") {
-        @Override
-        public byte[] objectToBytes(Object obj) {
-            byte[] bytes = new byte[0];
-            long millis;
-
-            if (obj instanceof LocalDateTime data) {
-                millis = data.toEpochSecond(ZoneOffset.UTC);
-                bytes = Longs.toByteArray(millis);
-            }
-
-            return bytes;
-        }
-
-
-        @Override
-        public LocalDateTime bytesToObject(byte[] bytes) {
-            LocalDateTime data = null;
-            long millis;
-
-            if (bytes != null && bytes.length > 0) {
-                millis = Longs.fromByteArray(bytes);
-                data = bytes.length > 0 ? LocalDateTime.ofEpochSecond(millis, 0, ZoneOffset.UTC) : null;
-            }
-
-            return data;
-        }
-
-        @Override
-        public String bytesToString(byte[] bytes) {
-            return bytesToObject(bytes).format(DateTimeFormatter.ofPattern("d-M-yy H:mm"));
         }
     },// end of single enumeration
 
@@ -382,22 +429,6 @@ public enum AETypePref implements AITypePref {
     //        }// end of method
     //    },// end of single enumeration
 
-    //    decimal("decimale", AFieldType.lungo) {
-    //        @Override
-    //        public byte[] objectToBytes(Object obj) {
-    //            byte[] bytes = new byte[0];
-    //            if (obj instanceof BigDecimal) {
-    //                BigDecimal bd = (BigDecimal) obj;
-    //                bytes = LibByte.bigDecimalToByteArray(bd);
-    //            }// end of if cycle
-    //            return bytes;
-    //        }// end of method
-    //
-    //        @Override
-    //        public Object bytesToObject(byte[] bytes) {
-    //            return LibByte.byteArrayToBigDecimal(bytes);
-    //        }// end of method
-    //    },// end of single enumeration
 
     //    bytes("blog", EAFieldType.json);
 
@@ -452,6 +483,19 @@ public enum AETypePref implements AITypePref {
         buffer.put(bytes, 0, bytes.length);
         buffer.flip();
         return buffer.getLong();
+    }// end of static method
+
+
+    public static byte[] bigDecimalToByteArray(BigDecimal bd) {
+        double value = bd.doubleValue();
+        byte[] bytes = new byte[8];
+        ByteBuffer.wrap(bytes).putDouble(value);
+        return bytes;
+    }// end of static method
+
+    public static BigDecimal byteArrayToBigDecimal(byte[] bytes) {
+        double dbl = ByteBuffer.wrap(bytes).getDouble();
+        return new BigDecimal(dbl);
     }// end of static method
 
     public static List<AETypePref> getAllEnums() {

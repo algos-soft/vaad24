@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
 import javax.annotation.*;
+import java.math.*;
 import java.util.*;
 
 /**
@@ -152,6 +153,11 @@ public enum Pref implements AIGenPref {
     @Override
     public int getInt() {
         return preferenceService.getInt(type, keyCode);
+    }
+
+    @Override
+    public BigDecimal getDecimal() {
+        return preferenceService.getDecimal(type, keyCode);
     }
 
     @Override

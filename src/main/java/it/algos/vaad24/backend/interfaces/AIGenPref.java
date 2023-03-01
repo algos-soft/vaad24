@@ -3,6 +3,8 @@ package it.algos.vaad24.backend.interfaces;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.service.*;
 
+import java.math.*;
+
 /**
  * Project vaadin23
  * Created by Algos
@@ -25,6 +27,7 @@ public interface AIGenPref {
     boolean is();
 
     public int getInt();
+    public BigDecimal getDecimal();
 
     public String getEnumAll();
 
