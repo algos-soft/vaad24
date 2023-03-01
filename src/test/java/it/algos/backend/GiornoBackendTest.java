@@ -36,6 +36,9 @@ public class GiornoBackendTest extends BackendTest {
     @InjectMocks
     private MeseBackend meseBackend;
 
+    private List<Giorno> listaBeans;
+
+
     //--giorno
     //--esistente
     protected static Stream<Arguments> GIORNI() {
@@ -59,6 +62,7 @@ public class GiornoBackendTest extends BackendTest {
         assertNotNull(meseBackend);
         super.entityClazz = Giorno.class;
         super.crudBackend = backend;
+        super.typeBackend = TypeBackend.giorno;
         super.setUpAll();
     }
 
@@ -88,6 +92,7 @@ public class GiornoBackendTest extends BackendTest {
     @DisplayName("23 - findAll con sort specifico (discendente)")
     protected void findAllSort() {
         System.out.println("23 - findAll con sort specifico (discendente)");
+        System.out.println(VUOTA);
 
         sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
         listaBeans = crudBackend.findAllSort(sort);
@@ -95,7 +100,7 @@ public class GiornoBackendTest extends BackendTest {
         ottenutoIntero = listaBeans.size();
         message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
         System.out.println(message);
-        printSubLista(listaBeans);
+        printGiorni(listaBeans);
     }
 
 
@@ -124,16 +129,15 @@ public class GiornoBackendTest extends BackendTest {
     protected void findAllByMese() {
         System.out.println("52 - findAllByMese (entity)");
         System.out.println("Rimanda a findAllByProperty(FIELD_NAME_MESE, mese)");
-        List<Giorno> listaGiorni;
         int num = 3;
 
         for (Mese sorgente : meseBackend.findAllNoSort()) {
-            listaGiorni = backend.findAllByMese(sorgente);
-            assertNotNull(listaGiorni);
+            listaBeans = backend.findAllByMese(sorgente);
+            assertNotNull(listaBeans);
             System.out.println(VUOTA);
-            message = String.format("Nel mese di %s ci sono %s giorni. Mostro solo i primi %s", sorgente, textService.format(listaGiorni.size()),num);
+            message = String.format("Nel mese di %s ci sono %s giorni. Mostro solo i primi %s", sorgente, textService.format(listaBeans.size()), num);
             System.out.println(message);
-            printGiorni(listaGiorni.subList(0, num));
+            printGiorni(listaBeans.subList(0, num));
         }
     }
 
@@ -148,10 +152,10 @@ public class GiornoBackendTest extends BackendTest {
         for (Mese sorgente : meseBackend.findAllSortCorrente()) {
             listaStr = backend.findAllForNomeByMese(sorgente);
             assertNotNull(listaStr);
-            message = String.format("Nel mese di %s ci sono %s giorni. Mostro solo i primi %s", sorgente, textService.format(listaStr.size()),num);
+            message = String.format("Nel mese di %s ci sono %s giorni. Mostro solo i primi %s", sorgente, textService.format(listaStr.size()), num);
             System.out.println(VUOTA);
             System.out.println(message);
-            if (num>0) {
+            if (num > 0) {
                 print(listaStr.subList(0, num));
             }
         }
@@ -231,19 +235,5 @@ public class GiornoBackendTest extends BackendTest {
         System.out.println(VUOTA);
     }
 
-    void printGiorni(List<Giorno> listaGiorni) {
-        int k = 0;
-
-        for (Giorno giorno : listaGiorni) {
-            System.out.print(++k);
-            System.out.print(PARENTESI_TONDA_END);
-            System.out.print(SPAZIO);
-            System.out.print(giorno.nome);
-            System.out.print(SPAZIO);
-            System.out.print(giorno.trascorsi);
-            System.out.print(SPAZIO);
-            System.out.println(giorno.mancanti);
-        }
-    }
 
 }

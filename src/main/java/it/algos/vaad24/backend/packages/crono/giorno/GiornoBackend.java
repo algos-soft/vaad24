@@ -38,6 +38,7 @@ public class GiornoBackend extends CrudBackend {
      *
      * @return la nuova entity appena creata (non salvata)
      */
+    @Override
     public Giorno newEntity() {
         return newEntity(0, VUOTA, null, 0, 0);
     }
@@ -45,10 +46,9 @@ public class GiornoBackend extends CrudBackend {
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      *
-     * @param keyPropertyValue (obbligatorio, unico)
-     *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
+    @Override
     public Giorno newEntity(final String keyPropertyValue) {
         return newEntity(0, keyPropertyValue, null, 0, 0);
     }
@@ -100,12 +100,12 @@ public class GiornoBackend extends CrudBackend {
 
     @Override
     public List<Giorno> findAllNoSort() {
-        return super.findAllNoSort();
+        return (List<Giorno>)super.findAllNoSort();
     }
 
     @Override
     public List<Giorno> findAllSortCorrente() {
-        return super.findAllSortCorrente();
+        return (List<Giorno>) super.findAllSortCorrente();
     }
 
     public List<Giorno> findAllByMese(Mese mese) {
@@ -131,6 +131,10 @@ public class GiornoBackend extends CrudBackend {
         return findAllByMese(mese).stream().map(giorno -> giorno.nome).collect(Collectors.toList());
     }
 
+    @Override
+    public Giorno save(AEntity entity) {
+        return (Giorno) super.save(entity);
+    }
 
     /**
      * Creazione di alcuni dati <br>

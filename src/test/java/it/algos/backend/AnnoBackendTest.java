@@ -119,23 +119,10 @@ public class AnnoBackendTest extends BackendTest {
             message = String.format("Nel secolo %s ci sono %s anni", sorgente, textService.format(listaAnni.size()));
             System.out.println(VUOTA);
             System.out.println(message);
-            printAnni(listaAnni);
+//            printAnni(listaAnni);
         }
     }
 
 
-    void printAnni(List<Anno> listaAnni) {
-        int k = 0;
-
-        for (Anno anno : listaAnni) {
-            System.out.print(++k);
-            System.out.print(PARENTESI_TONDA_END);
-            System.out.print(SPAZIO);
-            System.out.print(anno.nome);
-            System.out.print(SPAZIO);
-            System.out.print(anno.bisestile ? "bisestile" : VUOTA);
-            System.out.println(SPAZIO);
-        }
-    }
 
 }

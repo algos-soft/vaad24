@@ -8,6 +8,8 @@ import org.junit.jupiter.api.*;
 import org.mockito.*;
 import org.springframework.boot.test.context.*;
 
+import java.util.*;
+
 /**
  * Project vaad24
  * Created by Algos
@@ -26,6 +28,9 @@ public class MeseBackendTest extends BackendTest {
     @InjectMocks
     private MeseBackend backend;
 
+
+    private List<Mese> listaBeans;
+
     /**
      * Qui passa una volta sola <br>
      */
@@ -34,6 +39,7 @@ public class MeseBackendTest extends BackendTest {
         assertNotNull(backend);
         super.entityClazz = Mese.class;
         super.crudBackend = backend;
+        super.typeBackend = TypeBackend.mese;
         super.setUpAll();
     }
 
@@ -41,5 +47,24 @@ public class MeseBackendTest extends BackendTest {
     protected void setUpEach() {
         super.setUpEach();
     }
+
+
+//    @Test
+//    @Order(23)
+//    @DisplayName("23 - findAll con sort specifico (discendente)")
+//    protected void findAllSort() {
+//        System.out.println("23 - findAll con sort specifico (discendente)");
+//        System.out.println(VUOTA);
+//
+//        sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
+//        listaBeans = backend.findAllSort(sort);
+//        assertNotNull(listaBeans);
+//        ottenutoIntero = listaBeans.size();
+//        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
+//        System.out.println(message);
+//        printBackend(listaBeans);
+//    }
+
+
 
 }

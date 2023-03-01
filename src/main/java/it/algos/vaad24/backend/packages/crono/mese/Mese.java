@@ -34,7 +34,6 @@ public class Mese extends AEntity {
 
     @AIField(type = AETypeField.integer, widthEM = 6)
     public int ordine;
-
     @AIField(type = AETypeField.text)
     public String breve;
 

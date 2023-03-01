@@ -2,10 +2,14 @@ package it.algos.base;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.logic.*;
+import it.algos.vaad24.backend.packages.crono.giorno.*;
+import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
 import org.springframework.data.domain.*;
+
+import java.util.*;
 
 /**
  * Project vaad24
@@ -43,6 +47,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
 
     protected String keyPropertyName;
 
+    protected TypeBackend typeBackend;
 
     /**
      * Qui passa una volta sola <br>
@@ -119,39 +124,39 @@ public abstract class BackendTest extends AlgosIntegrationTest {
 
     @Test
     @Order(21)
-    @DisplayName("21 - findAllNoSort")
+    @DisplayName("21 - findAllNoSort (entityBeans)")
     protected void findAllNoSort() {
-        System.out.println("21 - findAllNoSort");
+        System.out.println("21 - findAllNoSort (entityBeans)");
 
         listaBeans = crudBackend.findAllNoSort();
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
         message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
         System.out.println(message);
-        printSubLista(listaBeans);
+        printBackend(listaBeans);
     }
 
 
     @Test
     @Order(22)
-    @DisplayName("22 - findAll findAllSortCorrente")
+    @DisplayName("22 - findAll findAllSortCorrente (entityBeans)")
     protected void findAllSortCorrente() {
-        System.out.println("22 - findAll findAllSortCorrente");
+        System.out.println("22 - findAll findAllSortCorrente (entityBeans)");
 
         listaBeans = crudBackend.findAllSortCorrente();
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
         message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
         System.out.println(message);
-        printSubLista(listaBeans);
+        printBackend(listaBeans);
     }
 
 
     @Test
     @Order(23)
-    @DisplayName("23 - findAll con sort specifico (discendente)")
+    @DisplayName("23 - findAll con sort specifico discendente (entityBeans)")
     protected void findAllSort() {
-        System.out.println("23 - findAll con sort specifico (discendente)");
+        System.out.println("23 - findAll con sort specifico discendente (entityBeans)");
 
         sort = Sort.by(Sort.Direction.DESC, keyPropertyName);
         listaBeans = crudBackend.findAllSort(sort);
@@ -159,15 +164,15 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         ottenutoIntero = listaBeans.size();
         message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
         System.out.println(message);
-        printSubLista(listaBeans);
+        printBackend(listaBeans);
     }
 
 
     @Test
     @Order(31)
-    @DisplayName("31 - findAllForKey")
+    @DisplayName("31 - findAllForKey (String)")
     protected void findAllForKey() {
-        System.out.println("31 - findAllForKey");
+        System.out.println("31 - findAllForKey (String)");
         System.out.println(VUOTA);
 
         if (!annotationService.usaKeyPropertyName(entityClazz)) {
@@ -203,9 +208,9 @@ public abstract class BackendTest extends AlgosIntegrationTest {
 
     @Test
     @Order(32)
-    @DisplayName("32 - findAllForKeyReverseOrder")
+    @DisplayName("32 - findAllForKeyReverseOrder (String)")
     protected void findAllForKeyReverseOrder() {
-        System.out.println("32 - findAllForKeyReverseOrder");
+        System.out.println("32 - findAllForKeyReverseOrder (String)");
         System.out.println(VUOTA);
 
         if (!annotationService.usaKeyPropertyName(entityClazz)) {
@@ -598,7 +603,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
             printRisultato(ottenutoRisultato);
 
             System.out.println(VUOTA);
-            printSubLista(ottenutoRisultato.getLista());
+            printBackend(ottenutoRisultato.getLista());
         }
         else {
             logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
@@ -631,7 +636,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
             printRisultato(ottenutoRisultato);
 
             System.out.println(VUOTA);
-            printSubLista(ottenutoRisultato.getLista());
+            printBackend(ottenutoRisultato.getLista());
         }
         else {
             logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
@@ -657,5 +662,151 @@ public abstract class BackendTest extends AlgosIntegrationTest {
     @AfterAll
     void tearDownAll() {
     }
+
+
+    protected void printBackend(final List lista) {
+        printBackend(lista, 10);
+    }
+
+
+    protected void printBackend(final List lista, int max) {
+        String message = VUOTA;
+        int cont = 1;
+        int tot;
+        System.out.println(VUOTA);
+
+        if (lista != null) {
+            if (lista.size() > 0) {
+                tot = Math.min(lista.size(), max);
+                message = String.format("La lista contiene %d elementi.", lista.size());
+                if (lista.size() > tot) {
+                    message += String.format(" Mostro solo i primi %d", tot);
+                }
+                System.out.println(message);
+
+                switch (typeBackend) {
+                    case giorno -> {
+                        System.out.print("nome");
+                        System.out.print(SEP);
+                        System.out.print("Trascorsi");
+                        System.out.print(SEP);
+                        System.out.println("mancanti");
+                    }
+                    case mese -> {
+                        System.out.print("breve");
+                        System.out.print(SEP);
+                        System.out.print("nome");
+                        System.out.print(SEP);
+                        System.out.print("giorni");
+                        System.out.print(SEP);
+                        System.out.print("primo");
+                        System.out.print(SEP);
+                        System.out.println("ultimo");
+                    }
+                    default -> {}
+                } ;
+                System.out.println(VUOTA);
+
+                for (Object obj : lista.subList(0, tot)) {
+                    System.out.print(cont);
+                    System.out.print(PARENTESI_TONDA_END);
+                    System.out.print(SPAZIO);
+                    switch (typeBackend) {
+                        case giorno -> printGiorno(obj);
+                        case mese -> printMese(obj);
+                        default -> {
+                            System.out.println(obj);
+                        }
+                    } ;
+                    cont++;
+                }
+                if (lista.size() > tot) {
+                    System.out.print(cont);
+                    System.out.print(PARENTESI_TONDA_END);
+                    System.out.print(SPAZIO);
+                    System.out.println(TRE_PUNTI);
+                }
+            }
+            else {
+                System.out.println("Non ci sono elementi nella lista");
+            }
+        }
+        else {
+            System.out.println("Manca la lista");
+        }
+    }
+
+    protected void printGiorno(Object obj) {
+        if (obj instanceof Giorno giorno) {
+            System.out.print(giorno.nome);
+            System.out.print(SPAZIO);
+            System.out.print(giorno.trascorsi);
+            System.out.print(SPAZIO);
+            System.out.println(giorno.mancanti);
+        }
+    }
+
+    protected void printGiorni(List<Giorno> listaGiorni) {
+        int k = 0;
+
+        for (Giorno giorno : listaGiorni) {
+            System.out.print(++k);
+            System.out.print(PARENTESI_TONDA_END);
+            System.out.print(SPAZIO);
+            System.out.print(giorno.nome);
+            System.out.print(SPAZIO);
+            System.out.print(giorno.trascorsi);
+            System.out.print(SPAZIO);
+            System.out.println(giorno.mancanti);
+        }
+    }
+
+
+    protected void printMese(Object obj) {
+        if (obj instanceof Mese mese) {
+            System.out.print(mese.breve);
+            System.out.print(SPAZIO);
+            System.out.print(mese.nome);
+            System.out.print(SPAZIO);
+            System.out.print(mese.giorni);
+            System.out.print(SPAZIO);
+            System.out.print(mese.primo);
+            System.out.print(SPAZIO);
+            System.out.println(mese.ultimo);
+        }
+    }
+
+    protected void printMesi(List<Mese> listaMesi) {
+        int k = 0;
+
+        for (Mese mese : listaMesi) {
+            System.out.print(++k);
+            System.out.print(PARENTESI_TONDA_END);
+            System.out.print(SPAZIO);
+            System.out.print(mese.breve);
+            System.out.print(SPAZIO);
+            System.out.print(mese.nome);
+            System.out.print(SPAZIO);
+            System.out.print(mese.giorni);
+            System.out.print(SPAZIO);
+            System.out.print(mese.primo);
+            System.out.print(SPAZIO);
+            System.out.println(mese.ultimo);
+        }
+    }
+
+    protected void printSecoli(List<Giorno> listaGiorni) {
+    }
+
+    protected void printAnni(List<Giorno> listaGiorni) {
+    }
+
+    protected void printVie(List<Giorno> listaGiorni) {
+    }
+
+    protected void printContinenti(List<Giorno> listaGiorni) {
+    }
+
+    protected enum TypeBackend {via, anno, giorno, mese, secolo, continente, nota, versione}
 
 }

@@ -29,8 +29,6 @@ public class MeseBackend extends CrudBackend {
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
      *
      * @return la nuova entity appena creata (non salvata)
      */
@@ -42,18 +40,19 @@ public class MeseBackend extends CrudBackend {
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
      *
      * @return la nuova entity appena creata (non salvata)
      */
     @Override
-    public Mese newEntity(String nome) {
-        return newEntity(0, VUOTA, nome, 0, 0, 0);
+    public Mese newEntity(final String keyPropertyValue) {
+        return newEntity(0, VUOTA, keyPropertyValue, 0, 0, 0);
     }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Usa il @Builder di Lombok <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * All properties <br>
      *
      * @param ordine (obbligatorio, unico)
      * @param breve  (obbligatorio, unico)
@@ -109,7 +108,9 @@ public class MeseBackend extends CrudBackend {
     public List<String> findAllForKey() {
         return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
     }
-    public List<String> findAllStringKeyReverseOrder() {
+
+
+    public List<String> findAllForKeyReverseOrder() {
         return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
     }
 
