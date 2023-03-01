@@ -116,7 +116,7 @@ public abstract class CrudBackend extends AbstractService {
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
-        if (reflectionService.isEsiste(entityClazz,FIELD_NAME_ORDINE)) {
+        if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
             this.sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
         }
         else {
@@ -512,16 +512,20 @@ public abstract class CrudBackend extends AbstractService {
 
     public List<String> findAllForKey() {
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-        return mongoService.projectionString(entityClazz, keyPropertyName);
+        return findAllForProperty(keyPropertyName);
     }
 
-    public List<String> findAllStringKeyReverseOrder() {
+    public List<String> findAllForKeyReverseOrder() {
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-        return mongoService.projectionStringReverseOrder(entityClazz, keyPropertyName);
+        return findAllForPropertyReverseOrder(keyPropertyName);
     }
 
-    public List<String> findAllStringProperty(String keyPropertyName) {
+    public List<String> findAllForProperty(String keyPropertyName) {
         return mongoService.projectionString(entityClazz, keyPropertyName);
+    }
+
+    public List<String> findAllForPropertyReverseOrder(String keyPropertyName) {
+        return mongoService.projectionStringReverseOrder(entityClazz, keyPropertyName);
     }
 
     @Deprecated

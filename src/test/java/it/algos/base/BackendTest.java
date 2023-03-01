@@ -198,14 +198,14 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
         System.out.println(message);
 
-        print(listaStr);
+        printSubLista(listaStr);
     }
 
     @Test
     @Order(32)
-    @DisplayName("32 - findAllStringKeyReverseOrder")
-    protected void findAllStringKeyReverseOrder() {
-        System.out.println("32 - findAllStringKeyReverseOrder");
+    @DisplayName("32 - findAllForKeyReverseOrder")
+    protected void findAllForKeyReverseOrder() {
+        System.out.println("32 - findAllForKeyReverseOrder");
         System.out.println(VUOTA);
 
         if (!annotationService.usaKeyPropertyName(entityClazz)) {
@@ -228,7 +228,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
             return;
         }
 
-        listaStr = crudBackend.findAllStringKeyReverseOrder();
+        listaStr = crudBackend.findAllForKeyReverseOrder();
         assertNotNull(listaStr);
         ottenutoIntero = listaStr.size();
         sorgente = textService.format(ottenutoIntero);
@@ -236,7 +236,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s' in ordine inverso:", collectionName, clazzName, sorgente, sorgente2);
         System.out.println(message);
 
-        print(listaStr);
+        printSubLista(listaStr);
     }
 
     @Test

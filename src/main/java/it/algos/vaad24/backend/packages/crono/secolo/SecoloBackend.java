@@ -84,9 +84,9 @@ public class SecoloBackend extends CrudBackend {
         return (List<Secolo>) super.findAllSortCorrente();
     }
 
-    public List<String> findAllNomi() {
-        return super.findAllStringKeyReverseOrder();
-    }
+//    public List<String> findAllNomi() {
+//        return super.findAllStringKeyReverseOrder();
+//    }
 
     public Secolo findByOrdine(final int ordine) {
         return findByProperty(FIELD_NAME_ORDINE, ordine);

@@ -86,7 +86,7 @@ public class GiornoBackendTest extends BackendTest {
     @Test
     @Order(23)
     @DisplayName("23 - findAll con sort specifico (discendente)")
-    void findAllSort() {
+    protected void findAllSort() {
         System.out.println("23 - findAll con sort specifico (discendente)");
 
         sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
@@ -100,18 +100,82 @@ public class GiornoBackendTest extends BackendTest {
 
 
     @Test
-    @Order(31)
-    @DisplayName("31 - findAllForKey")
-    protected void findAllForKey() {
-        super.findAllForKey();
-        System.out.println("777 - pippo");
+    @Order(51)
+    @DisplayName("51 - findAllForNome (String)")
+    protected void findAllForNome() {
+        System.out.println("51 - findAllForNome (String)");
+        System.out.println("Uguale a 31 - findAllForKey");
+        System.out.println(VUOTA);
+
+        listaStr = backend.findAllForNome();
+        assertNotNull(listaStr);
+        ottenutoIntero = listaStr.size();
+        sorgente = textService.format(ottenutoIntero);
+        sorgente2 = keyPropertyName;
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
+        System.out.println(message);
+
+        printSubLista(listaStr);
     }
 
     @Test
-    @Order(51)
-    @DisplayName("51 - findByOrdine")
-    void findByOrdine() {
-        System.out.println("51 - findByOrdine");
+    @Order(52)
+    @DisplayName("52 - findAllByMese (entity)")
+    protected void findAllByMese() {
+        System.out.println("52 - findAllByMese (entity)");
+        System.out.println("Rimanda a findAllByProperty(FIELD_NAME_MESE, mese)");
+        List<Giorno> listaGiorni;
+        int num = 3;
+
+        for (Mese sorgente : meseBackend.findAllNoSort()) {
+            listaGiorni = backend.findAllByMese(sorgente);
+            assertNotNull(listaGiorni);
+            System.out.println(VUOTA);
+            message = String.format("Nel mese di %s ci sono %s giorni. Mostro solo i primi %s", sorgente, textService.format(listaGiorni.size()),num);
+            System.out.println(message);
+            printGiorni(listaGiorni.subList(0, num));
+        }
+    }
+
+    @Test
+    @Order(53)
+    @DisplayName("53 - findAllForNomeByMese (nomi)")
+    protected void findAllForNomeByMese() {
+        System.out.println("54 - findAllForNomeByMese (nomi)");
+        System.out.println("Rimanda a findAllByProperty(FIELD_NAME_MESE, mese)");
+        int num = 3;
+
+        for (Mese sorgente : meseBackend.findAllSortCorrente()) {
+            listaStr = backend.findAllForNomeByMese(sorgente);
+            assertNotNull(listaStr);
+            message = String.format("Nel mese di %s ci sono %s giorni. Mostro solo i primi %s", sorgente, textService.format(listaStr.size()),num);
+            System.out.println(VUOTA);
+            System.out.println(message);
+            print(listaStr.subList(0, num));
+        }
+    }
+
+    @Test
+    @Order(61)
+    @DisplayName("61 - isExistKey")
+    protected void isExistKey() {
+        System.out.println("61 - isExistKey");
+        System.out.println(VUOTA);
+        System.out.println("Giorno ricavato dal numero progressivo nell'anno");
+        System.out.println(VUOTA);
+
+        //--giorno
+        //--esistente
+        System.out.println(VUOTA);
+        GIORNI().forEach(this::isExistKeyBase);
+    }
+
+
+    @Test
+    @Order(62)
+    @DisplayName("62 - findByOrdine")
+    protected void findByOrdine() {
+        System.out.println("62 - findByOrdine");
         System.out.println(VUOTA);
         System.out.println("Giorno ricavato dal numero progressivo nell'anno");
         System.out.println(VUOTA);
@@ -147,21 +211,6 @@ public class GiornoBackendTest extends BackendTest {
         printValue(sorgenteIntero, ottenuto);
     }
 
-    @Test
-    @Order(52)
-    @DisplayName("52 - isExistKey")
-    void isExistKey() {
-        System.out.println("52 - isExistKey");
-        System.out.println(VUOTA);
-        System.out.println("Giorno ricavato dal numero progressivo nell'anno");
-        System.out.println(VUOTA);
-
-        //--giorno
-        //--esistente
-        System.out.println(VUOTA);
-        GIORNI().forEach(this::isExistKeyBase);
-    }
-
     //--giorno
     //--esistente
     void isExistKeyBase(Arguments arg) {
@@ -179,41 +228,6 @@ public class GiornoBackendTest extends BackendTest {
         }
         System.out.println(VUOTA);
     }
-
-
-    @Test
-    @Order(53)
-    @DisplayName("53 - findAllByMese (entity)")
-    void findAllByMese() {
-        System.out.println("53 - findAllByMese (entity)");
-        List<Giorno> listaGiorni;
-
-        for (Mese sorgente : meseBackend.findAllNoSort()) {
-            listaGiorni = backend.findAllByMese(sorgente);
-            assertNotNull(listaGiorni);
-            message = String.format("Nel mese di %s ci sono %s giorni", sorgente, textService.format(listaGiorni.size()));
-            System.out.println(VUOTA);
-            System.out.println(message);
-            printGiorni(listaGiorni);
-        }
-    }
-
-    @Test
-    @Order(54)
-    @DisplayName("54 - findAllByMese (nomi)")
-    void findAllNomiByMese() {
-        System.out.println("54 - findAllByMese (nomi)");
-
-        for (Mese sorgente : meseBackend.findAllSortCorrente()) {
-            listaStr = backend.findAllNomiByMese(sorgente);
-            assertNotNull(listaStr);
-            message = String.format("Nel mese di %s ci sono %s giorni", sorgente, textService.format(listaStr.size()));
-            System.out.println(VUOTA);
-            System.out.println(message);
-            print(listaStr);
-        }
-    }
-
 
     void printGiorni(List<Giorno> listaGiorni) {
         int k = 0;
