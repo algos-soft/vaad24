@@ -543,7 +543,13 @@ public class AResult {
     }
 
     public String deltaSec() {
-        return eseguito ? String.format("Eseguito in circa %s secondi", durataSec()) : "Non eseguito.";
+        int sec = durataSec();
+        String text = switch (sec) {
+            case 1 -> "secondo";
+            default -> "secondi";
+        };
+
+        return eseguito ? String.format("Eseguito in circa %s %s", sec, text) : "Non eseguito.";
     }
 
     public void print(final LogService logger, final AETypeLog typeLog) {
