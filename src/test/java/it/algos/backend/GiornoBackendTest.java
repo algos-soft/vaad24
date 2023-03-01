@@ -151,7 +151,9 @@ public class GiornoBackendTest extends BackendTest {
             message = String.format("Nel mese di %s ci sono %s giorni. Mostro solo i primi %s", sorgente, textService.format(listaStr.size()),num);
             System.out.println(VUOTA);
             System.out.println(message);
-            print(listaStr.subList(0, num));
+            if (num>0) {
+                print(listaStr.subList(0, num));
+            }
         }
     }
 

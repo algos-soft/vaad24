@@ -124,11 +124,7 @@ public class GiornoBackend extends CrudBackend {
 
 
     public List<String> findAllForNomeByMese(Mese mese) {
-//        return  findAllByProperty(FIELD_NAME_MESE, mese);
-
-    return findAllByMese(mese).stream()
-                .map(giorno -> giorno.nome)
-                .collect(Collectors.toList());
+        return findAllByMese(mese).stream().map(giorno -> giorno.nome).collect(Collectors.toList());
     }
 
 

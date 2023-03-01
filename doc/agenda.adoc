@@ -164,6 +164,5 @@ These four operations are fundamental to the management of data in any data stor
 
 * Lista parziale singola property **findAllFor...By...** propertyName, propertyName2
 ** public List<> findAllForNomeByMese(final Mese mese)
-*** public List<> crudBackend.findAllForPropertyByProperty(final String propertyName, final Object propertyValue2)
-
+*** findAllByMese(mese).stream().map(giorno -> giorno.nome).collect(Collectors.toList());
 

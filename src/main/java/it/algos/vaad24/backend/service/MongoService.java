@@ -414,9 +414,9 @@ public class MongoService<capture> extends AbstractService {
             return 0;
         }
         if (!isExistsCollection(entityClazz)) {
-//            collectionName = annotationService.getCollectionName(entityClazz);
-//            message = String.format("La entityClazz '%s' non ha una corrispondente collection '%s'", entityClazz.getSimpleName(), collectionName);
-//            logger.info(new WrapLog().exception(new AlgosException(message)).usaDb());
+            //            collectionName = annotationService.getCollectionName(entityClazz);
+            //            message = String.format("La entityClazz '%s' non ha una corrispondente collection '%s'", entityClazz.getSimpleName(), collectionName);
+            //            logger.info(new WrapLog().exception(new AlgosException(message)).usaDb());
             return 0;
         }
 
@@ -503,6 +503,28 @@ public class MongoService<capture> extends AbstractService {
 
         Bson projection = Projections.fields(Projections.include(property), Projections.excludeId());
         FindIterable<Document> documents = collection.find().projection(projection).sort(sort);
+
+        for (var singolo : documents) {
+            Object obj = singolo.get(property);
+            listaProperty.add(obj.toString());
+        }
+        return listaProperty;
+    }
+
+    public List<String> projectionString(Class<? extends AEntity> entityClazz, Document query, String property, BasicDBObject sort) {
+        List<String> listaProperty = new ArrayList();
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String message;
+        collection = getCollection(textService.primaMinuscola(collectionName));
+
+        if (collection == null) {
+            message = String.format("Non esiste la collection", entityClazz.getSimpleName());
+            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            return listaProperty;
+        }
+
+        Bson projection = Projections.fields(Projections.include(property), Projections.excludeId());
+        FindIterable<Document> documents = collection.find(query).projection(projection).sort(sort);
 
         for (var singolo : documents) {
             Object obj = singolo.get(property);
