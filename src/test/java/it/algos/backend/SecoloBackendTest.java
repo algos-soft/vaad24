@@ -36,8 +36,8 @@ public class SecoloBackendTest extends BackendTest {
         assertNotNull(backend);
         super.entityClazz = Secolo.class;
         super.crudBackend = backend;
-        super.typeBackend = TypeBackend.secolo;
         super.setUpAll();
+        super.typeBackend = TypeBackend.secolo;
     }
 
     @BeforeEach

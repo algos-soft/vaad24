@@ -61,8 +61,8 @@ public class GiornoBackendTest extends BackendTest {
         assertNotNull(meseBackend);
         super.entityClazz = Giorno.class;
         super.crudBackend = backend;
-        super.typeBackend = TypeBackend.giorno;
         super.setUpAll();
+        super.typeBackend = TypeBackend.giorno;
     }
 
 

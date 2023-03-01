@@ -44,8 +44,8 @@ public class AnnoBackendTest extends BackendTest {
         assertNotNull(secoloBackend);
         super.entityClazz = Anno.class;
         super.crudBackend = backend;
-        super.typeBackend = TypeBackend.anno;
         super.setUpAll();
+        super.typeBackend = TypeBackend.anno;
     }
 
 

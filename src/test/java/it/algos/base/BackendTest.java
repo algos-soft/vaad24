@@ -64,6 +64,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         backendName = clazzName + SUFFIX_BACKEND;
         collectionName = annotationService.getCollectionName(entityClazz);
         keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        this.typeBackend = TypeBackend.nessuno;
 
         if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
             sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
@@ -848,6 +849,6 @@ public abstract class BackendTest extends AlgosIntegrationTest {
     }
 
 
-    protected enum TypeBackend {via, anno, giorno, mese, secolo, continente, nota, versione}
+    protected enum TypeBackend {nessuno, via, anno, giorno, mese, secolo, continente, nota, versione}
 
 }

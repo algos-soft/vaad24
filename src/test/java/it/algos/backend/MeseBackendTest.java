@@ -39,8 +39,8 @@ public class MeseBackendTest extends BackendTest {
         assertNotNull(backend);
         super.entityClazz = Mese.class;
         super.crudBackend = backend;
-        super.typeBackend = TypeBackend.mese;
         super.setUpAll();
+        super.typeBackend = TypeBackend.mese;
     }
 
     @BeforeEach
