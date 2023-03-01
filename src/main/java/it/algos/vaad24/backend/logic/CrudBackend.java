@@ -39,7 +39,7 @@ import java.util.*;
  */
 public abstract class CrudBackend extends AbstractService {
 
-    protected Sort sortOrder;
+    public Sort sortOrder;
 
     /**
      * The Entity Class  (obbligatoria sempre e final)
@@ -440,6 +440,39 @@ public abstract class CrudBackend extends AbstractService {
         else {
             if (sortOrder != null) {
                 query.with(sortOrder);
+            }
+            return mongoService.mongoOp.find(query, entityClazz, collectionName);
+        }
+    }
+
+
+    public List findAllSortCorrenteReverse() {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Query query = new Query();
+        Sort sort;
+        String sortText;
+        String[] parti;
+        String field;
+        String order;
+        Sort.Direction direction;
+
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+            return crudRepository.findAll();
+        }
+        else {
+            if (sortOrder != null) {
+                sortText = sortOrder.toString();
+                parti = sortText.split(DUE_PUNTI);
+                field = parti[0].trim();
+                order = parti[1].trim();
+                if (order.equals(SORT_SPRING_ASC)) {
+                    direction = Sort.Direction.DESC;
+                }
+                else {
+                    direction = Sort.Direction.ASC;
+                }
+                sort = Sort.by(direction, field);
+                query.with(sort);
             }
             return mongoService.mongoOp.find(query, entityClazz, collectionName);
         }

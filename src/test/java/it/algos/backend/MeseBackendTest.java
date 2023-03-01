@@ -48,23 +48,4 @@ public class MeseBackendTest extends BackendTest {
         super.setUpEach();
     }
 
-
-//    @Test
-//    @Order(23)
-//    @DisplayName("23 - findAll con sort specifico (discendente)")
-//    protected void findAllSort() {
-//        System.out.println("23 - findAll con sort specifico (discendente)");
-//        System.out.println(VUOTA);
-//
-//        sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
-//        listaBeans = backend.findAllSort(sort);
-//        assertNotNull(listaBeans);
-//        ottenutoIntero = listaBeans.size();
-//        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
-//        System.out.println(message);
-//        printBackend(listaBeans);
-//    }
-
-
-
 }

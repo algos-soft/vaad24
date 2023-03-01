@@ -49,6 +49,8 @@ public abstract class BackendTest extends AlgosIntegrationTest {
 
     protected TypeBackend typeBackend;
 
+    protected Sort sortOrder;
+
     /**
      * Qui passa una volta sola <br>
      */
@@ -60,6 +62,14 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         backendName = clazzName + SUFFIX_BACKEND;
         collectionName = annotationService.getCollectionName(entityClazz);
         keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+
+        if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+            sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
+        }
+        else {
+            sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_CON);
+        }
+        crudBackend.sortOrder = sortOrder;
     }
 
     /**
@@ -154,12 +164,11 @@ public abstract class BackendTest extends AlgosIntegrationTest {
 
     @Test
     @Order(23)
-    @DisplayName("23 - findAll con sort specifico discendente (entityBeans)")
+    @DisplayName("23 - findAllSortCorrenteReverse (entityBeans)")
     protected void findAllSort() {
-        System.out.println("23 - findAll con sort specifico discendente (entityBeans)");
+        System.out.println("23 - findAllSortCorrenteReverse (entityBeans)");
 
-        sort = Sort.by(Sort.Direction.DESC, keyPropertyName);
-        listaBeans = crudBackend.findAllSort(sort);
+        listaBeans = crudBackend.findAllSortCorrenteReverse();
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
         message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));

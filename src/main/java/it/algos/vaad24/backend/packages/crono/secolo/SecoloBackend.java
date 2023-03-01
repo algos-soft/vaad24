@@ -29,7 +29,7 @@ public class SecoloBackend extends CrudBackend {
 
     @Override
     protected void fixPreferenze() {
-        this.sortOrder = Sort.by(Sort.Direction.DESC, "ordine");
+        this.sortOrder = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
     }
 
     public Secolo newEntity() {
