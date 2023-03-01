@@ -98,10 +98,12 @@ public class GiornoBackend extends CrudBackend {
         return this.findByProperty(FIELD_NAME_ORDINE, ordine);
     }
 
+    @Override
     public List<Giorno> findAllNoSort() {
         return super.findAllNoSort();
     }
 
+    @Override
     public List<Giorno> findAllSortCorrente() {
         return super.findAllSortCorrente();
     }
@@ -110,10 +112,12 @@ public class GiornoBackend extends CrudBackend {
         return super.findAllByProperty(FIELD_NAME_MESE, mese);
     }
 
+    @Override
     public List<String> findAllForKey() {
         return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
     }
 
+    @Override
     public List<String> findAllForKeyReverseOrder() {
         return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
     }
