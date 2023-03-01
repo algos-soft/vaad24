@@ -1,5 +1,6 @@
 package it.algos.vaad24.backend.logic;
 
+import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -543,22 +544,42 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
+    /**
+     * Lista della sola keyProperty indicata per tutte le entities della collezione <br>
+     * Ordinata secondo la keyProperty <br>
+     * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
+     */
     public List<String> findAllForKey() {
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         return findAllForProperty(keyPropertyName);
     }
 
+    /**
+     * Lista della sola keyProperty indicata per tutte le entities della collezione <br>
+     * Ordinata al contrario della keyProperty <br>
+     * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
+     */
     public List<String> findAllForKeyReverseOrder() {
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         return findAllForPropertyReverseOrder(keyPropertyName);
     }
 
+    /**
+     * Lista della sola property indicata per tutte le entities della collezione <br>
+     * Ordinata secondo la property stessa <br>
+     * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
+     */
     public List<String> findAllForProperty(String keyPropertyName) {
-        return mongoService.projectionString(entityClazz, keyPropertyName);
+        return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(keyPropertyName, 1));
     }
 
+    /**
+     * Lista della sola property indicata per tutte le entities della collezione <br>
+     * Ordinata al contrario della property stessa <br>
+     * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
+     */
     public List<String> findAllForPropertyReverseOrder(String keyPropertyName) {
-        return mongoService.projectionStringReverseOrder(entityClazz, keyPropertyName);
+        return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(keyPropertyName, 1));
     }
 
     @Deprecated

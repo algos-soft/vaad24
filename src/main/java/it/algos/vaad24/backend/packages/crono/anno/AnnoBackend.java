@@ -9,8 +9,6 @@ import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.domain.*;
-import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -37,17 +35,29 @@ public class AnnoBackend extends CrudBackend {
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
      *
      * @return la nuova entity appena creata (non salvata)
      */
+    @Override
     public Anno newEntity() {
         return newEntity(0, VUOTA, null, false, false);
     }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     *
+     * @return la nuova entity appena creata (non salvata e senza keyID)
+     */
+    @Override
+    public Anno newEntity(final String keyPropertyValue) {
+        return newEntity(0, keyPropertyValue, null, false, false);
+    }
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Usa il @Builder di Lombok <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * All properties <br>
      *
      * @param ordine     di presentazione nel popup/combobox (obbligatorio, unico)
      * @param nome       corrente
@@ -89,39 +99,42 @@ public class AnnoBackend extends CrudBackend {
     }
 
     @Override
+    public List<Anno> findAllNoSort() {
+        return (List<Anno>)super.findAllNoSort();
+    }
+
+    @Override
     public List<Anno> findAllSortCorrente() {
-        String collectionName = annotationService.getCollectionName(entityClazz);
-        Query query = new Query();
-
-        if (sortOrder != null) {
-            query.with(sortOrder);
-        }
-        return (List<Anno>) mongoService.mongoOp.find(query, entityClazz, collectionName);
+        return (List<Anno>) super.findAllSortCorrente();
     }
 
-    public List<Anno> findAllDiscendente() {
-        String collectionName = annotationService.getCollectionName(entityClazz);
-        Sort sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
-        Query query = new Query();
-        query.with(sort);
-
-        return (List<Anno>) mongoService.mongoOp.find(query, entityClazz, collectionName);
+    public List<Anno> findAllBySecolo(Secolo secolo) {
+        return findAllByProperty(FIELD_NAME_SECOLO, secolo);
     }
 
-    public List<Anno> findAllAscendente() {
-        String collectionName = annotationService.getCollectionName(entityClazz);
-        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
-        Query query = new Query();
-        query.with(sort);
+    //    public List<Anno> findAllDiscendente() {
+//        String collectionName = annotationService.getCollectionName(entityClazz);
+//        Sort sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
+//        Query query = new Query();
+//        query.with(sort);
+//
+//        return (List<Anno>) mongoService.mongoOp.find(query, entityClazz, collectionName);
+//    }
 
-        return (List<Anno>) mongoService.mongoOp.find(query, entityClazz, collectionName);
-    }
+//    public List<Anno> findAllAscendente() {
+//        String collectionName = annotationService.getCollectionName(entityClazz);
+//        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
+//        Query query = new Query();
+//        query.with(sort);
+//
+//        return (List<Anno>) mongoService.mongoOp.find(query, entityClazz, collectionName);
+//    }
 
     public List<String> findAllForKey() {
         return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
     }
 
-    public List<String> findAllStringKeyReverseOrder() {
+    public List<String> findAllForKeyReverseOrder() {
         return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
     }
 
@@ -131,15 +144,22 @@ public class AnnoBackend extends CrudBackend {
     //                .collect(Collectors.toList());
     //    }
 
-    public List<Anno> findAllBySecolo(Secolo secolo) {
-        return findAllByProperty("secolo", secolo);
+
+    public List<String> findAllForNome() {
+        return findAllForKey();
     }
 
 
-    public List<String> findNomiBySecolo(Secolo secolo) {
+    public List<String> findAllForNomeBySecolo(Secolo secolo) {
         return findAllBySecolo(secolo).stream()
                 .map(anno -> anno.nome)
                 .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public Anno save(AEntity entity) {
+        return (Anno) super.save(entity);
     }
 
     /**

@@ -112,15 +112,12 @@ public class GiornoBackendTest extends BackendTest {
     protected void findAllByMese() {
         System.out.println("52 - findAllByMese (entity)");
         System.out.println("Rimanda a findAllByProperty(FIELD_NAME_MESE, mese)");
-        int num = 3;
 
         for (Mese sorgente : meseBackend.findAllNoSort()) {
             listaBeans = backend.findAllByMese(sorgente);
             assertNotNull(listaBeans);
             System.out.println(VUOTA);
-            message = String.format("Nel mese di %s ci sono %s giorni. Mostro solo i primi %s", sorgente, textService.format(listaBeans.size()), num);
-            System.out.println(message);
-            printGiorni(listaBeans.subList(0, num));
+            printBackend(listaBeans,3);
         }
     }
 

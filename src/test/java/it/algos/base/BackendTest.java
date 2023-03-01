@@ -2,8 +2,10 @@ package it.algos.base;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.logic.*;
+import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
+import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
@@ -695,6 +697,8 @@ public abstract class BackendTest extends AlgosIntegrationTest {
 
                 switch (typeBackend) {
                     case giorno -> {
+                        System.out.print("ordine");
+                        System.out.print(SEP);
                         System.out.print("nome");
                         System.out.print(SEP);
                         System.out.print("Trascorsi");
@@ -702,6 +706,8 @@ public abstract class BackendTest extends AlgosIntegrationTest {
                         System.out.println("mancanti");
                     }
                     case mese -> {
+                        System.out.print("ordine");
+                        System.out.print(SEP);
                         System.out.print("breve");
                         System.out.print(SEP);
                         System.out.print("nome");
@@ -711,6 +717,28 @@ public abstract class BackendTest extends AlgosIntegrationTest {
                         System.out.print("primo");
                         System.out.print(SEP);
                         System.out.println("ultimo");
+                    }
+                    case secolo -> {
+                        System.out.print("ordine");
+                        System.out.print(SEP);
+                        System.out.print("nome");
+                        System.out.print(SEP);
+                        System.out.print("inizio");
+                        System.out.print(SEP);
+                        System.out.print("fine");
+                        System.out.print(SEP);
+                        System.out.println("avanti Cristo");
+                    }
+                    case anno -> {
+                        System.out.print("ordine");
+                        System.out.print(SEP);
+                        System.out.print("nome");
+                        System.out.print(SEP);
+                        System.out.print("secolo");
+                        System.out.print(SEP);
+                        System.out.print("dopoCristo");
+                        System.out.print(SEP);
+                        System.out.println("bisestile");
                     }
                     default -> {}
                 } ;
@@ -723,6 +751,8 @@ public abstract class BackendTest extends AlgosIntegrationTest {
                     switch (typeBackend) {
                         case giorno -> printGiorno(obj);
                         case mese -> printMese(obj);
+                        case secolo -> printSecolo(obj);
+                        case anno -> printAnno(obj);
                         default -> {
                             System.out.println(obj);
                         }
@@ -762,11 +792,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
             System.out.print(++k);
             System.out.print(PARENTESI_TONDA_END);
             System.out.print(SPAZIO);
-            System.out.print(giorno.nome);
-            System.out.print(SPAZIO);
-            System.out.print(giorno.trascorsi);
-            System.out.print(SPAZIO);
-            System.out.println(giorno.mancanti);
+            printGiorno(giorno);
         }
     }
 
@@ -792,29 +818,35 @@ public abstract class BackendTest extends AlgosIntegrationTest {
             System.out.print(++k);
             System.out.print(PARENTESI_TONDA_END);
             System.out.print(SPAZIO);
-            System.out.print(mese.breve);
-            System.out.print(SPAZIO);
-            System.out.print(mese.nome);
-            System.out.print(SPAZIO);
-            System.out.print(mese.giorni);
-            System.out.print(SPAZIO);
-            System.out.print(mese.primo);
-            System.out.print(SPAZIO);
-            System.out.println(mese.ultimo);
+            printMese(mese);
         }
     }
 
-    protected void printSecoli(List<Giorno> listaGiorni) {
+    protected void printSecolo(Object obj) {
+        if (obj instanceof Secolo secolo) {
+            System.out.print(secolo.nome);
+            System.out.print(SPAZIO);
+            System.out.print(secolo.inizio);
+            System.out.print(SPAZIO);
+            System.out.print(secolo.fine);
+            System.out.print(SPAZIO);
+            System.out.println(secolo.anteCristo ? true : false);
+        }
     }
 
-    protected void printAnni(List<Giorno> listaGiorni) {
+
+    protected void printAnno(Object obj) {
+        if (obj instanceof Anno anno) {
+            System.out.print(anno.nome);
+            System.out.print(SPAZIO);
+            System.out.print(anno.secolo);
+            System.out.print(SPAZIO);
+            System.out.print(anno.dopoCristo ? true : false);
+            System.out.print(SPAZIO);
+            System.out.println(anno.bisestile ? true : false);
+        }
     }
 
-    protected void printVie(List<Giorno> listaGiorni) {
-    }
-
-    protected void printContinenti(List<Giorno> listaGiorni) {
-    }
 
     protected enum TypeBackend {via, anno, giorno, mese, secolo, continente, nota, versione}
 

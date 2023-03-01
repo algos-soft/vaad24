@@ -33,6 +33,8 @@ public class AnnoBackendTest extends BackendTest {
     @InjectMocks
     private SecoloBackend secoloBackend;
 
+    private List<Anno> listaBeans;
+
     /**
      * Qui passa una volta sola <br>
      */
@@ -42,6 +44,7 @@ public class AnnoBackendTest extends BackendTest {
         assertNotNull(secoloBackend);
         super.entityClazz = Anno.class;
         super.crudBackend = backend;
+        super.typeBackend = TypeBackend.anno;
         super.setUpAll();
     }
 
@@ -111,15 +114,14 @@ public class AnnoBackendTest extends BackendTest {
     @DisplayName("53 - findAllBySecolo (entity)")
     void findAllBySecolo() {
         System.out.println("53 - findAllBySecolo (entity)");
-        List<Anno> listaAnni;
 
         for (Secolo sorgente : secoloBackend.findAllSortCorrente()) {
-            listaAnni = backend.findAllBySecolo(sorgente);
-            assertNotNull(listaAnni);
-            message = String.format("Nel secolo %s ci sono %s anni", sorgente, textService.format(listaAnni.size()));
+            listaBeans = backend.findAllBySecolo(sorgente);
+            assertNotNull(listaBeans);
+            message = String.format("Nel secolo %s ci sono %s anni", sorgente, textService.format(listaBeans.size()));
             System.out.println(VUOTA);
             System.out.println(message);
-//            printAnni(listaAnni);
+            printBackend(listaBeans);
         }
     }
 

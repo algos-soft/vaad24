@@ -1,5 +1,6 @@
 package it.algos.vaad24.backend.packages.crono.secolo;
 
+import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -32,11 +33,13 @@ public class SecoloBackend extends CrudBackend {
         this.sortOrder = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
     }
 
+    @Override
     public Secolo newEntity() {
         return newEntity(0, VUOTA, 0, 0, false);
     }
 
 
+    @Override
     public Secolo newEntity(String nome) {
         return newEntity(0, nome, 0, 0, false);
     }
@@ -80,17 +83,11 @@ public class SecoloBackend extends CrudBackend {
         return (Secolo) super.findByProperty(propertyName, propertyValue);
     }
 
-    public List<Secolo> findAllSortCorrente() {
-        return (List<Secolo>) super.findAllSortCorrente();
-    }
-
-//    public List<String> findAllNomi() {
-//        return super.findAllStringKeyReverseOrder();
-//    }
 
     public Secolo findByOrdine(final int ordine) {
         return findByProperty(FIELD_NAME_ORDINE, ordine);
     }
+
 
     /**
      * Seleziona un secolo dato l'anno <br>
@@ -141,6 +138,22 @@ public class SecoloBackend extends CrudBackend {
         }
 
         return entity;
+    }
+
+    @Override
+    public List<Secolo> findAllSortCorrente() {
+        return (List<Secolo>) super.findAllSortCorrente();
+    }
+
+
+    @Override
+    public List<String> findAllForKey() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
+    }
+
+    @Override
+    public List<String> findAllForKeyReverseOrder() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
     }
 
     @Override
