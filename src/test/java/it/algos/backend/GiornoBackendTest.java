@@ -10,6 +10,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
 import org.springframework.boot.test.context.*;
+import org.springframework.data.domain.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -80,6 +81,30 @@ public class GiornoBackendTest extends BackendTest {
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();
+    }
+
+    @Test
+    @Order(23)
+    @DisplayName("23 - findAll con sort specifico (discendente)")
+    void findAllSort() {
+        System.out.println("23 - findAll con sort specifico (discendente)");
+
+        sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
+        listaBeans = crudBackend.findAllSort(sort);
+        assertNotNull(listaBeans);
+        ottenutoIntero = listaBeans.size();
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
+        System.out.println(message);
+        printSubLista(listaBeans);
+    }
+
+
+    @Test
+    @Order(31)
+    @DisplayName("31 - findAllForKey")
+    protected void findAllForKey() {
+        super.findAllForKey();
+        System.out.println("777 - pippo");
     }
 
     @Test
@@ -163,7 +188,7 @@ public class GiornoBackendTest extends BackendTest {
         System.out.println("53 - findAllByMese (entity)");
         List<Giorno> listaGiorni;
 
-        for (Mese sorgente : meseBackend.findAllSortCorrente()) {
+        for (Mese sorgente : meseBackend.findAllNoSort()) {
             listaGiorni = backend.findAllByMese(sorgente);
             assertNotNull(listaGiorni);
             message = String.format("Nel mese di %s ci sono %s giorni", sorgente, textService.format(listaGiorni.size()));

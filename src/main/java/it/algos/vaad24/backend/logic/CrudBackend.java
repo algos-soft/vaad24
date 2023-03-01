@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.data.mongodb.repository.*;
 
+import javax.annotation.*;
 import java.util.*;
 
 /**
@@ -78,10 +79,6 @@ public abstract class CrudBackend extends AbstractService {
      */
     public CrudBackend(final Class<? extends AEntity> entityClazz) {
         this.entityClazz = entityClazz;
-
-        //--Preferenze usate da questa 'logic'
-        this.fixPreferenze();
-
     }// end of constructor
 
 
@@ -95,12 +92,23 @@ public abstract class CrudBackend extends AbstractService {
     public CrudBackend(final MongoRepository crudRepository, final Class<? extends AEntity> entityClazz) {
         this.crudRepository = crudRepository;
         this.entityClazz = entityClazz;
-
-        //--Preferenze usate da questa 'logic'
-        this.fixPreferenze();
-
     }// end of constructor with @Autowired
 
+
+    /**
+     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
+     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+     * <p>
+     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti, <br>
+     * ma l'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
+     * Se viene implementata una sottoclasse, passa di qui per ogni sottoclasse oltre che per questa istanza <br>
+     * Se esistono delle sottoclassi, passa di qui per ognuna di esse (oltre a questa classe madre) <br>
+     */
+    @PostConstruct
+    private void postConstruct() {
+        //--Preferenze usate da questa 'logic'
+        this.fixPreferenze();
+    }
 
     /**
      * Preferenze usate da questa 'backend' <br>
@@ -108,7 +116,12 @@ public abstract class CrudBackend extends AbstractService {
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
-        this.sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_CON);
+        if (reflectionService.isEsiste(entityClazz,FIELD_NAME_ORDINE)) {
+            this.sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
+        }
+        else {
+            this.sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_CON);
+        }
     }
 
     public boolean creaIfNotExist(final Object keyPropertyValue) {
@@ -483,7 +496,7 @@ public abstract class CrudBackend extends AbstractService {
     }
 
 
-    public List findAllBeanProperty(final String propertyName, final Object propertyValue) {
+    public List findAllByProperty(final String propertyName, final Object propertyValue) {
         String collectionName = annotationService.getCollectionName(entityClazz);
         Query query = new Query();
 
@@ -497,7 +510,7 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
-    public List<String> findAllStringKey() {
+    public List<String> findAllForKey() {
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         return mongoService.projectionString(entityClazz, keyPropertyName);
     }

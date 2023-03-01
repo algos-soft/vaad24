@@ -11,6 +11,7 @@
 - SimplePref.onContextRefreshEvent();
 
 == Vaadin
+
 - Start [https://vaadin.com/docs/latest/guide/quick-start]
 - MyApp [https://start.vaadin.com/app]
 - Components [https://vaadin.com/docs/latest/components]
@@ -18,6 +19,7 @@
 - 23.3.5 [https://github.com/vaadin/platform/releases/tag/23.3.5]
 
 == AsciiDoc
+
 Baeldung [https://www.baeldung.com/asciidoctor]
 
 AsciiDoc reference [https://docs.netapp.com/us-en/contribute/asciidoc_syntax.html#labeled-lists]
@@ -25,14 +27,15 @@ AsciiDoc reference [https://docs.netapp.com/us-en/contribute/asciidoc_syntax.htm
 Quick reference [https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/#ex-urls]
 
 == Banner
+
 Baeldung color [https://www.baeldung.com/spring-boot-color-banner]
 
 OnLine [https://devops.datenkollektiv.de/banner.txt/index.html]
 
 Create [https://devops.datenkollektiv.de/create-your-own-spring-boot-banner.html]
 
-
 == Crono
+
 * Next, fire up the terminal and run crontab -e.
 * Once you’re on the vim screen, hit i to put the editor into INSERT mode
 * After typing out the cron expression, hit esc and then type :wq to save and exit vim.
@@ -42,6 +45,7 @@ Create [https://devops.datenkollektiv.de/create-your-own-spring-boot-banner.html
 * Ss64 [https://ss64.com/osx/crontab.html]
 
 == Format
+
 * String.format("");
 
  %a 	floating point (except BigDecimal) 	Returns Hex output of floating point number.
@@ -60,16 +64,18 @@ are needed after this. See Date/Time conversion below.
  %x 	integer (incl. byte, short, int, long, bigint) Hex string.
 * Javatpoint [https://www.javatpoint.com/java-string-format]
 
-
 == Scheduler
 
-* Sotto-pattern per i minuti. I valori ammessi vanno da 0 a 59.
-* Sotto-pattern per le ore. I valori ammessi vanno da 0 a 23.
-* Sotto-pattern per il giorno del mese. I valori ammessi vanno da 1 a 31.
-* Sotto-pattern per il mese. I valori ammessi vanno da 1 (gennaio) a 12 (dicembre), o le stringhe-equivalenti "jan", "feb", "mar", "apr",
-"may", "jun", "jul", "aug", "sep", "oct", "nov" e "dec".
-* Sotto-pattern per il giorno della settimana. I valori ammessi vanno da 0 (domenica) a 6 (sabato), o le stringhe-equivalenti: "sun",
-"mon", "tue", "wed", "thu", "fri" e "sat".
+* Sotto-pattern per i minuti.
+I valori ammessi vanno da 0 a 59.
+* Sotto-pattern per le ore.
+I valori ammessi vanno da 0 a 23.
+* Sotto-pattern per il giorno del mese.
+I valori ammessi vanno da 1 a 31.
+* Sotto-pattern per il mese.
+I valori ammessi vanno da 1 (gennaio) a 12 (dicembre), o le stringhe-equivalenti "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov" e "dec".
+* Sotto-pattern per il giorno della settimana.
+I valori ammessi vanno da 0 (domenica) a 6 (sabato), o le stringhe-equivalenti: "sun", "mon", "tue", "wed", "thu", "fri" e "sat".
 
 * Cron4j [http://www.sauronsoftware.it/projects/cron4j/manual.php]
 
@@ -77,17 +83,16 @@ are needed after this. See Date/Time conversion below.
 
 * Vaadin [https://vaadin.com/docs/latest/components/icons]
 
-
 == Enums
 
 * Baeldung [https://www.baeldung.com/a-guide-to-java-enums]
-
 
 == BSon
 
 * Baeldung [https://www.baeldung.com/mongodb-bson]
 
 == Annotation
+
 Annotation type:
 
 - A primitive type
@@ -99,9 +104,11 @@ Annotation type:
 
 - Oracle [https://docs.oracle.com/javase/specs/jls/se8/html/jls-9.html#jls-9.6.1]
 
-
 == CRUD
-CRUD stands for Create, Read, Update, and Delete. These are the four basic operations that are commonly used in databases and data storage systems to manage data. Here is a brief explanation of each CRUD operation:
+
+CRUD stands for Create, Read, Update, and Delete.
+These are the four basic operations that are commonly used in databases and data storage systems to manage data.
+Here is a brief explanation of each CRUD operation:
 
 * Create:
 
@@ -125,11 +132,38 @@ in SQL or an equivalent method in other data storage systems.
 
 These four operations are fundamental to the management of data in any data storage system, and are used extensively in various software applications and websites.
 
-
 == Auto-Generated Field
 
 * Baeldung [https://www.baeldung.com/spring-boot-mongodb-auto-generated-field]
 
 == Criteria
+
 * Baeldung [https://www.baeldung.com/queries-in-spring-data-mongodb]
 * mongodb [https://www.mongodb.com/docs/manual/reference/operator/query/]
+
+== Backend
+
+* Singola entityBean **findBy...**
+** public AEntity findById(final String keyID)
+** public AEntity findByKey(final String keyValue)
+** public AEntity findByProperty(final String propertyName, final Object propertyValue)
+
+* Lista completa beans **findAll**...Sort
+** public List findAll()
+** public List findAllNoSort()
+** public List findAllSortCorrente()
+** public List findAllSort(final Sort sort)
+
+* Lista parziale beans **findAllBy...** propertyName
+** public List findAllByMese(final Mese mese)
+*** public List crudBackend.findAllByProperty(final String propertyName, final Object propertyValue)
+
+* Lista completa singola property **findAllFor...** propertyName
+** public List<String> findAllForNome()
+*** public List<String> crudBackend.findAllForProperty(final String propertyName)
+
+* Lista parziale singola property **findAllFor...By...** propertyName, propertyName2
+** public List<> findAllForNomeByMese(final Mese mese)
+*** public List<> crudBackend.findAllForPropertyByProperty(final String propertyName, final Object propertyValue2)
+
+

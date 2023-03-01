@@ -81,7 +81,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
     @Test
     @Order(1)
     @DisplayName("1 - collection")
-    void collection() {
+    protected void collection() {
         System.out.println("1 - Esistenza della collection");
 
         ottenutoBooleano = crudBackend.isExistsCollection();
@@ -98,7 +98,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
     @Test
     @Order(2)
     @DisplayName("2 - count")
-    void count2() {
+    protected void count2() {
         System.out.println("2 - count");
 
         ottenutoIntero = crudBackend.count();
@@ -119,9 +119,9 @@ public abstract class BackendTest extends AlgosIntegrationTest {
 
     @Test
     @Order(21)
-    @DisplayName("21 - findAll unsorted")
-    void findAllNoSort() {
-        System.out.println("21 - findAll unsorted");
+    @DisplayName("21 - findAllNoSort")
+    protected void findAllNoSort() {
+        System.out.println("21 - findAllNoSort");
 
         listaBeans = crudBackend.findAllNoSort();
         assertNotNull(listaBeans);
@@ -134,9 +134,9 @@ public abstract class BackendTest extends AlgosIntegrationTest {
 
     @Test
     @Order(22)
-    @DisplayName("22 - findAll getSortKeyID")
-    void findAllSortCorrente() {
-        System.out.println("22 - findAll getSortKeyID");
+    @DisplayName("22 - findAll findAllSortCorrente")
+    protected void findAllSortCorrente() {
+        System.out.println("22 - findAll findAllSortCorrente");
 
         listaBeans = crudBackend.findAllSortCorrente();
         assertNotNull(listaBeans);
@@ -150,7 +150,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
     @Test
     @Order(23)
     @DisplayName("23 - findAll con sort specifico (discendente)")
-    void findAllSort() {
+    protected void findAllSort() {
         System.out.println("23 - findAll con sort specifico (discendente)");
 
         sort = Sort.by(Sort.Direction.DESC, keyPropertyName);
@@ -165,9 +165,9 @@ public abstract class BackendTest extends AlgosIntegrationTest {
 
     @Test
     @Order(31)
-    @DisplayName("31 - findAllStringKey")
-    void findAllStringKey() {
-        System.out.println("31 - findAllStringKey");
+    @DisplayName("31 - findAllForKey")
+    protected void findAllForKey() {
+        System.out.println("31 - findAllForKey");
         System.out.println(VUOTA);
 
         if (!annotationService.usaKeyPropertyName(entityClazz)) {
@@ -190,7 +190,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
             return;
         }
 
-        listaStr = crudBackend.findAllStringKey();
+        listaStr = crudBackend.findAllForKey();
         assertNotNull(listaStr);
         ottenutoIntero = listaStr.size();
         sorgente = textService.format(ottenutoIntero);
@@ -204,7 +204,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
     @Test
     @Order(32)
     @DisplayName("32 - findAllStringKeyReverseOrder")
-    void findAllStringKeyReverseOrder() {
+    protected void findAllStringKeyReverseOrder() {
         System.out.println("32 - findAllStringKeyReverseOrder");
         System.out.println(VUOTA);
 
@@ -242,7 +242,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
     @Test
     @Order(40)
     @DisplayName("40 - toString")
-    void toStringTest() {
+    protected void toStringTest() {
         System.out.println("40 - toString");
         System.out.println(VUOTA);
 
@@ -282,7 +282,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
                 System.out.println(message);
             }
             assertTrue(textService.isValid(ottenuto));
-            System.out.println(ottenuto);
+            System.out.println(String.format("toString%s%s", FORWARD, ottenuto));
             return;
         }
 
@@ -313,7 +313,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
     @Test
     @Order(41)
     @DisplayName("41 - newEntity con ID ma non registrata")
-    void newEntity() {
+    protected void newEntity() {
         System.out.println("41 - newEntity con ID ma non registrata");
         System.out.println(VUOTA);
         String keyPropertyName = VUOTA;
@@ -341,6 +341,8 @@ public abstract class BackendTest extends AlgosIntegrationTest {
 
                 assertEquals(previsto, ottenuto);
                 assertEquals(previsto2, ottenuto2);
+                assertTrue(textService.isValid(ottenuto));
+                System.out.println(String.format("KeyIdg%s%s", FORWARD, ottenuto));
             }
             return;
         }
@@ -375,7 +377,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
     @Test
     @Order(42)
     @DisplayName("42 - CRUD operations")
-    void crud() {
+    protected void crud() {
         System.out.println("42 - CRUD operations");
         System.out.println(VUOTA);
 
@@ -498,74 +500,84 @@ public abstract class BackendTest extends AlgosIntegrationTest {
 
     //Segnaposto
     @Order(51)
-    void libero51() {
+    protected void libero51() {
     }
 
     //Segnaposto
     @Order(52)
-    void libero52() {
+    protected void libero52() {
     }
 
 
     //Segnaposto
     @Order(53)
-    void libero53() {
+    protected void libero53() {
+    }
+
+    //Segnaposto
+    @Order(54)
+    protected void libero54() {
+    }
+
+    //Segnaposto
+    @Order(55)
+    protected void libero55() {
     }
 
     //Segnaposto
     @Order(61)
-    void libero61() {
+    protected void libero61() {
     }
 
     //Segnaposto
     @Order(62)
-    void libero62() {
+    protected void libero62() {
     }
 
 
     //Segnaposto
     @Order(63)
-    void libero63() {
+    protected void libero63() {
     }
 
 
     //Segnaposto
     @Order(71)
-    void libero71() {
+    protected void libero71() {
     }
 
     //Segnaposto
     @Order(72)
-    void libero72() {
+    protected void libero72() {
     }
 
 
     //Segnaposto
     @Order(73)
-    void libero73() {
+    protected void libero73() {
     }
 
 
     //Segnaposto
     @Order(81)
-    void libero81() {
+    protected void libero81() {
     }
 
     //Segnaposto
     @Order(82)
-    void libero82() {
+    protected void libero82() {
     }
 
 
     //Segnaposto
     @Order(83)
-    void libero83() {
+    protected void libero83() {
     }
 
     @Test
     @Order(91)
     @DisplayName("91 - resetOnlyEmpty")
-    void resetOnlyEmpty() {
+    protected void resetOnlyEmpty() {
         System.out.println("91 - resetOnlyEmpty");
         System.out.println(VUOTA);
 
@@ -598,7 +610,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
     @Test
     @Order(92)
     @DisplayName("92 - resetForcing")
-    void resetForcing() {
+    protected void resetForcing() {
         System.out.println("92 - resetForcing");
         System.out.println(VUOTA);
 

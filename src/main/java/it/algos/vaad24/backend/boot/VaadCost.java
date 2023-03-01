@@ -455,6 +455,14 @@ public class VaadCost {
 
     public static final String FIELD_NAME_COMPANY = "company";
 
+    public static final String FIELD_NAME_MESE = "mese";
+
+    public static final String FIELD_NAME_ANNO = "anno";
+
+    public static final String FIELD_NAME_GIORNO = "giorno";
+
+    public static final String FIELD_NAME_SECOLO = "secolo";
+
     public static final String FIELD_KEY_ORDER = "#";
 
     public static final String TRATTINO = "-";

@@ -51,6 +51,7 @@ public class PreferenzaBackend extends CrudBackend {
         this.repository = (PreferenzaRepository) crudRepository;
     }
 
+
     public boolean existsByKeyCode(final String code) {
         return findByKey(code) != null;
     }

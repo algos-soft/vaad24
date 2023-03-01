@@ -117,7 +117,7 @@ public class AnnoBackend extends CrudBackend {
         return (List<Anno>) mongoService.mongoOp.find(query, entityClazz, collectionName);
     }
 
-    public List<String> findAllStringKey() {
+    public List<String> findAllForKey() {
         return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
     }
 
@@ -132,7 +132,7 @@ public class AnnoBackend extends CrudBackend {
     //    }
 
     public List<Anno> findAllBySecolo(Secolo secolo) {
-        return findAllBeanProperty("secolo", secolo);
+        return findAllByProperty("secolo", secolo);
     }
 
 

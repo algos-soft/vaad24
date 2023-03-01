@@ -1,6 +1,5 @@
 package it.algos.vaad24.backend.packages.crono.giorno;
 
-import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -95,24 +94,28 @@ public class GiornoBackend extends CrudBackend {
     }
 
     public Giorno findByOrdine(final int ordine) {
-        return findByProperty(FIELD_NAME_ORDINE, ordine);
+        return this.findByProperty(FIELD_NAME_ORDINE, ordine);
     }
 
     public List<Giorno> findAllByMese(Mese mese) {
-        return findAllBeanProperty("mese", mese);
+        return super.findAllByProperty(FIELD_NAME_MESE, mese);
     }
 
-    public List<String> findAllStringKey() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
-    }
 
-    public List<String> findAllStringKeyReverseOrder() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
-    }
+    //    public List<String> findAllForKey() {
+//        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
+//    }
 
-    //    public List<String> findAllNomi() {
-    //        return this.findAllStringKey();
-    //    }
+//    public List<String> findAllStringKeyReverseOrder() {
+//        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
+//    }
+
+    public List<String> findAllForNome() {
+        return null;
+    }
+    public List<String> findAllForNomeByMese(Mese mese) {
+        return null;
+    }
 
 
     public List<String> findAllNomiByMese(Mese mese) {

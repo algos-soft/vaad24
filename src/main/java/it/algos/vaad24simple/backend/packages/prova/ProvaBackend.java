@@ -95,6 +95,7 @@ public class ProvaBackend extends CrudBackend {
         List<AEntity> lista;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            result.setValido(true);
             lista = new ArrayList<>();
             lista.add(insert(newEntity("Aldo", null)));
             lista.add(insert(newEntity("Giovanni", null)));

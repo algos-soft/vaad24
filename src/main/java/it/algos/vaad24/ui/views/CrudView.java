@@ -292,7 +292,8 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         //--Larghezza del browser utilizzato in questa sessione <br>
         UI.getCurrent().getPage().retrieveExtendedClientDetails(details -> browserWidth = details.getBodyClientWidth());
 
-        sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_SENZA);
+        sortOrder = crudBackend.getSortOrder();
+        sortOrder = sortOrder != null ? sortOrder : Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_SENZA);
         usaRowIndex = true;
         riordinaColonne = true;
         gridPropertyNamesList = new ArrayList<>();
