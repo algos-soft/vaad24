@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.*;
 import java.lang.reflect.Field;
@@ -919,6 +920,25 @@ public class AnnotationService extends AbstractService {
         }
 
         return isSearch;
+    }
+
+    /**
+     * Check if the field is transient <br>.
+     *
+     * @param entityClazz     the class of type AEntity
+     * @param publicFieldName the property name
+     *
+     * @return the field is transient
+     */
+    public boolean isTransient(final Class<? extends AEntity> entityClazz, final String publicFieldName) {
+        boolean isTransient = false;
+        Field field = reflectionService.getField(entityClazz, publicFieldName);
+
+        if (field != null) {
+            return field.getDeclaredAnnotation(Transient.class) != null;
+        }
+
+        return isTransient;
     }
 
     /**

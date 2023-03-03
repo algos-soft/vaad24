@@ -9,15 +9,17 @@ import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
+import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
+import it.algos.vaad24.backend.packages.utility.log.Logger;
 import it.algos.vaad24.backend.packages.utility.log.*;
+import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.views.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
-import org.slf4j.Logger;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
@@ -63,7 +65,7 @@ public abstract class AlgosUnitTest {
 
     protected static final LocalDateTime LOCAL_DATE_TIME_DUE = LocalDateTime.of(2014, 10, 5, 7, 4);
 
-    public Logger slf4jLogger;
+    public org.slf4j.Logger slf4jLogger;
 
     protected boolean previstoBooleano;
 
@@ -236,7 +238,22 @@ public abstract class AlgosUnitTest {
                 Arguments.of(Mese.class, Mese.class.getSimpleName()),
                 Arguments.of(Continente.class, Continente.class.getSimpleName()),
                 Arguments.of(Giorno.class, Giorno.class.getSimpleName()),
-                Arguments.of(Via.class, Via.class.getSimpleName())
+                Arguments.of(Logger.class, Logger.class.getSimpleName()),
+                Arguments.of(Via.class, Via.class.getSimpleName()),
+                Arguments.of(ViaView.class, ViaView.class.getSimpleName()),
+                Arguments.of(SecoloView.class, SecoloView.class.getSimpleName())
+        );
+    }
+
+    //--clazz
+    //--usa AIView
+    protected static Stream<Arguments> CLAZZ_VIEW() {
+        return Stream.of(
+                Arguments.of(CrudView.class, false),
+                Arguments.of(AIType.class, false),
+                Arguments.of(Mese.class, false),
+                Arguments.of(PreferenzaView.class, true),
+                Arguments.of(SecoloView.class, false)
         );
     }
 
@@ -367,6 +384,7 @@ public abstract class AlgosUnitTest {
         classService.annotationService = annotationService;
         classService.arrayService = arrayService;
         annotationService.textService = textService;
+        annotationService.reflectionService = reflectionService;
     }
 
     /**

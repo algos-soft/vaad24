@@ -521,7 +521,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
     protected void fixNomiColonne() {
         if (gridPropertyNamesList.size() < 1) {
-            List<Field> lista= reflectionService.getAllFields(entityClazz);
+            List<Field> lista= reflectionService.getDeclaredFields(entityClazz);
             for (Field field : lista) {
                 gridPropertyNamesList.add(field.getName());
             }
