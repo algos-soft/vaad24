@@ -337,12 +337,13 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
 
     protected void printFields(Class clazz, List<Field> lista, boolean isCompresi) {
         String clazzName = clazz.getSimpleName();
-        String compresi = isCompresi ? "compreso _ID e quelli della superclasse" : "escluso _ID e quelli della superclasse";
+        String quali = isCompresi ? "compreso" : "escluso";
+        String fields = " _ID, transient e quelli della superclasse";
         String fieldName;
         String fieldClass;
         int k = 1;
 
-        message = String.format("Nella classe %s ci sono %d fields %s", clazzName, lista.size(), compresi);
+        message = String.format("Nella classe %s ci sono %d fields %s%s", clazzName, lista.size(), quali, fields);
         System.out.println(message);
         System.out.println(VUOTA);
 

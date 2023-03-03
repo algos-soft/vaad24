@@ -8,7 +8,6 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
 
-import javax.persistence.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
@@ -187,11 +186,9 @@ public class ReflectionService extends AbstractService {
         if (fieldsArray != null) {
             listaFields = new ArrayList<>();
             for (Field field : fieldsArray) {
-//                Object alfa=field.getAnnotatedType();
-                Object beta= field.getDeclaredAnnotations();
-                Object alfa= field.getDeclaredAnnotation(Transient.class);
-
-                listaFields.add(field);
+                if (!annotationService.isTransient(entityClazz,field)) {
+                    listaFields.add(field);
+                }
             }
         }
 

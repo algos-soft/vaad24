@@ -930,15 +930,27 @@ public class AnnotationService extends AbstractService {
      *
      * @return the field is transient
      */
-    public boolean isTransient(final Class<? extends AEntity> entityClazz, final String publicFieldName) {
+    public boolean isTransient(final Class<? extends AEntity> entityClazz, final Field field) {
         boolean isTransient = false;
-        Field field = reflectionService.getField(entityClazz, publicFieldName);
 
         if (field != null) {
             return field.getDeclaredAnnotation(Transient.class) != null;
         }
 
         return isTransient;
+    }
+
+    /**
+     * Check if the field is transient <br>.
+     *
+     * @param entityClazz     the class of type AEntity
+     * @param publicFieldName the property name
+     *
+     * @return the field is transient
+     */
+    public boolean isTransient(final Class<? extends AEntity> entityClazz, final String publicFieldName) {
+        Field field = reflectionService.getField(entityClazz, publicFieldName);
+        return isTransient(entityClazz, field);
     }
 
     /**
