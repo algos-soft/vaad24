@@ -506,7 +506,9 @@ public class MongoService<capture> extends AbstractService {
 
         for (var singolo : documents) {
             Object obj = singolo.get(property);
-            listaProperty.add(obj.toString());
+            if (obj != null) {
+                listaProperty.add(obj.toString());
+            }
         }
         return listaProperty;
     }

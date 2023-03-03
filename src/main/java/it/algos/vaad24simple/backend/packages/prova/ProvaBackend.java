@@ -1,10 +1,14 @@
 package it.algos.vaad24simple.backend.packages.prova;
 
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
+import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.wrapper.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -15,34 +19,24 @@ import java.util.*;
  * User: gac
  * Date: Mon, 13-Feb-2023
  * Time: 09:40
- * <p>
- * Service di una entityClazz specifica e di un package <br>
- * Garantisce i metodi di collegamento per accedere al database <br>
- * Non mantiene lo stato di una istanza entityBean <br>
- * Mantiene lo stato della entityClazz <br>
- * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
 public class ProvaBackend extends CrudBackend {
 
+    @Autowired
+    public ContinenteBackend continenteBackend;
 
-    /**
-     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
-     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
-     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     */
-    //@todo registrare eventualmente come costante in VaadCost il valore del Qualifier
+    @Autowired
+    public ViaBackend viaBackend;
+
+
     public ProvaBackend() {
-        super(null, Prova.class);
+        super(Prova.class);
     }
 
 
-    public boolean creaIfNotExist(final String nome) {
-        return insert(newEntity(nome, null)) != null;
+    public boolean creaIfNotExist(final String descrizione) {
+        return insert(newEntity(descrizione, null, null, VUOTA, null, null)) != null;
     }
 
 
@@ -54,8 +48,9 @@ public class ProvaBackend extends CrudBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public Prova newEntity(String descrizione) {
-        return newEntity(descrizione, null);
+        return newEntity(descrizione, null, null, VUOTA, null, null);
     }
+
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -67,10 +62,14 @@ public class ProvaBackend extends CrudBackend {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public Prova newEntity(final String descrizione, Continente continente) {
+    public Prova newEntity(String descrizione, Continente continenteLinkDinamicoDBRef, Via viaLinkStatico, String typeString, AETypeVers versione, AESchedule schedule) {
         Prova newEntityBean = Prova.builder()
                 .descrizione(textService.isValid(descrizione) ? descrizione : null)
-                .continenti(continente)
+                .continenteLinkDinamicoDBRef(continenteLinkDinamicoDBRef)
+                .viaLinkStatico(viaLinkStatico)
+                .typeString(textService.isValid(typeString) ? typeString : null)
+                .versione(versione)
+                .schedule(schedule)
                 .build();
 
         return (Prova) fixKey(newEntityBean);
@@ -92,20 +91,52 @@ public class ProvaBackend extends CrudBackend {
         AResult result = super.resetOnlyEmpty();
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
-        List<AEntity> lista;
+        String nomeFileConfig = "prova";
+        Map<String, List<String>> mappa;
+        List<AEntity> lista = null;
+        List<String> riga;
+        AEntity entityBean;
+
+        String descrizione = VUOTA;
+        Continente continenteLinkDinamicoDBRef = null;
+        Via viaLinkStatico = null;
+        String typeString = VUOTA;
+        AETypeVers versione = null;
+        AESchedule schedule = null;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             result.setValido(true);
-            lista = new ArrayList<>();
-            lista.add(insert(newEntity("Aldo", null)));
-            lista.add(insert(newEntity("Giovanni", null)));
-            lista.add(insert(newEntity("Giacomo", null)));
+            mappa = resourceService.leggeMappaConfig(nomeFileConfig);
+            if (mappa != null) {
+                result.setValido(true);
+                lista = new ArrayList<>();
 
-            return super.fixResult(result, clazzName, collectionName, lista);
+                for (String key : mappa.keySet()) {
+                    riga = mappa.get(key);
+                    if (riga.size() == 6) {
+                        descrizione = riga.get(0);
+                        continenteLinkDinamicoDBRef = continenteBackend.findById(riga.get(1));
+                        viaLinkStatico = viaBackend.findById(riga.get(2));
+                        typeString = riga.get(3);
+                        versione = AETypeVers.valueOf(riga.get(4));
+                        schedule = AESchedule.valueOf(riga.get(5));
+                    }
+                    entityBean = insert(newEntity(descrizione, continenteLinkDinamicoDBRef, viaLinkStatico, typeString, versione, schedule));
+                    if (entityBean != null) {
+                        lista.add(entityBean);
+                    }
+                    else {
+                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", descrizione))).usaDb());
+                        result.setValido(false);
+                    }
+                }
+                return super.fixResult(result, clazzName, collectionName, lista);
+            }
         }
         else {
             return result.fine();
         }
+        return result.fine();
     }
 
 }// end of crud backend class

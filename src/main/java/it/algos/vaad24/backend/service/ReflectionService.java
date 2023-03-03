@@ -145,7 +145,7 @@ public class ReflectionService extends AbstractService {
             logger.error(new WrapLog().exception(new AlgosException(String.format("La classe %s non è una classe di tipo AEntity", entityClazz.getSimpleName()))).usaDb());
         }
 
-        //--recupera tutti i fields della entity e di tutte le superclassi
+        //--recupera tutti i fields della entity e di tutte le superClassi
         fieldsArray = entityClazz.getFields();
         if (fieldsArray != null) {
             listaFields = new ArrayList<>();
@@ -162,6 +162,30 @@ public class ReflectionService extends AbstractService {
                 //                if (field.getName().equalsIgnoreCase(PROPERTY_MODIFICA) && !annotationService.usaTimeStamp(entityClazz)) {
                 //                    continue;
                 //                }
+                listaFields.add(field);
+            }
+        }
+
+        return listaFields;
+    }
+
+    public List<Field> getDeclaredFields(Class<? extends AEntity> entityClazz) {
+        List<Field> listaFields = null;
+        Field[] fieldsArray;
+
+        if (entityClazz == null) {
+            logger.error(new WrapLog().exception(new AlgosException("Manca la entityClazz")).usaDb());
+        }
+
+        if (!AEntity.class.isAssignableFrom(entityClazz)) {
+            logger.error(new WrapLog().exception(new AlgosException(String.format("La classe %s non è una classe di tipo AEntity", entityClazz.getSimpleName()))).usaDb());
+        }
+
+        //--recupera tutti i fields della entity e di tutte le superClassi
+        fieldsArray = entityClazz.getDeclaredFields();
+        if (fieldsArray != null) {
+            listaFields = new ArrayList<>();
+            for (Field field : fieldsArray) {
                 listaFields.add(field);
             }
         }

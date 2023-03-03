@@ -35,11 +35,11 @@ import java.time.format.*;
 @AIEntity(keyPropertyName = "descrizione")
 public class Nota extends AEntity {
 
-    @AIField(type = AETypeField.enumerationType, enumClazz = AETypeLog.class)
-    public String type;
+    @AIField(type = AETypeField.enumType, enumClazz = AETypeLog.class)
+    public AETypeLog type;
 
-    @AIField(type = AETypeField.enumerationType, enumClazz = AENotaLevel.class)
-    public String livello;
+    @AIField(type = AETypeField.enumType, enumClazz = AENotaLevel.class)
+    public AENotaLevel livello;
 
     @AIField(type = AETypeField.localDate)
     public LocalDate inizio;

@@ -2,6 +2,8 @@ package it.algos.simpleOnly;
 
 import it.algos.*;
 import it.algos.base.*;
+import it.algos.vaad24.backend.packages.anagrafica.*;
+import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24simple.backend.packages.prova.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
@@ -26,6 +28,12 @@ public class ProvaBackendTest extends BackendTest {
     @InjectMocks
     private ProvaBackend backend;
 
+    @InjectMocks
+    private ContinenteBackend continenteBackend;
+
+    @InjectMocks
+    private ViaBackend viaBackend;
+
     /**
      * Qui passa una volta sola <br>
      */
@@ -34,7 +42,17 @@ public class ProvaBackendTest extends BackendTest {
         assertNotNull(backend);
         super.entityClazz = Prova.class;
         super.crudBackend = backend;
+
         super.setUpAll();
+
+        backend.continenteBackend = continenteBackend;
+        backend.viaBackend = viaBackend;
+        backend.continenteBackend.annotationService = annotationService;
+        backend.continenteBackend.textService = textService;
+        backend.continenteBackend.mongoService = mongoService;
+        backend.viaBackend.annotationService = annotationService;
+        backend.viaBackend.textService = textService;
+        backend.viaBackend.mongoService = mongoService;
     }
 
 }

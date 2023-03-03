@@ -359,6 +359,7 @@ public abstract class AlgosUnitTest {
         reflectionService.textService = textService;
         reflectionService.classService = classService;
         reflectionService.logger = logService;
+        reflectionService.annotationService = annotationService;
         classService.textService = textService;
         classService.fileService = fileService;
         classService.reflectionService = reflectionService;

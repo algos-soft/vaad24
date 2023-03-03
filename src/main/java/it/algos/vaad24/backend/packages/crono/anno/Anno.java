@@ -42,7 +42,7 @@ public class Anno extends AEntity {
     public String nome;
 
     @DBRef
-    @AIField(type = AETypeField.link, widthEM = 10, linkClazz = SecoloBackend.class)
+    @AIField(type = AETypeField.linkDinamico, widthEM = 10, linkClazz = SecoloBackend.class)
     public Secolo secolo;
 
     @AIField(type = AETypeField.booleano, header = "d.C.")

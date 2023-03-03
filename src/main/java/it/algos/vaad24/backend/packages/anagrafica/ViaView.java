@@ -47,7 +47,7 @@ public class ViaView extends CrudView {
         super.usaBottoneDeleteReset = true;
         super.usaReset = true;
         super.usaBottoneNew = false;
-        super.usaBottoneEdit = false;
+        super.usaBottoneEdit = true;
         super.usaBottoneSearch = false;
         super.usaBottoneDelete = false;
     }

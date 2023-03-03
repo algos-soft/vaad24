@@ -280,7 +280,7 @@ public abstract class CrudDialog extends Dialog {
                         case integer -> new IntegerField(caption);
                         case lungo -> new TextField(caption);
                         case booleano -> new Checkbox(caption);
-                        case enumerationString -> {
+                        case enumString -> {
                             combo = new ComboBox(caption);
                             combo.setClearButtonVisible(nullSelectionAllowed);
                             try {
@@ -293,7 +293,7 @@ public abstract class CrudDialog extends Dialog {
                             }
                             yield combo;
                         }
-                        case link -> {
+                        case linkDinamico, linkStatico -> {
                             combo = new ComboBox(caption);
                             combo.setClearButtonVisible(nullSelectionAllowed);
 
@@ -339,7 +339,7 @@ public abstract class CrudDialog extends Dialog {
                 }
                 else {
                     aField = switch (type) {
-                        case enumerationType -> {
+                        case enumType -> {
                             aField = new AComboField();
                             try {
                                 enumClazz = annotationService.getEnumClazz(currentItem.getClass(), key);

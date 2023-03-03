@@ -1,6 +1,7 @@
 package it.algos.vaad24.backend.packages.utility.nota;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.logic.*;
 import org.springframework.stereotype.*;
 
@@ -18,14 +19,16 @@ public class NotaBackend extends CrudBackend {
 
 
     public NotaBackend() {
-        super( Nota.class);
+        super(Nota.class);
     }
 
-
+    public Nota newEntity() {
+        return newEntity(null, null, VUOTA);
+    }
 
     @Override
     public Nota newEntity(final String keyPropertyValue) {
-        return newEntity(VUOTA, VUOTA, keyPropertyValue);
+        return newEntity(null, null, keyPropertyValue);
     }
 
     /**
@@ -37,10 +40,10 @@ public class NotaBackend extends CrudBackend {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public Nota newEntity(final String type, final String livello, final String descrizione) {
+    public Nota newEntity(final AETypeLog type, final AENotaLevel livello, final String descrizione) {
         Nota newEntityBean = Nota.builder()
-                .type(textService.isValid(type) ? type : null)
-                .livello(textService.isValid(livello) ? livello : null)
+                .type(type != null ? type : AETypeLog.system)
+                .livello(livello != null ? livello : AENotaLevel.normale)
                 .inizio(LocalDate.now())
                 .descrizione(textService.isValid(descrizione) ? descrizione : null)
                 .build();

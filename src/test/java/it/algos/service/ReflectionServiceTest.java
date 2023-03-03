@@ -3,12 +3,15 @@ package it.algos.service;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.service.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.test.context.junit.jupiter.*;
 
@@ -218,6 +221,7 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
         assertTrue(ottenutoBooleano);
 
     }
+
     @Test
     @Order(27)
     @DisplayName("27 - isEsisteMetodoSenzaParametri")
@@ -232,6 +236,52 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
         assertFalse(ottenutoBooleano);
     }
 
+    @ParameterizedTest
+    @MethodSource(value = "CLAZZ_FOR_NAME")
+    @Order(41)
+    @DisplayName("41 - getAllFields di una classe AEntity")
+        //--clazz
+        //--simpleName
+    void getAllFields(final Class genericClazz, final String simpleName) {
+        System.out.println("41 - getAllFields di una classe AEntity");
+        System.out.println(VUOTA);
+
+        if (!AEntity.class.isAssignableFrom(genericClazz)) {
+            message = String.format("La classe %s non è una classe di tipo AEntity", simpleName);
+            System.out.println(message);
+            return;
+        }
+        else {
+            clazz = genericClazz;
+        }
+
+        listaFields = service.getAllFields(clazz);
+        printFields(clazz, listaFields, true);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "CLAZZ_FOR_NAME")
+    @Order(42)
+    @DisplayName("42 - getDeclaredFields di una classe AEntity")
+        //--clazz
+        //--simpleName
+    void getDeclaredFields(final Class genericClazz, final String simpleName) {
+        System.out.println("42 - getDeclaredFields di una classe AEntity");
+        System.out.println(VUOTA);
+
+        if (!AEntity.class.isAssignableFrom(genericClazz)) {
+            message = String.format("La classe %s non è una classe di tipo AEntity", simpleName);
+            System.out.println(message);
+            return;
+        }
+        else {
+            clazz = genericClazz;
+        }
+
+        listaFields = service.getDeclaredFields(clazz);
+        printFields(clazz, listaFields, false);
+    }
 
     /**
      * Qui passa al termine di ogni singolo test <br>
@@ -283,6 +333,28 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
         }
 
         return lista;
+    }
+
+    protected void printFields(Class clazz, List<Field> lista, boolean isCompresi) {
+        String clazzName = clazz.getSimpleName();
+        String compresi = isCompresi ? "compreso _ID e quelli della superclasse" : "escluso _ID e quelli della superclasse";
+        String fieldName;
+        String fieldClass;
+        int k = 1;
+
+        message = String.format("Nella classe %s ci sono %d fields %s", clazzName, lista.size(), compresi);
+        System.out.println(message);
+        System.out.println(VUOTA);
+
+        for (Field field : lista) {
+            fieldName = field.getName();
+            fieldClass = field.getType().getSimpleName();
+            message = String.format("%s%s%s", fieldName, FORWARD, fieldClass);
+            System.out.print(k++);
+            System.out.print(PARENTESI_TONDA_END);
+            System.out.print(SPAZIO);
+            System.out.println(message);
+        }
     }
 
 }

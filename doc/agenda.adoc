@@ -166,3 +166,6 @@ These four operations are fundamental to the management of data in any data stor
 ** public List<> findAllForNomeByMese(final Mese mese)
 *** findAllByMese(mese).stream().map(giorno -> giorno.nome).collect(Collectors.toList());
 
+== Fields
+
+* Baeldung [https://www.baeldung.com/java-reflection-class-fields]

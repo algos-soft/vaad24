@@ -5,8 +5,6 @@ import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import org.springframework.beans.factory.annotation.*;
 
-import java.util.*;
-
 /**
  * Project vaad24
  * Created by Algos
@@ -50,15 +48,7 @@ public class ProvaView extends CrudView {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
-
-        super.gridPropertyNamesList = Arrays.asList("descrizione", "continenti", "typeString","typeA","typeB"); // controllare la congruità con la Entity
-        super.formPropertyNamesList = Arrays.asList("descrizione", "continenti", "typeString","typeA","typeB"); // controllare la congruità con la Entity
-        super.riordinaColonne = true; //se rimane true, uguale al default, si può cancellare
-        super.usaBottoneRefresh = false; //se rimane false, uguale al default, si può cancellare
-        super.usaBottoneDeleteReset = false; //se rimane false, uguale al default, si può cancellare
-        super.usaBottoneNew = true; //se rimane true, uguale al default, si può cancellare
-        super.usaBottoneEdit = true; //se rimane true, uguale al default, si può cancellare
-        super.usaBottoneDelete = true; //se rimane true, uguale al default, si può cancellare
+        autoCreateColumns = true;
     }
 
     /**

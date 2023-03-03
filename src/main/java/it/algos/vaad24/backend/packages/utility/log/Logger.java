@@ -33,10 +33,10 @@ import java.time.format.*;
 @AIEntity(keyPropertyName = "evento")
 public class Logger extends AEntity {
 
-    @AIField(type = AETypeField.enumerationType, enumClazz = AETypeLog.class)
+    @AIField(type = AETypeField.enumType, enumClazz = AETypeLog.class)
     public AETypeLog type;
 
-    @AIField(type = AETypeField.enumerationType, enumClazz = AELogLevel.class)
+    @AIField(type = AETypeField.enumType, enumClazz = AELogLevel.class)
     public AELogLevel livello;
 
     @AIField(type = AETypeField.localDateTime)

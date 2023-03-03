@@ -20,7 +20,6 @@ public class EnumTypeField extends AField {
 
 
     public EnumTypeField() {
-
         add(new Span("Forse"));
     }
     @Override

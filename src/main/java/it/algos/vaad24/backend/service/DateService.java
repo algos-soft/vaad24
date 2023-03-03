@@ -198,8 +198,12 @@ public class DateService extends AbstractService {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("d-MMM-yy"));
     }
 
+    public String get(LocalDate localDate) {
+        return localDate != null ? localDate.format(DateTimeFormatter.ofPattern("d-MMM-yy", Locale.ITALIAN)) : NULL;
+    }
+
     public String get(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern("d-MMM-yy H:mm", Locale.ITALIAN));
+        return localDateTime != null ? localDateTime.format(DateTimeFormatter.ofPattern("d-MMM-yy H:mm", Locale.ITALIAN)) : NULL;
     }
 
     /**

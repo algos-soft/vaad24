@@ -105,6 +105,20 @@ public class AComboField extends CustomField implements HasValue {
 
     @Override
     protected Object generateModelValue() {
+        //        String value= comboBox.getValue().toString();
+        //        if (items.contains(value)) {
+        //            int a=87;
+        //        }
+        //        for (Object obj : items) {
+        //            if (obj instanceof AITypePref type) {
+        //                Object beta=type.get(value);
+        //                if (beta.toString().equals(value)) {
+        //                    return obj;
+        //                }
+        //            }
+        //        }
+        //
+        //        return null;
         return comboBox.getValue().toString();
     }
 

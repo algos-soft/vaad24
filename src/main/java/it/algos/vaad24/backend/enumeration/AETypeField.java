@@ -44,15 +44,16 @@ public enum AETypeField {
     //    stringLinkClassCombo(10, 14),
 
     //    multicombo,
-    combolinkato(8, 8),
+    linkDinamico(8, 10),
+    linkStatico(8, 8),
 
-    enumerationString(8, 8),
-    enumerationType(true,8, 8),
+    enumString(8, 8),
+
+    enumType(true,8, 8),
     gridShowOnly(0, 20),
 
     //    dateNotEnabled,
     //    decimal,
-    link(8, 10),
     image(3, 9),
     //    resource,
 

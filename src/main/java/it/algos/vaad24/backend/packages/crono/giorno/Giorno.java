@@ -43,7 +43,7 @@ public class Giorno extends AEntity {
     public String nome;
 
     @DBRef
-    @AIField(type = AETypeField.link, linkClazz = MeseBackend.class)
+    @AIField(type = AETypeField.linkDinamico, linkClazz = MeseBackend.class)
     public Mese mese;
 
     @AIField(type = AETypeField.integer, widthEM = 6, headerIcon = VaadinIcon.STEP_BACKWARD, caption = "Progressivo da inizio anno")

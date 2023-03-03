@@ -25,6 +25,7 @@ import org.springframework.core.env.*;
 import org.springframework.data.domain.*;
 import org.vaadin.crudui.crud.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -475,6 +476,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
      */
     protected void fixBodyLayout() {
         // Create a listing component for a bean type
+        this.fixNomiColonne();
         grid = new Grid(entityClazz, autoCreateColumns);
 
         // Crea/regola le colonne
@@ -514,6 +516,15 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         items = crudBackend.findAllSort(sortOrder);
         if (items != null) {
             grid.setItems(items);
+        }
+    }
+
+    protected void fixNomiColonne() {
+        if (gridPropertyNamesList.size() < 1) {
+            List<Field> lista= reflectionService.getAllFields(entityClazz);
+            for (Field field : lista) {
+                gridPropertyNamesList.add(field.getName());
+            }
         }
     }
 

@@ -16,13 +16,6 @@ import java.util.*;
  * User: gac
  * Date: dom, 03-apr-2022
  * Time: 08:39
- * <p>
- * Service di una entityClazz specifica e di un package <br>
- * Garantisce i metodi di collegamento per accedere al database <br>
- * Non mantiene lo stato di una istanza entityBean <br>
- * Mantiene lo stato della entityClazz <br>
- * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
 public class ContinenteBackend extends CrudBackend {
@@ -37,7 +30,6 @@ public class ContinenteBackend extends CrudBackend {
      * Regola la entityClazz (final nella superclasse) associata a questo service <br>
      *
      */
-    //@todo registrare eventualmente come costante in VaadCost il valore del Qualifier
     public ContinenteBackend() {
         super( Continente.class);
     }
@@ -45,8 +37,6 @@ public class ContinenteBackend extends CrudBackend {
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
      *
      * @return la nuova entity appena creata (non salvata)
      */
@@ -79,6 +69,20 @@ public class ContinenteBackend extends CrudBackend {
         return continente;
     }
 
+    @Override
+    public Continente findById(final String keyID) {
+        return (Continente) super.findById(keyID);
+    }
+
+    @Override
+    public Continente findByKey(final String keyValue) {
+        return (Continente) super.findByKey(keyValue);
+    }
+
+    @Override
+    public Continente findByProperty(final String propertyName, final Object propertyValue) {
+        return (Continente) super.findByProperty(propertyName, propertyValue);
+    }
 
     /**
      * Creazione di alcuni dati <br>
@@ -92,7 +96,7 @@ public class ContinenteBackend extends CrudBackend {
         AResult result = super.resetOnlyEmpty();
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
-        String nomeFile = "continenti";
+        String nomeFileConfig = "continenti";
         Map<String, List<String>> mappa;
         List<String> riga;
         String id;
@@ -105,7 +109,7 @@ public class ContinenteBackend extends CrudBackend {
         String message;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            mappa = resourceService.leggeMappa(nomeFile);
+            mappa = resourceService.leggeMappa(nomeFileConfig);
             if (mappa != null) {
                 result.setValido(true);
                 lista = new ArrayList<>();

@@ -6,9 +6,16 @@ import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
+import it.algos.vaad24.backend.packages.geografia.continente.*;
+import it.algos.vaad24.backend.packages.utility.log.*;
+import it.algos.vaad24.backend.packages.utility.nota.*;
+import it.algos.vaad24.backend.packages.utility.preferenza.*;
+import it.algos.vaad24.backend.packages.utility.versione.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
+import org.mockito.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 
 import java.util.*;
@@ -41,6 +48,36 @@ import java.util.*;
  */
 public abstract class BackendTest extends AlgosIntegrationTest {
 
+    @InjectMocks
+    protected NotaBackend notaBackend;
+
+    @InjectMocks
+    protected GiornoBackend giornoBackend;
+
+    @InjectMocks
+    protected MeseBackend meseBackend;
+
+    @InjectMocks
+    protected AnnoBackend annoBackend;
+
+    @InjectMocks
+    protected SecoloBackend secoloBackend;
+
+    @InjectMocks
+    protected ContinenteBackend continenteBackend;
+
+    @InjectMocks
+    protected LoggerBackend loggerBackend;
+
+    @InjectMocks
+    protected VersioneBackend versioneBackend;
+
+    @InjectMocks
+    protected PreferenzaBackend preferenzaBackend;
+
+    @Autowired
+    protected PreferenzaRepository preferenzaRepository;
+
 
     protected CrudBackend crudBackend;
 
@@ -65,7 +102,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         backendName = clazzName + SUFFIX_BACKEND;
         collectionName = annotationService.getCollectionName(entityClazz);
         keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-        this.typeBackend = TypeBackend.nessuno;
+        this.typeBackend = typeBackend != null ? typeBackend : TypeBackend.nessuno;
 
         if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
             sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
@@ -742,6 +779,19 @@ public abstract class BackendTest extends AlgosIntegrationTest {
                         System.out.print(SEP);
                         System.out.println("bisestile");
                     }
+                    case nota -> {
+                        System.out.print("type");
+                        System.out.print(SEP);
+                        System.out.print("livello");
+                        System.out.print(SEP);
+                        System.out.print("inizio");
+                        System.out.print(SEP);
+                        System.out.print("descrizione");
+                        System.out.print(SEP);
+                        System.out.print("fatto");
+                        System.out.print(SEP);
+                        System.out.println("fine");
+                    }
                     default -> {}
                 } ;
                 System.out.println(VUOTA);
@@ -755,6 +805,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
                         case mese -> printMese(obj);
                         case secolo -> printSecolo(obj);
                         case anno -> printAnno(obj);
+                        case nota -> printNota(obj);
                         default -> {
                             System.out.println(obj);
                         }
@@ -849,6 +900,38 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         }
     }
 
+
+    protected void printNota(Object obj) {
+        if (obj instanceof Nota nota) {
+            System.out.print(nota.type);
+            System.out.print(SPAZIO);
+            System.out.print(nota.livello);
+            System.out.print(SPAZIO);
+            System.out.print(dateService.get(nota.inizio));
+            System.out.print(SPAZIO);
+            System.out.print(nota.descrizione);
+            System.out.print(SPAZIO);
+            System.out.print(nota.livello);
+            System.out.print(SPAZIO);
+            System.out.print(nota.fatto ? true : false);
+            System.out.print(SPAZIO);
+            System.out.println(dateService.get(nota.fine));
+        }
+    }
+
+    protected void printNota() {
+        System.out.print("type");
+        System.out.print(SEP);
+        System.out.print("livello");
+        System.out.print(SEP);
+        System.out.print("inizio");
+        System.out.print(SEP);
+        System.out.print("descrizione");
+        System.out.print(SEP);
+        System.out.print("fatto");
+        System.out.print(SEP);
+        System.out.println("fine");
+    }
 
     protected enum TypeBackend {nessuno, via, anno, giorno, mese, secolo, continente, nota, versione}
 
