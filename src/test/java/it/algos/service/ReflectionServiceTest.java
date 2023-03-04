@@ -55,11 +55,11 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
         return Stream.of(
                 Arguments.of(CrudView.class, CrudView.class.getSimpleName(), 0, 0, 0),
                 Arguments.of(AIType.class, AIType.class.getSimpleName(), 0, 0, 0),
-                Arguments.of(Mese.class, Mese.class.getSimpleName(), 10, 7, 6),
-                Arguments.of(Continente.class, Continente.class.getSimpleName(), 8, 4, 3),
-                Arguments.of(Giorno.class, Giorno.class.getSimpleName(), 9, 6, 5),
-                Arguments.of(Logger.class, Logger.class.getSimpleName(), 16, 13, 10),
-                Arguments.of(Via.class, Via.class.getSimpleName(), 5, 2, 1),
+                Arguments.of(Mese.class, Mese.class.getSimpleName(), 10, 7, 7),
+                Arguments.of(Continente.class, Continente.class.getSimpleName(), 8, 4, 4),
+                Arguments.of(Giorno.class, Giorno.class.getSimpleName(), 9, 6, 6),
+                Arguments.of(Logger.class, Logger.class.getSimpleName(), 16, 13, 11),
+                Arguments.of(Via.class, Via.class.getSimpleName(), 5, 2, 2),
                 Arguments.of(ViaView.class, ViaView.class.getSimpleName(), 0, 0, 0),
                 Arguments.of(SecoloView.class, SecoloView.class.getSimpleName(), 0, 0, 0)
         );
@@ -325,14 +325,14 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
     @ParameterizedTest
     @MethodSource(value = "CLAZZ_FOR_FIELD")
     @Order(43)
-    @DisplayName("43 - getDeclaredFieldsDB di una classe AEntity")
+    @DisplayName("43 - getClassOnlyDeclaredFieldsDB di una classe AEntity")
         //--clazz
         //--simpleName
         //--numero fields classe + superClassi
         //--numero only fields della classe
         //--numero only fields della classe accettabili nel database
-    void getDeclaredFieldsDB(final Class genericClazz, final String simpleName, final int nonUsato, final int nonUsato2, final int numOnlyClasseDatabase) {
-        System.out.println("43 - getDeclaredFieldsDB di una classe AEntity");
+    void getClassOnlyDeclaredFieldsDB(final Class genericClazz, final String simpleName, final int nonUsato, final int nonUsato2, final int numOnlyClasseDatabase) {
+        System.out.println("43 - getClassOnlyDeclaredFieldsDB di una classe AEntity");
         System.out.println(VUOTA);
 
         if (!AEntity.class.isAssignableFrom(genericClazz)) {
@@ -344,7 +344,7 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
             clazz = genericClazz;
         }
 
-        listaFields = service.getDeclaredFieldsDB(clazz);
+        listaFields = service.getClassOnlyDeclaredFieldsDB(clazz);
         assertNotNull(listaFields);
         ottenutoIntero = listaFields.size();
         assertEquals(numOnlyClasseDatabase, ottenutoIntero);

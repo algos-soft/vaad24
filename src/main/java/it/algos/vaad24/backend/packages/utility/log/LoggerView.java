@@ -120,7 +120,6 @@ public class LoggerView extends CrudView {
             return new Span(oraTxt);
         })).setHeader(VaadinIcon.CALENDAR.create()).setKey("ora").setFlexGrow(0).setWidth("5em");
 
-        Grid.Column ordine = grid.getColumnByKey(FIELD_KEY_ORDER);
         Grid.Column type = grid.getColumnByKey("type");
         Grid.Column livello = grid.getColumnByKey("livello");
         Grid.Column evento = grid.getColumnByKey("evento");
@@ -132,10 +131,10 @@ public class LoggerView extends CrudView {
         if (VaadVar.usaCompany) {
             Grid.Column company = grid.getColumnByKey("company");
             Grid.Column user = grid.getColumnByKey("user");
-            grid.setColumnOrder(ordine, type, livello, evento, giorno, mese, ora, descrizione, company, user, classe, metodo, linea);
+            grid.setColumnOrder( type, livello, evento, giorno, mese, ora, descrizione, company, user, classe, metodo, linea);
         }
         else {
-            grid.setColumnOrder(ordine, type, livello, evento, giorno, mese, ora, descrizione, classe, metodo, linea);
+            grid.setColumnOrder( type, livello, evento, giorno, mese, ora, descrizione, classe, metodo, linea);
         }
 
     }

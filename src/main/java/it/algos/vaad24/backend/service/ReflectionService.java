@@ -235,23 +235,33 @@ public class ReflectionService extends AbstractService {
      *
      * @return lista di static fields della Entity
      */
-    public List<Field> getDeclaredFieldsDB(Class<? extends AEntity> entityClazz) {
+    public List<Field> getClassOnlyDeclaredFieldsDB(Class<? extends AEntity> entityClazz) {
         List<Field> listaFields = null;
-        Field[] fieldsArray;
+        List<Field> listaFieldsAll = getClassOnlyDeclaredFields(entityClazz);
+        //        Field[] fieldsArray;
+        //
+        //        if (entityClazz == null) {
+        //            logger.error(new WrapLog().exception(new AlgosException("Manca la entityClazz")).usaDb());
+        //        }
+        //
+        //        if (!AEntity.class.isAssignableFrom(entityClazz)) {
+        //            logger.error(new WrapLog().exception(new AlgosException(String.format("La classe %s non è una classe di tipo AEntity", entityClazz.getSimpleName()))).usaDb());
+        //        }
 
-        if (entityClazz == null) {
-            logger.error(new WrapLog().exception(new AlgosException("Manca la entityClazz")).usaDb());
-        }
+        //        //--recupera tutti i fields della entity
+        //        fieldsArray = entityClazz.getDeclaredFields();
+        //        if (fieldsArray != null) {
+        //            listaFields = new ArrayList<>();
+        //            for (Field field : fieldsArray) {
+        //                if (!annotationService.isTransient(entityClazz, field)) {
+        //                    listaFields.add(field);
+        //                }
+        //            }
+        //        }
 
-        if (!AEntity.class.isAssignableFrom(entityClazz)) {
-            logger.error(new WrapLog().exception(new AlgosException(String.format("La classe %s non è una classe di tipo AEntity", entityClazz.getSimpleName()))).usaDb());
-        }
-
-        //--recupera tutti i fields della entity
-        fieldsArray = entityClazz.getDeclaredFields();
-        if (fieldsArray != null) {
+        if (listaFieldsAll != null) {
             listaFields = new ArrayList<>();
-            for (Field field : fieldsArray) {
+            for (Field field : listaFieldsAll) {
                 if (!annotationService.isTransient(entityClazz, field)) {
                     listaFields.add(field);
                 }

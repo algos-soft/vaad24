@@ -15,6 +15,7 @@ import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -481,13 +482,13 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         grid = new Grid(entityClazz, autoCreateColumns);
 
         // Crea/regola le colonne
-//        this.fixAutoNumbering();
-//        if (autoCreateColumns) {
-//            this.fixColumnsAutomaticallyCreated();
-//        }
-//        else {
-//            this.addColumnsOneByOne();
-//        }
+        this.fixAutoNumbering();
+        if (autoCreateColumns) {
+            this.fixColumnsAutomaticallyCreated();
+        }
+        else {
+            this.addColumnsOneByOne();
+        }
         //        this.fixSearch();
 
         // Pass all objects to a grid from a Spring Data repository object
@@ -516,19 +517,21 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
      * Chiamato PRIMA di creare la Grid <br>
      * Controlla la validità della lista gridPropertyNamesList <br>
      * In quanto usata/creata da una sottoclasse specifica <br>
+     * Se è vuota, regola a true la variabile autoCreateColumns <br>
      * Se è vuota, la crea con tutti i fields della classe <br>
-     * Se era vuota, regola a true la variabile autoCreateColumns <br>
-//     * Aggiunge la colonna di ordinamento, secondo il parametro usaRowIndex <br>
+     * //     * Aggiunge la colonna di ordinamento, secondo il parametro usaRowIndex <br>
      * Rimuove la colonna della chiave keyId, secondo il parametro cancellaColonnaKeyId <br>
      */
     protected void fixNomiColonne() {
         if (gridPropertyNamesList.size() < 1) {
-            List<Field> lista= reflectionService.getDeclaredFieldsDB(entityClazz);
+            autoCreateColumns = true;
+            List<Field> lista = reflectionService.getClassOnlyDeclaredFieldsDB(entityClazz);
             for (Field field : lista) {
                 gridPropertyNamesList.add(field.getName());
             }
         }
         else {
+            autoCreateColumns = false;
         }
     }
 
@@ -543,8 +546,18 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
 
     protected void fixAutoNumbering() {
-        if (usaRowIndex) {
-            grid.addColumn(LitRenderer.of("${index + 1}")).setHeader(FIELD_KEY_ORDER).setKey(FIELD_KEY_ORDER).setWidth(getNumberingWidth()).setFlexGrow(0); ;
+        String message;
+
+        if (usaRowIndex && reflectionService.isEsiste(entityClazz, FIELD_KEY_ORDER)) {
+            grid.addColumn(LitRenderer.of("${index + 1}")).setHeader(FIELD_KEY_ORDER).setKey(FIELD_KEY_ORDER).setWidth(getNumberingWidth()).setFlexGrow(0);
+            if (gridPropertyNamesList.size() > 0) {
+                try {
+                    gridPropertyNamesList.add(0, FIELD_KEY_ORDER);
+                } catch (Exception unErrore) {
+                    message = String.format("%s - Aggiunta della property '%s' alla Grid della classe [%s]", unErrore.toString(), FIELD_KEY_ORDER, this.getClass().getSimpleName());
+                    logger.error(new WrapLog().type(AETypeLog.flow).exception(new AlgosException(message)).usaDb());
+                }
+            }
         }
     }
 
@@ -557,10 +570,11 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixColumnsAutomaticallyCreated() {
-        grid.addColumn(item -> VUOTA).setKey("rowIndex");
+        //        grid.addColumn(item -> VUOTA).setKey("rowIndex");
         if (cancellaColonnaKeyId) {
             try {
                 grid.removeColumnByKey(FIELD_NAME_ID_SENZA);
+                gridPropertyNamesList.remove(FIELD_NAME_ID_SENZA);
             } catch (Exception unErrore) {
                 logger.error(new WrapLog().exception(unErrore).usaDb().message("Non ho indicato correttamente la colonna 'id' "));
                 return;
