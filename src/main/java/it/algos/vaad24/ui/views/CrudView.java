@@ -477,7 +477,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
      */
     protected void fixBodyLayout() {
         // Create a listing component for a bean type
-        this.fixNomiColonne();
+        this.fixNomiColonneFields();
 
         grid = new Grid(entityClazz, autoCreateColumns);
 
@@ -522,7 +522,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
      * //     * Aggiunge la colonna di ordinamento, secondo il parametro usaRowIndex <br>
      * Rimuove la colonna della chiave keyId, secondo il parametro cancellaColonnaKeyId <br>
      */
-    protected void fixNomiColonne() {
+    protected void fixNomiColonneFields() {
         if (gridPropertyNamesList.size() < 1) {
             autoCreateColumns = true;
             List<Field> lista = reflectionService.getClassOnlyDeclaredFieldsDB(entityClazz);
@@ -532,6 +532,13 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         }
         else {
             autoCreateColumns = false;
+        }
+
+        if (formPropertyNamesList.size() < 1) {
+            List<Field> lista = reflectionService.getClassOnlyFormFields(entityClazz);
+            for (Field field : lista) {
+                formPropertyNamesList.add(field.getName());
+            }
         }
     }
 

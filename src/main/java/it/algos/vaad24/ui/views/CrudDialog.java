@@ -280,6 +280,23 @@ public abstract class CrudDialog extends Dialog {
                         case integer -> new IntegerField(caption);
                         case lungo -> new TextField(caption);
                         case booleano -> new Checkbox(caption);
+                        case enumType -> {
+                            combo = new ComboBox(caption);
+                            combo.setClearButtonVisible(nullSelectionAllowed);
+                            try {
+                                enumClazz = annotationService.getEnumClazz(currentItem.getClass(), key);
+                                Object[] elementi = enumClazz.getEnumConstants();
+                                if (elementi != null) {
+                                    enumObjects = Arrays.asList(elementi);
+                                    if (enumObjects != null) {
+                                        combo.setItems(enumObjects);
+                                    }
+                                }
+                            } catch (Exception unErrore) {
+                                logger.error(new WrapLog().exception(unErrore).usaDb());
+                            }
+                            yield combo;
+                        }
                         case enumString -> {
                             combo = new ComboBox(caption);
                             combo.setClearButtonVisible(nullSelectionAllowed);

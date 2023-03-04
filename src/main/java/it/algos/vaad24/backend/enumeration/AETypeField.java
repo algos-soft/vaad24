@@ -49,7 +49,7 @@ public enum AETypeField {
 
     enumString(8, 8),
 
-    enumType(true,8, 8),
+    enumType(8, 8),
     gridShowOnly(0, 20),
 
     //    dateNotEnabled,
