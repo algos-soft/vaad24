@@ -477,9 +477,8 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     protected void fixBodyLayout() {
         // Create a listing component for a bean type
         this.fixNomiColonne();
+
         grid = new Grid(entityClazz, autoCreateColumns);
-        List listaa= grid.getColumns();
-        int a=87;
 
         // Crea/regola le colonne
 //        this.fixAutoNumbering();
@@ -512,6 +511,27 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         sincroFiltri();
     }
 
+
+    /**
+     * Chiamato PRIMA di creare la Grid <br>
+     * Controlla la validità della lista gridPropertyNamesList <br>
+     * In quanto usata/creata da una sottoclasse specifica <br>
+     * Se è vuota, la crea con tutti i fields della classe <br>
+     * Se era vuota, regola a true la variabile autoCreateColumns <br>
+//     * Aggiunge la colonna di ordinamento, secondo il parametro usaRowIndex <br>
+     * Rimuove la colonna della chiave keyId, secondo il parametro cancellaColonnaKeyId <br>
+     */
+    protected void fixNomiColonne() {
+        if (gridPropertyNamesList.size() < 1) {
+            List<Field> lista= reflectionService.getDeclaredFieldsDB(entityClazz);
+            for (Field field : lista) {
+                gridPropertyNamesList.add(field.getName());
+            }
+        }
+        else {
+        }
+    }
+
     protected void fixItems() {
         List items;
 
@@ -521,14 +541,6 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         }
     }
 
-    protected void fixNomiColonne() {
-        if (gridPropertyNamesList.size() < 1) {
-            List<Field> lista= reflectionService.getDeclaredFields(entityClazz);
-            for (Field field : lista) {
-                gridPropertyNamesList.add(field.getName());
-            }
-        }
-    }
 
     protected void fixAutoNumbering() {
         if (usaRowIndex) {

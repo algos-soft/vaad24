@@ -4,9 +4,15 @@ import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
+import it.algos.vaad24.backend.packages.crono.giorno.*;
+import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
+import it.algos.vaad24.backend.packages.geografia.continente.*;
+import it.algos.vaad24.backend.packages.utility.log.*;
 import it.algos.vaad24.backend.service.*;
+import it.algos.vaad24.ui.views.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.*;
@@ -17,6 +23,7 @@ import org.springframework.test.context.junit.jupiter.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project vaad24
@@ -39,6 +46,24 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
      */
     private ReflectionService service;
 
+    //--clazz
+    //--simpleName
+    //--numero fields classe + superClassi
+    //--numero only fields della classe
+    //--numero only fields della classe accettabili nel database
+    protected static Stream<Arguments> CLAZZ_FOR_FIELD() {
+        return Stream.of(
+                Arguments.of(CrudView.class, CrudView.class.getSimpleName(), 0, 0, 0),
+                Arguments.of(AIType.class, AIType.class.getSimpleName(), 0, 0, 0),
+                Arguments.of(Mese.class, Mese.class.getSimpleName(), 10, 7, 6),
+                Arguments.of(Continente.class, Continente.class.getSimpleName(), 8, 4, 3),
+                Arguments.of(Giorno.class, Giorno.class.getSimpleName(), 9, 6, 5),
+                Arguments.of(Logger.class, Logger.class.getSimpleName(), 16, 13, 10),
+                Arguments.of(Via.class, Via.class.getSimpleName(), 5, 2, 1),
+                Arguments.of(ViaView.class, ViaView.class.getSimpleName(), 0, 0, 0),
+                Arguments.of(SecoloView.class, SecoloView.class.getSimpleName(), 0, 0, 0)
+        );
+    }
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -237,13 +262,14 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "CLAZZ_FOR_NAME")
+    @MethodSource(value = "CLAZZ_FOR_FIELD")
     @Order(41)
-    @DisplayName("41 - getAllFields di una classe AEntity")
+    @DisplayName("41 - getAllSuperClassFields di una classe AEntity")
         //--clazz
         //--simpleName
-    void getAllFields(final Class genericClazz, final String simpleName) {
-        System.out.println("41 - getAllFields di una classe AEntity");
+        //--numero fields classe + superClassi
+    void getAllSuperClassFields(final Class genericClazz, final String simpleName, final int numSuperClassi) {
+        System.out.println("41 - getAllSuperClassFields di una classe AEntity");
         System.out.println(VUOTA);
 
         if (!AEntity.class.isAssignableFrom(genericClazz)) {
@@ -255,19 +281,26 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
             clazz = genericClazz;
         }
 
-        listaFields = service.getAllFields(clazz);
-        printFields(clazz, listaFields, true);
-    }
+        listaFields = service.getAllSuperClassFields(clazz);
+        assertNotNull(listaFields);
+        ottenutoIntero = listaFields.size();
+        assertEquals(numSuperClassi, ottenutoIntero);
 
+        message = String.format("Tutti i fields della classe e di tutte le superClassi; compreso _ID e transient");
+        System.out.println(message);
+        printFields(clazz, listaFields);
+    }
 
     @ParameterizedTest
-    @MethodSource(value = "CLAZZ_FOR_NAME")
+    @MethodSource(value = "CLAZZ_FOR_FIELD")
     @Order(42)
-    @DisplayName("42 - getDeclaredFields di una classe AEntity")
+    @DisplayName("42 - getClassOnlyDeclaredFields di una classe AEntity")
         //--clazz
         //--simpleName
-    void getDeclaredFields(final Class genericClazz, final String simpleName) {
-        System.out.println("42 - getDeclaredFields di una classe AEntity");
+        //--numero fields classe + superClassi
+        //--numero only fields della classe
+    void getClassOnlyDeclaredFields(final Class genericClazz, final String simpleName, final int nonUsato, final int numOnlyClasse) {
+        System.out.println("42 - getClassOnlyDeclaredFields di una classe AEntity");
         System.out.println(VUOTA);
 
         if (!AEntity.class.isAssignableFrom(genericClazz)) {
@@ -279,9 +312,48 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
             clazz = genericClazz;
         }
 
-        listaFields = service.getDeclaredFields(clazz);
-        printFields(clazz, listaFields, false);
+        listaFields = service.getClassOnlyDeclaredFields(clazz);
+        assertNotNull(listaFields);
+        ottenutoIntero = listaFields.size();
+        assertEquals(numOnlyClasse, ottenutoIntero);
+
+        message = String.format("Tutti i fields della classe; compreso _ID e transient, ma esclusi i fields della superclasse");
+        System.out.println(message);
+        printFields(clazz, listaFields);
     }
+
+    @ParameterizedTest
+    @MethodSource(value = "CLAZZ_FOR_FIELD")
+    @Order(43)
+    @DisplayName("43 - getDeclaredFieldsDB di una classe AEntity")
+        //--clazz
+        //--simpleName
+        //--numero fields classe + superClassi
+        //--numero only fields della classe
+        //--numero only fields della classe accettabili nel database
+    void getDeclaredFieldsDB(final Class genericClazz, final String simpleName, final int nonUsato, final int nonUsato2, final int numOnlyClasseDatabase) {
+        System.out.println("43 - getDeclaredFieldsDB di una classe AEntity");
+        System.out.println(VUOTA);
+
+        if (!AEntity.class.isAssignableFrom(genericClazz)) {
+            message = String.format("La classe %s non è una classe di tipo AEntity", simpleName);
+            System.out.println(message);
+            return;
+        }
+        else {
+            clazz = genericClazz;
+        }
+
+        listaFields = service.getDeclaredFieldsDB(clazz);
+        assertNotNull(listaFields);
+        ottenutoIntero = listaFields.size();
+        assertEquals(numOnlyClasseDatabase, ottenutoIntero);
+
+        message = String.format("Tutti i fields della classe; compreso _ID, ma esclusi transient e i fields della superclasse");
+        System.out.println(message);
+        printFields(clazz, listaFields);
+    }
+
 
     /**
      * Qui passa al termine di ogni singolo test <br>
@@ -335,15 +407,13 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
         return lista;
     }
 
-    protected void printFields(Class clazz, List<Field> lista, boolean isCompresi) {
+    protected void printFields(Class clazz, List<Field> lista) {
         String clazzName = clazz.getSimpleName();
-        String quali = isCompresi ? "compreso" : "escluso";
-        String fields = " _ID, transient e quelli della superclasse";
         String fieldName;
         String fieldClass;
         int k = 1;
 
-        message = String.format("Nella classe %s ci sono %d fields %s%s", clazzName, lista.size(), quali, fields);
+        message = String.format("Nella classe %s ci sono %d fields", clazzName, lista.size());
         System.out.println(message);
         System.out.println(VUOTA);
 
