@@ -224,12 +224,11 @@ public class ReflectionService extends AbstractService {
 
     /**
      * Lista dei fields statici PUBBLICI dichiarati in una classe di tipo AEntity. <br>
-     * Controlla che il parametro in ingresso non sia nullo <br>
+     * Considera solo la entity senza le sue superClassi <br>
      * Esclusi i fields PRIVATI <br>
-     * Fields NON ordinati <br>
-     * Class.getDeclaredFields() prende fields pubblici e privati della classe <br>
      * ATTENZIONE - Esclusi eventuali fields statici pubblici che NON siano property per il DB (tipo Transient) <br>
      * ATTENZIONE - Compreso anche il field keyId (anche se è della superclasse)) <br>
+     * Fields ordinati con keyId per primo e gli altri NON ordinati <br>
      *
      * @param entityClazz da cui estrarre i fields statici
      *
@@ -238,31 +237,40 @@ public class ReflectionService extends AbstractService {
     public List<Field> getClassOnlyDeclaredFieldsDB(Class<? extends AEntity> entityClazz) {
         List<Field> listaFields = null;
         List<Field> listaFieldsAll = getClassOnlyDeclaredFields(entityClazz);
-        //        Field[] fieldsArray;
-        //
-        //        if (entityClazz == null) {
-        //            logger.error(new WrapLog().exception(new AlgosException("Manca la entityClazz")).usaDb());
-        //        }
-        //
-        //        if (!AEntity.class.isAssignableFrom(entityClazz)) {
-        //            logger.error(new WrapLog().exception(new AlgosException(String.format("La classe %s non è una classe di tipo AEntity", entityClazz.getSimpleName()))).usaDb());
-        //        }
-
-        //        //--recupera tutti i fields della entity
-        //        fieldsArray = entityClazz.getDeclaredFields();
-        //        if (fieldsArray != null) {
-        //            listaFields = new ArrayList<>();
-        //            for (Field field : fieldsArray) {
-        //                if (!annotationService.isTransient(entityClazz, field)) {
-        //                    listaFields.add(field);
-        //                }
-        //            }
-        //        }
 
         if (listaFieldsAll != null) {
             listaFields = new ArrayList<>();
             for (Field field : listaFieldsAll) {
                 if (!annotationService.isTransient(entityClazz, field)) {
+                    listaFields.add(field);
+                }
+            }
+        }
+
+        return listaFields;
+    }
+
+
+    /**
+     * Lista dei fields statici PUBBLICI dichiarati in una classe di tipo AEntity. <br>
+     * Considera solo la entity senza le sue superClassi <br>
+     * Esclusi i fields PRIVATI <br>
+     * ATTENZIONE - Esclusi eventuali fields statici pubblici che NON siano property per il DB (tipo Transient) <br>
+     * ATTENZIONE - Escluso anche il field keyId (che è della superclasse)) <br>
+     * Fields ordinati per costruzione di defualt <br>
+     *
+     * @param entityClazz da cui estrarre i fields statici
+     *
+     * @return lista di static fields della Entity
+     */
+    public List<Field> getClassOnlyFormFields(Class<? extends AEntity> entityClazz) {
+        List<Field> listaFields = null;
+        List<Field> listaFieldsAll = getClassOnlyDeclaredFieldsDB(entityClazz);
+
+        if (listaFieldsAll != null) {
+            listaFields = new ArrayList<>();
+            for (Field field : listaFieldsAll) {
+                if (!field.getName().equals(FIELD_NAME_ID_SENZA)) {
                     listaFields.add(field);
                 }
             }
