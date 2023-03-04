@@ -48,7 +48,7 @@ public class ProvaView extends CrudView {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
-        autoCreateColumns = true;
+//        autoCreateColumns = true;
     }
 
     /**

@@ -300,7 +300,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         gridPropertyNamesList = new ArrayList<>();
         formPropertyNamesList = new ArrayList<>();
         cancellaColonnaKeyId = true;
-        autoCreateColumns = false;
+        autoCreateColumns = true;
         usaBottoneRefresh = false;
         usaBottoneDeleteReset = false;
         usaReset = false;
@@ -478,15 +478,17 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         // Create a listing component for a bean type
         this.fixNomiColonne();
         grid = new Grid(entityClazz, autoCreateColumns);
+        List listaa= grid.getColumns();
+        int a=87;
 
         // Crea/regola le colonne
-        this.fixAutoNumbering();
-        if (autoCreateColumns) {
-            this.fixColumnsAutomaticallyCreated();
-        }
-        else {
-            this.addColumnsOneByOne();
-        }
+//        this.fixAutoNumbering();
+//        if (autoCreateColumns) {
+//            this.fixColumnsAutomaticallyCreated();
+//        }
+//        else {
+//            this.addColumnsOneByOne();
+//        }
         //        this.fixSearch();
 
         // Pass all objects to a grid from a Spring Data repository object
