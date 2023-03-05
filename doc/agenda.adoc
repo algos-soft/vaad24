@@ -169,3 +169,8 @@ These four operations are fundamental to the management of data in any data stor
 == Fields
 
 * Baeldung [https://www.baeldung.com/java-reflection-class-fields]
+
+== BigDecimal
+
+* Vaadin [https://vaadin.com/forum/thread/17649839/binding-a-bigdecimal-to-a-field-in-vaadin]
+* Vaadin [https://vaadin.com/docs/latest/components/number-field]

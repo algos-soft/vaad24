@@ -108,7 +108,7 @@ public enum AETypePref implements AITypePref {
         }
     },// end of single enumeration
 
-    lungo("long", "black") {
+    lungo("long", "Green") {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
@@ -133,12 +133,39 @@ public enum AETypePref implements AITypePref {
         }
     },// end of single enumeration
 
-//    doppio("double", "black") {
+    percentuale("percentuale", "Green") {
+        @Override
+        public byte[] objectToBytes(Object obj) {
+            byte[] bytes = new byte[0];
+            if (obj instanceof Integer num) {
+                bytes = intToByteArray(num);
+            }
+            if (obj instanceof String) {
+                bytes = intToByteArray(Integer.valueOf((String) obj));
+            }
+
+            return bytes;
+        }
+
+
+        @Override
+        public Integer bytesToObject(byte[] bytes) {
+            return byteArrayToInt(bytes);
+        }
+
+
+        @Override
+        public String bytesToString(byte[] bytes) {
+            return bytesToObject(bytes) + VUOTA;
+        }
+    },// end of single enumeration
+
+    //    doppio("double", "black") {
 //        @Override
 //        public byte[] objectToBytes(Object obj) {
 //            byte[] bytes = new byte[0];
-//            if (obj instanceof Long lungo) {
-//                bytes = longToByteArray(lungo);
+//            if (obj instanceof Double doppio) {
+//                bytes = longToByteArray(doppio);
 //            }
 //            if (obj instanceof String) {
 //                bytes = longToByteArray(Long.valueOf((String) obj));
@@ -158,7 +185,7 @@ public enum AETypePref implements AITypePref {
 //        }
 //    },// end of single enumeration
 
-    decimal("decimale", "black") {
+    decimal("decimale", "Green") {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];

@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Scope;
 import org.vaadin.crudui.crud.*;
 
 import javax.annotation.*;
+import java.math.*;
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
@@ -340,13 +341,48 @@ public class PreferenzaDialog extends Dialog {
                 }
                 valueLayout.add(numberField);
             }
+            case percentuale -> {
+                String numTxt;
+                TextField percentField = new TextField("Value (percentuale)");
+                if (operation != CrudOperation.ADD) {
+                    Object obj = type.getValue().bytesToObject(currentItem.getValue());
+                    if (obj instanceof Integer numero) {
+                        if (numero > 9999) {
+                            logger.warn(new WrapLog().message(String.format("Valore %d è troppo grande per una percentuale",numero)));
+                            break;
+                        }
+                        numTxt = numero + VUOTA;
+                        if (numero > 100) {
+                            numTxt = numTxt.substring(0, numTxt.length() - 2) + VIRGOLA + numTxt.substring(numTxt.length() - 2);
+                        }
+                        numTxt += PERCENTUALE;
+                        if (operation != CrudOperation.ADD) {
+                            percentField.setValue(numTxt);
+                            percentField.setReadOnly(operation == CrudOperation.DELETE);
+                        }
+                    }
+                }
+                valueLayout.add(percentField);
+            }
+            case decimal -> {
+                BigDecimalField bigDecimalField = new BigDecimalField();
+                bigDecimalField.setLabel("Value (BigDecimal)");
+                bigDecimalField.setWidth("240px");
+
+                if (operation != CrudOperation.ADD) {
+                    BigDecimal decimal = (BigDecimal) type.getValue().bytesToObject(currentItem.getValue());
+                    bigDecimalField.setValue(decimal);
+                    bigDecimalField.setReadOnly(operation == CrudOperation.DELETE);
+                }
+                valueLayout.add(bigDecimalField);
+            }
+
             case localdatetime -> {
                 DateTimePicker pickerField = new DateTimePicker("Data completa (giorno e orario)");
                 pickerField.setValue((LocalDateTime) type.getValue().bytesToObject(currentItem.getValue()));
                 pickerField.setReadOnly(operation == CrudOperation.DELETE);
                 valueLayout.add(pickerField);
             }
-
             case localdate -> {
                 DatePicker pickerField = new DatePicker("Data (giorno)");
                 pickerField.setValue((LocalDate) type.getValue().bytesToObject(currentItem.getValue()));
@@ -445,7 +481,30 @@ public class PreferenzaDialog extends Dialog {
                     valido = true;
                 }
             }
+            case percentuale -> {
+                Integer numero=0;
+                if (comp != null && comp instanceof TextField textField) {
+                    String value = textField.getValue();
+                    value = textService.levaCoda(value, PERCENTUALE);
+                    value = textService.sostituisce(value, VIRGOLA, VUOTA);
 
+                    try {
+                        numero = Integer.decode(value);
+                    } catch (Exception unErrore) {
+                        logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+                    }
+
+                    currentItem.setValue(type.getValue().objectToBytes(numero));
+                    valido = true;
+                }
+            }
+            case decimal -> {
+                if (comp != null && comp instanceof BigDecimalField bigDecimalField) {
+                    BigDecimal decimal = bigDecimalField.getValue();
+                    currentItem.setValue(type.getValue().objectToBytes(decimal));
+                    valido = true;
+                }
+            }
             case localdatetime -> {
                 if (comp != null && comp instanceof DateTimePicker pickerField) {
                     timeValue = pickerField.getValue();
@@ -554,7 +613,6 @@ public class PreferenzaDialog extends Dialog {
     public void fixListener() {
         type.addValueChangeListener(e -> sincroValueToPresentation());
     }
-
 
     public void saveHandler() {
         String message;

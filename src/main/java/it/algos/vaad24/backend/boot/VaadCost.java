@@ -146,6 +146,7 @@ public class VaadCost {
 
     public static final String VIRGOLA_SPAZIO = VIRGOLA + SPAZIO;
 
+    public static final String PERCENTUALE = "%";
 
     public static final String CONFIG = "config";
 

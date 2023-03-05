@@ -14,11 +14,13 @@ import it.algos.vaad24.backend.packages.utility.versione.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project vaad24
@@ -90,6 +92,20 @@ public abstract class BackendTest extends AlgosIntegrationTest {
     protected TypeBackend typeBackend;
 
     protected Sort sortOrder;
+
+
+    //--giorno
+    //--esistente
+    protected static Stream<Arguments> GIORNI() {
+        return Stream.of(
+                Arguments.of(null, false),
+                Arguments.of(VUOTA, false),
+                Arguments.of("23 febbraio", true),
+                Arguments.of("43 marzo", false),
+                Arguments.of("19 dicembra", false),
+                Arguments.of("4 gennaio", true)
+        );
+    }
 
     /**
      * Qui passa una volta sola <br>
@@ -397,7 +413,7 @@ public abstract class BackendTest extends AlgosIntegrationTest {
                 assertEquals(previsto, ottenuto);
                 assertEquals(previsto2, ottenuto2);
                 assertTrue(textService.isValid(ottenuto));
-                System.out.println(String.format("KeyIdg%s%s", FORWARD, ottenuto));
+                System.out.println(String.format("KeyId%s%s", FORWARD, ottenuto));
             }
             return;
         }

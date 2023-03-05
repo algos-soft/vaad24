@@ -15,8 +15,8 @@ import com.vaadin.flow.data.selection.*;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.server.*;
 import it.algos.vaad24.backend.annotation.*;
-import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.service.*;
@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 import org.vaadin.crudui.crud.*;
 
+import java.math.*;
 import java.util.*;
 
 /**
@@ -296,6 +297,34 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
                         Icon icona = vero ? VaadinIcon.CHECK.create() : VaadinIcon.CLOSE.create();
                         icona.setColor(vero ? COLOR_VERO : COLOR_FALSO);
                         yield icona;
+                    }
+                    case percentuale -> {
+                        Label label = null;
+                        String numTxt;
+                        Object obj = pref.getType().bytesToObject(pref.getValue());
+                        if (obj instanceof Integer numero) {
+                            if (numero > 9999) {
+                                logger.warn(new WrapLog().message(String.format("Valore %d è troppo grande per una percentuale",numero)));
+                                yield null;
+                            }
+                            numTxt = numero + VUOTA;
+                            if (numero > 100) {
+                                numTxt = numTxt.substring(0, numTxt.length() - 2) + VIRGOLA + numTxt.substring(numTxt.length() - 2);
+                            }
+                            numTxt += PERCENTUALE;
+                            label = new Label(numTxt);
+                            label.getElement().getStyle().set("color", pref.getType().getColor());
+                            label.getElement().getStyle().set("fontWeight", "bold");
+                        }
+                        yield label;
+                    }
+
+                    case decimal -> {
+                        BigDecimal decimale = (BigDecimal) pref.getType().bytesToObject(pref.getValue());
+                        Label label = new Label(decimale.toString());
+                        label.getElement().getStyle().set("color", pref.getType().getColor());
+                        label.getElement().getStyle().set("fontWeight", "bold");
+                        yield label;
                     }
                     case enumerationType, enumerationString -> {
                         String value = pref.getType().bytesToString(pref.getValue());
