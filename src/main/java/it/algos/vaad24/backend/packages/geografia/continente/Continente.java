@@ -4,13 +4,10 @@ import it.algos.vaad24.backend.annotation.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import lombok.*;
-import org.springframework.data.mongodb.core.index.*;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 /**
  * Project vaadin23
@@ -31,16 +28,9 @@ import javax.validation.constraints.*;
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
 @AIEntity(keyPropertyName = "nome", usaReset = true)
-public class Continente extends AREntity {
+public class Continente extends OrdineEntity {
 
-    @Indexed(unique = true, direction = IndexDirection.DESCENDING)
-    @AIField(type = AETypeField.integer, header = "#", widthEM = 2)
-    public int ordine;
-
-    @NotBlank()
-    @Indexed(unique = true, direction = IndexDirection.DESCENDING)
-    @AIField(type = AETypeField.text)
-    public String nome;
+    public boolean reset;
 
     @AIField(type = AETypeField.booleano, widthEM = 7)
     public boolean abitato;

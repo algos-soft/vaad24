@@ -65,15 +65,14 @@ public class MeseBackend extends CrudBackend {
      */
     public Mese newEntity(int ordine, String breve, String nome, int giorni, int primo, int ultimo) {
         Mese newEntityBean = Mese.builder()
-                .ordine(ordine)
                 .breve(textService.isValid(breve) ? breve : null)
-                .nome(textService.isValid(nome) ? nome : null)
                 .giorni(giorni)
                 .primo(primo)
                 .ultimo(ultimo)
                 .build();
 
-        return (Mese) fixKey(newEntityBean);
+        super.fixOrdine(newEntityBean, ordine, nome);
+        return (Mese) super.fixKey(newEntityBean);
     }
 
     @Override
@@ -91,8 +90,9 @@ public class MeseBackend extends CrudBackend {
         return (Mese) super.findByProperty(propertyName, propertyValue);
     }
 
+    @Override
     public Mese findByOrdine(final int ordine) {
-        return findByProperty(FIELD_NAME_ORDINE, ordine);
+        return (Mese)super.findByOrdine(ordine);
     }
 
     @Override

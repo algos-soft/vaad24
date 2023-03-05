@@ -23,16 +23,18 @@ import org.springframework.boot.test.context.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NotaBackendTest extends BackendTest {
 
-    private Nota nota;
+    private NotaBackend backend;
 
     /**
      * Qui passa una volta sola <br>
      */
     @BeforeAll
     protected void setUpAll() {
+        this.backend = super.notaBackend;
         super.entityClazz = Nota.class;
-        super.crudBackend = notaBackend;
         super.typeBackend = TypeBackend.nota;
+        super.crudBackend = backend;
+
         super.setUpAll();
     }
 
@@ -48,11 +50,11 @@ public class NotaBackendTest extends BackendTest {
         keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
 
         System.out.println("Senza parametri");
-        nota = notaBackend.newEntity();
-        assertNotNull(nota);
+        entityBean = notaBackend.newEntity();
+        assertNotNull(entityBean);
         printNota();
-        printNota(nota);
-        crudBackend.save(nota);
+        printNota(entityBean);
+        crudBackend.save(entityBean);
     }
 
 }

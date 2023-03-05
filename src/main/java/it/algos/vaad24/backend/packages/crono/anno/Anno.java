@@ -5,8 +5,6 @@ import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import lombok.*;
-import org.springframework.data.mongodb.core.index.*;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
 
@@ -32,14 +30,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
 @AIEntity(keyPropertyName = "nome", usaReset = true, preReset = "secolo")
-public class Anno extends AEntity {
-
-    @Indexed(unique = true, direction = IndexDirection.ASCENDING)
-    @AIField(type = AETypeField.integer, header = "#", widthEM = 5, caption = "Ordine a partire dal 1.000 a.C.")
-    public int ordine;
-
-    @AIField(type = AETypeField.text, widthEM = 7, caption = "Nome corrente")
-    public String nome;
+public class Anno extends OrdineEntity {
 
     @DBRef
     @AIField(type = AETypeField.linkDinamico, widthEM = 10, linkClazz = SecoloBackend.class)

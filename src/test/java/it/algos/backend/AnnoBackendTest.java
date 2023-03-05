@@ -7,7 +7,6 @@ import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
-import org.mockito.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
@@ -27,11 +26,7 @@ import java.util.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AnnoBackendTest extends BackendTest {
 
-    @InjectMocks
     private AnnoBackend backend;
-
-    @InjectMocks
-    private SecoloBackend secoloBackend;
 
     private List<Anno> listaBeans;
 
@@ -40,12 +35,12 @@ public class AnnoBackendTest extends BackendTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        assertNotNull(backend);
-        assertNotNull(secoloBackend);
+        this.backend = super.annoBackend;
         super.entityClazz = Anno.class;
-        super.crudBackend = backend;
-        super.setUpAll();
         super.typeBackend = TypeBackend.anno;
+        super.crudBackend = backend;
+
+        super.setUpAll();
     }
 
 
@@ -64,10 +59,6 @@ public class AnnoBackendTest extends BackendTest {
         backend.secoloBackend.textService = textService;
     }
 
-    @BeforeEach
-    protected void setUpEach() {
-        super.setUpEach();
-    }
 
     @Test
     @Order(51)
@@ -124,7 +115,5 @@ public class AnnoBackendTest extends BackendTest {
             printBackend(listaBeans);
         }
     }
-
-
 
 }

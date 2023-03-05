@@ -3,9 +3,7 @@ package it.algos.backend;
 import it.algos.*;
 import it.algos.base.*;
 import it.algos.vaad24.backend.packages.utility.versione.*;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
-import org.mockito.*;
 import org.springframework.boot.test.context.*;
 
 /**
@@ -23,7 +21,6 @@ import org.springframework.boot.test.context.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class VersioneBackendTest extends BackendTest {
 
-    @InjectMocks
     private VersioneBackend backend;
 
     /**
@@ -31,15 +28,12 @@ public class VersioneBackendTest extends BackendTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        assertNotNull(backend);
+        this.backend = super.versioneBackend;
         super.entityClazz = Versione.class;
+        super.typeBackend = TypeBackend.versione;
         super.crudBackend = backend;
-        super.setUpAll();
-    }
 
-    @BeforeEach
-    protected void setUpEach() {
-        super.setUpEach();
+        super.setUpAll();
     }
 
 }

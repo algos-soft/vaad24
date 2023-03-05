@@ -29,13 +29,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
 @AIEntity(keyPropertyName = "nome", usaReset = true)
-public class Secolo extends AEntity {
-
-    @AIField(type = AETypeField.integer, header = "#", widthEM = 4, caption = "Ordinamento a partire dal XX secolo a.C.")
-    public int ordine;
-
-    @AIField(type = AETypeField.text, caption = "Nome corrente")
-    public String nome;
+public class Secolo extends OrdineEntity {
 
     @AIField(type = AETypeField.integer, widthEM = 6, caption = "Primo anno del secolo")
     public int inizio;

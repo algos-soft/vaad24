@@ -1,6 +1,5 @@
 package it.algos.vaad24.backend.packages.crono.anno;
 
-import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 /**
  * Project vaadin23
@@ -69,14 +67,13 @@ public class AnnoBackend extends CrudBackend {
      */
     public Anno newEntity(final int ordine, final String nome, final Secolo secolo, final boolean dopoCristo, final boolean bisestile) {
         Anno newEntityBean = Anno.builder()
-                .ordine(ordine)
-                .nome(textService.isValid(nome) ? nome : null)
                 .secolo(secolo)
                 .dopoCristo(dopoCristo)
                 .bisestile(bisestile)
                 .build();
 
-        return (Anno) fixKey(newEntityBean);
+        super.fixOrdine(newEntityBean, ordine, nome);
+        return (Anno) super.fixKey(newEntityBean);
     }
 
     @Override
@@ -94,9 +91,6 @@ public class AnnoBackend extends CrudBackend {
         return (Anno) super.findByProperty(propertyName, propertyValue);
     }
 
-    public Anno findByOrdine(final int ordine) {
-        return findByProperty(FIELD_NAME_ORDINE, ordine);
-    }
 
     @Override
     public List<Anno> findAllNoSort() {
@@ -112,49 +106,10 @@ public class AnnoBackend extends CrudBackend {
         return findAllByProperty(FIELD_NAME_SECOLO, secolo);
     }
 
-    //    public List<Anno> findAllDiscendente() {
-//        String collectionName = annotationService.getCollectionName(entityClazz);
-//        Sort sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
-//        Query query = new Query();
-//        query.with(sort);
-//
-//        return (List<Anno>) mongoService.mongoOp.find(query, entityClazz, collectionName);
-//    }
-
-//    public List<Anno> findAllAscendente() {
-//        String collectionName = annotationService.getCollectionName(entityClazz);
-//        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
-//        Query query = new Query();
-//        query.with(sort);
-//
-//        return (List<Anno>) mongoService.mongoOp.find(query, entityClazz, collectionName);
-//    }
-
-    public List<String> findAllForKey() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
+    public Anno findByOrdine(final int ordine) {
+        return (Anno)super.findByOrdine(ordine);
     }
 
-    public List<String> findAllForKeyReverseOrder() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
-    }
-
-    //    public List<Anno> findAllBySecolo(Secolo secolo) {
-    //        return findAllAscendente().stream()
-    //                .filter(anno -> anno.secolo.nome.equals(secolo.nome))
-    //                .collect(Collectors.toList());
-    //    }
-
-
-    public List<String> findAllForNome() {
-        return findAllForKey();
-    }
-
-
-    public List<String> findAllForNomeBySecolo(Secolo secolo) {
-        return findAllBySecolo(secolo).stream()
-                .map(anno -> anno.nome)
-                .collect(Collectors.toList());
-    }
 
 
     @Override

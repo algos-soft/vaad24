@@ -8,7 +8,6 @@ import it.algos.vaad24.backend.packages.crono.mese.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.*;
-import org.mockito.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
@@ -28,11 +27,7 @@ import java.util.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GiornoBackendTest extends BackendTest {
 
-    @InjectMocks
     private GiornoBackend backend;
-
-    @InjectMocks
-    private MeseBackend meseBackend;
 
     private List<Giorno> listaBeans;
 
@@ -42,12 +37,12 @@ public class GiornoBackendTest extends BackendTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        assertNotNull(backend);
-        assertNotNull(meseBackend);
+        this.backend = super.giornoBackend;
         super.entityClazz = Giorno.class;
-        super.crudBackend = backend;
-        super.setUpAll();
         super.typeBackend = TypeBackend.giorno;
+        super.crudBackend = backend;
+
+        super.setUpAll();
     }
 
 
@@ -66,10 +61,6 @@ public class GiornoBackendTest extends BackendTest {
         backend.meseBackend.textService = textService;
     }
 
-    @BeforeEach
-    protected void setUpEach() {
-        super.setUpEach();
-    }
 
 
     @Test

@@ -7,7 +7,7 @@ package it.algos.vaad24.backend.entity;
  * Date: ven, 01-apr-2022
  * Time: 11:58
  */
-public abstract class AREntity extends AEntity {
+public abstract class ResetEntity extends AEntity {
 
     /**
      * flag per le collezioni che usano 'reset' e 'leggono' i dati

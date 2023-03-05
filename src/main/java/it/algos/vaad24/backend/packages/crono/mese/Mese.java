@@ -30,15 +30,10 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
 @AIEntity(keyPropertyName = "nome", usaReset = true)
-public class Mese extends AEntity {
+public class Mese extends OrdineEntity {
 
-    @AIField(type = AETypeField.integer, widthEM = 6)
-    public int ordine;
     @AIField(type = AETypeField.text)
     public String breve;
-
-    @AIField(type = AETypeField.text)
-    public String nome;
 
     @AIField(type = AETypeField.integer, widthEM = 6)
     public int giorni;

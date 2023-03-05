@@ -382,7 +382,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
             buttonDeleteReset = new Button();
             buttonDeleteReset.getElement().setAttribute("theme", "error");
             //--ha senso solo per le entity che estendono AREntity con la property 'reset'
-            if (AREntity.class.isAssignableFrom(entityClazz) || usaReset) {
+            if (ResetEntity.class.isAssignableFrom(entityClazz) || usaReset) {
                 buttonDeleteReset.getElement().setProperty("title", "Reset: ripristina nel database i valori di default annullando le " +
                         "eventuali modifiche apportate successivamente\nShortcut SHIFT+R");
                 buttonDeleteReset.addClickListener(event -> AReset.reset(this::reset));

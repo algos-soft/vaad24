@@ -2,6 +2,7 @@ package it.algos.base;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.logic.*;
+import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
@@ -80,6 +81,8 @@ public abstract class BackendTest extends AlgosIntegrationTest {
     @Autowired
     protected PreferenzaRepository preferenzaRepository;
 
+    @Autowired
+    protected ViaBackend viaBackend;
 
     protected CrudBackend crudBackend;
 
@@ -146,6 +149,8 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         crudBackend.mongoService = mongoService;
         crudBackend.annotationService = annotationService;
         crudBackend.logger = logger;
+        crudBackend.beanService = beanService;
+
         crudBackend.crudRepository = null;
     }
 
@@ -949,6 +954,6 @@ public abstract class BackendTest extends AlgosIntegrationTest {
         System.out.println("fine");
     }
 
-    protected enum TypeBackend {nessuno, via, anno, giorno, mese, secolo, continente, nota, versione}
+    protected enum TypeBackend {nessuno, via, anno, giorno, mese, secolo, continente, nota, versione, logger}
 
 }

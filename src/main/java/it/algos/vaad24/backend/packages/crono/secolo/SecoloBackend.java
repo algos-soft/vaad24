@@ -1,6 +1,5 @@
 package it.algos.vaad24.backend.packages.crono.secolo;
 
-import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -57,14 +56,13 @@ public class SecoloBackend extends CrudBackend {
      */
     public Secolo newEntity(final int ordine, final String nome, final int inizio, final int fine, final boolean anteCristo) {
         Secolo newEntityBean = Secolo.builder()
-                .ordine(ordine)
-                .nome(textService.isValid(nome) ? nome : null)
                 .inizio(inizio)
                 .fine(fine)
                 .anteCristo(anteCristo)
                 .build();
 
-        return (Secolo) fixKey(newEntityBean);
+        super.fixOrdine(newEntityBean, ordine, nome);
+        return (Secolo) super.fixKey(newEntityBean);
     }
 
 
@@ -84,8 +82,9 @@ public class SecoloBackend extends CrudBackend {
     }
 
 
+    @Override
     public Secolo findByOrdine(final int ordine) {
-        return findByProperty(FIELD_NAME_ORDINE, ordine);
+        return (Secolo) super.findByOrdine(ordine);
     }
 
 
@@ -147,16 +146,6 @@ public class SecoloBackend extends CrudBackend {
 
 
     @Override
-    public List<String> findAllForKey() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
-    }
-
-    @Override
-    public List<String> findAllForKeyReverseOrder() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
-    }
-
-    @Override
     public AResult resetOnlyEmpty() {
         AResult result = super.resetOnlyEmpty();
         String clazzName = entityClazz.getSimpleName();
@@ -172,7 +161,6 @@ public class SecoloBackend extends CrudBackend {
         int fine;
         boolean anteCristo = false;
         String anteCristoText;
-        String message;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             mappa = resourceService.leggeMappa(nomeFile);

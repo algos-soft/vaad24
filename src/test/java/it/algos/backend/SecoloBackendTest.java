@@ -6,7 +6,6 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
-import org.mockito.*;
 import org.springframework.boot.test.context.*;
 
 /**
@@ -24,7 +23,6 @@ import org.springframework.boot.test.context.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SecoloBackendTest extends BackendTest {
 
-    @InjectMocks
     private SecoloBackend backend;
 
 
@@ -33,17 +31,14 @@ public class SecoloBackendTest extends BackendTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        assertNotNull(backend);
+        this.backend = super.secoloBackend;
         super.entityClazz = Secolo.class;
-        super.crudBackend = backend;
-        super.setUpAll();
         super.typeBackend = TypeBackend.secolo;
+        super.crudBackend = backend;
+
+        super.setUpAll();
     }
 
-    @BeforeEach
-    protected void setUpEach() {
-        super.setUpEach();
-    }
 
 
     @Test
@@ -148,6 +143,5 @@ public class SecoloBackendTest extends BackendTest {
         ottenuto = entityBean.toString();
         printValue(sorgenteIntero, ottenuto);
     }
-
 
 }

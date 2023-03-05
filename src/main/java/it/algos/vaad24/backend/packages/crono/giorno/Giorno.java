@@ -6,8 +6,6 @@ import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import lombok.*;
-import org.springframework.data.mongodb.core.index.*;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
 
@@ -33,14 +31,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
 @AIEntity(keyPropertyName = "nome", usaReset = true, preReset = "mese")
-public class Giorno extends AEntity {
-
-    @Indexed(unique = true, direction = IndexDirection.ASCENDING)
-    @AIField(type = AETypeField.integer, header = "#", widthEM = 3, caption = "Ordinamento da inizio anno")
-    public int ordine;
-
-    @AIField(type = AETypeField.text, caption = "Nome corrente", sortProperty = "ordine")
-    public String nome;
+public class Giorno extends OrdineEntity {
 
     @DBRef
     @AIField(type = AETypeField.linkDinamico, linkClazz = MeseBackend.class)

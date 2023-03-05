@@ -4,8 +4,6 @@ import it.algos.*;
 import it.algos.base.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
-import org.mockito.*;
 import org.springframework.boot.test.context.*;
 
 /**
@@ -23,7 +21,6 @@ import org.springframework.boot.test.context.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ViaBackendTest extends BackendTest {
 
-    @InjectMocks
     private ViaBackend backend;
 
 
@@ -32,15 +29,12 @@ public class ViaBackendTest extends BackendTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        assertNotNull(backend);
+        this.backend = super.viaBackend;
         super.entityClazz = Via.class;
+        super.typeBackend = TypeBackend.via;
         super.crudBackend = backend;
-        super.setUpAll();
-    }
 
-    @BeforeEach
-    protected void setUpEach() {
-        super.setUpEach();
+        super.setUpAll();
     }
 
 }

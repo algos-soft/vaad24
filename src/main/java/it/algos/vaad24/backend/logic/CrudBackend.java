@@ -164,6 +164,14 @@ public abstract class CrudBackend extends AbstractService {
         return newEntityBean;
     }
 
+    public void fixOrdine(AEntity newEntityBean, final int ordine, final String nome) {
+        OrdineEntity entityBeanSuperclasse = newEntityOrdine(ordine, nome);
+        beanService.copia(entityBeanSuperclasse, newEntityBean);
+    }
+
+    public OrdineEntity newEntityOrdine(final int ordine, final String nome) {
+        return OrdineEntity.builderOrdine().ordine(ordine).nome(textService.isValid(nome) ? nome : null).build();
+    }
 
     public int nextOrdine() {
         int nextOrdine = 1;
@@ -318,6 +326,10 @@ public abstract class CrudBackend extends AbstractService {
         }
 
         return entity;
+    }
+
+    public AEntity findByOrdine(final int ordine) {
+        return findByProperty(FIELD_NAME_ORDINE, ordine);
     }
 
     public AEntity save(AEntity entityBean) {
@@ -550,8 +562,12 @@ public abstract class CrudBackend extends AbstractService {
      * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
      */
     public List<String> findAllForKey() {
-        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-        return findAllForProperty(keyPropertyName);
+        if (isOrdineEntity()) {
+            return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
+        }
+        else {
+            return findAllForProperty(annotationService.getKeyPropertyName(entityClazz));
+        }
     }
 
     /**
@@ -560,8 +576,19 @@ public abstract class CrudBackend extends AbstractService {
      * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
      */
     public List<String> findAllForKeyReverseOrder() {
-        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-        return findAllForPropertyReverseOrder(keyPropertyName);
+        if (isOrdineEntity()) {
+            return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
+        }
+        else {
+            return findAllForPropertyReverseOrder(annotationService.getKeyPropertyName(entityClazz));
+        }
+    }
+
+    public boolean isOrdineEntity() {
+        boolean isNome = reflectionService.isEsiste(entityClazz, FIELD_NAME_NOME);
+        boolean isOrdine = reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE);
+
+        return isNome && isOrdine;
     }
 
     /**

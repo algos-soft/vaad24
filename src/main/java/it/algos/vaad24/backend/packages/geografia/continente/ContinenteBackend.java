@@ -59,14 +59,14 @@ public class ContinenteBackend extends CrudBackend {
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Continente newEntity(final String id, final int ordine, final String nome, final boolean abitato, final boolean reset) {
-        Continente continente = Continente.builder()
-                .ordine(ordine)
-                .nome(textService.isValid(nome) ? nome : null)
+        Continente newEntityBean = Continente.builder()
                 .abitato(abitato)
+                .reset(reset)
                 .build();
-        continente.id = id;
-        continente.reset = reset;
-        return continente;
+        newEntityBean.id = id;
+
+        super.fixOrdine(newEntityBean, ordine, nome);
+        return (Continente) super.fixKey(newEntityBean);
     }
 
     @Override
@@ -82,6 +82,11 @@ public class ContinenteBackend extends CrudBackend {
     @Override
     public Continente findByProperty(final String propertyName, final Object propertyValue) {
         return (Continente) super.findByProperty(propertyName, propertyValue);
+    }
+
+    @Override
+    public Continente findByOrdine(final int ordine) {
+        return (Continente)super.findByOrdine(ordine);
     }
 
     /**
