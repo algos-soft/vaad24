@@ -12,7 +12,6 @@ import org.mockito.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 /**
  * Project vaad24
@@ -21,9 +20,9 @@ import java.util.stream.*;
  * Date: Wed, 22-Feb-2023
  * Time: 21:45
  */
-@SpringBootTest(classes = {Wiki24App.class})
+@SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
+@Tag("giorno")
 @Tag("backend")
 @DisplayName("Giorno Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -36,8 +35,6 @@ public class GiornoBackendTest extends BackendTest {
     private MeseBackend meseBackend;
 
     private List<Giorno> listaBeans;
-
-
 
 
     /**
@@ -105,7 +102,7 @@ public class GiornoBackendTest extends BackendTest {
             listaBeans = backend.findAllByMese(sorgente);
             assertNotNull(listaBeans);
             System.out.println(VUOTA);
-            printBackend(listaBeans,3);
+            printBackend(listaBeans, 3);
         }
     }
 
@@ -144,6 +141,23 @@ public class GiornoBackendTest extends BackendTest {
         GIORNI().forEach(this::isExistKeyBase);
     }
 
+    //--giorno
+    //--esistente
+    void isExistKeyBase(Arguments arg) {
+        Object[] mat = arg.get();
+        sorgente = (String) mat[0];
+        previstoBooleano = (boolean) mat[1];
+
+        ottenutoBooleano = backend.isExistKey(sorgente);
+        assertEquals(previstoBooleano, ottenutoBooleano);
+        if (ottenutoBooleano) {
+            System.out.println(String.format("Il giorno %s esiste", sorgente));
+        }
+        else {
+            System.out.println(String.format("Il giorno %s non esiste", sorgente));
+        }
+        System.out.println(VUOTA);
+    }
 
     @Test
     @Order(62)
@@ -183,24 +197,6 @@ public class GiornoBackendTest extends BackendTest {
         assertNull(entityBean);
         ottenuto = VUOTA;
         printValue(sorgenteIntero, ottenuto);
-    }
-
-    //--giorno
-    //--esistente
-    void isExistKeyBase(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[1];
-
-        ottenutoBooleano = backend.isExistKey(sorgente);
-        assertEquals(previstoBooleano, ottenutoBooleano);
-        if (ottenutoBooleano) {
-            System.out.println(String.format("Il giorno %s esiste", sorgente));
-        }
-        else {
-            System.out.println(String.format("Il giorno %s non esiste", sorgente));
-        }
-        System.out.println(VUOTA);
     }
 
 

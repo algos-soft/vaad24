@@ -227,6 +227,8 @@ public abstract class AlgosUnitTest {
 
     @InjectMocks
     public PreferenceService preferenceService;
+    @InjectMocks
+    public BeanService beanService;
 
 
     //--clazz
@@ -341,6 +343,7 @@ public abstract class AlgosUnitTest {
         assertNotNull(regexService);
         assertNotNull(mathService);
         assertNotNull(preferenceService);
+        assertNotNull(beanService);
     }
 
 
@@ -385,6 +388,7 @@ public abstract class AlgosUnitTest {
         classService.arrayService = arrayService;
         annotationService.textService = textService;
         annotationService.reflectionService = reflectionService;
+        beanService.reflectionService = reflectionService;
     }
 
     /**
