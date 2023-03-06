@@ -15,14 +15,14 @@ import org.springframework.boot.test.context.*;
  */
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
+@Tag("mese")
 @Tag("backend")
 @DisplayName("Mese Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MeseBackendTest extends BackendTest {
 
 
-    private MeseBackend backend;
+    protected MeseBackend backend;
 
     /**
      * Qui passa una volta sola <br>

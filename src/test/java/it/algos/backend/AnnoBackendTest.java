@@ -26,6 +26,7 @@ import java.util.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AnnoBackendTest extends BackendTest {
 
+
     private AnnoBackend backend;
 
     private List<Anno> listaBeans;
