@@ -49,7 +49,8 @@ import java.util.stream.*;
  * resetOnlyEmpty()
  * deleteAll()
  */
-public abstract class BackendTest extends AlgosIntegrationTest {
+
+public  abstract class BackendTest extends AlgosIntegrationTest {
 
     @InjectMocks
     protected NotaBackend notaBackend;

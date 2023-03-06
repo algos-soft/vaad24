@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.*;
  */
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("via")
 @Tag("reset")
 @DisplayName("Via Reset")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
