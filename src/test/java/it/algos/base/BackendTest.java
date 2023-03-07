@@ -200,6 +200,7 @@ public  abstract class BackendTest extends AlgosIntegrationTest {
     @DisplayName("21 - findAllNoSort (entityBeans)")
     protected void findAllNoSort() {
         System.out.println("21 - findAllNoSort (entityBeans)");
+        System.out.println(VUOTA);
 
         listaBeans = crudBackend.findAllNoSort();
         assertNotNull(listaBeans);
@@ -215,6 +216,7 @@ public  abstract class BackendTest extends AlgosIntegrationTest {
     @DisplayName("22 - findAll findAllSortCorrente (entityBeans)")
     protected void findAllSortCorrente() {
         System.out.println("22 - findAll findAllSortCorrente (entityBeans)");
+        System.out.println(VUOTA);
 
         listaBeans = crudBackend.findAllSortCorrente();
         assertNotNull(listaBeans);
@@ -230,6 +232,7 @@ public  abstract class BackendTest extends AlgosIntegrationTest {
     @DisplayName("23 - findAllSortCorrenteReverse (entityBeans)")
     protected void findAllSort() {
         System.out.println("23 - findAllSortCorrenteReverse (entityBeans)");
+        System.out.println(VUOTA);
 
         listaBeans = crudBackend.findAllSortCorrenteReverse();
         assertNotNull(listaBeans);
@@ -745,7 +748,6 @@ public  abstract class BackendTest extends AlgosIntegrationTest {
         String message = VUOTA;
         int cont = 1;
         int tot;
-        System.out.println(VUOTA);
 
         if (lista != null) {
             if (lista.size() > 0) {
