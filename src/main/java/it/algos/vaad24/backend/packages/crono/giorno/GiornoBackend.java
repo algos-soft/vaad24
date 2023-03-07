@@ -68,7 +68,7 @@ public class GiornoBackend extends CrudBackend {
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Giorno newEntity(final int ordine, final String nome, final Mese mese, final int trascorsi, final int mancanti) {
-        Giorno newEntityBean = Giorno.builder()
+        Giorno newEntityBean = Giorno.builderGiorno()
                 .mese(mese)
                 .trascorsi(trascorsi)
                 .mancanti(mancanti)

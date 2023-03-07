@@ -66,7 +66,7 @@ public class AnnoBackend extends CrudBackend {
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Anno newEntity(final int ordine, final String nome, final Secolo secolo, final boolean dopoCristo, final boolean bisestile) {
-        Anno newEntityBean = Anno.builder()
+        Anno newEntityBean = Anno.builderAnno()
                 .secolo(secolo)
                 .dopoCristo(dopoCristo)
                 .bisestile(bisestile)
