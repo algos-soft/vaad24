@@ -96,7 +96,7 @@ public class BeanServiceTest extends AlgosUnitTest {
         System.out.println(String.format("Nome del continente: %s.%s%s%s", sorgente, sorgente3, FORWARD, continente.nome));
         System.out.println(String.format("Nome della via: %s.%s%s%s", sorgente2, sorgente3, FORWARD, via.nome));
 
-        service.copia(continente,via);
+        service.copiaAncheID(continente,via);
 
         System.out.println(VUOTA);
         System.out.println("Dopo la copia:");

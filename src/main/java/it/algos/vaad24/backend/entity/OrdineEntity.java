@@ -36,4 +36,9 @@ public  class OrdineEntity extends AEntity {
     @AIField(type = AETypeField.text, caption = "Nome corrente", sortProperty = "ordine")
     public String nome;
 
+    @Override
+    public String toString() {
+        return nome;
+    }
+
 }

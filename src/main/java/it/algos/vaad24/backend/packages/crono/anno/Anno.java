@@ -44,7 +44,7 @@ public class Anno extends OrdineEntity {
 
     @Override
     public String toString() {
-        return nome;
+        return super.toString();
     }
 
 }// end of crud entity class
