@@ -166,7 +166,7 @@ public abstract class CrudBackend extends AbstractService {
 
     public void fixOrdine(AEntity newEntityBean, final int ordine, final String nome) {
         OrdineEntity entityBeanSuperclasse = newEntityOrdine(ordine, nome);
-        beanService.copia(entityBeanSuperclasse, newEntityBean);
+        beanService.copiaAncheID(entityBeanSuperclasse, newEntityBean);
     }
 
     public OrdineEntity newEntityOrdine(final int ordine, final String nome) {
