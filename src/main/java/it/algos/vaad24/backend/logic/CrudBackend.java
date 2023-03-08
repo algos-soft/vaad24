@@ -732,34 +732,49 @@ public abstract class CrudBackend extends AbstractService {
     public AResult fixResult(AResult result, String clazzName, String collectionName, List lista) {
         String message;
 
+        result.fine();
         if (lista.size() > 0) {
             result.setIntValue(lista.size());
             result.setLista(lista);
-            return fixResult(result, clazzName, collectionName, lista.size());
+
+            //            return fixResult(result, clazzName, collectionName, lista.size());
+            if (result.isValido()) {
+                result.errorMessage(VUOTA).eseguito().typeResult(AETypeResult.collectionCreata);
+                message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. ", collectionName, clazzName);
+                message += String.format("Contiene %s elementi. ", textService.format(lista.size()));
+                message += result.deltaSec();
+                logger.info(new WrapLog().message(message).type(AETypeLog.reset).usaDb());
+                return result.validMessage(message);
+            }
+            else {
+                return result.typeResult(AETypeResult.error);
+            }
         }
         else {
             result.typeResult(AETypeResult.error);
             message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetOnlyEmpty()", collectionName, clazzName);
-            return result.errorMessage(message).fine();
+            return result.errorMessage(message);
         }
 
     }
 
-    public AResult fixResult(AResult result, String clazzName, String collectionName, int numeroElementi) {
-        String message;
-
-        if (result.isValido()) {
-            message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. ", collectionName, clazzName);
-            message += String.format("Contiene %s elementi.", textService.format(numeroElementi));
-            result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
-            logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.reset).usaDb());
-        }
-        else {
-            result.typeResult(AETypeResult.error);
-        }
-
-        return result.fine();
-    }
+    //    public AResult fixResult(AResult result, String clazzName, String collectionName, int numeroElementi) {
+    //        String message;
+    //
+    //        if (result.isValido()) {
+    //            result.errorMessage(VUOTA).eseguito().typeResult(AETypeResult.collectionCreata);
+    //            message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. ", collectionName, clazzName);
+    //            message += String.format("Contiene %s elementi.", textService.format(numeroElementi));
+    //            message += result.deltaSec();
+    //            result.validMessage(message);
+    //            logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.reset).usaDb());
+    //        }
+    //        else {
+    //            result.typeResult(AETypeResult.error);
+    //        }
+    //
+    //        return result.fine();
+    //    }
 
     /**
      * Esegue un azione di download, specifica del programma/package in corso <br>
