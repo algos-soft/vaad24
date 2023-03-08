@@ -50,7 +50,7 @@ import java.util.stream.*;
  * deleteAll()
  */
 
-public  abstract class BackendTest extends AlgosIntegrationTest {
+public abstract class BackendTest extends AlgosIntegrationTest {
 
     @InjectMocks
     protected NotaBackend notaBackend;
@@ -759,15 +759,7 @@ public  abstract class BackendTest extends AlgosIntegrationTest {
                 System.out.println(message);
 
                 switch (typeBackend) {
-                    case giorno -> {
-                        System.out.print("ordine");
-                        System.out.print(SEP);
-                        System.out.print("nome");
-                        System.out.print(SEP);
-                        System.out.print("Trascorsi");
-                        System.out.print(SEP);
-                        System.out.println("mancanti");
-                    }
+                    case giorno -> printTestaGiorno();
                     case mese -> {
                         System.out.print("ordine");
                         System.out.print(SEP);
@@ -792,17 +784,7 @@ public  abstract class BackendTest extends AlgosIntegrationTest {
                         System.out.print(SEP);
                         System.out.println("avanti Cristo");
                     }
-                    case anno -> {
-                        System.out.print("ordine");
-                        System.out.print(SEP);
-                        System.out.print("nome");
-                        System.out.print(SEP);
-                        System.out.print("secolo");
-                        System.out.print(SEP);
-                        System.out.print("dopoCristo");
-                        System.out.print(SEP);
-                        System.out.println("bisestile");
-                    }
+                    case anno -> printTestaAnno();
                     case nota -> {
                         System.out.print("type");
                         System.out.print(SEP);
@@ -850,6 +832,16 @@ public  abstract class BackendTest extends AlgosIntegrationTest {
         else {
             System.out.println("Manca la lista");
         }
+    }
+
+    protected void printTestaGiorno() {
+        System.out.print("ordine");
+        System.out.print(SEP);
+        System.out.print("nome");
+        System.out.print(SEP);
+        System.out.print("Trascorsi");
+        System.out.print(SEP);
+        System.out.println("mancanti");
     }
 
     protected void printGiorno(Object obj) {
@@ -911,6 +903,17 @@ public  abstract class BackendTest extends AlgosIntegrationTest {
         }
     }
 
+    protected void printTestaAnno() {
+        System.out.print("ordine");
+        System.out.print(SEP);
+        System.out.print("nome");
+        System.out.print(SEP);
+        System.out.print("secolo");
+        System.out.print(SEP);
+        System.out.print("dopoCristo");
+        System.out.print(SEP);
+        System.out.println("bisestile");
+    }
 
     protected void printAnno(Object obj) {
         if (obj instanceof Anno anno) {
