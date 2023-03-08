@@ -53,7 +53,7 @@ public class Anno extends AEntity {
 
     @Override
     public String toString() {
-        return super.toString();
+        return nome;
     }
 
 }// end of crud entity class
