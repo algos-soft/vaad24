@@ -56,12 +56,13 @@ public class SecoloBackend extends CrudBackend {
      */
     public Secolo newEntity(final int ordine, final String nome, final int inizio, final int fine, final boolean anteCristo) {
         Secolo newEntityBean = Secolo.builder()
+                .ordine(ordine)
+                .nome(textService.isValid(nome) ? nome : null)
                 .inizio(inizio)
                 .fine(fine)
                 .anteCristo(anteCristo)
                 .build();
 
-        super.fixOrdine(newEntityBean, ordine, nome);
         return (Secolo) super.fixKey(newEntityBean);
     }
 

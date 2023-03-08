@@ -170,7 +170,8 @@ public abstract class CrudBackend extends AbstractService {
     }
 
     public OrdineEntity newEntityOrdine(final int ordine, final String nome) {
-        return OrdineEntity.builderOrdine().ordine(ordine).nome(textService.isValid(nome) ? nome : null).build();
+//        return OrdineEntity.builderOrdine().ordine(ordine).nome(textService.isValid(nome) ? nome : null).build();
+    return null;
     }
 
     public int nextOrdine() {

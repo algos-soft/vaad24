@@ -136,7 +136,6 @@ public class LoggerView extends CrudView {
         else {
             grid.setColumnOrder( type, livello, evento, giorno, mese, ora, descrizione, classe, metodo, linea);
         }
-
     }
 
     /**

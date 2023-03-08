@@ -65,13 +65,14 @@ public class MeseBackend extends CrudBackend {
      */
     public Mese newEntity(int ordine, String breve, String nome, int giorni, int primo, int ultimo) {
         Mese newEntityBean = Mese.builder()
+                .ordine(ordine)
+                .nome(textService.isValid(nome) ? nome : null)
                 .breve(textService.isValid(breve) ? breve : null)
                 .giorni(giorni)
                 .primo(primo)
                 .ultimo(ultimo)
                 .build();
 
-        super.fixOrdine(newEntityBean, ordine, nome);
         return (Mese) super.fixKey(newEntityBean);
     }
 

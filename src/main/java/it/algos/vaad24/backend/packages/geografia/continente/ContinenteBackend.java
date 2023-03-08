@@ -41,7 +41,7 @@ public class ContinenteBackend extends CrudBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public Continente newEntity() {
-        return newEntity(VUOTA, 0, VUOTA, true, false);
+        return newEntity( 0, VUOTA, true, false);
     }
 
     /**
@@ -50,7 +50,6 @@ public class ContinenteBackend extends CrudBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param id      (obbligatorio, unico)
      * @param ordine  di presentazione nel popup/combobox (obbligatorio, unico)
      * @param nome    (obbligatorio, unico)
      * @param abitato (obbligatorio)
@@ -58,14 +57,14 @@ public class ContinenteBackend extends CrudBackend {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public Continente newEntity(final String id, final int ordine, final String nome, final boolean abitato, final boolean reset) {
+    public Continente newEntity(final int ordine, final String nome, final boolean abitato, final boolean reset) {
         Continente newEntityBean = Continente.builder()
+                .ordine(ordine)
+                .nome(textService.isValid(nome) ? nome : null)
                 .abitato(abitato)
                 .reset(reset)
                 .build();
-        newEntityBean.id = id;
 
-        super.fixOrdine(newEntityBean, ordine, nome);
         return (Continente) super.fixKey(newEntityBean);
     }
 
@@ -104,14 +103,12 @@ public class ContinenteBackend extends CrudBackend {
         String nomeFileConfig = "continenti";
         Map<String, List<String>> mappa;
         List<String> riga;
-        String id;
         int ordine;
         String nome;
         boolean abitato;
         boolean reset;
         List<AEntity> lista;
         AEntity entityBean;
-        String message;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             mappa = resourceService.leggeMappa(nomeFileConfig);
@@ -131,14 +128,13 @@ public class ContinenteBackend extends CrudBackend {
                         nome = riga.get(1);
                         abitato = Boolean.valueOf(riga.get(2));
                         reset = Boolean.valueOf(riga.get(3));
-                        id = nome.toLowerCase();
                     }
                     else {
                         logger.error(new WrapLog().exception(new AlgosException("I dati non sono congruenti")).usaDb());
                         return result;
                     }
 
-                    entityBean = insert(newEntity(id, ordine, nome, abitato, reset));
+                    entityBean = insert(newEntity(ordine, nome, abitato, reset));
                     if (entityBean != null) {
                         lista.add(entityBean);
                     }

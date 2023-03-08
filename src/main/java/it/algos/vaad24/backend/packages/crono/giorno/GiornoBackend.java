@@ -69,12 +69,13 @@ public class GiornoBackend extends CrudBackend {
      */
     public Giorno newEntity(final int ordine, final String nome, final Mese mese, final int trascorsi, final int mancanti) {
         Giorno newEntityBean = Giorno.builderGiorno()
+                .ordine(ordine)
+                .nome(textService.isValid(nome) ? nome : null)
                 .mese(mese)
                 .trascorsi(trascorsi)
                 .mancanti(mancanti)
                 .build();
 
-        super.fixOrdine(newEntityBean, ordine, nome);
         return (Giorno) super.fixKey(newEntityBean);
     }
 

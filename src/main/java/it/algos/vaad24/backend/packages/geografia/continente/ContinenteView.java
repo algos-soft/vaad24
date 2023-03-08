@@ -26,12 +26,6 @@ import java.util.*;
 public class ContinenteView extends CrudView {
 
 
-    //--per eventuali metodi specifici
-    private ContinenteBackend backend;
-
-    //--per eventuali metodi specifici
-    private ContinenteDialog dialog;
-
     /**
      * Costruttore @Autowired (facoltativo) <br>
      * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
@@ -42,7 +36,6 @@ public class ContinenteView extends CrudView {
      */
     public ContinenteView(@Autowired final ContinenteBackend crudBackend) {
         super(crudBackend, Continente.class);
-        this.backend = crudBackend;
     }
 
     /**
@@ -57,12 +50,12 @@ public class ContinenteView extends CrudView {
         super.sortOrder = Sort.by(Sort.Direction.ASC, "ordine");
         super.gridPropertyNamesList = Arrays.asList("ordine", "nome", "abitato");
         super.formPropertyNamesList = Arrays.asList("ordine", "nome", "abitato");
+
         super.usaRowIndex = false;
         super.usaBottoneDeleteReset = true;
         super.usaBottoneNew = false;
         super.autoCreateColumns = false;
         super.searchFieldName = "nome";
-        super.dialogClazz = ContinenteDialog.class;
     }
 
     /**
@@ -77,6 +70,5 @@ public class ContinenteView extends CrudView {
         addSpan(ASpan.text("Solo hard coded. Non creabili e non modificabili").rosso());
         addSpan(ASpan.text("Ordinati di default per 'ordine'. Ordinabili anche per 'nome'.").rosso());
     }
-
 
 }// end of crud @Route view class

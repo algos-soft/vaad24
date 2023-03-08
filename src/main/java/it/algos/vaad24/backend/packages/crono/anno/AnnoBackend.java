@@ -67,12 +67,13 @@ public class AnnoBackend extends CrudBackend {
      */
     public Anno newEntity(final int ordine, final String nome, final Secolo secolo, final boolean dopoCristo, final boolean bisestile) {
         Anno newEntityBean = Anno.builderAnno()
+                .ordine(ordine)
+                .nome(textService.isValid(nome) ? nome : null)
                 .secolo(secolo)
                 .dopoCristo(dopoCristo)
                 .bisestile(bisestile)
                 .build();
 
-        super.fixOrdine(newEntityBean, ordine, nome);
         return (Anno) super.fixKey(newEntityBean);
     }
 
@@ -131,7 +132,6 @@ public class AnnoBackend extends CrudBackend {
         String collectionName = result.getTarget();
         AEntity entityBean;
         List<AEntity> lista;
-        String message;
 
         if (secoloBackend.count() < 1) {
             AResult resultMese = secoloBackend.resetOnlyEmpty();
