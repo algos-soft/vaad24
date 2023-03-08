@@ -94,12 +94,12 @@ public class GiornoBackend extends CrudBackend {
     }
 
     public Giorno findByOrdine(final int ordine) {
-        return (Giorno)super.findByOrdine(ordine);
+        return (Giorno) super.findByOrdine(ordine);
     }
 
     @Override
     public List<Giorno> findAllNoSort() {
-        return (List<Giorno>)super.findAllNoSort();
+        return (List<Giorno>) super.findAllNoSort();
     }
 
     @Override
@@ -160,8 +160,11 @@ public class GiornoBackend extends CrudBackend {
         List<AEntity> lista;
 
         if (meseBackend.count() < 1) {
-            logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Mese'")).usaDb());
-            return result.fine();
+            AResult resultMese = meseBackend.resetOnlyEmpty();
+            if (resultMese.isErrato()) {
+                logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Mese'")).usaDb());
+                return result.fine();
+            }
         }
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {

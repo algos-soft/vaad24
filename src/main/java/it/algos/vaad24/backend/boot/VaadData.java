@@ -87,7 +87,7 @@ public class VaadData extends AbstractService {
         logger.info(new WrapLog().message(message).type(AETypeLog.info));
 
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
-//        resetData(VaadVar.moduloVaadin24);
+        resetData(VaadVar.moduloVaadin24);
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
         resetData(VaadVar.projectNameModulo);
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
@@ -130,7 +130,8 @@ public class VaadData extends AbstractService {
         }
 
         //--seleziono solo le classi di tipo 'backend' che implementano il metodo resetOnlyEmpty()
-        allResetOrderedClass = classService.allModuleBackendResetOrderedClass(moduleName);
+        allResetOrderedClass = classService.allModuleBackendResetClass(moduleName);
+//        allResetOrderedClass = classService.allModuleBackendResetOrderedClass(moduleName);
         if (allResetOrderedClass != null && allResetOrderedClass.size() > 0) {
             if (allResetOrderedClass.size() == 1) {
                 message = String.format("Nel modulo %s è stata trovata solo la classe %s che implementa il metodo %s()", moduleName, allResetOrderedClass.get(0).getSimpleName(),METHOD_NAME_RESET_ONLY);
@@ -154,14 +155,14 @@ public class VaadData extends AbstractService {
         if (allResetOrderedClass != null) {
             for (Class clazz : allResetOrderedClass) {
                 result = classService.esegueMetodo(clazz.getCanonicalName(), METHOD_NAME_RESET_ONLY);
-                if (result.isValido()) {
-                    if (result.getTypeResult() == AETypeResult.collectionPiena) {
-                        logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.checkData));
-                    }
-                    else {
-                        logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.checkData).usaDb());
-                    }
-                }
+//                if (result.isValido()) {
+//                    if (result.getTypeResult() == AETypeResult.collectionPiena) {
+//                        logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.checkData));
+//                    }
+//                    else {
+//                        logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.checkData).usaDb());
+//                    }
+//                }
             }
         }
 

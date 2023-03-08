@@ -584,9 +584,10 @@ public class ClassService extends AbstractService {
      *
      * @return lista ordinata di tutte le classi 'backend' && 'reset' del package
      */
+    @Deprecated
     public List<Class> allModuleBackendResetOrderedClass(final String moduleName) {
         List<Class> allOrderedClazz = null;
-        List<Class> allBackendClazz;
+        List<Class> allBackendResetClazz;
         Class entityClazz;
         Map<String, Class> mappaClazz = new HashMap();
         String simpleName;
@@ -597,12 +598,12 @@ public class ClassService extends AbstractService {
             return null;
         }
 
-        allBackendClazz = allModuleBackendResetClass(moduleName);
-        if (allBackendClazz == null || allBackendClazz.size() == 0) {
+        allBackendResetClazz = allModuleBackendResetClass(moduleName);
+        if (allBackendResetClazz == null || allBackendResetClazz.size() == 0) {
             return null;
         }
 
-        for (Class backendClazz : allBackendClazz) {
+        for (Class backendClazz : allBackendResetClazz) {
             pathName = backendClazz.getCanonicalName();
             pathName = textService.levaCoda(pathName, SUFFIX_BACKEND);
             entityClazz = this.getClazzFromCanonicalName(pathName);
@@ -621,7 +622,8 @@ public class ClassService extends AbstractService {
             allOrderedClazz.add(mappaClazz.get(key));
         }
 
-        return allOrderedClazz;
+//        return allOrderedClazz;
+        return allBackendResetClazz;
     }
 
     /**

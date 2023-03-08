@@ -134,8 +134,11 @@ public class AnnoBackend extends CrudBackend {
         String message;
 
         if (secoloBackend.count() < 1) {
-            logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Secolo'")).usaDb());
-            return result.fine();
+            AResult resultMese = secoloBackend.resetOnlyEmpty();
+            if (resultMese.isErrato()) {
+                logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Secolo'")).usaDb());
+                return result.fine();
+            }
         }
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {

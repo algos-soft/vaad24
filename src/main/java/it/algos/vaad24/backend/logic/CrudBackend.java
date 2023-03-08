@@ -752,6 +752,7 @@ public abstract class CrudBackend extends AbstractService {
             message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. ", collectionName, clazzName);
             message += String.format("Contiene %s elementi.", textService.format(numeroElementi));
             result.errorMessage(VUOTA).eseguito().validMessage(message).typeResult(AETypeResult.collectionCreata);
+            logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.reset).usaDb());
         }
         else {
             result.typeResult(AETypeResult.error);
