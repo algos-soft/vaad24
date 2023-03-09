@@ -170,8 +170,8 @@ public abstract class CrudBackend extends AbstractService {
     }
 
     public OrdineEntity newEntityOrdine(final int ordine, final String nome) {
-//        return OrdineEntity.builderOrdine().ordine(ordine).nome(textService.isValid(nome) ? nome : null).build();
-    return null;
+        //        return OrdineEntity.builderOrdine().ordine(ordine).nome(textService.isValid(nome) ? nome : null).build();
+        return null;
     }
 
     public int nextOrdine() {
@@ -342,10 +342,13 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
-    public AEntity insert(final AEntity entityBean) {
+    public AEntity insert(AEntity entityBean) {
         String collectionName = annotationService.getCollectionName(entityClazz);
 
         if (!isExistId(entityBean.id)) {
+            //possibilità di inserire il keyID prima dell'inserimento automatico di mongoDB se manca
+            entityBean = fixKey(entityBean);
+
             if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
                 return (AEntity) crudRepository.insert(entityBean);
             }
