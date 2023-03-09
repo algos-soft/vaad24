@@ -27,7 +27,7 @@ import java.util.stream.*;
 @Tag("enums")
 @DisplayName("Enumeration AENotaLevel")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AENotaLevelTest extends AlgosUnitTest {
+public class AENotaLevelTest extends AlgosTest {
 
 
     private AENotaLevel type;

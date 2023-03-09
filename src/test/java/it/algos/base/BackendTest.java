@@ -50,7 +50,7 @@ import java.util.stream.*;
  * deleteAll()
  */
 
-public abstract class BackendTest extends AlgosIntegrationTest {
+public abstract class BackendTest extends AlgosTest {
 
     @InjectMocks
     protected NotaBackend notaBackend;

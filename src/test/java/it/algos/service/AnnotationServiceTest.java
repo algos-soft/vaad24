@@ -28,7 +28,7 @@ import org.springframework.test.context.junit.jupiter.*;
 @Tag("service")
 @DisplayName("Annotation Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AnnotationServiceTest extends AlgosIntegrationTest {
+public class AnnotationServiceTest extends AlgosTest {
 
     /**
      * Classe principale di riferimento <br>

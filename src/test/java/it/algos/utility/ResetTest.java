@@ -25,7 +25,7 @@ import org.springframework.test.context.junit.jupiter.*;
 @Tag("integration")
 @DisplayName("Reset")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ResetTest extends AlgosIntegrationTest {
+public class ResetTest extends AlgosTest {
 
 
     /**

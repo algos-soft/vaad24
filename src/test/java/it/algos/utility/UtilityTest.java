@@ -27,7 +27,7 @@ import java.util.*;
 @Tag("integration")
 @DisplayName("Utility")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UtilityTest extends AlgosIntegrationTest {
+public class UtilityTest extends AlgosTest {
 
 
     /**

@@ -22,6 +22,7 @@ import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.context.*;
 import org.springframework.data.domain.*;
 
 import java.lang.reflect.*;
@@ -39,7 +40,7 @@ import java.util.stream.*;
  *
  * @see <a href="https://www.baeldung.com/parameterized-tests-junit-5">...</a>
  */
-public abstract class AlgosUnitTest {
+public abstract class AlgosTest {
 
     public static final String SEP_RIGA = "====================";
 
@@ -170,6 +171,9 @@ public abstract class AlgosUnitTest {
     protected long inizio;
 
     protected Sort sort;
+
+    @Autowired
+    public ApplicationContext appContext;
 
     @InjectMocks
     protected TextService textService;
@@ -325,6 +329,7 @@ public abstract class AlgosUnitTest {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void initMocks() {
+        assertNotNull(appContext);
         assertNotNull(textService);
         assertNotNull(slf4jLogger);
         assertNotNull(logService);
@@ -354,6 +359,7 @@ public abstract class AlgosUnitTest {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixRiferimentiIncrociati() {
+        classService.appContext = appContext;
         mailService.textService = textService;
         dateService.textService = textService;
         arrayService.textService = textService;

@@ -24,7 +24,7 @@ import java.util.*;
 @Tag("enums")
 @DisplayName("Enumeration AESchedule")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AEScheduleTest extends AlgosUnitTest {
+public class AEScheduleTest extends AlgosTest {
 
 
     private AESchedule type;

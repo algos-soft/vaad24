@@ -27,7 +27,7 @@ import java.util.stream.*;
 @Tag("enums")
 @DisplayName("Enumeration AELogLevel")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AELogLevelTest extends AlgosUnitTest {
+public class AELogLevelTest extends AlgosTest {
 
     private AELogLevel type;
     private AELogLevel[] matrice;

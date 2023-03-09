@@ -38,7 +38,7 @@ import java.util.stream.*;
 @Tag("service")
 @DisplayName("Class Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ClassServiceTest extends AlgosIntegrationTest {
+public class ClassServiceTest extends AlgosTest {
 
     /**
      * Classe principale di riferimento <br>

@@ -26,7 +26,7 @@ import org.springframework.test.context.junit.jupiter.*;
 @Tag("service")
 @DisplayName("Bean Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BeanServiceTest extends AlgosUnitTest {
+public class BeanServiceTest extends AlgosTest {
 
     /**
      * Classe principale di riferimento <br>

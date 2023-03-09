@@ -24,7 +24,7 @@ import java.util.*;
 @Tag("enums")
 @DisplayName("Enumeration AEFontStyle")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AEFontStyleTest extends AlgosUnitTest {
+public class AEFontStyleTest extends AlgosTest {
 
 
     private AEFontStyle type;

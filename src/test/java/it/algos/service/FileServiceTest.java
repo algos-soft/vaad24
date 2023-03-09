@@ -35,7 +35,7 @@ import java.util.stream.*;
 @Tag("service")
 @DisplayName("File service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class FileServiceTest extends AlgosIntegrationTest {
+public class FileServiceTest extends AlgosTest {
 
 
     private static String NOME_FILE_UNO = "Alfa.txt";

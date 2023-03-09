@@ -23,7 +23,7 @@ import org.springframework.test.context.junit.jupiter.*;
 @Tag("service")
 @DisplayName("Math Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MathServiceTest extends AlgosIntegrationTest {
+public class MathServiceTest extends AlgosTest {
 
 
     /**

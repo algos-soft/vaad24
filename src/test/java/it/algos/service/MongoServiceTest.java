@@ -28,7 +28,7 @@ import java.util.*;
 @Tag("service")
 @DisplayName("Mongo Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MongoServiceTest extends AlgosIntegrationTest {
+public class MongoServiceTest extends AlgosTest {
 
 
     private MongoDatabase dataBase;

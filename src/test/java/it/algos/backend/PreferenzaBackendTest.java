@@ -27,7 +27,7 @@ import java.util.*;
 @Tag("backendx")
 @DisplayName("Preferenza Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PreferenzaBackendTest extends AlgosUnitTest {
+public class PreferenzaBackendTest extends AlgosTest {
 
     /**
      * The Service.

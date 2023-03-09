@@ -24,7 +24,7 @@ import java.util.*;
 @Tag("enums")
 @DisplayName("Enumeration AECopy")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AECopyTest extends AlgosUnitTest {
+public class AECopyTest extends AlgosTest {
 
 
     private AECopy type;

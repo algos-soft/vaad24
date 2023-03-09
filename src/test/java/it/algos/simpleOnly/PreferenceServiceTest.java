@@ -29,7 +29,7 @@ import java.util.*;
 @Tag("service")
 @DisplayName("Preference Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PreferenceServiceTest extends AlgosIntegrationTest {
+public class PreferenceServiceTest extends AlgosTest {
 
     /**
      * Classe principale di riferimento <br>

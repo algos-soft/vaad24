@@ -24,7 +24,7 @@ import java.util.*;
 @Tag("enums")
 @DisplayName("Enumeration AEFontHeight")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AEFontHeightTest extends AlgosUnitTest {
+public class AEFontHeightTest extends AlgosTest {
 
 
     private AEFontSize type;

@@ -22,7 +22,7 @@ import org.springframework.test.context.junit.jupiter.*;
 @Tag("service")
 @DisplayName("Array Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ArrayServiceTest extends AlgosIntegrationTest {
+public class ArrayServiceTest extends AlgosTest {
 
     /**
      * Classe principale di riferimento <br>
