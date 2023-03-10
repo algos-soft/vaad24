@@ -750,7 +750,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
             refresh();
         }
         else {
-            Avviso.message("Reset non eseguito").error().open();
+            Avviso.message(result.getErrorMessage()).error().durata(6).open();
         }
     }
 

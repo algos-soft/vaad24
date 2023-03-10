@@ -42,6 +42,8 @@ public class VaadCost {
 
     public static final String ALGOS = "algos";
 
+    public static final Locale LOCALE = Locale.ITALIAN;
+
     public static final LocalDateTime ROOT_DATA_TIME = LocalDateTime.of(2000, 1, 1, 0, 0);
 
     public static final LocalDate ROOT_DATA = LocalDate.of(2000, 1, 1);
@@ -471,6 +473,7 @@ public class VaadCost {
     public static final String COLOR_VERO = "#9FE2BF";
 
     public static final String COLOR_FALSO = "#FF7F50";
+    public static final String COLOR_DEBUG = "#FF0054";
 
     public static final String COLOR_BLUE = "blue";
 

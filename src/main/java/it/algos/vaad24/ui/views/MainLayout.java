@@ -5,9 +5,12 @@ import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.applayout.*;
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.icon.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
 import it.algos.vaad24.backend.boot.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.security.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.ui.service.*;
@@ -159,7 +162,18 @@ public class MainLayout extends AppLayout {
     @Override
     protected void afterNavigation() {
         super.afterNavigation();
-        viewTitle.setText(getCurrentPageTitle());
+
+        viewTitle.removeAll();
+
+        Icon icona = VaadinIcon.BUG.create();
+        icona.setColor(COLOR_DEBUG);
+
+        if (icona != null && Pref.debug.is()) {
+            viewTitle.add(new Span(getCurrentPageTitle()), new Span(TAB_SPAZIO), icona);
+        }
+        else {
+            viewTitle.add(new Span(getCurrentPageTitle()));
+        }
     }
 
     private String getCurrentPageTitle() {

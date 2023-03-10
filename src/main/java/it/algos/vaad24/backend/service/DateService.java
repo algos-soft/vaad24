@@ -345,4 +345,318 @@ public class DateService extends AbstractService {
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
     }
 
+    /**
+     * Restituisce la data nella forma del pattern ricevuto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     *
+     * @param localDateTime da rappresentare
+     * @param pattern       per la formattazione
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String get(LocalDateTime localDateTime, AETypeData pattern) {
+        if (pattern.isSenzaTime()) {
+            return VUOTA;
+        }
+        else {
+            return get(localDateTime, pattern.getPattern());
+        }
+    }
+
+
+    /**
+     * Restituisce la data nella forma del pattern ricevuto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     *
+     * @param localDate da rappresentare
+     * @param pattern   per la formattazione
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String get(LocalDate localDate, AETypeData pattern) {
+        if (pattern.isSenzaTime()) {
+            return get(localDate, pattern.getPattern());
+        }
+        else {
+            return get(localDate);
+        }
+    }
+
+
+    /**
+     * Restituisce la data nella forma del pattern ricevuto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     *
+     * @param localTime da rappresentare
+     * @param pattern   per la formattazione
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String get(LocalTime localTime, AETypeData pattern) {
+        return get(localTime, pattern.getPattern());
+    }
+
+
+    /**
+     * Restituisce la data nella forma del pattern ricevuto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     *
+     * @param localDateTime da rappresentare
+     * @param pattern       per la formattazione
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String get(LocalDateTime localDateTime, String pattern) {
+        if (localDateTime != null) {
+            return localDateTime.format(DateTimeFormatter.ofPattern(pattern, LOCALE));
+        }
+        else {
+            return VUOTA;
+        }
+    }
+
+
+    /**
+     * Restituisce la data nella forma del pattern ricevuto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     *
+     * @param localDate da rappresentare
+     * @param pattern   per la formattazione
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String get(LocalDate localDate, String pattern) {
+        if (localDate != null) {
+            return localDate.format(DateTimeFormatter.ofPattern(pattern, LOCALE));
+        }
+        else {
+            return VUOTA;
+        }
+    }
+
+
+    /**
+     * Restituisce la data nella forma del pattern ricevuto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     *
+     * @param localTime da rappresentare
+     * @param pattern   per la formattazione
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String get(LocalTime localTime, String pattern) {
+        if (localTime != null) {
+            return localTime.format(DateTimeFormatter.ofPattern(pattern, LOCALE));
+        }
+        else {
+            return VUOTA;
+        }
+    }
+
+
+    /**
+     * Restituisce la data nella forma del pattern previsto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     * Not using leading zeroes in day <br>
+     * Two numbers for year <br>
+     * Pattern: d-M-yy <br>
+     * Esempio: 5-4-17 <br>
+     *
+     * @param localDate da rappresentare
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String getCorta(LocalDate localDate) {
+        return get(localDate, AETypeData.dateShort);
+    }
+
+
+    /**
+     * Restituisce la data nella forma del pattern previsto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     * Pattern: d-MMM-yy <br>
+     * Esempio: 5-ott-14 <br>
+     *
+     * @param localDate da rappresentare
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String getNormale(LocalDate localDate) {
+        return get(localDate, AETypeData.dateNormal);
+    }
+
+
+    /**
+     * Restituisce la data nella forma del pattern previsto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     * Pattern: d-MMMM-yyy <br>
+     * Esempio: 5-ottobre-2014 <br>
+     *
+     * @param localDate da rappresentare
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String getLunga(LocalDate localDate) {
+        return get(localDate, AETypeData.dateLong);
+    }
+
+
+    /**
+     * Restituisce la data nella forma del pattern previsto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     * Pattern: EEEE, d-MMMM-yyy <br>
+     * Esempio: domenica, 5-ottobre-2014 <br>
+     *
+     * @param localDate da rappresentare
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String getCompleta(LocalDate localDate) {
+        return get(localDate, AETypeData.dataCompleta);
+    }
+
+    /**
+     * Restituisce la data nella forma del pattern previsto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     * Pattern: EEEE, d-MMMM-yyy <br>
+     * Esempio: dom, 5-ott-2014 <br>
+     *
+     * @param localDate da rappresentare
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String getCompletaShort(LocalDate localDate) {
+        return get(localDate, AETypeData.dataCompletaShort);
+    }
+
+
+    /**
+     * Restituisce la data e l' orario nella forma del pattern previsto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     * Pattern: d-M-yy H:mm <br>
+     * Esempio: 18-4-17 13:45 <br>
+     *
+     * @param localDateTime da rappresentare
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String getDataOrario(LocalDateTime localDateTime) {
+        return get(localDateTime, AETypeData.normaleOrario);
+    }
+
+
+    /**
+     * Restituisce la data e l' orario nella forma del pattern previsto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     * Pattern: EEEE, d-MMMM-yyy 'alle' H:mm <br>
+     * Esempio: domenica, 5-ottobre-2014 alle 13:45 <br>
+     *
+     * @param localDateTime da rappresentare
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String getDataOrarioCompleta(LocalDateTime localDateTime) {
+        return get(localDateTime, AETypeData.completaOrario);
+    }
+
+
+    /**
+     * Restituisce la data e l' orario nella forma del pattern previsto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     * Pattern: d-M-yy 'alle' H:mm <br>
+     * Esempio: 5-ott-14 alle 13:45 <br>
+     *
+     * @param localDateTime da rappresentare
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String getDataOrarioBreve(LocalDateTime localDateTime) {
+        return get(localDateTime, AETypeData.breveOrario);
+    }
+
+
+    /**
+     * Restituisce l' orario corrente nella forma del pattern previsto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String getOrario() {
+        return getOrario(LocalTime.now());
+    }
+
+
+    /**
+     * Restituisce l' orario nella forma del pattern previsto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     *
+     * @param localTime da rappresentare
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String getOrario(LocalTime localTime) {
+        return localTime != null ? localTime.format(DateTimeFormatter.ofPattern(AETypeData.orario.getPattern(), LOCALE)) : VUOTA;
+    }
+
+
+    /**
+     * Restituisce l' orario nella forma del pattern previsto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     *
+     * @param localDateTime da rappresentare
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String getOrario(LocalDateTime localDateTime) {
+        return getOrario(localDateTimeToLocalTime(localDateTime));
+    }
+
+
+    /**
+     * Restituisce l' orario nella forma del pattern previsto. <br>
+     * <p>
+     * Returns a string representation of the time <br>
+     * Pattern: H:mm:ss <br>
+     * Esempio:  13:45:08 <br>
+     *
+     * @param localDateTime da rappresentare
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String getOrarioCompleto(LocalDateTime localDateTime) {
+        return localDateTimeToLocalTime(localDateTime).format(DateTimeFormatter.ofPattern(AETypeData.orarioLungo.getPattern(), LOCALE));
+    }
+
+    /**
+     * Convert java.util.LocalDateTime to java.time.LocalTime
+     * Estrae la sola parte di Time
+     * LocalDateTime HA anni, giorni, ore, minuti e secondi
+     * LocalTime NON ha anni e giorni
+     * Si perdono quindi gli anni ed i giorni di LocalDateTime
+     *
+     * @param localDateTime da convertire
+     *
+     * @return time senza il giorno
+     */
+    public LocalTime localDateTimeToLocalTime(LocalDateTime localDateTime) {
+        return LocalTime.of(localDateTime.getHour(), localDateTime.getMinute(), localDateTime.getSecond());
+    }
+
 }
