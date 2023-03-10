@@ -73,6 +73,10 @@ public class UtilityView extends VerticalLayout {
     @Autowired
     public PreferenzaBackend preferenzaBackend;
 
+    private static String ESEGUIRE = "Da eseguire sempre dopo un drop del database Mongo, oppure una nuova release significativa.";
+
+    private static String FLAG_DEBUG = "Mette temporaneamente a TRUE il flag 'debug' delle preferenze e poi ripristina il valore originale.";
+
     /**
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      */
@@ -100,9 +104,6 @@ public class UtilityView extends VerticalLayout {
 
         this.titolo();
 
-        this.paragrafoReset();
-        this.paragrafoPreferenze();
-
         //--spazio per distanziare i paragrafi
         this.add(new H3());
     }
@@ -111,6 +112,10 @@ public class UtilityView extends VerticalLayout {
         H1 titolo = new H1("Gestione utility");
         titolo.getElement().getStyle().set("color", "green");
         this.add(titolo);
+    }
+    public void body() {
+        this.paragrafoReset();
+        this.paragrafoPreferenze();
     }
 
     public void paragrafoReset() {
@@ -123,13 +128,15 @@ public class UtilityView extends VerticalLayout {
         H3 paragrafo = new H3("Reset di tutte le collection [ordinate]");
         paragrafo.getElement().getStyle().set("color", "blue");
 
-        message = String.format("Esegue il %s() su tutte le collection [ordinate] che implementano %s()", METHOD_NAME_RESET_FORCING, METHOD_NAME_RESET_ONLY);
+        message = String.format("Esegue il %s() su tutte le collection [ordinate] che implementano %s(). ", METHOD_NAME_RESET_FORCING, METHOD_NAME_RESET_ONLY);
         layout.add(ASpan.text(message));
+        layout.add(ASpan.text(ESEGUIRE));
+        layout.add(ASpan.text(FLAG_DEBUG));
         lista = classService.allModuleEntityResetOrderedClassName(VaadVar.moduloVaadin24);
-        message = String.format("%s%s%s", VaadVar.moduloVaadin24, DUE_PUNTI_SPAZIO, lista.toString());
+        message = String.format("Modulo %s%s%s", VaadVar.moduloVaadin24, DUE_PUNTI_SPAZIO, lista.toString());
         layout.add(ASpan.text(message));
         lista = classService.allModuleEntityResetOrderedClassName(VaadVar.projectNameModulo);
-        message = String.format("%s%s%s", VaadVar.projectNameModulo, DUE_PUNTI_SPAZIO, lista.toString());
+        message = String.format("Modulo %s%s%s", VaadVar.projectNameModulo, DUE_PUNTI_SPAZIO, lista.toString());
         layout.add(ASpan.text(message));
         Button bottone = new Button("Reset all");
         bottone.getElement().setAttribute("theme", "primary");
@@ -184,12 +191,13 @@ public class UtilityView extends VerticalLayout {
         layout.setPadding(false);
         layout.setSpacing(false);
         String message;
-        List<String> lista;
         H3 paragrafo = new H3("Reset delle preferenze");
         paragrafo.getElement().getStyle().set("color", "blue");
 
         message = String.format("Esegue il reset/refresh di tutte le preferenze");
         layout.add(ASpan.text(message));
+        layout.add(ASpan.text(ESEGUIRE));
+        layout.add(ASpan.text(FLAG_DEBUG));
         message = "Refresh -> ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche.";
         layout.add(ASpan.text(message));
         message = "Delete -> ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche.";
@@ -207,6 +215,7 @@ public class UtilityView extends VerticalLayout {
         layout.add(new HorizontalLayout(bottone, bottone2));
         this.add(layout);
     }
+
 
 
     private void refresh() {
