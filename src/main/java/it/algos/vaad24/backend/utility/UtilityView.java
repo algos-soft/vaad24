@@ -118,9 +118,43 @@ public class UtilityView extends VerticalLayout {
     }
 
     public void body() {
-        this.paragrafoReset();
         this.paragrafoPreferenze();
+        this.paragrafoReset();
     }
+
+
+    public void paragrafoPreferenze() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setPadding(false);
+        layout.setSpacing(false);
+        String message;
+        H3 paragrafo = new H3("Reset delle preferenze");
+        paragrafo.getElement().getStyle().set("color", "blue");
+
+        message = String.format("Esegue il reset/refresh di tutte le preferenze");
+        layout.add(ASpan.text(message));
+        layout.add(ASpan.text(ESEGUIRE));
+        message = String.format("Il valore originale del flag 'debug' dopo il reset è TRUE");
+        layout.add(ASpan.text(message));
+        message = "Refresh -> ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche.";
+        layout.add(ASpan.text(message));
+        message = "Delete -> ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche.";
+        layout.add(ASpan.text(message));
+
+        Button bottone = new Button("Refresh");
+        bottone.getElement().setAttribute("theme", "primary");
+        bottone.addClickListener(event -> refreshPreferenze());
+
+        Button bottone2 = new Button("Reset");
+        bottone2.getElement().setAttribute("theme", "primary");
+        bottone2.addClickListener(event -> resetPreferenze());
+
+        this.add(paragrafo);
+        layout.add(new HorizontalLayout(bottone, bottone2));
+        this.add(layout);
+    }
+
 
     public void paragrafoReset() {
         VerticalLayout layout = new VerticalLayout();
@@ -196,39 +230,6 @@ public class UtilityView extends VerticalLayout {
             message = String.format("Nel modulo %s non ci sono classi che implementano il metodo %s", nomeModulo, METHOD_NAME_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.reset));
         }
-    }
-
-
-    public void paragrafoPreferenze() {
-        VerticalLayout layout = new VerticalLayout();
-        layout.setMargin(false);
-        layout.setPadding(false);
-        layout.setSpacing(false);
-        String message;
-        H3 paragrafo = new H3("Reset delle preferenze");
-        paragrafo.getElement().getStyle().set("color", "blue");
-
-        message = String.format("Esegue il reset/refresh di tutte le preferenze");
-        layout.add(ASpan.text(message));
-        layout.add(ASpan.text(ESEGUIRE));
-        message = String.format("Il valore originale del flag 'debug' dopo il reset è TRUE");
-        layout.add(ASpan.text(message));
-        message = "Refresh -> ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche.";
-        layout.add(ASpan.text(message));
-        message = "Delete -> ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche.";
-        layout.add(ASpan.text(message));
-
-        Button bottone = new Button("Refresh");
-        bottone.getElement().setAttribute("theme", "primary");
-        bottone.addClickListener(event -> refreshPreferenze());
-
-        Button bottone2 = new Button("Reset");
-        bottone2.getElement().setAttribute("theme", "primary");
-        bottone2.addClickListener(event -> resetPreferenze());
-
-        this.add(paragrafo);
-        layout.add(new HorizontalLayout(bottone, bottone2));
-        this.add(layout);
     }
 
 
