@@ -51,6 +51,7 @@ public enum AETypeLog implements AIType {
     spazio("spazio"),
     schedule("schedule"),
     flow("flow"),
+    utility("utility"),
     ;
 
     private String tag;

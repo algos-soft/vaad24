@@ -144,7 +144,7 @@ public class UtilityView extends VerticalLayout {
         layout.add(ASpan.text(message));
         Button bottone = new Button("Reset all");
         bottone.getElement().setAttribute("theme", "primary");
-        bottone.addClickListener(event -> AReset.reset(this::reset));
+        bottone.addClickListener(event -> AReset.reset(this::resetCollections));
 
         this.add(paragrafo);
         layout.add(bottone);
@@ -152,10 +152,11 @@ public class UtilityView extends VerticalLayout {
     }
 
 
-    private void reset() {
+    private void resetCollections() {
         inizioDebug();
 
-        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
+        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.utility));
+        logger.info(new WrapLog().message("Utility: reset di tutte le collection.").type(AETypeLog.utility));
         resetSingoloModulo(VaadVar.moduloVaadin24);
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
         resetSingoloModulo(VaadVar.projectNameModulo);
@@ -219,11 +220,11 @@ public class UtilityView extends VerticalLayout {
 
         Button bottone = new Button("Refresh");
         bottone.getElement().setAttribute("theme", "primary");
-        bottone.addClickListener(event -> refresh());
+        bottone.addClickListener(event -> refreshPreferenze());
 
-        Button bottone2 = new Button("Delete");
+        Button bottone2 = new Button("Reset");
         bottone2.getElement().setAttribute("theme", "primary");
-        bottone2.addClickListener(event -> delete());
+        bottone2.addClickListener(event -> resetPreferenze());
 
         this.add(paragrafo);
         layout.add(new HorizontalLayout(bottone, bottone2));
@@ -231,12 +232,16 @@ public class UtilityView extends VerticalLayout {
     }
 
 
-    protected void refresh() {
+    protected void refreshPreferenze() {
+        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.utility));
+        logger.info(new WrapLog().message("Utility: refresh di tutte le preferenze non dinamiche.").type(AETypeLog.utility));
         preferenzaBackend.refreshAll();
     }
 
 
-    protected void delete() {
+    protected void resetPreferenze() {
+        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.utility));
+        logger.info(new WrapLog().message("Utility: reset di tutte le preferenze.").type(AETypeLog.utility));
         preferenzaBackend.deleteAll();
     }
 
