@@ -73,7 +73,8 @@ public class UtilityView extends VerticalLayout {
     @Autowired
     public PreferenzaBackend preferenzaBackend;
 
-    protected static String ESEGUIRE = "Da eseguire sempre dopo un drop del database Mongo, oppure una nuova release significativa.";
+    protected static String RELEASE = "Da eseguire dopo una nuova release significativa. Non serve se il database è stato completamente cancellato (drop).";
+    protected static String DROP = "Da eseguire SEMPRE se il database è stato completamente cancellato (drop).";
 
     protected static String FLAG_DEBUG = "Mette temporaneamente a TRUE il flag 'debug' delle preferenze e poi ripristina il valore originale.";
 
@@ -134,12 +135,12 @@ public class UtilityView extends VerticalLayout {
 
         message = String.format("Esegue il reset/refresh di tutte le preferenze");
         layout.add(ASpan.text(message));
-        layout.add(ASpan.text(ESEGUIRE));
+        layout.add(ASpan.text(RELEASE));
         message = String.format("Il valore originale del flag 'debug' dopo il reset è TRUE");
         layout.add(ASpan.text(message));
         message = "Refresh -> ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche.";
         layout.add(ASpan.text(message));
-        message = "Delete -> ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche.";
+        message = "Reset -> ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche.";
         layout.add(ASpan.text(message));
 
         Button bottone = new Button("Refresh");
@@ -168,7 +169,7 @@ public class UtilityView extends VerticalLayout {
 
         message = String.format("Esegue il %s() su tutte le collection [ordinate] che implementano %s(). ", METHOD_NAME_RESET_FORCING, METHOD_NAME_RESET_ONLY);
         layout.add(ASpan.text(message));
-        layout.add(ASpan.text(ESEGUIRE));
+        layout.add(ASpan.text(RELEASE));
         layout.add(ASpan.text(FLAG_DEBUG));
         lista = classService.allModuleEntityResetOrderedClassName(VaadVar.moduloVaadin24);
         message = String.format("Modulo %s%s%s", VaadVar.moduloVaadin24, DUE_PUNTI_SPAZIO, lista.toString());
