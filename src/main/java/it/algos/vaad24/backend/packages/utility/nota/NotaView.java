@@ -64,7 +64,7 @@ public class NotaView extends CrudView {
         super.gridPropertyNamesList = Arrays.asList("type", "livello", "inizio", "descrizione", "fatto", "fine");
         super.formPropertyNamesList = Arrays.asList("type", "livello", "descrizione", "fatto", "fine");
         super.sortOrder = Sort.by(Sort.Direction.DESC, "inizio");
-        this.usaBottoneDeleteReset = true;
+        this.usaBottoneDeleteAll = true;
         super.usaComboType = true;
     }
 

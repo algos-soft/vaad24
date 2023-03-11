@@ -93,12 +93,12 @@ public class MeseBackend extends CrudBackend {
 
     @Override
     public Mese findByOrdine(final int ordine) {
-        return (Mese)super.findByOrdine(ordine);
+        return (Mese) super.findByOrdine(ordine);
     }
 
     @Override
     public List<Mese> findAllNoSort() {
-        return (List<Mese>)super.findAllNoSort();
+        return (List<Mese>) super.findAllNoSort();
     }
 
     @Override
@@ -122,8 +122,8 @@ public class MeseBackend extends CrudBackend {
     }
 
     @Override
-    public AResult resetOnlyEmpty() {
-        AResult result = super.resetOnlyEmpty();
+    public AResult resetOnlyEmpty(boolean logInfo) {
+        AResult result = super.resetOnlyEmpty(logInfo);
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
         String nomeFileCSVSulServerAlgos = "mesi";
@@ -140,6 +140,8 @@ public class MeseBackend extends CrudBackend {
         int ultimo = 0;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
+            logger.debug(new WrapLog().message(message));
             mappa = resourceService.leggeMappa(nomeFileCSVSulServerAlgos);
             if (mappa != null) {
                 result.setValido(true);
@@ -185,7 +187,7 @@ public class MeseBackend extends CrudBackend {
                         result.setValido(false);
                     }
                 }
-                return super.fixResult(result, clazzName, collectionName, lista);
+                return super.fixResult(result, clazzName, collectionName, lista, logInfo);
             }
             else {
                 return result.errorMessage("Non ho trovato il file sul server").fine();

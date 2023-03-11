@@ -144,8 +144,8 @@ public class GiornoBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty() {
-        AResult result = super.resetOnlyEmpty();
+    public AResult resetOnlyEmpty(boolean logInfo) {
+        AResult result = super.resetOnlyEmpty(logInfo);
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
         int ordine;
@@ -161,7 +161,7 @@ public class GiornoBackend extends CrudBackend {
         List<AEntity> lista;
 
         if (meseBackend.count() < 1) {
-            AResult resultMese = meseBackend.resetOnlyEmpty();
+            AResult resultMese = meseBackend.resetOnlyEmpty(logInfo);
             if (resultMese.isErrato()) {
                 logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Mese'")).usaDb());
                 return result.fine();
@@ -169,6 +169,8 @@ public class GiornoBackend extends CrudBackend {
         }
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
+            logger.debug(new WrapLog().message(message));
             //costruisce i 366 records
             mappa = dateService.getAllGiorni();
             result.setValido(true);
@@ -197,7 +199,7 @@ public class GiornoBackend extends CrudBackend {
                 }
             }
 
-            return super.fixResult(result, clazzName, collectionName, lista);
+            return super.fixResult(result, clazzName, collectionName, lista, logInfo);
         }
         else {
             return result.fine();

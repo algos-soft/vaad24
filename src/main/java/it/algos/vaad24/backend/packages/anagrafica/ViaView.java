@@ -44,12 +44,11 @@ public class ViaView extends CrudView {
         super.gridPropertyNamesList = Arrays.asList("nome");
         super.formPropertyNamesList = Arrays.asList("nome");
 
-        super.usaBottoneDeleteReset = true;
+        super.usaBottoneReset = true;
         super.usaReset = true;
         super.usaBottoneNew = false;
         super.usaBottoneEdit = true;
         super.usaBottoneSearch = false;
-        super.usaBottoneDelete = false;
     }
 
     /**

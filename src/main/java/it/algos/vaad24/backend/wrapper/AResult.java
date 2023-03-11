@@ -525,17 +525,18 @@ public class AResult {
         this.tagCode = tagCode;
     }
 
-    public int durataSec() {
-        long durataLong;
-
+    public long durataLong() {
         if (inizio > 0 && fine > 0) {
-            durataLong = fine - inizio;
-            if (durataLong > 1000) {
-                return (int) durataLong / 1000;
-            }
-            else {
-                return 0;
-            }
+            return fine - inizio;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public int durataSec() {
+        if (durataLong() > 1000) {
+            return (int) durataLong() / 1000;
         }
         else {
             return 0;

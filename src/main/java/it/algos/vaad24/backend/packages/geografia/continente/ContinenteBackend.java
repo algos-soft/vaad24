@@ -28,10 +28,9 @@ public class ContinenteBackend extends CrudBackend {
      * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
      * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
      * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
      */
     public ContinenteBackend() {
-        super( Continente.class);
+        super(Continente.class);
     }
 
 
@@ -41,7 +40,7 @@ public class ContinenteBackend extends CrudBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public Continente newEntity() {
-        return newEntity( 0, VUOTA, true, false);
+        return newEntity(0, VUOTA, true, false);
     }
 
     /**
@@ -85,7 +84,7 @@ public class ContinenteBackend extends CrudBackend {
 
     @Override
     public Continente findByOrdine(final int ordine) {
-        return (Continente)super.findByOrdine(ordine);
+        return (Continente) super.findByOrdine(ordine);
     }
 
     /**
@@ -96,8 +95,8 @@ public class ContinenteBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty() {
-        AResult result = super.resetOnlyEmpty();
+    public AResult resetOnlyEmpty(boolean logInfo) {
+        AResult result = super.resetOnlyEmpty(logInfo);
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
         String nomeFileConfig = "continenti";
@@ -109,8 +108,11 @@ public class ContinenteBackend extends CrudBackend {
         boolean reset;
         List<AEntity> lista;
         AEntity entityBean;
+        String message;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
+            logger.debug(new WrapLog().message(message));
             mappa = resourceService.leggeMappa(nomeFileConfig);
             if (mappa != null) {
                 result.setValido(true);
@@ -143,7 +145,7 @@ public class ContinenteBackend extends CrudBackend {
                         result.setValido(false);
                     }
                 }
-                return super.fixResult(result, clazzName, collectionName, lista);
+                return super.fixResult(result, clazzName, collectionName, lista, logInfo);
             }
             else {
                 return result.fine();

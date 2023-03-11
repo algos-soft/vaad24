@@ -58,12 +58,11 @@ public class SecoloView extends CrudView {
         super.formPropertyNamesList = Arrays.asList("ordine", "nome", "inizio", "fine", "anteCristo");
 
         super.usaRowIndex = false;
-        super.usaBottoneDeleteReset = true;
+        super.usaBottoneReset = true;
         super.usaReset = true;
         super.usaBottoneNew = false;
         super.usaBottoneEdit = false;
         super.usaBottoneSearch = false;
-        super.usaBottoneDelete = false;
     }
 
     /**

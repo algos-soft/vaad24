@@ -64,8 +64,8 @@ public class ViaBackend extends CrudBackend {
 
 
     @Override
-    public AResult resetOnlyEmpty() {
-        AResult result = super.resetOnlyEmpty();
+    public AResult resetOnlyEmpty(boolean logInfo) {
+        AResult result = super.resetOnlyEmpty(logInfo);
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
         String nomeFileCSVSulServerAlgos = "vie";
@@ -77,6 +77,8 @@ public class ViaBackend extends CrudBackend {
         String message;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
+            logger.debug(new WrapLog().message(message));
             mappa = resourceService.leggeMappa(nomeFileCSVSulServerAlgos);
             if (mappa != null) {
                 result.setValido(true);
@@ -100,7 +102,7 @@ public class ViaBackend extends CrudBackend {
                         result.setValido(false);
                     }
                 }
-                return super.fixResult(result, clazzName, collectionName, lista);
+                return super.fixResult(result, clazzName, collectionName, lista, logInfo);
             }
             else {
                 return result.errorMessage("Non ho trovato il file sul server").fine();

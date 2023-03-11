@@ -95,7 +95,7 @@ public class AnnoBackend extends CrudBackend {
 
     @Override
     public List<Anno> findAllNoSort() {
-        return (List<Anno>)super.findAllNoSort();
+        return (List<Anno>) super.findAllNoSort();
     }
 
     @Override
@@ -108,9 +108,8 @@ public class AnnoBackend extends CrudBackend {
     }
 
     public Anno findByOrdine(final int ordine) {
-        return (Anno)super.findByOrdine(ordine);
+        return (Anno) super.findByOrdine(ordine);
     }
-
 
 
     @Override
@@ -126,15 +125,17 @@ public class AnnoBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty() {
-        AResult result = super.resetOnlyEmpty();
+    public AResult resetOnlyEmpty(boolean logInfo) {
+        AResult result = super.resetOnlyEmpty(logInfo);
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
         AEntity entityBean;
         List<AEntity> lista;
+        String message;
+        int tempo = 3;
 
         if (secoloBackend.count() < 1) {
-            AResult resultMese = secoloBackend.resetOnlyEmpty();
+            AResult resultMese = secoloBackend.resetOnlyEmpty(logInfo);
             if (resultMese.isErrato()) {
                 logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Secolo'")).usaDb());
                 return result.fine();
@@ -144,6 +145,8 @@ public class AnnoBackend extends CrudBackend {
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             result.setValido(true);
             lista = new ArrayList<>();
+            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: circa %d secondi.", clazzName, tempo);
+            logger.debug(new WrapLog().message(message));
 
             //--costruisce gli anni prima di cristo partendo da ANTE_CRISTO_MAX che coincide con DELTA_ANNI
             for (int k = 1; k <= ANTE_CRISTO_MAX; k++) {
@@ -167,7 +170,7 @@ public class AnnoBackend extends CrudBackend {
                     result.setValido(false);
                 }
             }
-            return super.fixResult(result, clazzName, collectionName, lista);
+            return super.fixResult(result, clazzName, collectionName, lista, logInfo);
         }
         else {
             return result.fine();

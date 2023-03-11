@@ -147,8 +147,8 @@ public class SecoloBackend extends CrudBackend {
 
 
     @Override
-    public AResult resetOnlyEmpty() {
-        AResult result = super.resetOnlyEmpty();
+    public AResult resetOnlyEmpty(boolean logInfo) {
+        AResult result = super.resetOnlyEmpty(logInfo);
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
         String nomeFile = "secoli";
@@ -162,8 +162,11 @@ public class SecoloBackend extends CrudBackend {
         int fine;
         boolean anteCristo = false;
         String anteCristoText;
+        String message;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
+            logger.debug(new WrapLog().message(message));
             mappa = resourceService.leggeMappa(nomeFile);
 
             if (mappa != null) {
@@ -210,7 +213,7 @@ public class SecoloBackend extends CrudBackend {
                         result.setValido(false);
                     }
                 }
-                return super.fixResult(result, clazzName, collectionName, lista);
+                return super.fixResult(result, clazzName, collectionName, lista, logInfo);
             }
             else {
                 logger.error(new WrapLog().exception(new AlgosException("Non ho trovato il file sul server")).usaDb());

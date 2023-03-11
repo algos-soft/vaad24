@@ -562,6 +562,10 @@ public class LogService extends AbstractService {
         boolean flagUsaDB = wrap.isUsaDB();
         boolean flagUsaMail = wrap.isUsaMail();
 
+        if (level == AELogLevel.debug && Pref.debug.is()) {
+            type = AETypeLog.debug;
+        }
+
         //--type merceologico con quadre e pad di larghezza fissa
         type = type != null ? type : AETypeLog.system;
         typeText = type != null ? textService.fixSizeQuadre(type.getTag(), PAD_TYPE) : VUOTA;//@todo da sistemare
@@ -609,7 +613,12 @@ public class LogService extends AbstractService {
             case info -> slf4jLogger.info(message);
             case warn -> slf4jLogger.warn(message);
             case error -> slf4jLogger.error(message);
-            case debug -> slf4jLogger.debug(message);
+            case debug -> {
+                slf4jLogger.debug(message);
+                if (Pref.debug.is()) {
+                    slf4jLogger.info(message);
+                }
+            }
             default -> slf4jLogger.info(message);
         }
 

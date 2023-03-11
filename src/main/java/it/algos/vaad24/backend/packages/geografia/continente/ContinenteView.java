@@ -52,7 +52,7 @@ public class ContinenteView extends CrudView {
         super.formPropertyNamesList = Arrays.asList("ordine", "nome", "abitato");
 
         super.usaRowIndex = false;
-        super.usaBottoneDeleteReset = true;
+        super.usaBottoneReset = true;
         super.usaBottoneNew = false;
         super.autoCreateColumns = false;
         super.searchFieldName = "nome";

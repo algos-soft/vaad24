@@ -69,9 +69,9 @@ public class LoggerView extends CrudView {
             super.formPropertyNamesList = Arrays.asList("type", "livello", "evento", "descrizione", "classe", "metodo", "linea");
         }
         super.sortOrder = Sort.by(Sort.Direction.DESC, "evento");
-        super.usaBottoneDeleteReset = true;
+        super.usaBottoneReset = false;
         super.usaBottoneNew = false;
-        super.usaBottoneDelete = false;
+        super.usaBottoneDeleteAll = true;
         super.usaComboType = true;
         super.dialogClazz = LoggerDialog.class;
     }

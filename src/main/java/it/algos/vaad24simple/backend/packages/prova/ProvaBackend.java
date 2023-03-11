@@ -87,8 +87,8 @@ public class ProvaBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty() {
-        AResult result = super.resetOnlyEmpty();
+    public AResult resetOnlyEmpty(boolean logInfo) {
+        AResult result = super.resetOnlyEmpty(logInfo);
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
         String nomeFileConfig = "prova";
@@ -103,9 +103,12 @@ public class ProvaBackend extends CrudBackend {
         String typeString = VUOTA;
         AETypeVers versione = null;
         AESchedule schedule = null;
+        String message;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             result.setValido(true);
+            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
+            logger.debug(new WrapLog().message(message));
             mappa = resourceService.leggeMappaConfig(nomeFileConfig);
             if (mappa != null) {
                 result.setValido(true);
@@ -130,7 +133,7 @@ public class ProvaBackend extends CrudBackend {
                         result.setValido(false);
                     }
                 }
-                return super.fixResult(result, clazzName, collectionName, lista);
+                return super.fixResult(result, clazzName, collectionName, lista, logInfo);
             }
         }
         else {

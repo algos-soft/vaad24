@@ -131,21 +131,12 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
     protected int browserWidth;
 
-    /**
-     * Flag di preferenza per la cancellazione della colonna ID. Di default true. <br>
-     */
     protected boolean cancellaColonnaKeyId;
 
-    /**
-     * Flag di preferenza per la creazione automatica delle colonne. Di default true. <br>
-     */
     protected boolean autoCreateColumns;
 
     protected boolean usaRowIndex;
 
-    /**
-     * Flag di preferenza per avere un ordine prestabilito per le colonne. Di default false. <br>
-     */
     protected boolean riordinaColonne;
 
     protected List<String> gridPropertyNamesList;
@@ -153,12 +144,21 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     protected List<String> formPropertyNamesList;
 
 
-    /**
-     * Flag di preferenza per l' utilizzo del bottone. Di default true. <br>
-     */
     protected boolean usaBottoneRefresh;
 
     protected Button buttonRefresh;
+
+    protected boolean usaBottoneReset;
+
+    protected Button buttonReset;
+
+    protected boolean usaBottoneDeleteAll;
+
+    protected Button buttonDeleteAll;
+
+    protected boolean usaBottoneDeleteEntity;
+
+    protected Button buttonDeleteEntity;
 
     protected boolean usaBottoneSearch;
 
@@ -166,39 +166,18 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
     protected String searchFieldName;
 
-    /**
-     * Flag di preferenza per l' utilizzo del bottone. Di default false. <br>
-     */
-    protected boolean usaBottoneDeleteReset;
-
-    protected Button buttonDeleteReset;
 
     protected boolean usaReset;
 
-    /**
-     * Flag di preferenza per l' utilizzo del bottone. Di default new. <br>
-     */
     protected boolean usaBottoneNew;
 
     protected Button buttonNew;
 
-    /**
-     * Flag di preferenza per l' utilizzo del bottone. Di default true. <br>
-     */
     protected boolean usaBottoneEdit;
 
     protected Button buttonEdit;
 
-    /**
-     * Flag di preferenza per l' utilizzo del bottone. Di default true. <br>
-     */
-    protected boolean usaBottoneDelete;
 
-    protected Button buttonDelete;
-
-    /**
-     * Flag di preferenza per l' utilizzo del bottone. Di default false. <br>
-     */
     protected boolean usaBottoneExport;
 
     protected Button buttonExport;
@@ -303,11 +282,12 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         cancellaColonnaKeyId = true;
         autoCreateColumns = true;
         usaBottoneRefresh = false;
-        usaBottoneDeleteReset = false;
+        usaBottoneReset = false;
+        usaBottoneDeleteAll = false;
+        usaBottoneDeleteEntity = true;
         usaReset = false;
         usaBottoneNew = true;
         usaBottoneEdit = true;
-        usaBottoneDelete = true;
         usaBottoneExport = false;
         usaBottoneSearch = true;
         usaComboType = false;
@@ -378,85 +358,77 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
             topPlaceHolder.add(buttonRefresh);
         }
 
-        if (usaBottoneDeleteReset) {
-            buttonDeleteReset = new Button();
-            buttonDeleteReset.getElement().setAttribute("theme", "error");
+        if (usaBottoneReset) {
+            buttonReset = new Button();
+            buttonReset.getElement().setAttribute("theme", "error");
             //--ha senso solo per le entity che estendono AREntity con la property 'reset'
             //            if (ResetEntity.class.isAssignableFrom(entityClazz) || usaReset) {
-            buttonDeleteReset.getElement().setProperty("title", "Reset: ripristina nel database i valori di default annullando le " +
+            buttonReset.getElement().setProperty("title", "Reset: ripristina nel database i valori di default annullando le " +
                     "eventuali modifiche apportate successivamente\nShortcut SHIFT+R");
-            buttonDeleteReset.addClickListener(event -> AReset.reset(this::reset));
-            buttonDeleteReset.addClickShortcut(Key.KEY_R, KeyModifier.SHIFT);
-//        }
-        //            else {
-        //                buttonDeleteReset.getElement().setProperty("title", "Delete: cancella tutta la collection\nShortcut SHIFT+D");
-        //                buttonDeleteReset.addClickListener(event -> ADelete.deleteAll(this::deleteAll));
-        //                buttonDeleteReset.addClickShortcut(Key.KEY_D, KeyModifier.SHIFT);
-        //            }
-        buttonDeleteReset.setIcon(new Icon(VaadinIcon.REFRESH));
-        topPlaceHolder.add(buttonDeleteReset);
+            buttonReset.addClickListener(event -> AReset.reset(this::reset));
+            buttonReset.addClickShortcut(Key.KEY_R, KeyModifier.SHIFT);
+            //        }
+            //            else {
+            //                buttonDeleteReset.getElement().setProperty("title", "Delete: cancella tutta la collection\nShortcut SHIFT+D");
+            //                buttonDeleteReset.addClickListener(event -> ADelete.deleteAll(this::deleteAll));
+            //                buttonDeleteReset.addClickShortcut(Key.KEY_D, KeyModifier.SHIFT);
+            //            }
+            buttonReset.setIcon(new Icon(VaadinIcon.REFRESH));
+            topPlaceHolder.add(buttonReset);
+        }
+
+        if (usaBottoneDeleteAll) {
+            buttonDeleteAll = new Button();
+            buttonDeleteAll.getElement().setAttribute("theme", "error");
+            buttonDeleteAll.getElement().setProperty("title", "Delete: cancella completamente tutta la collezione");
+            buttonDeleteAll.setIcon(new Icon(VaadinIcon.TRASH));
+            buttonDeleteAll.addClickListener(event -> ADelete.deleteAll(this::deleteAll));
+            topPlaceHolder.add(buttonDeleteAll);
+        }
+
+        if (usaBottoneNew) {
+            buttonNew = new Button();
+            buttonNew.getElement().setAttribute("theme", "secondary");
+            buttonNew.getElement().setProperty("title", "Add: aggiunge un elemento alla collezione\nShortcut SHIFT+N");
+            buttonNew.setIcon(new Icon(VaadinIcon.PLUS));
+            buttonNew.setEnabled(true);
+            buttonNew.addClickListener(event -> newItem());
+            buttonNew.addClickShortcut(Key.KEY_N, KeyModifier.SHIFT);
+            topPlaceHolder.add(buttonNew);
+        }
+
+        if (usaBottoneEdit) {
+            buttonEdit = new Button();
+            buttonEdit.getElement().setAttribute("theme", "secondary");
+            buttonEdit.getElement().setProperty("title", "Update: modifica l'elemento selezionato\nShortcut SHIFT+E");
+            buttonEdit.setIcon(new Icon(VaadinIcon.PENCIL));
+            buttonEdit.setEnabled(false);
+            buttonEdit.addClickListener(event -> updateItem());
+            buttonEdit.addClickShortcut(Key.KEY_E, KeyModifier.SHIFT);
+            topPlaceHolder.add(buttonEdit);
+        }
+
+        if (usaBottoneDeleteEntity) {
+            buttonDeleteEntity = new Button();
+            buttonDeleteEntity.getElement().setAttribute("theme", "error");
+            buttonDeleteEntity.getElement().setProperty("title", "Delete: cancella l'elemento selezionato\nShortcut SHIFT+D");
+            buttonDeleteEntity.setIcon(new Icon(VaadinIcon.TRASH));
+            buttonDeleteEntity.setEnabled(false);
+            buttonDeleteEntity.addClickListener(event -> deleteItem());
+            buttonDeleteEntity.addClickShortcut(Key.KEY_D, KeyModifier.SHIFT);
+            topPlaceHolder.add(buttonDeleteEntity);
+        }
+
+        if (usaBottoneSearch) {
+            searchField = new TextField();
+            searchField.setPlaceholder(TAG_ALTRE_BY);
+            searchField.setWidth(WIDTH_EM);
+            searchField.setClearButtonVisible(true);
+            searchField.addValueChangeListener(event -> sincroFiltri());
+            topPlaceHolder.add(searchField);
+        }
+
     }
-
-    //        if (usaBottoneDeleteAll) {
-    //            buttonDeleteAll = new Button();
-    //            buttonDeleteAll.getElement().setAttribute("theme", "error");
-    //            buttonDeleteAll.getElement().setProperty("title", "Delete: cancella completamente tutta la collezione");
-    //            buttonDeleteAll.setIcon(new Icon(VaadinIcon.REFRESH));
-    //            buttonDeleteAll.addClickListener(event -> reset());
-    //            topPlaceHolder.add(buttonDeleteAll);
-    //        }
-
-        if(usaBottoneNew)
-
-    {
-        buttonNew = new Button();
-        buttonNew.getElement().setAttribute("theme", "secondary");
-        buttonNew.getElement().setProperty("title", "Add: aggiunge un elemento alla collezione\nShortcut SHIFT+N");
-        buttonNew.setIcon(new Icon(VaadinIcon.PLUS));
-        buttonNew.setEnabled(true);
-        buttonNew.addClickListener(event -> newItem());
-        buttonNew.addClickShortcut(Key.KEY_N, KeyModifier.SHIFT);
-        topPlaceHolder.add(buttonNew);
-    }
-
-        if(usaBottoneEdit)
-
-    {
-        buttonEdit = new Button();
-        buttonEdit.getElement().setAttribute("theme", "secondary");
-        buttonEdit.getElement().setProperty("title", "Update: modifica l'elemento selezionato\nShortcut SHIFT+E");
-        buttonEdit.setIcon(new Icon(VaadinIcon.PENCIL));
-        buttonEdit.setEnabled(false);
-        buttonEdit.addClickListener(event -> updateItem());
-        buttonEdit.addClickShortcut(Key.KEY_E, KeyModifier.SHIFT);
-        topPlaceHolder.add(buttonEdit);
-    }
-
-        if(usaBottoneDelete)
-
-    {
-        buttonDelete = new Button();
-        buttonDelete.getElement().setAttribute("theme", "error");
-        buttonDelete.getElement().setProperty("title", "Delete: cancella l'elemento selezionato\nShortcut SHIFT+D");
-        buttonDelete.setIcon(new Icon(VaadinIcon.TRASH));
-        buttonDelete.setEnabled(false);
-        buttonDelete.addClickListener(event -> deleteItem());
-        buttonDelete.addClickShortcut(Key.KEY_D, KeyModifier.SHIFT);
-        topPlaceHolder.add(buttonDelete);
-    }
-
-        if(usaBottoneSearch)
-
-    {
-        searchField = new TextField();
-        searchField.setPlaceholder(TAG_ALTRE_BY);
-        searchField.setWidth(WIDTH_EM);
-        searchField.setClearButtonVisible(true);
-        searchField.addValueChangeListener(event -> sincroFiltri());
-        topPlaceHolder.add(searchField);
-    }
-
-}
 
     protected void fixFiltri() {
     }
@@ -600,7 +572,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         //--cambia solo l'ordine di presentazione delle colonne. Ha senso solo se sono state costruite in automatico.
         //--tutte le caratteristiche delle colonne create in automatico rimangono immutate
         //--se servono caratteristiche particolari per una colonna o va creata manualmente o va recuperata e modificata
-        List alfa=grid.getColumns();
+        List alfa = grid.getColumns();
         if (riordinaColonne && gridPropertyNamesList.size() > 0) {
             try {
                 grid.setColumnOrder(gridPropertyNamesList.stream().map(getColonna).collect(Collectors.toList()));
@@ -619,19 +591,19 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     protected void addColumnsOneByOne() {
         columnService.addColumnsOneByOne(grid, entityClazz, gridPropertyNamesList);
     }
-//    protected void addColumnsNomeOrdine() {
-//        if (OrdineEntity.class.isAssignableFrom(entityClazz)) {
-//            grid.addColumn(new ComponentRenderer<>(entity -> {
-//                OrdineEntity entityBean = (OrdineEntity) entity;
-//                return new Span(entityBean.ordine+"");
-//            })).setHeader(FIELD_NAME_ORDINE).setKey(FIELD_NAME_ORDINE).setFlexGrow(0).setWidth("3em");
-//
-//           grid.addColumn(new ComponentRenderer<>(entity -> {
-//                OrdineEntity entityBean = (OrdineEntity) entity;
-//                return new Span(entityBean.nome);
-//            })).setHeader(FIELD_NAME_NOME).setKey(FIELD_NAME_NOME).setFlexGrow(0).setWidth("10em");
-//        }
-//    }
+    //    protected void addColumnsNomeOrdine() {
+    //        if (OrdineEntity.class.isAssignableFrom(entityClazz)) {
+    //            grid.addColumn(new ComponentRenderer<>(entity -> {
+    //                OrdineEntity entityBean = (OrdineEntity) entity;
+    //                return new Span(entityBean.ordine+"");
+    //            })).setHeader(FIELD_NAME_ORDINE).setKey(FIELD_NAME_ORDINE).setFlexGrow(0).setWidth("3em");
+    //
+    //           grid.addColumn(new ComponentRenderer<>(entity -> {
+    //                OrdineEntity entityBean = (OrdineEntity) entity;
+    //                return new Span(entityBean.nome);
+    //            })).setHeader(FIELD_NAME_NOME).setKey(FIELD_NAME_NOME).setFlexGrow(0).setWidth("10em");
+    //        }
+    //    }
 
     protected void fixSearch() {
         if (grid != null) {
@@ -712,8 +684,8 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     protected boolean sincroSelection(SelectionEvent event) {
         boolean singoloSelezionato = event.getAllSelectedItems().size() == 1;
 
-        if (buttonDeleteReset != null) {
-            buttonDeleteReset.setEnabled(!singoloSelezionato);
+        if (buttonReset != null) {
+            buttonReset.setEnabled(!singoloSelezionato);
         }
         if (buttonNew != null) {
             buttonNew.setEnabled(!singoloSelezionato);
@@ -721,8 +693,8 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         if (buttonEdit != null) {
             buttonEdit.setEnabled(singoloSelezionato);
         }
-        if (buttonDelete != null) {
-            buttonDelete.setEnabled(singoloSelezionato);
+        if (buttonDeleteAll != null) {
+            buttonDeleteAll.setEnabled(singoloSelezionato);
         }
 
         return singoloSelezionato;
@@ -744,7 +716,6 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         AResult result = crudBackend.resetForcing();
 
         if (result.isValido()) {
-            logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.reset).usaDb());
             grid.setItems(crudBackend.findAllSort(sortOrder));
             Avviso.message("Eseguito reset completo").success().open();
             refresh();

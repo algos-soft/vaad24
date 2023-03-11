@@ -682,17 +682,23 @@ public abstract class CrudBackend extends AbstractService {
         String elementi;
 
         if (mongoService.isCollectionNullOrEmpty(entityClazz)) {
-            return resetOnlyEmpty().method("resetForcing");
+            return resetOnlyEmpty(false).method("resetForcing");
         }
         else {
             if (deleteAll()) {
-                result = resetOnlyEmpty().method("resetForcing");
+                result.method("resetForcing");
+                result = resetOnlyEmpty(false);
                 elementi = textService.format(result.getIntValue());
                 message = String.format("La collection '%s' della classe [%s] esisteva ma è stata cancellata e i dati sono stati ricreati. ", collectionName, clazzName);
                 message += String.format("Contiene %s elementi. ", elementi);
                 message += result.deltaSec();
                 if (result.isValido()) {
                     result.validMessage(message);
+                    logger.info(new WrapLog().message(message).type(AETypeLog.reset).usaDb());
+
+                    message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
+                    logger.debug(new WrapLog().message(message));
+
                 }
                 return result;
             }
@@ -701,6 +707,9 @@ public abstract class CrudBackend extends AbstractService {
                 return result.errorMessage(message).fine();
             }
         }
+    }
+    public AResult resetOnlyEmpty() {
+        return resetOnlyEmpty(false);
     }
 
 
@@ -714,7 +723,7 @@ public abstract class CrudBackend extends AbstractService {
      * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public AResult resetOnlyEmpty() {
+    public AResult resetOnlyEmpty(boolean logInfo) {
         String collectionName = annotationService.getCollectionName(entityClazz);
         AResult result = AResult.build().method("resetOnlyEmpty").target(collectionName);
         String clazzName = entityClazz.getSimpleName();
@@ -733,7 +742,7 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
-    public AResult fixResult(AResult result, String clazzName, String collectionName, List lista) {
+    public AResult fixResult(AResult result, String clazzName, String collectionName, List lista, boolean logInfo) {
         String message;
 
         result.fine();
@@ -741,14 +750,17 @@ public abstract class CrudBackend extends AbstractService {
             result.setIntValue(lista.size());
             result.setLista(lista);
 
-            //            return fixResult(result, clazzName, collectionName, lista.size());
             if (result.isValido()) {
                 result.errorMessage(VUOTA).eseguito().typeResult(AETypeResult.collectionCreata);
-                message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. ", collectionName, clazzName);
-                message += String.format("Contiene %s elementi. ", textService.format(lista.size()));
-                message += result.deltaSec();
-                logger.info(new WrapLog().message(message).type(AETypeLog.reset).usaDb());
-                return result.validMessage(message);
+                result.setValido(true);
+                if (logInfo) {
+                    message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. ", collectionName, clazzName);
+                    message += String.format("Contiene %s elementi. ", textService.format(lista.size()));
+                    message += result.deltaSec();
+                    logger.info(new WrapLog().message(message).type(AETypeLog.reset).usaDb());
+                    return result.validMessage(message);
+                }
+                return result;
             }
             else {
                 return result.typeResult(AETypeResult.error);

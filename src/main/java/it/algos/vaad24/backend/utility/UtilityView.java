@@ -73,9 +73,11 @@ public class UtilityView extends VerticalLayout {
     @Autowired
     public PreferenzaBackend preferenzaBackend;
 
-    private static String ESEGUIRE = "Da eseguire sempre dopo un drop del database Mongo, oppure una nuova release significativa.";
+    protected static String ESEGUIRE = "Da eseguire sempre dopo un drop del database Mongo, oppure una nuova release significativa.";
 
-    private static String FLAG_DEBUG = "Mette temporaneamente a TRUE il flag 'debug' delle preferenze e poi ripristina il valore originale.";
+    protected static String FLAG_DEBUG = "Mette temporaneamente a TRUE il flag 'debug' delle preferenze e poi ripristina il valore originale.";
+
+    protected boolean debugPrefOldValue;
 
     /**
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
@@ -103,6 +105,7 @@ public class UtilityView extends VerticalLayout {
         this.setSpacing(false);
 
         this.titolo();
+        this.body();
 
         //--spazio per distanziare i paragrafi
         this.add(new H3());
@@ -113,6 +116,7 @@ public class UtilityView extends VerticalLayout {
         titolo.getElement().getStyle().set("color", "green");
         this.add(titolo);
     }
+
     public void body() {
         this.paragrafoReset();
         this.paragrafoPreferenze();
@@ -149,11 +153,15 @@ public class UtilityView extends VerticalLayout {
 
 
     private void reset() {
+        inizioDebug();
+
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
         resetSingoloModulo(VaadVar.moduloVaadin24);
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
         resetSingoloModulo(VaadVar.projectNameModulo);
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
+
+        fineDebug();
     }
 
     private void resetSingoloModulo(String nomeModulo) {
@@ -171,15 +179,20 @@ public class UtilityView extends VerticalLayout {
 
         listaClazz = classService.allModuleBackendResetOrderedClass(nomeModulo);
         if (listaClazz != null && listaClazz.size() > 0) {
-            message = String.format("Nel modulo %s ci sono %d classi che implementano il metodo %s", nomeModulo, listaClazz.size(), METHOD_NAME_RESET_ONLY);
+            if (listaClazz.size() == 1) {
+                message = String.format("Nel modulo %s c'è una sola classe che implementa il metodo %s", nomeModulo, METHOD_NAME_RESET_ONLY);
+            }
+            else {
+                message = String.format("Nel modulo %s ci sono %d classi che implementano il metodo %s", nomeModulo, listaClazz.size(), METHOD_NAME_RESET_ONLY);
+            }
             logger.info(new WrapLog().message(message).type(AETypeLog.reset));
             for (Class clazz : listaClazz) {
-                risultato = classService.esegueMetodo(clazz.getCanonicalName(), METHOD_NAME_RESET_FORCING);
-                logger.info(new WrapLog().message(risultato.getValidMessage()).type(AETypeLog.reset));
+                logger.info(new WrapLog().message(VUOTA).type(AETypeLog.reset));
+                classService.esegueMetodo(clazz.getCanonicalName(), METHOD_NAME_RESET_FORCING);
             }
         }
         else {
-            message = String.format("Nel modulo %s non ci sono classi che implementino il metodo %s", nomeModulo, METHOD_NAME_RESET_ONLY);
+            message = String.format("Nel modulo %s non ci sono classi che implementano il metodo %s", nomeModulo, METHOD_NAME_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.reset));
         }
     }
@@ -197,7 +210,8 @@ public class UtilityView extends VerticalLayout {
         message = String.format("Esegue il reset/refresh di tutte le preferenze");
         layout.add(ASpan.text(message));
         layout.add(ASpan.text(ESEGUIRE));
-        layout.add(ASpan.text(FLAG_DEBUG));
+        message = String.format("Il valore originale del flag 'debug' dopo il reset è TRUE");
+        layout.add(ASpan.text(message));
         message = "Refresh -> ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche.";
         layout.add(ASpan.text(message));
         message = "Delete -> ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche.";
@@ -217,14 +231,22 @@ public class UtilityView extends VerticalLayout {
     }
 
 
-
-    private void refresh() {
+    protected void refresh() {
         preferenzaBackend.refreshAll();
     }
 
 
-    private void delete() {
+    protected void delete() {
         preferenzaBackend.deleteAll();
+    }
+
+    protected void inizioDebug() {
+        debugPrefOldValue = Pref.debug.is();
+        Pref.debug.setValue(true);
+    }
+
+    protected void fineDebug() {
+        Pref.debug.setValue(debugPrefOldValue);
     }
 
 }

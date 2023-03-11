@@ -48,6 +48,7 @@ public class ProvaView extends CrudView {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+        usaBottoneReset = true;
     }
 
     /**
