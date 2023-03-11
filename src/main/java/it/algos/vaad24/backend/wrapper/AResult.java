@@ -20,66 +20,48 @@ import java.util.*;
 @Component
 public class AResult {
 
-    private boolean valido;
+    protected boolean valido;
 
-    private boolean eseguito;
+    protected boolean eseguito;
 
-    private AETypeResult typeResult;
+    protected AETypeResult typeResult;
 
-    private AETypeLog typeLog;
+    protected AETypeLog typeLog;
 
-    private AECopy typeCopy;
+    protected AECopy typeCopy;
 
-    private AlgosException exception;
-    //    private String webTitle = VUOTA;
-    //
-    //    private String wikiTitle = VUOTA;
-    //
-    //    private String urlPreliminary = VUOTA;
-    //
-    //    private String urlRequest = VUOTA;
+    protected AlgosException exception;
 
-    private String target = VUOTA;
+    protected String target = VUOTA;
 
-    private String typeTxt = VUOTA;
+    protected String typeTxt = VUOTA;
 
-    private String tagCode = VUOTA;
+    protected String tagCode = VUOTA;
 
-    private String method = VUOTA;
+    protected String method = VUOTA;
 
-    private String errorCode = VUOTA;
+    protected String errorCode = VUOTA;
 
-    private String errorMessage = VUOTA;
+    protected String errorMessage = VUOTA;
 
-    private String codeMessage = VUOTA;
+    protected String codeMessage = VUOTA;
 
-    private String validMessage = VUOTA;
+    protected String validMessage = VUOTA;
 
-    //    private String preliminaryResponse = VUOTA;
 
-    //    private String response = VUOTA;
+    protected int intValue = 0;
 
-    //    private String wikiText = VUOTA;
+    protected long longValue = 0;
 
-    //    private String wikiBio = VUOTA;
+    protected long inizio = 0;
 
-    //    private String token = VUOTA;
+    protected long fine = 0;
 
-    //    private String queryType = VUOTA;
+    protected String txtValue = VUOTA;
 
-    private int intValue = 0;
+    protected List lista = null;
 
-    private long longValue = 0;
-
-    private long inizio = 0;
-
-    private long fine = 0;
-
-    private String txtValue = VUOTA;
-
-    private List lista = null;
-
-    private LinkedHashMap mappa = null;
+    protected LinkedHashMap mappa = null;
 
 
     protected AResult() {

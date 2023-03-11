@@ -402,6 +402,8 @@ public class VaadCost {
 
     public static final String METHOD_NAME_RESET_FORCING = "resetForcing";
 
+    public static final String METHOD_NAME_ELABORA = "elabora";
+
 
     public static final String TAG_FLOW_DATA = "flowdata";
 
@@ -473,6 +475,7 @@ public class VaadCost {
     public static final String COLOR_VERO = "#9FE2BF";
 
     public static final String COLOR_FALSO = "#FF7F50";
+
     public static final String COLOR_DEBUG = "#FF0054";
 
     public static final String COLOR_BLUE = "blue";

@@ -478,6 +478,25 @@ public class ClassService extends AbstractService {
                 .collect(Collectors.toList());
     }
 
+    public List<Class> allModuleBackendElaboraClass(final String moduleName) {
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModuleBackendClass(moduleName)
+                .stream()
+                .filter(clazz -> reflectionService.isEsisteMetodo(clazz.getCanonicalName(), METHOD_NAME_ELABORA))
+                .collect(Collectors.toList());
+    }
+
+
+    public List<String> allModuleBackendElaboraSimpleName(final String moduleName) {
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModuleBackendElaboraClass(moduleName).stream().map(Class::getSimpleName).collect(Collectors.toList());
+    }
 
     /**
      * Spazzola tutta la directory package del modulo in esame e recupera
@@ -622,7 +641,6 @@ public class ClassService extends AbstractService {
             allOrderedClazz.add(mappaClazz.get(key));
         }
 
-//        return allOrderedClazz;
         return allBackendResetClazz;
     }
 
