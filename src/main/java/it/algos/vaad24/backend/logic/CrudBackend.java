@@ -796,7 +796,8 @@ public abstract class CrudBackend extends AbstractService {
      * Esegue un azione di download, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, senza invocare il metodo della superclasse <br>
      */
-    public void download() {
+    public WResult download() {
+        return WResult.build().method("download").target(getClass().getSimpleName());
     }
 
     /**

@@ -113,7 +113,7 @@ public class UtilityView extends VerticalLayout {
     }
 
     public void titolo() {
-        H1 titolo = new H1("Gestione utility");
+        H2 titolo = new H2("Gestione utility");
         titolo.getElement().getStyle().set("color", "green");
         this.add(titolo);
     }
