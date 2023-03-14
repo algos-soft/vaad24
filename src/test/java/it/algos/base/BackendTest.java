@@ -579,6 +579,23 @@ public abstract class BackendTest extends AlgosTest {
     }
 
     //Segnaposto
+    @Order(43)
+    @DisplayName("43 - newEntityConParametri")
+    protected void newEntityConParametri() {
+        System.out.println("43 - newEntityConParametri");
+        System.out.println(VUOTA);
+    }
+
+
+    //Segnaposto
+    @Order(44)
+    @DisplayName("44 - creaIfNotExist")
+    protected void insert() {
+        System.out.println("44 - creaIfNotExist");
+        System.out.println(VUOTA);
+    }
+
+    //Segnaposto
     @Order(51)
     protected void libero51() {
     }

@@ -21,7 +21,7 @@ import java.util.*;
  * Date: Sat, 11-Feb-2023
  * Time: 17:22
  */
-@SpringBootTest(classes = {Wiki24App.class})
+@SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
 @Tag("backendx")

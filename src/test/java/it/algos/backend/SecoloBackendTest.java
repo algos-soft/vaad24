@@ -39,6 +39,67 @@ public class SecoloBackendTest extends BackendTest {
         super.setUpAll();
     }
 
+    @Test
+    @Order(43)
+    @DisplayName("43 - newEntityConParametri")
+    protected void newEntityConParametri() {
+        System.out.println("43 - newEntityConParametri");
+        System.out.println(VUOTA);
+        Secolo secolo;
+
+        sorgenteIntero = 4567;
+        sorgente = "XXX secolo";
+        previsto = "xxxsecolo";
+        int sorgenteIntero2 = 88;
+        int sorgenteIntero3 = 431;
+        boolean anteCristo = false;
+
+        entityBean = backend.newEntity(sorgenteIntero, sorgente, sorgenteIntero2, sorgenteIntero3, anteCristo);
+        assertNotNull(entityBean);
+        assertTrue(entityBean instanceof Secolo);
+        secolo = (Secolo) entityBean;
+        assertEquals(previsto, secolo.id);
+        assertEquals(sorgenteIntero, secolo.ordine);
+        assertEquals(sorgente, secolo.nome);
+        assertEquals(sorgenteIntero2, secolo.inizio);
+        assertEquals(sorgenteIntero3, secolo.fine);
+        assertFalse(secolo.anteCristo);
+        message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
+        System.out.println(message);
+    }
+
+    @Test
+    @Order(44)
+    @DisplayName("44 - creaIfNotExist")
+    protected void creaIfNotExist() {
+        System.out.println("44 - creaIfNotExist");
+
+        sorgente = "3472";
+
+        ottenutoBooleano = crudBackend.isExistKey(sorgente);
+        assertFalse(ottenutoBooleano);
+        message = String.format("1) isExistKey -> Non esiste (false) la entity [%s]", sorgente);
+        System.out.println(VUOTA);
+        System.out.println(message);
+
+        ottenutoBooleano = backend.creaIfNotExist(sorgente);
+        assertTrue(ottenutoBooleano);
+        ottenutoBooleano = crudBackend.isExistKey(sorgente);
+        assertTrue(ottenutoBooleano);
+        message = String.format("2) creaIfNotExist -> Creata correttamente (nel database) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
+        System.out.println(VUOTA);
+        System.out.println(message);
+
+        entityBean = backend.findByKey(sorgente);
+        assertNotNull(entityBean);
+        ottenutoBooleano = backend.delete(entityBean);
+        assertTrue(ottenutoBooleano);
+        ottenutoBooleano = crudBackend.isExistKey(sorgente);
+        assertFalse(ottenutoBooleano);
+        message = String.format("3) delete -> Cancellata la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
+        System.out.println(VUOTA);
+        System.out.println(message);
+    }
 
 
     @Test

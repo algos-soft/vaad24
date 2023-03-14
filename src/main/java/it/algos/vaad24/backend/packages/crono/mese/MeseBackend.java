@@ -45,7 +45,7 @@ public class MeseBackend extends CrudBackend {
      */
     @Override
     public Mese newEntity(final String keyPropertyValue) {
-        return newEntity(0, VUOTA, keyPropertyValue, 0, 0, 0);
+        return newEntity(0, keyPropertyValue, VUOTA, 0, 0, 0);
     }
 
     /**
@@ -55,15 +55,15 @@ public class MeseBackend extends CrudBackend {
      * All properties <br>
      *
      * @param ordine (obbligatorio, unico)
-     * @param breve  (obbligatorio, unico)
      * @param nome   (obbligatorio, unico)
+     * @param breve  (obbligatorio, unico)
      * @param giorni (obbligatorio)
      * @param primo  giorno dell'anno (facoltativo)
      * @param ultimo giorno dell'anno (facoltativo)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public Mese newEntity(int ordine, String breve, String nome, int giorni, int primo, int ultimo) {
+    public Mese newEntity(int ordine, String nome, String breve, int giorni, int primo, int ultimo) {
         Mese newEntityBean = Mese.builder()
                 .ordine(ordine)
                 .nome(textService.isValid(nome) ? nome : null)
