@@ -98,7 +98,7 @@ public class AnnoBackendTest extends BackendTest {
 
         sorgente = "3472";
 
-        ottenutoBooleano = crudBackend.isExistKey(sorgente);
+        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
         assertFalse(ottenutoBooleano);
         message = String.format("1) isExistKey -> Non esiste (false) la entity [%s]", sorgente);
         System.out.println(VUOTA);
@@ -106,7 +106,7 @@ public class AnnoBackendTest extends BackendTest {
 
         ottenutoBooleano = backend.creaIfNotExist(sorgente);
         assertTrue(ottenutoBooleano);
-        ottenutoBooleano = crudBackend.isExistKey(sorgente);
+        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
         assertTrue(ottenutoBooleano);
         message = String.format("2) creaIfNotExist -> Creata correttamente (nel database) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
         System.out.println(VUOTA);
@@ -116,7 +116,7 @@ public class AnnoBackendTest extends BackendTest {
         assertNotNull(entityBean);
         ottenutoBooleano = backend.delete(entityBean);
         assertTrue(ottenutoBooleano);
-        ottenutoBooleano = crudBackend.isExistKey(sorgente);
+        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
         assertFalse(ottenutoBooleano);
         message = String.format("3) delete -> Cancellata la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
         System.out.println(VUOTA);

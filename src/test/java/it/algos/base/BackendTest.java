@@ -194,6 +194,11 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println(message);
     }
 
+    @Test
+    @Order(20)
+    @DisplayName("----------")
+    void test20() {
+    }
 
     @Test
     @Order(21)
@@ -242,6 +247,11 @@ public abstract class BackendTest extends AlgosTest {
         printBackend(listaBeans);
     }
 
+    @Test
+    @Order(30)
+    @DisplayName("----------")
+    void test30() {
+    }
 
     @Test
     @Order(31)
@@ -317,6 +327,12 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println(message);
 
         printSubLista(listaStr);
+    }
+
+    @Test
+    @Order(40)
+    @DisplayName("----------")
+    void test40() {
     }
 
     @Test
@@ -486,7 +502,7 @@ public abstract class BackendTest extends AlgosTest {
         previsto = "topolino";
         previsto2 = "Giuseppe";
 
-        ottenutoBooleano = crudBackend.isExistId(sorgente);
+        ottenutoBooleano = crudBackend.isExistById(sorgente);
         assertFalse(ottenutoBooleano);
         message = String.format("1) isExistId -> Nella collection '%s' non esiste (false) la entity [%s]", collectionName, sorgente);
         System.out.println(message);
@@ -496,7 +512,7 @@ public abstract class BackendTest extends AlgosTest {
         message = String.format("2) creaIfNotExist -> Nella collection '%s' è stata creata (true) la entity [%s].%s che prima non esisteva", collectionName, previsto, sorgente);
         System.out.println(message);
 
-        ottenutoBooleano = crudBackend.isExistId(previsto);
+        ottenutoBooleano = crudBackend.isExistById(previsto);
         assertTrue(ottenutoBooleano);
         message = String.format("3) isExistId -> Controllo l'esistenza (true) della entity [%s].%s tramite l'ID", previsto, sorgente);
         System.out.println(message);
@@ -510,19 +526,19 @@ public abstract class BackendTest extends AlgosTest {
 
         System.out.println(VUOTA);
 
-        ottenutoBooleano = crudBackend.isExistId(previsto);
+        ottenutoBooleano = crudBackend.isExistById(previsto);
         assertTrue(ottenutoBooleano);
         message = String.format("5) isExistId -> Controllo l'esistenza (true) della entity [%s].%s tramite l'ID", previsto, sorgente);
         System.out.println(message);
-        ottenutoBooleano = crudBackend.isExistKey(sorgente);
+        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
         message = String.format("6) isExistKey -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", previsto, sorgente, sorgente, keyPropertyName);
         assertTrue(ottenutoBooleano);
         System.out.println(message);
-        ottenutoBooleano = crudBackend.isExistKey(previsto2);
+        ottenutoBooleano = crudBackend.isExistByKey(previsto2);
         assertFalse(ottenutoBooleano);
         message = String.format("7) isExistKey -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", previsto, previsto2, previsto2, keyPropertyName);
         System.out.println(message);
-        ottenutoBooleano = crudBackend.isExistProperty(keyPropertyName, sorgente);
+        ottenutoBooleano = crudBackend.isExistByProperty(keyPropertyName, sorgente);
         message = String.format("8) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", previsto, previsto2, sorgente, keyPropertyName);
         assertTrue(ottenutoBooleano);
         System.out.println(message);
@@ -553,15 +569,15 @@ public abstract class BackendTest extends AlgosTest {
         message = String.format("12) save -> Modifica la entity [%s].%s in [%s].%s", previsto, sorgente, previsto, previsto2);
         System.out.println(message);
 
-        ottenutoBooleano = crudBackend.isExistKey(sorgente);
+        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
         message = String.format("13) isExistKey -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", previsto, sorgente, sorgente, keyPropertyName);
         assertFalse(ottenutoBooleano);
         System.out.println(message);
-        ottenutoBooleano = crudBackend.isExistKey(previsto2);
+        ottenutoBooleano = crudBackend.isExistByKey(previsto2);
         assertTrue(ottenutoBooleano);
         message = String.format("14) isExistKey -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", previsto, previsto2, previsto2, keyPropertyName);
         System.out.println(message);
-        ottenutoBooleano = crudBackend.isExistProperty(keyPropertyName, previsto2);
+        ottenutoBooleano = crudBackend.isExistByProperty(keyPropertyName, previsto2);
         message = String.format("15) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", previsto, previsto2, previsto2, keyPropertyName);
         assertTrue(ottenutoBooleano);
         System.out.println(message);
@@ -573,7 +589,7 @@ public abstract class BackendTest extends AlgosTest {
         message = String.format("16) delete -> Cancello la entity [%s].%s", previsto, previsto2);
         System.out.println(message);
 
-        ottenutoBooleano = crudBackend.isExistId(previsto);
+        ottenutoBooleano = crudBackend.isExistById(previsto);
         message = String.format("17) isExistId -> Alla fine, nella collection '%s' non esiste più la entity [%s] che è stata cancellata", collectionName, previsto);
         System.out.println(message);
     }
@@ -593,6 +609,13 @@ public abstract class BackendTest extends AlgosTest {
     protected void insert() {
         System.out.println("44 - creaIfNotExist");
         System.out.println(VUOTA);
+    }
+
+
+    @Test
+    @Order(50)
+    @DisplayName("----------")
+    void test50() {
     }
 
     //Segnaposto
@@ -621,6 +644,12 @@ public abstract class BackendTest extends AlgosTest {
     protected void libero55() {
     }
 
+    @Test
+    @Order(60)
+    @DisplayName("----------")
+    void test60() {
+    }
+
     //Segnaposto
     @Order(61)
     protected void libero61() {
@@ -637,6 +666,11 @@ public abstract class BackendTest extends AlgosTest {
     protected void libero63() {
     }
 
+    @Test
+    @Order(70)
+    @DisplayName("----------")
+    void test70() {
+    }
 
     //Segnaposto
     @Order(71)
@@ -654,6 +688,11 @@ public abstract class BackendTest extends AlgosTest {
     protected void libero73() {
     }
 
+    @Test
+    @Order(80)
+    @DisplayName("----------")
+    void test80() {
+    }
 
     //Segnaposto
     @Order(81)
@@ -669,6 +708,12 @@ public abstract class BackendTest extends AlgosTest {
     //Segnaposto
     @Order(83)
     protected void libero83() {
+    }
+
+    @Test
+    @Order(90)
+    @DisplayName("----------")
+    void test90() {
     }
 
     @Test

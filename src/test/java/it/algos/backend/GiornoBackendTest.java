@@ -100,7 +100,7 @@ public class GiornoBackendTest extends BackendTest {
 
         sorgente = "12 termidoro";
 
-        ottenutoBooleano = crudBackend.isExistKey(sorgente);
+        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
         assertFalse(ottenutoBooleano);
         message = String.format("1) isExistKey -> Non esiste (false) la entity [%s]", sorgente);
         System.out.println(VUOTA);
@@ -108,7 +108,7 @@ public class GiornoBackendTest extends BackendTest {
 
         ottenutoBooleano = backend.creaIfNotExist(sorgente);
         assertTrue(ottenutoBooleano);
-        ottenutoBooleano = crudBackend.isExistKey(sorgente);
+        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
         assertTrue(ottenutoBooleano);
         message = String.format("2) creaIfNotExist -> Creata correttamente (nel database) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
         System.out.println(VUOTA);
@@ -118,7 +118,7 @@ public class GiornoBackendTest extends BackendTest {
         assertNotNull(entityBean);
         ottenutoBooleano = backend.delete(entityBean);
         assertTrue(ottenutoBooleano);
-        ottenutoBooleano = crudBackend.isExistKey(sorgente);
+        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
         assertFalse(ottenutoBooleano);
         message = String.format("3) delete -> Cancellata la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
         System.out.println(VUOTA);
@@ -201,7 +201,7 @@ public class GiornoBackendTest extends BackendTest {
         sorgente = (String) mat[0];
         previstoBooleano = (boolean) mat[1];
 
-        ottenutoBooleano = backend.isExistKey(sorgente);
+        ottenutoBooleano = backend.isExistByKey(sorgente);
         assertEquals(previstoBooleano, ottenutoBooleano);
         if (ottenutoBooleano) {
             System.out.println(String.format("Il giorno %s esiste", sorgente));
