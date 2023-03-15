@@ -34,9 +34,12 @@ import java.util.stream.*;
  * isExistId()
  * isExistKey(), se esiste una key
  * isExistProperty()
- * findByID()
- * findByKey(), se esiste una key
- * findByProperty()
+ * <p>
+ * findById(final String keyID)
+ * findByKey(final String keyValue), se esiste una keyPropertyName
+ * findByProperty(final String propertyName, final Object propertyValue)
+ * findByOrdine(final int ordine), se esiste FIELD_NAME_ORDINE
+ * <p>
  * save()
  * insert()
  * update()
@@ -543,19 +546,38 @@ public abstract class BackendTest extends AlgosTest {
         assertTrue(ottenutoBooleano);
         System.out.println(message);
 
+        System.out.println(VUOTA);
+
+        // findById(final String keyID)
         entityBean = crudBackend.findById(previsto);
         assertNotNull(entityBean);
         message = String.format("9) findById -> Recupero la entity [%s].%s dalla keyID", previsto, sorgente);
         System.out.println(message);
 
+        // findByKey(final String keyValue), se esiste una keyPropertyName
         entityBean = crudBackend.findByKey(sorgente);
         assertNotNull(entityBean);
         message = String.format("10) findByKey -> Recupero la entity [%s].%s dal valore '%s' della keyProperty [%s]", previsto, sorgente, sorgente, keyPropertyName);
         System.out.println(message);
+
+        // findByProperty(final String propertyName, final Object propertyValue)
         entityBean = crudBackend.findByProperty(keyPropertyName, sorgente);
         assertNotNull(entityBean);
         message = String.format("11) findByProperty -> Recupero la entity [%s].%s dal valore '%s' della property [%s]", previsto, sorgente, sorgente, keyPropertyName);
         System.out.println(message);
+
+        // findByOrdine(final int ordine), se esiste FIELD_NAME_ORDINE
+        if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+            sorgenteIntero = 1;
+            entityBean = crudBackend.findByOrdine(sorgenteIntero);
+            assertNotNull(entityBean);
+            message = String.format("12) findByProperty -> Recupero la entity [%s] dal valore '%s' della property [%s]", entityBean, sorgenteIntero, FIELD_NAME_ORDINE);
+            System.out.println(message);
+        }
+        else {
+            message = String.format("12) findByProperty -> La collection '%s' non prevede la property [%s]", clazzName, FIELD_NAME_ORDINE);
+            System.out.println(message);
+        }
 
         System.out.println(VUOTA);
 
@@ -566,19 +588,19 @@ public abstract class BackendTest extends AlgosTest {
         entityBean = crudBackend.findById(previsto);
         assertNotNull(entityBean);
         assertEquals(previsto2, reflectionService.getPropertyValue(entityBean, keyPropertyName));
-        message = String.format("12) save -> Modifica la entity [%s].%s in [%s].%s", previsto, sorgente, previsto, previsto2);
+        message = String.format("13) save -> Modifica la entity [%s].%s in [%s].%s", previsto, sorgente, previsto, previsto2);
         System.out.println(message);
 
         ottenutoBooleano = crudBackend.isExistByKey(sorgente);
-        message = String.format("13) isExistKey -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", previsto, sorgente, sorgente, keyPropertyName);
+        message = String.format("14) isExistKey -> Non esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", previsto, sorgente, sorgente, keyPropertyName);
         assertFalse(ottenutoBooleano);
         System.out.println(message);
         ottenutoBooleano = crudBackend.isExistByKey(previsto2);
         assertTrue(ottenutoBooleano);
-        message = String.format("14) isExistKey -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", previsto, previsto2, previsto2, keyPropertyName);
+        message = String.format("15) isExistKey -> Esiste la entity [%s].%s individuata dal valore '%s' della keyProperty [%s]", previsto, previsto2, previsto2, keyPropertyName);
         System.out.println(message);
         ottenutoBooleano = crudBackend.isExistByProperty(keyPropertyName, previsto2);
-        message = String.format("15) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", previsto, previsto2, previsto2, keyPropertyName);
+        message = String.format("16) isExistProperty -> Esiste la entity [%s].%s individuata dal valore '%s' della property [%s]", previsto, previsto2, previsto2, keyPropertyName);
         assertTrue(ottenutoBooleano);
         System.out.println(message);
 
@@ -586,11 +608,11 @@ public abstract class BackendTest extends AlgosTest {
 
         ottenutoBooleano = crudBackend.delete(entityBean);
         assertTrue(ottenutoBooleano);
-        message = String.format("16) delete -> Cancello la entity [%s].%s", previsto, previsto2);
+        message = String.format("17) delete -> Cancello la entity [%s].%s", previsto, previsto2);
         System.out.println(message);
 
         ottenutoBooleano = crudBackend.isExistById(previsto);
-        message = String.format("17) isExistId -> Alla fine, nella collection '%s' non esiste più la entity [%s] che è stata cancellata", collectionName, previsto);
+        message = String.format("18) isExistId -> Alla fine, nella collection '%s' non esiste più la entity [%s] che è stata cancellata", collectionName, previsto);
         System.out.println(message);
     }
 
