@@ -43,6 +43,10 @@ import java.util.*;
  * findByOrdine(final int ordine), se esiste FIELD_NAME_ORDINE
  * findByProperty(final String propertyName, final Object propertyValue)
  * <p>
+ * creaIfNotExist(final Object keyPropertyValue), se esiste una keyPropertyName
+ * fixKey(AEntity newEntityBean)
+ * getIdKey(String keyPropertyValue), se esiste una keyPropertyName
+ * <p>
  * Le sottoclassi concrete: <br>
  * Non mantengono lo stato di una istanza entityBean <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
