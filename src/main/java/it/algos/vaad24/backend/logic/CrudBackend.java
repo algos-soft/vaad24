@@ -33,6 +33,16 @@ import java.util.*;
  * Se la sottoclasse xxxService non esiste (non è indispensabile), usa la classe generica GenericService; <br>
  * i metodi esistono ma occorre un cast in uscita <br>
  * <p>
+ * isExistById()
+ * isExistByKey(), se esiste una key
+ * isExistByOrdine(final int ordine), se esiste FIELD_NAME_ORDINE
+ * isExistByProperty()
+ * <p>
+ * findById(final String keyID)
+ * findByKey(final String keyValue), se esiste una keyPropertyName
+ * findByOrdine(final int ordine), se esiste FIELD_NAME_ORDINE
+ * findByProperty(final String propertyName, final Object propertyValue)
+ * <p>
  * Le sottoclassi concrete: <br>
  * Non mantengono lo stato di una istanza entityBean <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
@@ -265,7 +275,11 @@ public abstract class CrudBackend extends AbstractService {
         return isExistByProperty(keyPropertyName, keyValue);
     }
 
-    public boolean isExistByProperty(final String propertyName, final String propertyValue) {
+    public boolean isExistByOrder(final int orderValue) {
+        return isExistByProperty(FIELD_NAME_ORDINE, orderValue);
+    }
+
+    public boolean isExistByProperty(final String propertyName, final Object propertyValue) {
         String collectionName = annotationService.getCollectionName(entityClazz);
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         Query query = new Query();
@@ -284,16 +298,17 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
+
     /**
      * Ricerca della singola entity <br>
      * Può essere sovrascritto nella sottoclasse specifica per il casting di ritorno <br>
      *
-     * @param keyID (obbligatorio, unico)
+     * @param keyId (obbligatorio, unico)
      *
      * @return la entity trovata
      */
-    public AEntity findById(final String keyID) {
-        return findByProperty(FIELD_NAME_ID_CON, keyID);
+    public AEntity findById(final String keyId) {
+        return findByProperty(FIELD_NAME_ID_CON, keyId);
     }
 
     /**
@@ -307,6 +322,10 @@ public abstract class CrudBackend extends AbstractService {
     public AEntity findByKey(final String keyValue) {
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         return findByProperty(keyPropertyName, keyValue);
+    }
+
+    public AEntity findByOrder(final int orderValue) {
+        return findByProperty(FIELD_NAME_ORDINE, orderValue);
     }
 
     /**
@@ -334,9 +353,6 @@ public abstract class CrudBackend extends AbstractService {
         return entity;
     }
 
-    public AEntity findByOrdine(final int ordine) {
-        return findByProperty(FIELD_NAME_ORDINE, ordine);
-    }
 
     public AEntity save(AEntity entityBean) {
         if (!isExistById(entityBean.id)) {

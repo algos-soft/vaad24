@@ -90,13 +90,15 @@ public class GiornoBackend extends CrudBackend {
     }
 
     @Override
+    public Giorno findByOrder(final int ordine) {
+        return (Giorno) super.findByOrder(ordine);
+    }
+
+    @Override
     public Giorno findByProperty(final String propertyName, final Object propertyValue) {
         return (Giorno) super.findByProperty(propertyName, propertyValue);
     }
 
-    public Giorno findByOrdine(final int ordine) {
-        return (Giorno) super.findByOrdine(ordine);
-    }
 
     @Override
     public List<Giorno> findAllNoSort() {

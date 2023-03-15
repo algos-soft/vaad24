@@ -19,14 +19,5 @@ import org.springframework.boot.test.context.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GiornoBackendResetTest extends GiornoBackendTest {
 
-    /**
-     * Chiamato solo dalla sottoclasse
-     */
-    @Test
-    @Order(92)
-    @DisplayName("92 - resetForcing")
-    protected void resetForcing() {
-        super.resetForcing();
-    }
 
 }

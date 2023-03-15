@@ -78,14 +78,15 @@ public class ContinenteBackend extends CrudBackend {
     }
 
     @Override
+    public Continente findByOrder(final int ordine) {
+        return (Continente) super.findByOrder(ordine);
+    }
+
+    @Override
     public Continente findByProperty(final String propertyName, final Object propertyValue) {
         return (Continente) super.findByProperty(propertyName, propertyValue);
     }
 
-    @Override
-    public Continente findByOrdine(final int ordine) {
-        return (Continente) super.findByOrdine(ordine);
-    }
 
     /**
      * Creazione di alcuni dati <br>

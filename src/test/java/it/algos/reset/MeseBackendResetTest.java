@@ -20,14 +20,5 @@ import org.springframework.boot.test.context.*;
 public class MeseBackendResetTest extends MeseBackendTest {
 
 
-    /**
-     * Chiamato solo dalla sottoclasse
-     */
-    @Test
-    @Order(92)
-    @DisplayName("92 - resetForcing")
-    protected void resetForcing() {
-        super.resetForcing();
-    }
 
 }

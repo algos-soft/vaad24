@@ -222,31 +222,31 @@ public class GiornoBackendTest extends BackendTest {
         System.out.println(VUOTA);
 
         sorgenteIntero = 857;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNull(entityBean);
         ottenuto = VUOTA;
         printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 4;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
         printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 127;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
         printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 250;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
         printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = -4;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNull(entityBean);
         ottenuto = VUOTA;
         printValue(sorgenteIntero, ottenuto);

@@ -133,31 +133,31 @@ public class AnnoBackendTest extends BackendTest {
         System.out.println(VUOTA);
 
         sorgenteIntero = 8527;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNull(entityBean);
         ottenuto = VUOTA;
         printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 2508;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
         printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 304;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
         printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 2963;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
         printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = -4;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNull(entityBean);
         ottenuto = VUOTA;
         printValue(sorgenteIntero, ottenuto);

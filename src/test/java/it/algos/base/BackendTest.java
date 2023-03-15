@@ -1,6 +1,7 @@
 package it.algos.base;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
@@ -31,14 +32,15 @@ import java.util.stream.*;
  * Time: 20:03
  * Test delle classi 'backend' senza repository <br>
  * <p>
- * isExistId()
- * isExistKey(), se esiste una key
- * isExistProperty()
+ * isExistById()
+ * isExistByKey(), se esiste una key
+ * isExistByOrdine(final int ordine), se esiste FIELD_NAME_ORDINE
+ * isExistByProperty()
  * <p>
  * findById(final String keyID)
  * findByKey(final String keyValue), se esiste una keyPropertyName
- * findByProperty(final String propertyName, final Object propertyValue)
  * findByOrdine(final int ordine), se esiste FIELD_NAME_ORDINE
+ * findByProperty(final String propertyName, final Object propertyValue)
  * <p>
  * save()
  * insert()
@@ -197,6 +199,72 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println(message);
     }
 
+
+    @Test
+    @Order(3)
+    @DisplayName("3 - resetOnlyEmpty")
+    protected void resetOnlyEmpty() {
+        System.out.println("3 - resetOnlyEmpty");
+        System.out.println(VUOTA);
+
+        if (!annotationService.usaReset(entityClazz)) {
+            message = String.format("Questo test presuppone che la entity [%s] preveda la funzionalità '%s'", clazzName, METHOD_NAME_RESET_ONLY);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entity [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(usaReset = true)");
+            System.out.println(message);
+            return;
+        }
+
+        ottenutoRisultato = crudBackend.resetOnlyEmpty();
+        assertNotNull(ottenutoRisultato);
+        if (ottenutoRisultato.isValido()) {
+            System.out.println(ottenutoRisultato.getMessage());
+            printRisultato(ottenutoRisultato);
+
+            System.out.println(VUOTA);
+            printBackend(ottenutoRisultato.getLista());
+        }
+        else {
+            logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
+        }
+        assertTrue(ottenutoRisultato.isValido());
+    }
+
+
+    @Test
+    @Order(4)
+    @DisplayName("4 - resetForcing")
+    protected void resetForcing() {
+        System.out.println("4 - resetForcing");
+        System.out.println(VUOTA);
+
+        if (!annotationService.usaReset(entityClazz)) {
+            message = String.format("Questo test presuppone che la entity [%s] preveda la funzionalità '%s'", clazzName, METHOD_NAME_RESET_ONLY);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entity [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(usaReset = true)");
+            System.out.println(message);
+            return;
+        }
+
+        ottenutoRisultato = crudBackend.resetForcing();
+        assertNotNull(ottenutoRisultato);
+        if (ottenutoRisultato.isValido()) {
+            System.out.println(ottenutoRisultato.getMessage());
+            printRisultato(ottenutoRisultato);
+
+            System.out.println(VUOTA);
+            printBackend(ottenutoRisultato.getLista());
+        }
+        else {
+            logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
+        }
+        assertTrue(ottenutoRisultato.isValido());
+    }
+
     @Test
     @Order(20)
     @DisplayName("----------")
@@ -338,82 +406,195 @@ public abstract class BackendTest extends AlgosTest {
     void test40() {
     }
 
-    @Test
-    @Order(40)
-    @DisplayName("40 - toString")
-    protected void toStringTest() {
-        System.out.println("40 - toString");
-        System.out.println(VUOTA);
-
-        sorgente = "Topo Lino";
-
-        if (annotationService.usaKeyPropertyName(entityClazz)) {
-            keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+    @Order(41)
+    @DisplayName("41 - isExistById")
+    protected boolean isExistById(String keyId) {
+        sorgente = keyId;
+        ottenutoBooleano = crudBackend.isExistById(sorgente);
+        if (ottenutoBooleano) {
+            message = String.format("Nella collection '%s' esiste (true) una entity con l'id = '%s'", collectionName, sorgente);
         }
         else {
-            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
-            System.out.println(message);
-            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
-            System.out.println(message);
-            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
-            System.out.println(message);
-            return;
+            message = String.format("Nella collection '%s' non esiste (false) nessuna entity con l'id = '%s'", collectionName, sorgente);
+        }
+        System.out.println(message);
+
+        return ottenutoBooleano;
+    }
+
+
+    @Order(42)
+    @DisplayName("42 - isExistByKey")
+    protected boolean isExistByKey(String keyValue) {
+        sorgente = keyValue;
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        if (textService.isEmpty(keyPropertyName)) {
+            message = String.format("Nella collection '%s' non esiste la keyPropertyName", collectionName);
+            return false;
         }
 
-        if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
-            try {
-                entityBean = crudBackend.newEntity(sorgente);
-            } catch (Exception unErrore) {
-                message = String.format("Non sono riuscito a creare una entityBean della classe [%s] col metodo newEntity() ad un solo parametro", clazzName);
-                System.out.println(message);
-                message = String.format("Probabilmente il valore [%s] usato per la keyPropertyName '%s' non è adeguato", sorgente, keyPropertyName);
-                System.out.println(message);
-                message = String.format("Devi scrivere un test alternativo per controllare la funzione toString() della classe [%s]", clazzName);
-                System.out.println(message);
-                return;
-            }
-            assertNotNull(entityBean);
-            ottenuto = entityBean.toString();
-            if (textService.isEmpty(ottenuto)) {
-                message = String.format("Non esiste il valore toString() della entity appena creata di classe [%s]", clazzName);
-                System.out.println(message);
-                message = String.format("Devi creare/modificare il metodo [%s].toString()", clazzName);
-                System.out.println(message);
-            }
-            assertTrue(textService.isValid(ottenuto));
-            System.out.println(String.format("toString%s%s", FORWARD, ottenuto));
-            return;
+        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
+        if (ottenutoBooleano) {
+            message = String.format("Nella collection '%s' esiste una entity con la keyId = '%s'", collectionName, keyValue);
+        }
+        else {
+            message = String.format("Nella collection '%s' non esiste nessuna entity con la keyId = '%s'", collectionName, keyValue);
+        }
+        System.out.println(message);
+
+        return ottenutoBooleano;
+    }
+
+
+
+    @Order(44)
+    @DisplayName("44 - isExistByOrder")
+    protected boolean isExistByOrder(int orderValue) {
+        sorgenteIntero = orderValue;
+
+        if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+            message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, FIELD_NAME_ORDINE);
+            System.out.println(message);
+            return false;
         }
 
-        if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 0)) {
-            entityBean = crudBackend.newEntity();
-            assertNotNull(entityBean);
-            assertNotNull(entityBean);
-            ottenuto = entityBean.toString();
-            if (textService.isEmpty(ottenuto)) {
-                message = String.format("Non esiste il valore toString() della entity di classe [%s]", clazzName);
-                System.out.println(message);
-                message = String.format("Perché è stata creata con %s() senza parametri", METHOD_NAME_NEW_ENTITY);
-                System.out.println(message);
-                message = String.format("E quindi non ha recepito il valore del keyPropertyName '%s'", keyPropertyName);
-                System.out.println(message);
-            }
-            return;
+        ottenutoBooleano = crudBackend.isExistByOrder(sorgenteIntero);
+        if (ottenutoBooleano) {
+            message = String.format("Nella collection '%s' esiste una entity individuata dal valore '%d' della property [%s]", collectionName, orderValue, FIELD_NAME_ORDINE);
+        }
+        else {
+            message = String.format("Nella collection '%s' non esiste nessuna entity col valore '%d' della property [%s]", collectionName, orderValue, FIELD_NAME_ORDINE);
+        }
+        System.out.println(message);
+
+        return ottenutoBooleano;
+    }
+
+    @Order(44)
+    @DisplayName("44 - isExistByProperty")
+    protected boolean isExistByProperty(String propertyName, String propertyValue) {
+        sorgente = propertyName;
+        sorgente2 = propertyValue;
+
+        if (!reflectionService.isEsiste(entityClazz, propertyName)) {
+            message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, propertyName);
+            System.out.println(message);
+            return false;
         }
 
-        message = String.format("Questo test presuppone che esista il metodo '%s' nella classe [%s] con un parametro solo o senza", METHOD_NAME_NEW_ENTITY, backendName);
+        ottenutoBooleano = crudBackend.isExistByProperty(sorgente, sorgente2);
+        if (ottenutoBooleano) {
+            message = String.format("Nella collection '%s' esiste una entity individuata dal valore '%s' della property [%s]", collectionName, propertyValue, propertyName);
+        }
+        else {
+            message = String.format("Nella collection '%s' non esiste nessuna entity col valore '%s' della property [%s]", collectionName, propertyValue, propertyName);
+        }
         System.out.println(message);
-        message = String.format("Devi scrivere un test alternativo oppure modificare la classe [%s]", backendName);
+
+        return ottenutoBooleano;
+    }
+
+
+    @Test
+    @Order(50)
+    @DisplayName("----------")
+    void test50() {
+    }
+
+    @Order(51)
+    @DisplayName("51 - findById")
+    protected AEntity findById(String keyId) {
+        sorgente = keyId;
+        entityBean = crudBackend.findById(sorgente);
+        if (entityBean != null) {
+            message = String.format("Nella collection '%s' esiste (true) una entity con l'id = '%s'", collectionName, entityBean.id);
+        }
+        else {
+            message = String.format("Nella collection '%s' non esiste (false) nessuna entity con id = '%s'", collectionName, sorgente);
+        }
         System.out.println(message);
-        message = String.format("Aggiungendo un metodo '%s' senza parametri oppure con un parametro", METHOD_NAME_NEW_ENTITY);
+
+        return entityBean;
+    }
+
+
+    @Order(52)
+    @DisplayName("52 - findByKey")
+    protected AEntity findByKey(String keyValue) {
+        sorgente = keyValue;
+
+        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        if (textService.isEmpty(keyPropertyName)) {
+            message = String.format("Nella collection '%s' non esiste la keyPropertyName", collectionName);
+            return null;
+        }
+
+        entityBean = crudBackend.findByKey(sorgente);
+        if (entityBean != null) {
+            message = String.format("Nella collection '%s' esiste (true) una entity con la keyId = '%s'", collectionName, keyValue);
+        }
+        else {
+            message = String.format("Nella collection '%s' non esiste (false) nessuna entity con la keyId = '%s'", collectionName, keyValue);
+        }
         System.out.println(message);
+
+        return entityBean;
+    }
+
+
+    @Order(53)
+    @DisplayName("53 - findByOrder")
+    protected AEntity findByOrder(int orderValue) {
+        sorgenteIntero = orderValue;
+
+        if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+            message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, FIELD_NAME_ORDINE);
+            System.out.println(message);
+            return null;
+        }
+
+        entityBean = crudBackend.findByOrder(sorgenteIntero);
+        if (entityBean != null) {
+            message = String.format("Nella collection '%s' esiste una entity individuata dal valore '%d' della property [%s]", collectionName, orderValue, FIELD_NAME_ORDINE);
+        }
+        else {
+            message = String.format("Nella collection '%s' non esiste nessuna entity col valore '%d' della property [%s]", collectionName, orderValue, FIELD_NAME_ORDINE);
+        }
+        System.out.println(message);
+
+        return entityBean;
+    }
+
+
+    @Order(54)
+    @DisplayName("54 - findByProperty")
+    protected AEntity findByProperty(String propertyName, String propertyValue) {
+        sorgente = propertyName;
+        sorgente2 = propertyValue;
+
+        if (!reflectionService.isEsiste(entityClazz, propertyName)) {
+            message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, propertyName);
+            System.out.println(message);
+            return null;
+        }
+
+        entityBean = crudBackend.findByProperty(sorgente, sorgente2);
+        if (entityBean != null) {
+            message = String.format("Nella collection '%s' esiste (true) la entity [%s]", collectionName, entityBean);
+        }
+        else {
+            message = String.format("Nella collection '%s' non esiste nessuna entity col valore '%s' della property [%s]", collectionName, propertyValue, propertyName);
+        }
+        System.out.println(message);
+
+        return entityBean;
     }
 
     @Test
-    @Order(41)
-    @DisplayName("41 - newEntity con ID ma non registrata")
+    @Order(62)
+    @DisplayName("62 - newEntity con ID ma non registrata")
     protected void newEntity() {
-        System.out.println("41 - newEntity con ID ma non registrata");
+        System.out.println("62 - newEntity con ID ma non registrata");
         System.out.println(VUOTA);
         String keyPropertyName = VUOTA;
 
@@ -474,10 +655,10 @@ public abstract class BackendTest extends AlgosTest {
 
 
     @Test
-    @Order(42)
-    @DisplayName("42 - CRUD operations")
+    @Order(63)
+    @DisplayName("63 - CRUD operations")
     protected void crud() {
-        System.out.println("42 - CRUD operations");
+        System.out.println("63 - CRUD operations");
         System.out.println(VUOTA);
 
         if (!reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
@@ -560,24 +741,25 @@ public abstract class BackendTest extends AlgosTest {
         message = String.format("10) findByKey -> Recupero la entity [%s].%s dal valore '%s' della keyProperty [%s]", previsto, sorgente, sorgente, keyPropertyName);
         System.out.println(message);
 
-        // findByProperty(final String propertyName, final Object propertyValue)
-        entityBean = crudBackend.findByProperty(keyPropertyName, sorgente);
-        assertNotNull(entityBean);
-        message = String.format("11) findByProperty -> Recupero la entity [%s].%s dal valore '%s' della property [%s]", previsto, sorgente, sorgente, keyPropertyName);
-        System.out.println(message);
-
         // findByOrdine(final int ordine), se esiste FIELD_NAME_ORDINE
         if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
             sorgenteIntero = 1;
-            entityBean = crudBackend.findByOrdine(sorgenteIntero);
+            entityBean = crudBackend.findByOrder(sorgenteIntero);
             assertNotNull(entityBean);
-            message = String.format("12) findByProperty -> Recupero la entity [%s] dal valore '%s' della property [%s]", entityBean, sorgenteIntero, FIELD_NAME_ORDINE);
+            assertEquals(sorgenteIntero, reflectionService.getPropertyValue(entityBean, FIELD_NAME_ORDINE));
+            message = String.format("11) findByOrdine -> Recupero la entity [%s] dal valore '%s' della property [%s]", entityBean, sorgenteIntero, FIELD_NAME_ORDINE);
             System.out.println(message);
         }
         else {
-            message = String.format("12) findByProperty -> La collection '%s' non prevede la property [%s]", clazzName, FIELD_NAME_ORDINE);
+            message = String.format("11) findByOrdine -> La collection '%s' non prevede la property [%s]", clazzName, FIELD_NAME_ORDINE);
             System.out.println(message);
         }
+
+        // findByProperty(final String propertyName, final Object propertyValue)
+        entityBean = crudBackend.findByProperty(keyPropertyName, sorgente);
+        assertNotNull(entityBean);
+        message = String.format("12) findByProperty -> Recupero la entity [%s].%s dal valore '%s' della property [%s]", previsto, sorgente, sorgente, keyPropertyName);
+        System.out.println(message);
 
         System.out.println(VUOTA);
 
@@ -617,49 +799,112 @@ public abstract class BackendTest extends AlgosTest {
     }
 
     //Segnaposto
-    @Order(43)
-    @DisplayName("43 - newEntityConParametri")
+    @Order(64)
+    @DisplayName("64 - newEntityConParametri")
     protected void newEntityConParametri() {
-        System.out.println("43 - newEntityConParametri");
+        System.out.println("64 - newEntityConParametri");
         System.out.println(VUOTA);
     }
-
-
-    //Segnaposto
-    @Order(44)
-    @DisplayName("44 - creaIfNotExist")
-    protected void insert() {
-        System.out.println("44 - creaIfNotExist");
-        System.out.println(VUOTA);
-    }
-
 
     @Test
-    @Order(50)
-    @DisplayName("----------")
-    void test50() {
+    @Order(244)
+    @DisplayName("244 - toString")
+    protected void toStringTest() {
+        System.out.println("244 - toString");
+        System.out.println(VUOTA);
+
+        sorgente = "Topo Lino";
+
+        if (annotationService.usaKeyPropertyName(entityClazz)) {
+            keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        }
+        else {
+            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
+            System.out.println(message);
+            return;
+        }
+
+        if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
+            try {
+                entityBean = crudBackend.newEntity(sorgente);
+            } catch (Exception unErrore) {
+                message = String.format("Non sono riuscito a creare una entityBean della classe [%s] col metodo newEntity() ad un solo parametro", clazzName);
+                System.out.println(message);
+                message = String.format("Probabilmente il valore [%s] usato per la keyPropertyName '%s' non è adeguato", sorgente, keyPropertyName);
+                System.out.println(message);
+                message = String.format("Devi scrivere un test alternativo per controllare la funzione toString() della classe [%s]", clazzName);
+                System.out.println(message);
+                return;
+            }
+            assertNotNull(entityBean);
+            ottenuto = entityBean.toString();
+            if (textService.isEmpty(ottenuto)) {
+                message = String.format("Non esiste il valore toString() della entity appena creata di classe [%s]", clazzName);
+                System.out.println(message);
+                message = String.format("Devi creare/modificare il metodo [%s].toString()", clazzName);
+                System.out.println(message);
+            }
+            assertTrue(textService.isValid(ottenuto));
+            System.out.println(String.format("toString%s%s", FORWARD, ottenuto));
+            return;
+        }
+
+        if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 0)) {
+            entityBean = crudBackend.newEntity();
+            assertNotNull(entityBean);
+            assertNotNull(entityBean);
+            ottenuto = entityBean.toString();
+            if (textService.isEmpty(ottenuto)) {
+                message = String.format("Non esiste il valore toString() della entity di classe [%s]", clazzName);
+                System.out.println(message);
+                message = String.format("Perché è stata creata con %s() senza parametri", METHOD_NAME_NEW_ENTITY);
+                System.out.println(message);
+                message = String.format("E quindi non ha recepito il valore del keyPropertyName '%s'", keyPropertyName);
+                System.out.println(message);
+            }
+            return;
+        }
+
+        message = String.format("Questo test presuppone che esista il metodo '%s' nella classe [%s] con un parametro solo o senza", METHOD_NAME_NEW_ENTITY, backendName);
+        System.out.println(message);
+        message = String.format("Devi scrivere un test alternativo oppure modificare la classe [%s]", backendName);
+        System.out.println(message);
+        message = String.format("Aggiungendo un metodo '%s' senza parametri oppure con un parametro", METHOD_NAME_NEW_ENTITY);
+        System.out.println(message);
     }
 
     //Segnaposto
-    @Order(51)
-    protected void libero51() {
+    @Order(141)
+    @DisplayName("141 - creaIfNotExist")
+    protected void insert() {
+        System.out.println("141 - creaIfNotExist");
+        System.out.println(VUOTA);
     }
 
-    //Segnaposto
-    @Order(52)
-    protected void libero52() {
-    }
-
-
-    //Segnaposto
-    @Order(53)
-    protected void libero53() {
-    }
-
-    //Segnaposto
-    @Order(54)
-    protected void libero54() {
-    }
+    //    //Segnaposto
+    //    @Order(51)
+    //    protected void libero51() {
+    //    }
+    //
+    //    //Segnaposto
+    //    @Order(52)
+    //    protected void libero52() {
+    //    }
+    //
+    //
+    //    //Segnaposto
+    //    @Order(53)
+    //    protected void libero53() {
+    //    }
+    //
+    //    //Segnaposto
+    //    @Order(54)
+    //    protected void libero54() {
+    //    }
 
     //Segnaposto
     @Order(55)
@@ -738,70 +983,6 @@ public abstract class BackendTest extends AlgosTest {
     void test90() {
     }
 
-    @Test
-    @Order(91)
-    @DisplayName("91 - resetOnlyEmpty")
-    protected void resetOnlyEmpty() {
-        System.out.println("91 - resetOnlyEmpty");
-        System.out.println(VUOTA);
-
-        if (!annotationService.usaReset(entityClazz)) {
-            message = String.format("Questo test presuppone che la entity [%s] preveda la funzionalità '%s'", clazzName, METHOD_NAME_RESET_ONLY);
-            System.out.println(message);
-            message = String.format("Devi scrivere un test alternativo oppure modificare la entity [%s]", clazzName);
-            System.out.println(message);
-            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(usaReset = true)");
-            System.out.println(message);
-            return;
-        }
-
-        ottenutoRisultato = crudBackend.resetOnlyEmpty();
-        assertNotNull(ottenutoRisultato);
-        if (ottenutoRisultato.isValido()) {
-            System.out.println(ottenutoRisultato.getMessage());
-            printRisultato(ottenutoRisultato);
-
-            System.out.println(VUOTA);
-            printBackend(ottenutoRisultato.getLista());
-        }
-        else {
-            logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
-        }
-        assertTrue(ottenutoRisultato.isValido());
-    }
-
-
-    /**
-     * Chiamato solo dalla sottoclasse
-     */
-    protected void resetForcing() {
-        System.out.println("92 - resetForcing");
-        System.out.println(VUOTA);
-
-        if (!annotationService.usaReset(entityClazz)) {
-            message = String.format("Questo test presuppone che la entity [%s] preveda la funzionalità '%s'", clazzName, METHOD_NAME_RESET_ONLY);
-            System.out.println(message);
-            message = String.format("Devi scrivere un test alternativo oppure modificare la entity [%s]", clazzName);
-            System.out.println(message);
-            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(usaReset = true)");
-            System.out.println(message);
-            return;
-        }
-
-        ottenutoRisultato = crudBackend.resetForcing();
-        assertNotNull(ottenutoRisultato);
-        if (ottenutoRisultato.isValido()) {
-            System.out.println(ottenutoRisultato.getMessage());
-            printRisultato(ottenutoRisultato);
-
-            System.out.println(VUOTA);
-            printBackend(ottenutoRisultato.getLista());
-        }
-        else {
-            logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
-        }
-        assertTrue(ottenutoRisultato.isValido());
-    }
 
     protected Object getParamEsistente() {
         return sorgente;

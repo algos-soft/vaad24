@@ -87,14 +87,15 @@ public class MeseBackend extends CrudBackend {
     }
 
     @Override
+    public Mese findByOrder(final int ordine) {
+        return (Mese) super.findByOrder(ordine);
+    }
+
+    @Override
     public Mese findByProperty(final String propertyName, final Object propertyValue) {
         return (Mese) super.findByProperty(propertyName, propertyValue);
     }
 
-    @Override
-    public Mese findByOrdine(final int ordine) {
-        return (Mese) super.findByOrdine(ordine);
-    }
 
     @Override
     public List<Mese> findAllNoSort() {
@@ -178,7 +179,7 @@ public class MeseBackend extends CrudBackend {
                         }
                     }
 
-                    entityBean = insert(newEntity(++ordine, breve, nome, giorni, primo, ultimo));
+                    entityBean = insert(newEntity(++ordine, nome, breve, giorni, primo, ultimo));
                     if (entityBean != null) {
                         lista.add(entityBean);
                     }

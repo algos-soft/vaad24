@@ -78,14 +78,13 @@ public class SecoloBackend extends CrudBackend {
     }
 
     @Override
-    public Secolo findByProperty(final String propertyName, final Object propertyValue) {
-        return (Secolo) super.findByProperty(propertyName, propertyValue);
+    public Secolo findByOrder(final int ordine) {
+        return (Secolo) super.findByOrder(ordine);
     }
 
-
     @Override
-    public Secolo findByOrdine(final int ordine) {
-        return (Secolo) super.findByOrdine(ordine);
+    public Secolo findByProperty(final String propertyName, final Object propertyValue) {
+        return (Secolo) super.findByProperty(propertyName, propertyValue);
     }
 
 

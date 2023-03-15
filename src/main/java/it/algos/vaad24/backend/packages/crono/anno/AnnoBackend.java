@@ -88,6 +88,11 @@ public class AnnoBackend extends CrudBackend {
     }
 
     @Override
+    public Anno findByOrder(final int ordine) {
+        return (Anno) super.findByOrder(ordine);
+    }
+
+    @Override
     public Anno findByProperty(final String propertyName, final Object propertyValue) {
         return (Anno) super.findByProperty(propertyName, propertyValue);
     }
@@ -107,9 +112,6 @@ public class AnnoBackend extends CrudBackend {
         return findAllByProperty(FIELD_NAME_SECOLO, secolo);
     }
 
-    public Anno findByOrdine(final int ordine) {
-        return (Anno) super.findByOrdine(ordine);
-    }
 
 
     @Override

@@ -112,31 +112,31 @@ public class SecoloBackendTest extends BackendTest {
         System.out.println(VUOTA);
 
         sorgenteIntero = 857;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNull(entityBean);
         ottenuto = VUOTA;
         printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 4;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
         printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 27;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNotNull(entityBean);
         ottenuto = entityBean.toString();
         printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = 35;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNull(entityBean);
         ottenuto = VUOTA;
         printValue(sorgenteIntero, ottenuto);
 
         sorgenteIntero = -4;
-        entityBean = backend.findByOrdine(sorgenteIntero);
+        entityBean = backend.findByOrder(sorgenteIntero);
         assertNull(entityBean);
         ottenuto = VUOTA;
         printValue(sorgenteIntero, ottenuto);
