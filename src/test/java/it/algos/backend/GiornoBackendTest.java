@@ -79,22 +79,6 @@ public class GiornoBackendTest extends BackendTest {
         assertTrue(ottenutoBooleano);
     }
 
-    //    @Test
-    //    @Order(22)
-    //    @DisplayName("22 - isExistByKey")
-    //    protected void isExistByKey() {
-    //        System.out.println("22 - isExistByKey");
-    //        System.out.println(VUOTA);
-    //
-    //        sorgente = "12 termidoro";
-    //        ottenutoBooleano = super.isExistByKey(sorgente);
-    //        assertFalse(ottenutoBooleano);
-    //        System.out.println(VUOTA);
-    //
-    //        sorgente = "23 maggio";
-    //        ottenutoBooleano = super.isExistByKey(sorgente);
-    //        assertTrue(ottenutoBooleano);
-    //    }
 
     @Test
     @Order(22)
@@ -102,7 +86,7 @@ public class GiornoBackendTest extends BackendTest {
     protected void isExistByKey() {
         System.out.println("22 - isExistByKey");
         System.out.println(VUOTA);
-        System.out.println("Giorno ricavato dal numero progressivo nell'anno");
+        System.out.println("Giorno ricavato dalla keyProperty");
         System.out.println(VUOTA);
 
         //--giorno
@@ -121,10 +105,10 @@ public class GiornoBackendTest extends BackendTest {
         ottenutoBooleano = backend.isExistByKey(sorgente);
         assertEquals(previstoBooleano, ottenutoBooleano);
         if (ottenutoBooleano) {
-            System.out.println(String.format("Il giorno %s esiste", sorgente));
+            System.out.println(String.format("Il giorno [%s] esiste", sorgente));
         }
         else {
-            System.out.println(String.format("Il giorno %s non esiste", sorgente));
+            System.out.println(String.format("Il giorno [%s] non esiste", sorgente));
         }
         System.out.println(VUOTA);
     }
@@ -324,7 +308,6 @@ public class GiornoBackendTest extends BackendTest {
     @DisplayName("64 - findAllForNome (String)")
     protected void findAllForNome() {
         System.out.println("64 - findAllForNome (String)");
-        System.out.println("Uguale a ?? - findAllForKey");
         System.out.println(VUOTA);
 
         listaStr = backend.findAllForNome();
@@ -344,7 +327,6 @@ public class GiornoBackendTest extends BackendTest {
     @DisplayName("65 - findAllForNomeByMese (String)")
     protected void findAllForNomeByMese() {
         System.out.println("65 - findAllForNomeByMese (String)");
-        System.out.println("Rimanda a findAllByProperty(FIELD_NAME_MESE, mese)");
         int num = 3;
 
         for (Mese sorgente : meseBackend.findAllSortCorrente()) {

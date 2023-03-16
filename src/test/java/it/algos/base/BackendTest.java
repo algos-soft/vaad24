@@ -116,6 +116,19 @@ public abstract class BackendTest extends AlgosTest {
         );
     }
 
+    //--nome
+    //--esistente
+    protected static Stream<Arguments> ANNI() {
+        return Stream.of(
+                Arguments.of(VUOTA, false),
+                Arguments.of("0", false),
+                Arguments.of("24", true),
+                Arguments.of("24 A.C.", false),
+                Arguments.of("24 a.C.", true),
+                Arguments.of("3208", false)
+        );
+    }
+
     /**
      * Qui passa una volta sola <br>
      */
