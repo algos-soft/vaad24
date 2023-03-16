@@ -63,127 +63,44 @@ public class GiornoBackendTest extends BackendTest {
 
 
     @Test
-    @Order(43)
-    @DisplayName("43 - newEntityConParametri")
-    protected void newEntityConParametri() {
-        System.out.println("43 - newEntityConParametri");
+    @Order(21)
+    @DisplayName("21 - isExistById")
+    protected void isExistById() {
+        System.out.println("21 - isExistById");
         System.out.println(VUOTA);
-        Giorno giorno;
 
-        sorgenteIntero = 18;
-        sorgente = "12 termidoro";
-        previsto = "12termidoro";
-        Mese mese = meseBackend.findByKey("aprile");
-        assertNotNull(mese);
-        int sorgenteIntero2 = 37;
-        int sorgenteIntero3 = 118;
-
-        entityBean = backend.newEntity(sorgenteIntero, sorgente, mese, sorgenteIntero2, sorgenteIntero3);
-        assertNotNull(entityBean);
-        assertTrue(entityBean instanceof Giorno);
-        giorno = (Giorno) entityBean;
-        assertEquals(previsto, giorno.id);
-        assertEquals(sorgenteIntero, giorno.ordine);
-        assertEquals(sorgente, giorno.nome);
-        assertEquals(mese, giorno.mese);
-        assertEquals(sorgenteIntero2, giorno.trascorsi);
-        assertEquals(sorgenteIntero3, giorno.mancanti);
-        message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
-        System.out.println(message);
-    }
-
-    @Test
-    @Order(44)
-    @DisplayName("44 - creaIfNotExist")
-    protected void creaIfNotExist() {
-        System.out.println("44 - creaIfNotExist");
-
-        sorgente = "12 termidoro";
-
-        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
+        sorgente = "sbagliato";
+        ottenutoBooleano = super.isExistById(sorgente);
         assertFalse(ottenutoBooleano);
-        message = String.format("1) isExistKey -> Non esiste (false) la entity [%s]", sorgente);
         System.out.println(VUOTA);
-        System.out.println(message);
 
-        ottenutoBooleano = backend.creaIfNotExist(sorgente);
+        sorgente = "23maggio";
+        ottenutoBooleano = super.isExistById(sorgente);
         assertTrue(ottenutoBooleano);
-        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
-        assertTrue(ottenutoBooleano);
-        message = String.format("2) creaIfNotExist -> Creata correttamente (nel database) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
-        System.out.println(VUOTA);
-        System.out.println(message);
-
-        entityBean = backend.findByKey(sorgente);
-        assertNotNull(entityBean);
-        ottenutoBooleano = backend.delete(entityBean);
-        assertTrue(ottenutoBooleano);
-        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
-        assertFalse(ottenutoBooleano);
-        message = String.format("3) delete -> Cancellata la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
-        System.out.println(VUOTA);
-        System.out.println(message);
     }
 
-    @Test
-    @Order(51)
-    @DisplayName("51 - findAllForNome (String)")
-    protected void findAllForNome() {
-        System.out.println("51 - findAllForNome (String)");
-        System.out.println("Uguale a 31 - findAllForKey");
-        System.out.println(VUOTA);
-
-        listaStr = backend.findAllForNome();
-        assertNotNull(listaStr);
-        ottenutoIntero = listaStr.size();
-        sorgente = textService.format(ottenutoIntero);
-        sorgente2 = keyPropertyName;
-        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
-        System.out.println(message);
-
-        printSubLista(listaStr);
-    }
+    //    @Test
+    //    @Order(22)
+    //    @DisplayName("22 - isExistByKey")
+    //    protected void isExistByKey() {
+    //        System.out.println("22 - isExistByKey");
+    //        System.out.println(VUOTA);
+    //
+    //        sorgente = "12 termidoro";
+    //        ottenutoBooleano = super.isExistByKey(sorgente);
+    //        assertFalse(ottenutoBooleano);
+    //        System.out.println(VUOTA);
+    //
+    //        sorgente = "23 maggio";
+    //        ottenutoBooleano = super.isExistByKey(sorgente);
+    //        assertTrue(ottenutoBooleano);
+    //    }
 
     @Test
-    @Order(52)
-    @DisplayName("52 - findAllByMese (entity)")
-    protected void findAllByMese() {
-        System.out.println("52 - findAllByMese (entity)");
-        System.out.println("Rimanda a findAllByProperty(FIELD_NAME_MESE, mese)");
-
-        for (Mese sorgente : meseBackend.findAllNoSort()) {
-            listaBeans = backend.findAllByMese(sorgente);
-            assertNotNull(listaBeans);
-            System.out.println(VUOTA);
-            printBackend(listaBeans, 3);
-        }
-    }
-
-    @Test
-    @Order(53)
-    @DisplayName("53 - findAllForNomeByMese (nomi)")
-    protected void findAllForNomeByMese() {
-        System.out.println("54 - findAllForNomeByMese (nomi)");
-        System.out.println("Rimanda a findAllByProperty(FIELD_NAME_MESE, mese)");
-        int num = 3;
-
-        for (Mese sorgente : meseBackend.findAllSortCorrente()) {
-            listaStr = backend.findAllForNomeByMese(sorgente);
-            assertNotNull(listaStr);
-            message = String.format("Nel mese di %s ci sono %s giorni. Mostro solo i primi %s", sorgente, textService.format(listaStr.size()), num);
-            System.out.println(VUOTA);
-            System.out.println(message);
-            if (num > 0) {
-                print(listaStr.subList(0, num));
-            }
-        }
-    }
-
-    @Test
-    @Order(61)
-    @DisplayName("61 - isExistKey")
-    protected void isExistKey() {
-        System.out.println("61 - isExistKey");
+    @Order(22)
+    @DisplayName("22 - isExistByKey")
+    protected void isExistByKey() {
+        System.out.println("22 - isExistByKey");
         System.out.println(VUOTA);
         System.out.println("Giorno ricavato dal numero progressivo nell'anno");
         System.out.println(VUOTA);
@@ -213,44 +130,233 @@ public class GiornoBackendTest extends BackendTest {
     }
 
     @Test
-    @Order(62)
-    @DisplayName("62 - findByOrdine")
-    protected void findByOrdine() {
-        System.out.println("62 - findByOrdine");
-        System.out.println(VUOTA);
-        System.out.println("Giorno ricavato dal numero progressivo nell'anno");
+    @Order(23)
+    @DisplayName("23 - isExistByOrder")
+    protected void isExistByOrder() {
+        System.out.println("23 - isExistByOrder");
         System.out.println(VUOTA);
 
-        sorgenteIntero = 857;
-        entityBean = backend.findByOrder(sorgenteIntero);
-        assertNull(entityBean);
-        ottenuto = VUOTA;
-        printValue(sorgenteIntero, ottenuto);
+        sorgenteIntero = 487;
+        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+        assertFalse(ottenutoBooleano);
+        System.out.println(VUOTA);
 
-        sorgenteIntero = 4;
-        entityBean = backend.findByOrder(sorgenteIntero);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.toString();
-        printValue(sorgenteIntero, ottenuto);
-
-        sorgenteIntero = 127;
-        entityBean = backend.findByOrder(sorgenteIntero);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.toString();
-        printValue(sorgenteIntero, ottenuto);
-
-        sorgenteIntero = 250;
-        entityBean = backend.findByOrder(sorgenteIntero);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.toString();
-        printValue(sorgenteIntero, ottenuto);
-
-        sorgenteIntero = -4;
-        entityBean = backend.findByOrder(sorgenteIntero);
-        assertNull(entityBean);
-        ottenuto = VUOTA;
-        printValue(sorgenteIntero, ottenuto);
+        sorgenteIntero = 6;
+        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+        assertTrue(ottenutoBooleano);
     }
 
+
+    @Test
+    @Order(24)
+    @DisplayName("24 - isExistByProperty")
+    protected void isExistByProperty() {
+        System.out.println("24 - isExistByProperty");
+        System.out.println(VUOTA);
+
+        sorgente = "propertyInesistente";
+        sorgenteIntero = 27;
+        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
+        assertFalse(ottenutoBooleano);
+        System.out.println(VUOTA);
+
+        sorgente = "trascorsi";
+        sorgenteIntero = 8527;
+        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
+        assertFalse(ottenutoBooleano);
+        System.out.println(VUOTA);
+
+        sorgente = "trascorsi";
+        sorgenteIntero = 233;
+        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
+        assertTrue(ottenutoBooleano);
+    }
+
+    @Test
+    @Order(31)
+    @DisplayName("31 - findById")
+    protected void findById() {
+        System.out.println("31 - findById");
+        System.out.println(VUOTA);
+
+        sorgente = "sbagliato";
+        entityBean = super.findById(sorgente);
+        assertNull(entityBean);
+        System.out.println(VUOTA);
+
+        sorgente = "23maggio";
+        entityBean = super.findById(sorgente);
+        assertNotNull(entityBean);
+    }
+
+    @Test
+    @Order(32)
+    @DisplayName("32 - findByKey")
+    protected void findByKey() {
+        System.out.println("32 - findByKey");
+        System.out.println(VUOTA);
+
+        sorgente = "12 termidoro";
+        entityBean = super.findByKey(sorgente);
+        assertNull(entityBean);
+        System.out.println(VUOTA);
+
+        sorgente = "23 maggio";
+        entityBean = super.findByKey(sorgente);
+        assertNotNull(entityBean);
+    }
+
+    @Test
+    @Order(33)
+    @DisplayName("33 - findByOrder")
+    protected void findByOrder() {
+        System.out.println("33 - findByOrder");
+        System.out.println(VUOTA);
+
+        sorgenteIntero = 487;
+        entityBean = super.findByOrder(sorgenteIntero);
+        assertNull(entityBean);
+        System.out.println(VUOTA);
+
+        sorgenteIntero = 6;
+        entityBean = super.findByOrder(sorgenteIntero);
+        assertNotNull(entityBean);
+    }
+
+
+    @Test
+    @Order(34)
+    @DisplayName("34 - findByProperty")
+    protected void findByProperty() {
+        System.out.println("34 - findByProperty");
+        System.out.println(VUOTA);
+
+        sorgente = "propertyInesistente";
+        sorgenteIntero = 27;
+        entityBean = super.findByProperty(sorgente, sorgenteIntero);
+        assertNull(entityBean);
+        System.out.println(VUOTA);
+
+        sorgente = "trascorsi";
+        sorgenteIntero = 8527;
+        entityBean = super.findByProperty(sorgente, sorgenteIntero);
+        assertNull(entityBean);
+        System.out.println(VUOTA);
+
+        sorgente = "trascorsi";
+        sorgenteIntero = 233;
+        entityBean = super.findByProperty(sorgente, sorgenteIntero);
+        assertNotNull(entityBean);
+        System.out.println(VUOTA);
+    }
+
+
+    @Test
+    @Order(41)
+    @DisplayName("41 - creaIfNotExist")
+    protected void creaIfNotExist() {
+        System.out.println("41 - creaIfNotExist");
+        System.out.println(VUOTA);
+
+        sorgente = "23 maggio";
+        ottenutoBooleano = super.creaIfNotExist(sorgente);
+        assertFalse(ottenutoBooleano);
+        System.out.println(VUOTA);
+
+        sorgente = "12 termidoro";
+        ottenutoBooleano = super.creaIfNotExist(sorgente);
+        assertTrue(ottenutoBooleano);
+
+        entityBean = backend.findByKey(sorgente);
+        assertNotNull(entityBean);
+        ottenutoBooleano = backend.delete(entityBean);
+        assertTrue(ottenutoBooleano);
+
+        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
+        assertFalse(ottenutoBooleano);
+    }
+
+    @Test
+    @Order(42)
+    @DisplayName("42 - newEntity")
+    protected void newEntity() {
+        System.out.println("42 - newEntity");
+        System.out.println(VUOTA);
+        Giorno giorno;
+        Mese mese = meseBackend.findByKey("febbraio"); ;
+
+        sorgenteIntero = 93;
+        sorgente = "12 termidoro";
+        previsto = "12termidoro";
+        int sorgenteIntero2 = 88;
+        int sorgenteIntero3 = 431;
+
+        entityBean = backend.newEntity(sorgenteIntero, sorgente, mese, sorgenteIntero2, sorgenteIntero3);
+        assertTrue(entityBean instanceof Giorno);
+        assertNotNull(entityBean);
+        giorno = (Giorno) entityBean;
+        assertEquals(previsto, giorno.id);
+        assertEquals(sorgenteIntero, giorno.ordine);
+        assertEquals(sorgente, giorno.nome);
+        assertEquals(sorgenteIntero2, giorno.trascorsi);
+        assertEquals(sorgenteIntero3, giorno.mancanti);
+        message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
+        System.out.println(message);
+    }
+    @Test
+    @Order(54)
+    @DisplayName("54 - findAllByMese (entity)")
+    protected void findAllByMese() {
+        System.out.println("54 - findAllByMese (entity)");
+        System.out.println("Rimanda a findAllByProperty(FIELD_NAME_MESE, mese)");
+
+        for (Mese sorgente : meseBackend.findAllNoSort()) {
+            listaBeans = backend.findAllByMese(sorgente);
+            assertNotNull(listaBeans);
+            System.out.println(VUOTA);
+            printBackend(listaBeans, 3);
+        }
+    }
+
+
+    @Test
+    @Order(64)
+    @DisplayName("64 - findAllForNome (String)")
+    protected void findAllForNome() {
+        System.out.println("64 - findAllForNome (String)");
+        System.out.println("Uguale a ?? - findAllForKey");
+        System.out.println(VUOTA);
+
+        listaStr = backend.findAllForNome();
+        assertNotNull(listaStr);
+        ottenutoIntero = listaStr.size();
+        sorgente = textService.format(ottenutoIntero);
+        sorgente2 = keyPropertyName;
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
+        System.out.println(message);
+
+        printSubLista(listaStr);
+    }
+
+
+    @Test
+    @Order(65)
+    @DisplayName("65 - findAllForNomeByMese (String)")
+    protected void findAllForNomeByMese() {
+        System.out.println("65 - findAllForNomeByMese (String)");
+        System.out.println("Rimanda a findAllByProperty(FIELD_NAME_MESE, mese)");
+        int num = 3;
+
+        for (Mese sorgente : meseBackend.findAllSortCorrente()) {
+            listaStr = backend.findAllForNomeByMese(sorgente);
+            assertNotNull(listaStr);
+            message = String.format("Nel mese di %s ci sono %s giorni. Mostro solo i primi %s", sorgente, textService.format(listaStr.size()), num);
+            System.out.println(VUOTA);
+            System.out.println(message);
+            if (num > 0) {
+                print(listaStr.subList(0, num));
+            }
+        }
+    }
 
 }

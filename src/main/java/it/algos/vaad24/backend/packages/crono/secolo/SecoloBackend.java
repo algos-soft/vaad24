@@ -113,6 +113,7 @@ public class SecoloBackend extends CrudBackend {
         return findByAnno(anno, false);
     }
 
+
     private Secolo findByAnno(final int anno, final boolean anteCristo) {
         Secolo entity;
         String collectionName = annotationService.getCollectionName(entityClazz);

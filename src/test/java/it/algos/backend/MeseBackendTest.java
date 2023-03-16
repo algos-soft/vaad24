@@ -253,9 +253,4 @@ public class MeseBackendTest extends BackendTest {
         System.out.println(message);
     }
 
-
-    @Test
-    void name() {
-    }
-
 }
