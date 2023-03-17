@@ -492,6 +492,7 @@ public abstract class CrudBackend extends AbstractService {
         String field;
         String order;
         Sort.Direction direction;
+        String keyPropertyName;
 
         if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
             return crudRepository.findAll();
@@ -510,7 +511,20 @@ public abstract class CrudBackend extends AbstractService {
                 }
                 sort = Sort.by(direction, field);
                 query.with(sort);
+                return mongoService.mongoOp.find(query, entityClazz, collectionName);
             }
+            if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+                sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
+                query.with(sort);
+                return mongoService.mongoOp.find(query, entityClazz, collectionName);
+            }
+            if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
+                keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+                sort = Sort.by(Sort.Direction.DESC, keyPropertyName);
+                query.with(sort);
+                return mongoService.mongoOp.find(query, entityClazz, collectionName);
+            }
+
             return mongoService.mongoOp.find(query, entityClazz, collectionName);
         }
     }

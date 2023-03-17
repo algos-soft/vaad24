@@ -509,6 +509,10 @@ public class AnnotationService extends AbstractService {
         }
     }
 
+    public boolean isEsisteKeyPropertyName(final Class<? extends AEntity> entityClazz) {
+        return textService.isValid(getKeyPropertyName(entityClazz));
+    }
+
 
     /**
      * Restituisce il nome della property chiave <br>
