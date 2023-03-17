@@ -50,7 +50,6 @@ public enum AEWizProject {
     testEnum("Directory TEST/enum (vaad24)", false, true, "src/test/java/it/algos/enumeration", AECopy.dirFilesModifica),
     testService("Directory TEST/service (vaad24)", false, true, "src/test/java/it/algos/service", AECopy.dirFilesModifica, "Vaad24SimpleApp", "Wiki24App"),
     testBackend("Directory TEST/backend (vaad24)", false, true, "src/test/java/it/algos/backend", AECopy.dirFilesModifica, "Vaad24SimpleApp", "Wiki24App"),
-    testReset("Directory TEST/reset (vaad24)", false, true, "src/test/java/it/algos/reset", AECopy.dirFilesModifica, "Vaad24SimpleApp", "Wiki24App"),
     application("Main class java", true, false, "src/main/java/it/algos/@PROJECTUPPER@Application.java",
             AECopy.sourceSovrascriveSempreAncheSeEsiste, "application"
     ),

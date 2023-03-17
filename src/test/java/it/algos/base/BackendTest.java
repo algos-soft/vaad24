@@ -519,12 +519,17 @@ public abstract class BackendTest extends AlgosTest {
     protected boolean creaIfNotExist(String keyValue) {
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
 
+        if (textService.isEmpty(keyValue)) {
+            System.out.println("La keyValue è nulla/vuota");
+            return false;
+        }
         if (textService.isEmpty(keyPropertyName)) {
             message = String.format("Nella collection '%s' non esiste la keyPropertyName", collectionName);
+            System.out.println(message);
             return false;
         }
 
-        ottenutoBooleano = crudBackend.creaIfNotExist(sorgente);
+        ottenutoBooleano = crudBackend.creaIfNotExist(keyValue);
         if (ottenutoBooleano) {
             message = String.format("Nella collection '%s' è stata CREATA (true) una entity individuata dal valore '%s' della property [%s]", collectionName, keyValue, keyPropertyName);
         }
