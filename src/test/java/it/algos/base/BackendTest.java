@@ -1198,6 +1198,36 @@ public abstract class BackendTest extends AlgosTest {
         }
     }
 
+
+    protected void printMese(Object obj) {
+        if (obj instanceof Mese mese) {
+            System.out.print(mese.breve);
+            System.out.print(SEP);
+            System.out.print(mese.nome);
+            System.out.print(SEP);
+            System.out.print(mese.giorni);
+            System.out.print(SEP);
+            System.out.print(mese.primo);
+            System.out.print(SEP);
+            System.out.print(mese.ultimo);
+            System.out.println(SPAZIO);
+        }
+    }
+
+
+    protected void printSecolo(Object obj) {
+        if (obj instanceof Secolo secolo) {
+            System.out.print(secolo.nome);
+            System.out.print(SEP);
+            System.out.print(secolo.inizio);
+            System.out.print(SEP);
+            System.out.print(secolo.fine);
+            System.out.print(SEP);
+            System.out.print(secolo.anteCristo);
+            System.out.println(SPAZIO);
+        }
+    }
+
     protected void printTestaGiorno() {
         System.out.print("ordine");
         System.out.print(SEP);
@@ -1220,56 +1250,6 @@ public abstract class BackendTest extends AlgosTest {
         }
     }
 
-    protected void printGiorni(List<Giorno> listaGiorni) {
-        int k = 0;
-
-        for (Giorno giorno : listaGiorni) {
-            System.out.print(++k);
-            System.out.print(PARENTESI_TONDA_END);
-            System.out.print(SPAZIO);
-            printGiorno(giorno);
-        }
-    }
-
-
-    protected void printMese(Object obj) {
-        if (obj instanceof Mese mese) {
-            System.out.print(mese.breve);
-            System.out.print(SEP);
-            System.out.print(mese.nome);
-            System.out.print(SEP);
-            System.out.print(mese.giorni);
-            System.out.print(SEP);
-            System.out.print(mese.primo);
-            System.out.print(SEP);
-            System.out.print(mese.ultimo);
-            System.out.println(SPAZIO);
-        }
-    }
-
-    protected void printMesi(List<Mese> listaMesi) {
-        int k = 0;
-
-        for (Mese mese : listaMesi) {
-            System.out.print(++k);
-            System.out.print(PARENTESI_TONDA_END);
-            System.out.print(SPAZIO);
-            printMese(mese);
-        }
-    }
-
-    protected void printSecolo(Object obj) {
-        if (obj instanceof Secolo secolo) {
-            System.out.print(secolo.nome);
-            System.out.print(SEP);
-            System.out.print(secolo.inizio);
-            System.out.print(SEP);
-            System.out.print(secolo.fine);
-            System.out.print(SEP);
-            System.out.print(secolo.anteCristo ? true : false);
-            System.out.println(SPAZIO);
-        }
-    }
 
     protected void printTestaAnno() {
         System.out.print("ordine");
@@ -1287,12 +1267,12 @@ public abstract class BackendTest extends AlgosTest {
     protected void printAnno(Object obj) {
         if (obj instanceof Anno anno) {
             System.out.print(anno.nome);
-            System.out.print(SPAZIO);
+            System.out.print(SEP);
             System.out.print(anno.secolo);
-            System.out.print(SPAZIO);
-            System.out.print(anno.dopoCristo ? true : false);
-            System.out.print(SPAZIO);
-            System.out.print(anno.bisestile ? true : false);
+            System.out.print(SEP);
+            System.out.print(anno.dopoCristo);
+            System.out.print(SEP);
+            System.out.print(anno.bisestile);
             System.out.println(SPAZIO);
         }
     }
@@ -1310,7 +1290,7 @@ public abstract class BackendTest extends AlgosTest {
             System.out.print(SPAZIO);
             System.out.print(nota.livello);
             System.out.print(SPAZIO);
-            System.out.print(nota.fatto ? true : false);
+            System.out.print(nota.fatto);
             System.out.print(SPAZIO);
             System.out.print(dateService.get(nota.fine));
             System.out.println(SPAZIO);

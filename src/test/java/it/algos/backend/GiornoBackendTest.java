@@ -298,6 +298,7 @@ public class GiornoBackendTest extends BackendTest {
             listaBeans = backend.findAllByMese(sorgente);
             assertNotNull(listaBeans);
             System.out.println(VUOTA);
+            message = String.format("Mese di %s", sorgente.nome);
             printBackend(listaBeans, 3);
         }
     }
@@ -308,6 +309,7 @@ public class GiornoBackendTest extends BackendTest {
     @DisplayName("64 - findAllForNome (String)")
     protected void findAllForNome() {
         System.out.println("64 - findAllForNome (String)");
+        System.out.println("Uguale a 61 - findAllForKey");
         System.out.println(VUOTA);
 
         listaStr = backend.findAllForNome();
