@@ -45,6 +45,7 @@ public enum AETypeResult implements AIType {
     collectionCreata("La collection è stata creata"), //dopo isCollectionNullOrEmpty
 
 
+    downloadValido("Download effettuato"),
     error("Errore"),
     mancaResult("Manca il Result"),
     mancaTypeLog("Manca il typeLog");

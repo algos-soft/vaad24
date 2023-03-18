@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.*;
 
+import java.util.*;
+
 /**
  * Project vaad24
  * Created by Algos
@@ -251,6 +253,7 @@ public class MeseBackendTest extends BackendTest {
         assertEquals(sorgenteIntero4, mese.ultimo);
         message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
         System.out.println(message);
+        printBackend(List.of(entityBean));
     }
 
 }

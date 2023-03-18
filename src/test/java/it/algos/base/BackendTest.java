@@ -1104,7 +1104,16 @@ public abstract class BackendTest extends AlgosTest {
 
 
     protected void printBackend(final List lista) {
-        printBackend(lista, 10);
+        if (lista == null) {
+            return;
+        }
+
+        if (lista.size() == 1) {
+            printBackend(lista, 1);
+        }
+        else {
+            printBackend(lista, 10);
+        }
     }
 
 
@@ -1116,11 +1125,16 @@ public abstract class BackendTest extends AlgosTest {
         if (lista != null) {
             if (lista.size() > 0) {
                 tot = Math.min(lista.size(), max);
+                System.out.println(VUOTA);
+
                 message = String.format("La lista contiene %d elementi.", lista.size());
                 if (lista.size() > tot) {
                     message += String.format(" Mostro solo i primi %d", tot);
                 }
-                System.out.println(message);
+                if (max > 1) {
+                    System.out.println(message);
+                    System.out.println(VUOTA);
+                }
 
                 switch (typeBackend) {
                     case giorno -> printTestaGiorno();
@@ -1164,7 +1178,6 @@ public abstract class BackendTest extends AlgosTest {
                     }
                     default -> {}
                 } ;
-                System.out.println(VUOTA);
 
                 for (Object obj : lista.subList(0, tot)) {
                     System.out.print(cont);
