@@ -8,6 +8,8 @@ import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.*;
 
+import java.util.*;
+
 /**
  * Project vaad24
  * Created by Algos
@@ -52,9 +54,8 @@ public class NotaBackendTest extends BackendTest {
         System.out.println("Senza parametri");
         entityBean = notaBackend.newEntity();
         assertNotNull(entityBean);
-        printNota();
-        printNota(entityBean);
-        crudBackend.save(entityBean);
+        printBackend(List.of(entityBean));
+        System.out.println(VUOTA);
     }
 
 }

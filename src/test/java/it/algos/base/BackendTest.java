@@ -1176,7 +1176,7 @@ public abstract class BackendTest extends AlgosTest {
                         System.out.print(SEP);
                         System.out.println("fine");
                     }
-                    default -> {}
+                    default -> printTestaEntityBean();
                 } ;
 
                 for (Object obj : lista.subList(0, tot)) {
@@ -1189,9 +1189,7 @@ public abstract class BackendTest extends AlgosTest {
                         case secolo -> printSecolo(obj);
                         case anno -> printAnno(obj);
                         case nota -> printNota(obj);
-                        default -> {
-                            System.out.println(obj);
-                        }
+                        default -> printEntityBeans(obj);
                     } ;
                     cont++;
                 }
@@ -1211,6 +1209,17 @@ public abstract class BackendTest extends AlgosTest {
         }
     }
 
+    protected void printTestaEntityBean() {
+    }
+
+    protected void printEntityBeans(Object obj) {
+        if (obj instanceof AEntity entityBean) {
+            System.out.print(entityBean.id);
+            System.out.print(SEP);
+            System.out.print(entityBean.toString());
+            System.out.println(SPAZIO);
+        }
+    }
 
     protected void printMese(Object obj) {
         if (obj instanceof Mese mese) {
