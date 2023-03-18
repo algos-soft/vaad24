@@ -283,8 +283,9 @@ public class AnnoBackendTest extends BackendTest {
         assertEquals(sorgente, anno.nome);
         assertEquals(dopoCristo, anno.dopoCristo);
         assertEquals(bisestile, anno.bisestile);
-        message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
+        message = String.format("Creata correttamente (SOLO IN MEMORIA) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
         System.out.println(message);
+        printBackend(List.of(entityBean));
     }
 
 

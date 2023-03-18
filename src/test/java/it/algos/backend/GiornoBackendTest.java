@@ -284,8 +284,9 @@ public class GiornoBackendTest extends BackendTest {
         assertEquals(sorgente, giorno.nome);
         assertEquals(sorgenteIntero2, giorno.trascorsi);
         assertEquals(sorgenteIntero3, giorno.mancanti);
-        message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
+        message = String.format("Creata correttamente (SOLO IN MEMORIA) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
         System.out.println(message);
+        printBackend(List.of(entityBean));
     }
     @Test
     @Order(54)

@@ -251,7 +251,7 @@ public class MeseBackendTest extends BackendTest {
         assertEquals(sorgenteIntero2, mese.giorni);
         assertEquals(sorgenteIntero3, mese.primo);
         assertEquals(sorgenteIntero4, mese.ultimo);
-        message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
+        message = String.format("Creata correttamente (SOLO IN MEMORIA) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
         System.out.println(message);
         printBackend(List.of(entityBean));
     }

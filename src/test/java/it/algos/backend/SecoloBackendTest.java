@@ -335,8 +335,9 @@ public class SecoloBackendTest extends BackendTest {
         assertEquals(sorgenteIntero2, secolo.inizio);
         assertEquals(sorgenteIntero3, secolo.fine);
         assertFalse(secolo.anteCristo);
-        message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
+        message = String.format("Creata correttamente (SOLO IN MEMORIA) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
         System.out.println(message);
+        printBackend(List.of(entityBean));
     }
 
 
