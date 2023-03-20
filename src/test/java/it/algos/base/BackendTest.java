@@ -3,21 +3,16 @@ package it.algos.base;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.logic.*;
-import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
-import it.algos.vaad24.backend.packages.geografia.continente.*;
-import it.algos.vaad24.backend.packages.utility.log.*;
 import it.algos.vaad24.backend.packages.utility.nota.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
-import it.algos.vaad24.backend.packages.utility.versione.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.*;
-import org.mockito.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 
@@ -57,38 +52,10 @@ import java.util.stream.*;
 
 public abstract class BackendTest extends AlgosTest {
 
-    @InjectMocks
-    protected NotaBackend notaBackend;
-
-    @InjectMocks
-    protected GiornoBackend giornoBackend;
-
-    @InjectMocks
-    protected MeseBackend meseBackend;
-
-    @InjectMocks
-    protected AnnoBackend annoBackend;
-
-    @InjectMocks
-    protected SecoloBackend secoloBackend;
-
-    @InjectMocks
-    protected ContinenteBackend continenteBackend;
-
-    @InjectMocks
-    protected LoggerBackend loggerBackend;
-
-    @InjectMocks
-    protected VersioneBackend versioneBackend;
-
-    @InjectMocks
-    protected PreferenzaBackend preferenzaBackend;
 
     @Autowired
     protected PreferenzaRepository preferenzaRepository;
 
-    @Autowired
-    protected ViaBackend viaBackend;
 
     protected CrudBackend crudBackend;
 
@@ -136,10 +103,10 @@ public abstract class BackendTest extends AlgosTest {
     protected void setUpAll() {
         super.setUpAll();
 
-        clazzName = entityClazz.getSimpleName();
+        clazzName = entityClazz != null ? entityClazz.getSimpleName() : VUOTA;
         backendName = clazzName + SUFFIX_BACKEND;
-        collectionName = annotationService.getCollectionName(entityClazz);
-        keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        collectionName = entityClazz != null ? annotationService.getCollectionName(entityClazz) : VUOTA;
+        keyPropertyName = entityClazz != null ? annotationService.getKeyPropertyName(entityClazz) : VUOTA;
         this.typeBackend = typeBackend != null ? typeBackend : TypeBackend.nessuno;
 
         if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
@@ -148,36 +115,17 @@ public abstract class BackendTest extends AlgosTest {
         else {
             sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_CON);
         }
-        crudBackend.sortOrder = sortOrder;
+        if (crudBackend != null) {
+            crudBackend.sortOrder = sortOrder;
+        }
     }
 
-    /**
-     * Regola tutti riferimenti incrociati <br>
-     * Deve essere fatto dopo aver costruito tutte le referenze 'mockate' <br>
-     * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    protected void fixRiferimentiIncrociati() {
-        super.fixRiferimentiIncrociati();
-
-        crudBackend.arrayService = arrayService;
-        crudBackend.dateService = dateService;
-        crudBackend.textService = textService;
-        crudBackend.resourceService = resourceService;
-        crudBackend.reflectionService = reflectionService;
-        crudBackend.mongoService = mongoService;
-        crudBackend.annotationService = annotationService;
-        crudBackend.logger = logger;
-        crudBackend.beanService = beanService;
-
-        crudBackend.crudRepository = null;
-    }
 
     @Test
     @Order(10)
     @DisplayName("10--------")
     void test10() {
-        System.out.println("11 - collection");
+        System.out.println("11 - isExistsCollection");
         System.out.println("12 - count");
         System.out.println("13 - resetOnlyEmpty");
         System.out.println("14 - resetForcing");
@@ -186,9 +134,14 @@ public abstract class BackendTest extends AlgosTest {
 
     @Test
     @Order(11)
-    @DisplayName("11 - collection")
-    protected void collection() {
-        System.out.println("11 - Esistenza della collection");
+    @DisplayName("11 - isExistsCollection")
+    protected void isExistsCollection() {
+        System.out.println("11 - isExistsCollection");
+
+        if (crudBackend == null) {
+            System.out.println("Manca la variabile crudBackend in questo test");
+            return;
+        }
 
         ottenutoBooleano = crudBackend.isExistsCollection();
         if (ottenutoBooleano) {
@@ -204,8 +157,13 @@ public abstract class BackendTest extends AlgosTest {
     @Test
     @Order(12)
     @DisplayName("12 - count")
-    protected void count2() {
+    protected void count() {
         System.out.println("12 - count");
+
+        if (crudBackend == null) {
+            System.out.println("Manca la variabile crudBackend in questo test");
+            return;
+        }
 
         ottenutoIntero = crudBackend.count();
         if (ottenutoIntero > 0) {
@@ -229,6 +187,11 @@ public abstract class BackendTest extends AlgosTest {
     protected void resetOnlyEmpty() {
         System.out.println("13 - resetOnlyEmpty");
         System.out.println(VUOTA);
+
+        if (entityClazz == null) {
+            System.out.println("Manca la variabile entityClazz in questo test");
+            return;
+        }
 
         if (!annotationService.usaReset(entityClazz)) {
             message = String.format("Questo test presuppone che la entity [%s] preveda la funzionalità '%s'", clazzName, METHOD_NAME_RESET_ONLY);
@@ -262,6 +225,11 @@ public abstract class BackendTest extends AlgosTest {
     protected void resetForcing() {
         System.out.println("14 - resetForcing");
         System.out.println(VUOTA);
+
+        if (entityClazz == null) {
+            System.out.println("Manca la variabile entityClazz in questo test");
+            return;
+        }
 
         if (!annotationService.usaReset(entityClazz)) {
             message = String.format("Questo test presuppone che la entity [%s] preveda la funzionalità '%s'", clazzName, METHOD_NAME_RESET_ONLY);
@@ -531,7 +499,7 @@ public abstract class BackendTest extends AlgosTest {
 
         ottenutoBooleano = crudBackend.creaIfNotExist(keyValue);
         if (ottenutoBooleano) {
-            message = String.format("Nella collection '%s' è stata CREATA (true) una entity individuata dal valore '%s' della property [%s]", collectionName, keyValue, keyPropertyName);
+            message = String.format("Nella collection '%s' è stata CREATA (true) SOLO IN MEMORIA una entity individuata dal valore '%s' della property [%s]", collectionName, keyValue, keyPropertyName);
         }
         else {
             message = String.format("Nella collection '%s' ESISTEVA già (false) una entity col valore '%s' della property [%s]", collectionName, keyValue, keyPropertyName);
@@ -782,7 +750,7 @@ public abstract class BackendTest extends AlgosTest {
             return;
         }
 
-        listaStr = crudBackend.findAllForKey();
+        listaStr = crudBackend.findAllForKeySortKey();
         assertNotNull(listaStr);
         ottenutoIntero = listaStr.size();
         sorgente = textService.format(ottenutoIntero);

@@ -113,7 +113,7 @@ public class VaadData extends AbstractService {
         String message;
 
         //--seleziono solo le classi di tipo 'backend'
-        allBackendClasses = classService.allModuleBackendClass(moduleName);
+        allBackendClasses = classService.allModuleBackendClazz(moduleName);
         if (allBackendClasses != null && allBackendClasses.size() > 0) {
             if (allBackendClasses.size() == 1) {
                 message = String.format("Nel modulo %s è stato trovato 1 package con la classe %s", moduleName, allBackendClasses.get(0).getSimpleName());

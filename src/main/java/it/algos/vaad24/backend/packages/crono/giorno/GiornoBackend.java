@@ -114,19 +114,12 @@ public class GiornoBackend extends CrudBackend {
         return super.findAllByProperty(FIELD_NAME_MESE, mese);
     }
 
-    @Override
-    public List<String> findAllForKey() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
-    }
 
     @Override
     public List<String> findAllForKeyReverseOrder() {
         return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
     }
 
-    public List<String> findAllForNome() {
-        return findAllForKey();
-    }
 
 
     public List<String> findAllForNomeByMese(Mese mese) {

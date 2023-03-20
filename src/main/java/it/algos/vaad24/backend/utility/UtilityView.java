@@ -171,10 +171,10 @@ public class UtilityView extends VerticalLayout {
         layout.add(ASpan.text(message));
         layout.add(ASpan.text(RELEASE));
         layout.add(ASpan.text(FLAG_DEBUG));
-        lista = classService.allModuleEntityResetOrderedClassName(VaadVar.moduloVaadin24);
+        lista = classService.allModuleEntityResetOrderedName(VaadVar.moduloVaadin24);
         message = String.format("Modulo %s%s%s", VaadVar.moduloVaadin24, DUE_PUNTI_SPAZIO, lista.toString());
         layout.add(ASpan.text(message));
-        lista = classService.allModuleEntityResetOrderedClassName(VaadVar.projectNameModulo);
+        lista = classService.allModuleEntityResetOrderedName(VaadVar.projectNameModulo);
         message = String.format("Modulo %s%s%s", VaadVar.projectNameModulo, DUE_PUNTI_SPAZIO, lista.toString());
         layout.add(ASpan.text(message));
         Button bottone = new Button("Reset all");

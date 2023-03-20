@@ -32,8 +32,6 @@ import javax.persistence.*;
 @AIEntity(keyPropertyName = "nome", usaReset = true)
 public class Continente extends AEntity {
 
-    public boolean reset;
-
     @Indexed(unique = true, direction = IndexDirection.ASCENDING)
     @AIField(type = AETypeField.integer, header = "#", widthEM = 3, caption = "Ordinamento")
     public int ordine;

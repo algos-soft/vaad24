@@ -148,6 +148,23 @@ public class FileServiceTest extends AlgosTest {
     }
 
 
+    //--simpleName
+    //--canonicalName
+    //--flag esiste
+    protected static Stream<Arguments> FILE_CANONICAL_NAME() {
+        return Stream.of(
+                Arguments.of(VUOTA, VUOTA, false),
+                Arguments.of("Logic", "it/algos/vaad24/backend/logic/Logic", true),
+                Arguments.of("Pippoz", VUOTA, false),
+                Arguments.of("Mese", "it/algos/vaad24/backend/packages/crono/mese/Mese", true),
+                Arguments.of("MeseView", "it/algos/vaad24/backend/packages/crono/mese/MeseView", true),
+                Arguments.of("MeseBackend", "it/algos/vaad24/backend/packages/crono/mese/MeseBackend", true),
+                Arguments.of("MeseDialog", VUOTA, false),
+                Arguments.of("SimpleCost", "it/algos/vaad24simple/backend/boot/SimpleCost", true)
+        );
+    }
+
+
     //--type copy
     //--pathDir sorgente
     //--pathDir destinazione
@@ -237,7 +254,7 @@ public class FileServiceTest extends AlgosTest {
                 Arguments.of(VaadVar.moduloVaadin24, true, "VaadVar.moduloVaadin24"),
                 Arguments.of(VaadVar.projectCurrentUpper, false, "VaadVar.projectNameUpper"),
                 Arguments.of(VaadVar.projectNameModulo, true, "VaadVar.projectNameModulo"),
-                Arguments.of(VaadVar.frameworkVaadin24, true, "VaadVar.projectVaadin24"),
+                Arguments.of(VaadVar.frameworkVaadin24, false, "VaadVar.projectVaadin24"),
                 Arguments.of(VaadVar.projectNameDirectoryIdea, false, "VaadVar.projectNameDirectoryIdea"),
                 Arguments.of(VaadVar.projectDate, false, "VaadVar.projectDate"),
                 Arguments.of(VaadVar.projectNote, false, "VaadVar.projectNote"),
@@ -287,9 +304,9 @@ public class FileServiceTest extends AlgosTest {
     void checkDirectory(final String absolutePathDirectoryToBeChecked, final boolean previstoBooleano) {
         System.out.println("1 - Check di una directory");
         System.out.println(VUOTA);
-        MongoDatabaseImpl cliente=(MongoDatabaseImpl)mongoService.getDataBase();
-String nome=cliente.getName();
-String alfa=nome;
+        MongoDatabaseImpl cliente = (MongoDatabaseImpl) mongoService.getDataBase();
+        String nome = cliente.getName();
+        String alfa = nome;
         sorgente = absolutePathDirectoryToBeChecked;
         ottenutoRisultato = service.checkDirectory(sorgente);
         assertNotNull(ottenutoRisultato);
@@ -1023,6 +1040,31 @@ String alfa=nome;
             System.out.print(message);
         }
         assertEquals(ottenutoBooleano, esiste);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "FILE_CANONICAL_NAME")
+    @Order(41)
+    @DisplayName("41 - getCanonicalName")
+        //--simpleName
+        //--canonicalName
+        //--flag esiste
+    void getCanonicalName(final String simpleName, String canonicalName, boolean esiste) {
+        System.out.println("41 - getCanonicalName");
+        System.out.println(VUOTA);
+
+        sorgente = simpleName;
+        previsto = canonicalName;
+        previsto = previsto.replaceAll(SLASH, PUNTO);
+
+        ottenuto = service.getCanonicalName(sorgente);
+        assertEquals(esiste, textService.isValid(ottenuto));
+        assertEquals(previsto, ottenuto);
+        if (textService.isValid(ottenuto)) {
+            message = String.format("%s%s%s", sorgente, FORWARD, ottenuto);
+            System.out.println(message);
+        }
+
     }
 
     private void creaCartelle() {

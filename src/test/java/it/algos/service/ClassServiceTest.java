@@ -230,7 +230,7 @@ public class ClassServiceTest extends AlgosTest {
         System.out.println(VUOTA);
 
         sorgente = moduleName;
-        listaClazz = service.allModulePackagesClass(sorgente);
+        listaClazz = service.allModulePackagesClazz(sorgente);
 
         if (listaClazz != null && listaClazz.size() > 0) {
             message = String.format("Ci sono in totale %d classi nella directory package del modulo %s", listaClazz.size(), sorgente);
@@ -330,7 +330,7 @@ public class ClassServiceTest extends AlgosTest {
         System.out.println(VUOTA);
 
         sorgente = moduleName;
-        listaClazz = service.allModuleBackendClass(sorgente);
+        listaClazz = service.allModuleBackendClazz(sorgente);
 
         if (listaClazz != null && listaClazz.size() > 0) {
             message = String.format("Ci sono in totale %d classi 'backend' nella directory package del modulo %s", listaClazz.size(), sorgente);
@@ -355,7 +355,7 @@ public class ClassServiceTest extends AlgosTest {
         System.out.println(VUOTA);
 
         sorgente = moduleName;
-        listaStr = service.allModuleBackendSimpleName(sorgente);
+        listaStr = service.allModuleBackendName(sorgente);
 
         if (listaStr != null && listaStr.size() > 0) {
             message = String.format("Ci sono in totale %d classi 'backend' nella directory package del modulo %s", listaStr.size(), sorgente);

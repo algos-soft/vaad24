@@ -6,14 +6,18 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.interfaces.*;
+import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
+import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.packages.utility.log.Logger;
 import it.algos.vaad24.backend.packages.utility.log.*;
+import it.algos.vaad24.backend.packages.utility.nota.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
+import it.algos.vaad24.backend.packages.utility.versione.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.views.*;
@@ -160,6 +164,8 @@ public abstract class AlgosTest {
 
     protected List<AEntity> listaBeans;
 
+    protected List<CrudBackend> listaBackendClazz;
+
     protected Map<String, List<String>> mappa;
 
     protected String message;
@@ -175,49 +181,46 @@ public abstract class AlgosTest {
     @Autowired
     public ApplicationContext appContext;
 
-    @InjectMocks
+    @Autowired
     protected TextService textService;
 
-    @InjectMocks
+    @Autowired
     protected DateService dateService;
 
-    @InjectMocks
+    @Autowired
     protected LogService logService;
 
-    @InjectMocks
+    @Autowired
     protected MailService mailService;
 
-    @InjectMocks
+    @Autowired
     protected AnnotationService annotationService;
 
-    @InjectMocks
+    @Autowired
     protected ArrayService arrayService;
 
-    @InjectMocks
+    @Autowired
     protected ClassService classService;
 
-    @InjectMocks
+    @Autowired
     protected ReflectionService reflectionService;
 
-    @InjectMocks
+    @Autowired
     protected FileService fileService;
 
-    @InjectMocks
+    @Autowired
     protected ResourceService resourceService;
 
-    @InjectMocks
+    @Autowired
     protected HtmlService htmlService;
 
-    @InjectMocks
-    protected LoggerBackend loggerBackend;
-
-    @InjectMocks
+    @Autowired
     protected UtilityService utilityService;
 
-    @InjectMocks
+    @Autowired
     protected WebService webService;
 
-    @InjectMocks
+    @Autowired
     public RegexService regexService;
 
     @Autowired
@@ -226,14 +229,44 @@ public abstract class AlgosTest {
     @Autowired
     public LogService logger;
 
-    @InjectMocks
+    @Autowired
     public MathService mathService;
 
-    @InjectMocks
+    @Autowired
     public PreferenceService preferenceService;
-    @InjectMocks
+
+    @Autowired
     public BeanService beanService;
 
+    @Autowired
+    protected ViaBackend viaBackend;
+
+    @Autowired
+    protected NotaBackend notaBackend;
+
+    @Autowired
+    protected GiornoBackend giornoBackend;
+
+    @Autowired
+    protected MeseBackend meseBackend;
+
+    @Autowired
+    protected AnnoBackend annoBackend;
+
+    @Autowired
+    protected SecoloBackend secoloBackend;
+
+    @Autowired
+    protected ContinenteBackend continenteBackend;
+
+    @Autowired
+    protected LoggerBackend loggerBackend;
+
+    @Autowired
+    protected VersioneBackend versioneBackend;
+
+    @Autowired
+    protected PreferenzaBackend preferenzaBackend;
 
     //--clazz
     //--simpleName
@@ -320,7 +353,6 @@ public abstract class AlgosTest {
         slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
 
         initMocks();
-        fixRiferimentiIncrociati();
     }
 
     /**
@@ -351,51 +383,6 @@ public abstract class AlgosTest {
         assertNotNull(beanService);
     }
 
-
-    /**
-     * Regola tutti riferimenti incrociati <br>
-     * Deve essere fatto dopo aver costruito tutte le referenze 'mockate' <br>
-     * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    protected void fixRiferimentiIncrociati() {
-        classService.appContext = appContext;
-        mailService.textService = textService;
-        dateService.textService = textService;
-        arrayService.textService = textService;
-        resourceService.textService = textService;
-        logService.fileService = fileService;
-        logService.textService = textService;
-        logService.loggerBackend = loggerBackend;
-        resourceService.fileService = fileService;
-        fileService.logger = logService;
-        fileService.reflectionService = reflectionService;
-        fileService.textService = textService;
-        fileService.arrayService = arrayService;
-        arrayService.logger = logService;
-        logService.utilityService = utilityService;
-        logService.slf4jLogger = slf4jLogger;
-        utilityService.fileService = fileService;
-        utilityService.textService = textService;
-        htmlService.textService = textService;
-        loggerBackend.fileService = fileService;
-        loggerBackend.textService = textService;
-        resourceService.webService = webService;
-        resourceService.logger = logService;
-        reflectionService.textService = textService;
-        reflectionService.classService = classService;
-        reflectionService.logger = logService;
-        reflectionService.annotationService = annotationService;
-        classService.textService = textService;
-        classService.fileService = fileService;
-        classService.reflectionService = reflectionService;
-        classService.logger = logService;
-        classService.annotationService = annotationService;
-        classService.arrayService = arrayService;
-        annotationService.textService = textService;
-        annotationService.reflectionService = reflectionService;
-        beanService.reflectionService = reflectionService;
-    }
 
     /**
      * Qui passa prima di ogni test delle sottoclassi <br>
@@ -450,6 +437,7 @@ public abstract class AlgosTest {
         message = VUOTA;
         listaClazz = null;
         sort = null;
+        listaBackendClazz = null;
     }
 
 

@@ -188,6 +188,8 @@ public class FileService extends AbstractService {
         if (textService.isEmpty(nomeModulo)) {
             return false;
         }
+
+        //i moduli sono sempre minuscoli
         if (nomeModulo.equals(textService.primaMaiuscola(nomeModulo))) {
             return false;
         }
@@ -1943,15 +1945,14 @@ public class FileService extends AbstractService {
      */
     public String getCanonicalName(String simpleName) {
         String canonicalName = VUOTA;
-        List<String> lista;
+        List<String> listaPath;
         String classeFinalePrevista;
         String classeFinalePath;
+        String message;
+        List<String> listaNomiCanonici = new ArrayList<>();
 
         if (textService.isEmpty(simpleName)) {
-            if (simpleName == null) {
-                logger.error(new AlgosException("Il parametro in ingresso è nullo"));
-            }
-            logger.error(new AlgosException("Il parametro in ingresso è vuoto"));
+            return canonicalName;
         }
 
         if (simpleName.endsWith(JAVA_SUFFIX)) {
@@ -1959,26 +1960,36 @@ public class FileService extends AbstractService {
         }
         simpleName = textService.primaMaiuscola(simpleName);
 
-        lista = getPathBreveAllPackageFiles();
-        if (lista == null || lista.size() < 1) {
+        listaPath = getPathBreveAllPackageFiles();
+        if (listaPath == null || listaPath.size() < 1) {
             logger.error(new AlgosException("Non sono riuscito a creare la lista dei files del package"));
         }
 
         classeFinalePrevista = estraeClasseFinale(simpleName);
-        for (String path : lista) {
+        for (String path : listaPath) {
             classeFinalePath = estraeClasseFinale(path);
             if (classeFinalePath.equals(classeFinalePrevista)) {
                 canonicalName = textService.levaTestoPrimaDi(path, DIR_PROGETTO_VUOTO);
                 canonicalName = canonicalName.replaceAll(SLASH, PUNTO);
-                break;
+                listaNomiCanonici.add(canonicalName);
             }
         }
 
         if (textService.isEmpty(canonicalName)) {
-            logger.error(new AlgosException(String.format("Nel package non esiste la classe %s", simpleName)));
+            message = String.format("Nel package non esiste la classe %s", simpleName);
+            logger.info(new WrapLog().message(message).type(AETypeLog.file));
         }
 
-        return canonicalName;
+        if (listaNomiCanonici.size() == 1) {
+            return listaNomiCanonici.get(0);
+        }
+        else {
+            if (listaNomiCanonici.size() > 1) {
+                message = String.format("Nei package c'è più di una classe con simpleName = %s", simpleName);
+                logger.info(new WrapLog().message(message).type(AETypeLog.file));
+            }
+            return VUOTA;
+        }
     }
 
 

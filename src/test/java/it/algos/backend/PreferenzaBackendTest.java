@@ -85,17 +85,6 @@ public class PreferenzaBackendTest extends AlgosTest {
     }
 
 
-    /**
-     * Regola tutti riferimenti incrociati <br>
-     * Deve essere fatto dopo aver costruito tutte le referenze 'mockate' <br>
-     * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    protected void fixRiferimentiIncrociati() {
-        super.fixRiferimentiIncrociati();
-    }
-
-
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();

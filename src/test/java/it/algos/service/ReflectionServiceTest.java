@@ -57,7 +57,7 @@ public class ReflectionServiceTest extends AlgosTest {
                 Arguments.of(CrudView.class, CrudView.class.getSimpleName(), 0, 0, 0, 0),
                 Arguments.of(AIType.class, AIType.class.getSimpleName(), 0, 0, 0, 0),
                 Arguments.of(Mese.class, Mese.class.getSimpleName(), 10, 7, 7, 6),
-                Arguments.of(Continente.class, Continente.class.getSimpleName(), 8, 4, 4, 3),
+                Arguments.of(Continente.class, Continente.class.getSimpleName(), 7, 4, 4, 3),
                 Arguments.of(Giorno.class, Giorno.class.getSimpleName(), 9, 6, 6, 5),
                 Arguments.of(Logger.class, Logger.class.getSimpleName(), 16, 13, 11, 10),
                 Arguments.of(Via.class, Via.class.getSimpleName(), 5, 2, 2, 1),

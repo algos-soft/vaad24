@@ -46,22 +46,6 @@ public class AnnoBackendTest extends BackendTest {
     }
 
 
-    /**
-     * Regola tutti riferimenti incrociati <br>
-     * Deve essere fatto dopo aver costruito tutte le referenze 'mockate' <br>
-     * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    protected void fixRiferimentiIncrociati() {
-        super.fixRiferimentiIncrociati();
-
-        backend.secoloBackend = secoloBackend;
-        backend.secoloBackend.mongoService = mongoService;
-        backend.secoloBackend.annotationService = annotationService;
-        backend.secoloBackend.textService = textService;
-    }
-
-
     @Test
     @Order(21)
     @DisplayName("21 - isExistById")
@@ -312,13 +296,13 @@ public class AnnoBackendTest extends BackendTest {
         System.out.println("64 - findAllForNome (String)");
         System.out.println(VUOTA);
 
-        listaStr = backend.findAllForNome();
-        assertNotNull(listaStr);
-        ottenutoIntero = listaStr.size();
-        sorgente = textService.format(ottenutoIntero);
-        sorgente2 = keyPropertyName;
-        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
-        System.out.println(message);
+//        listaStr = backend.findAllForNome();
+//        assertNotNull(listaStr);
+//        ottenutoIntero = listaStr.size();
+//        sorgente = textService.format(ottenutoIntero);
+//        sorgente2 = keyPropertyName;
+//        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
+//        System.out.println(message);
 
         printSubLista(listaStr);
     }

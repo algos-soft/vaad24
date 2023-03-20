@@ -2,13 +2,16 @@ package it.algos.simpleOnly;
 
 import it.algos.*;
 import it.algos.base.*;
-import it.algos.vaad24.backend.packages.anagrafica.*;
-import it.algos.vaad24.backend.packages.geografia.continente.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24simple.backend.packages.prova.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
-import org.mockito.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
+
+import java.util.stream.*;
 
 /**
  * Project vaad24
@@ -20,39 +23,71 @@ import org.springframework.boot.test.context.*;
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
-@Tag("backend")
+//@Tag("backend")
 @DisplayName("Prova Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ProvaBackendTest extends BackendTest {
+public class ProvaBackendTest extends AlgosTest {
 
-    @InjectMocks
+    @Autowired
     private ProvaBackend backend;
 
-    @InjectMocks
-    private ContinenteBackend continenteBackend;
 
-    @InjectMocks
-    private ViaBackend viaBackend;
+    //--simpleName
+    //--canonicalName
+    //--flag esiste
+    //--flag unico
+    protected static Stream<Arguments> FILE_CANONICAL_NAME_MODULO() {
+        return Stream.of(
+                Arguments.of(VUOTA, VUOTA, false, false),
+                Arguments.of("Logic", "it/algos/vaad24/backend/logic/Logic", true, true),
+                Arguments.of("Pippoz", VUOTA, false, false),
+                Arguments.of("Mese", "it/algos/vaad24/backend/packages/crono/mese/Mese", true, true),
+                Arguments.of("MeseView", "it/algos/vaad24/backend/packages/crono/mese/MeseView", true, true),
+                Arguments.of("MeseBackend", "it/algos/vaad24/backend/packages/crono/mese/MeseBackend", true, true),
+                Arguments.of("MeseDialog", VUOTA, false, false),
+                Arguments.of("Prova", VUOTA, false, false),
+                Arguments.of("test/Prova", "it/algos/vaad24/backend/packages/utility/test/Prova", true, false),
+                Arguments.of("Prova", "it/algos/vaad24simple/backend/packages/prova", true, false),
+                Arguments.of("test.Prova", "it/algos/vaad24/backend/packages/utility/test/Prova", true, false),
+
+                Arguments.of("SimpleCost", "it/algos/vaad24simple/backend/boot/SimpleCost", true, true)
+        );
+    }
 
     /**
      * Qui passa una volta sola <br>
      */
     @BeforeAll
     protected void setUpAll() {
-        assertNotNull(backend);
         super.entityClazz = Prova.class;
-        super.crudBackend = backend;
 
         super.setUpAll();
+    }
 
-        backend.continenteBackend = continenteBackend;
-        backend.viaBackend = viaBackend;
-        backend.continenteBackend.annotationService = annotationService;
-        backend.continenteBackend.textService = textService;
-        backend.continenteBackend.mongoService = mongoService;
-        backend.viaBackend.annotationService = annotationService;
-        backend.viaBackend.textService = textService;
-        backend.viaBackend.mongoService = mongoService;
+
+    @ParameterizedTest
+    @MethodSource(value = "FILE_CANONICAL_NAME_MODULO")
+    @Order(1)
+    @DisplayName("1 - getCanonicalName")
+        //--simpleName
+        //--canonicalName
+        //--flag esiste
+        //--flag unico
+    void getCanonicalName(final String simpleName, String canonicalName, boolean esiste, boolean unico) {
+        System.out.println("41 - getCanonicalName");
+        System.out.println(VUOTA);
+
+        sorgente = simpleName;
+        previsto = canonicalName;
+        previsto = previsto.replaceAll(SLASH, PUNTO);
+
+        ottenuto = fileService.getCanonicalName(sorgente);
+        assertEquals(esiste, textService.isValid(ottenuto));
+        assertEquals(previsto, ottenuto);
+        if (textService.isValid(ottenuto)) {
+            message = String.format("%s%s%s", sorgente, FORWARD, ottenuto);
+            System.out.println(message);
+        }
     }
 
 }

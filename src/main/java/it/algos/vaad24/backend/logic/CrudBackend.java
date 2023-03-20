@@ -275,23 +275,32 @@ public abstract class CrudBackend extends AbstractService {
 
 
     public boolean isExistByKey(final String keyValue) {
-        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-        return isExistByProperty(keyPropertyName, keyValue);
+        String keyPropertyName;
+
+        if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
+            keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+            return isExistByProperty(keyPropertyName, keyValue);
+        }
+        else {
+            return false;
+        }
     }
 
     public boolean isExistByOrder(final int orderValue) {
-        return isExistByProperty(FIELD_NAME_ORDINE, orderValue);
+        if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+            return isExistByProperty(FIELD_NAME_ORDINE, orderValue);
+        }
+        else {
+            return false;
+        }
     }
 
     public boolean isExistByProperty(final String propertyName, final Object propertyValue) {
-        String collectionName = annotationService.getCollectionName(entityClazz);
-        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        String collectionName;
         Query query = new Query();
 
-        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
-            return crudRepository.findById(keyPropertyName) != null;
-        }
-        else {
+        if (reflectionService.isEsiste(entityClazz, propertyName) || propertyName.equals(FIELD_NAME_ID_CON)) {
+            collectionName = annotationService.getCollectionName(entityClazz);
             query.addCriteria(Criteria.where(propertyName).is(propertyValue));
             if (textService.isValid(collectionName)) {
                 return mongoService.mongoOp.exists(query, entityClazz.getClass(), collectionName);
@@ -299,6 +308,9 @@ public abstract class CrudBackend extends AbstractService {
             else {
                 return mongoService.mongoOp.exists(query, entityClazz.getClass());
             }
+        }
+        else {
+            return false;
         }
     }
 
@@ -324,12 +336,25 @@ public abstract class CrudBackend extends AbstractService {
      * @return la entity trovata
      */
     public AEntity findByKey(final String keyValue) {
-        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-        return findByProperty(keyPropertyName, keyValue);
+        String keyPropertyName;
+
+        if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
+            keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+            return findByProperty(keyPropertyName, keyValue);
+        }
+        else {
+            return null;
+        }
     }
 
+
     public AEntity findByOrder(final int orderValue) {
-        return findByProperty(FIELD_NAME_ORDINE, orderValue);
+        if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+            return findByProperty(FIELD_NAME_ORDINE, orderValue);
+        }
+        else {
+            return null;
+        }
     }
 
     /**
@@ -342,19 +367,22 @@ public abstract class CrudBackend extends AbstractService {
      * @return la entity trovata
      */
     public AEntity findByProperty(final String propertyName, final Object propertyValue) {
-        AEntity entity;
-        String collectionName = annotationService.getCollectionName(entityClazz);
+        String collectionName;
         Query query = new Query();
-        query.addCriteria(Criteria.where(propertyName).is(propertyValue));
 
-        if (textService.isValid(collectionName)) {
-            entity = mongoService.mongoOp.findOne(query, entityClazz, collectionName);
+        if (reflectionService.isEsiste(entityClazz, propertyName) || propertyName.equals(FIELD_NAME_ID_CON)) {
+            collectionName = annotationService.getCollectionName(entityClazz);
+            query.addCriteria(Criteria.where(propertyName).is(propertyValue));
+            if (textService.isValid(collectionName)) {
+                return mongoService.mongoOp.findOne(query, entityClazz, collectionName);
+            }
+            else {
+                return mongoService.mongoOp.findOne(query, entityClazz);
+            }
         }
         else {
-            entity = mongoService.mongoOp.findOne(query, entityClazz);
+            return null;
         }
-
-        return entity;
     }
 
 
@@ -457,35 +485,37 @@ public abstract class CrudBackend extends AbstractService {
 
 
     public List findAllNoSort() {
+        Query query = new Query();
         String collectionName = annotationService.getCollectionName(entityClazz);
 
-        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
-            return crudRepository.findAll();
+        if (textService.isValid(collectionName)) {
+            return mongoService.mongoOp.find(query, entityClazz, collectionName);
         }
         else {
-            return mongoService.mongoOp.find(new Query(), entityClazz, collectionName);
+            return mongoService.mongoOp.find(query, entityClazz);
         }
     }
 
     public List findAllSortCorrente() {
-        String collectionName = annotationService.getCollectionName(entityClazz);
         Query query = new Query();
+        String collectionName = annotationService.getCollectionName(entityClazz);
 
-        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
-            return crudRepository.findAll();
+        if (sortOrder != null) {
+            query.with(sortOrder);
+        }
+
+        if (textService.isValid(collectionName)) {
+            return mongoService.mongoOp.find(new Query(), entityClazz, collectionName);
         }
         else {
-            if (sortOrder != null) {
-                query.with(sortOrder);
-            }
-            return mongoService.mongoOp.find(query, entityClazz, collectionName);
+            return mongoService.mongoOp.find(new Query(), entityClazz);
         }
     }
 
 
     public List findAllSortCorrenteReverse() {
-        String collectionName = annotationService.getCollectionName(entityClazz);
         Query query = new Query();
+        String collectionName = annotationService.getCollectionName(entityClazz);
         Sort sort;
         String sortText;
         String[] parti;
@@ -581,11 +611,19 @@ public abstract class CrudBackend extends AbstractService {
 
 
     public List findAllByProperty(final String propertyName, final Object propertyValue) {
-        String collectionName = annotationService.getCollectionName(entityClazz);
         Query query = new Query();
+        String collectionName;
+
+        if (textService.isEmpty(propertyName)) {
+            return null;
+        }
+        if (propertyValue == null) {
+            return null;
+        }
 
         query.addCriteria(Criteria.where(propertyName).is(propertyValue));
 
+        collectionName = annotationService.getCollectionName(entityClazz);
         if (textService.isValid(collectionName)) {
             return mongoService.mongoOp.find(query, entityClazz, collectionName);
         }
@@ -599,12 +637,37 @@ public abstract class CrudBackend extends AbstractService {
      * Ordinata secondo la keyProperty <br>
      * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
      */
-    public List<String> findAllForKey() {
-        if (isOrdineEntity()) {
-            return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
+    public List<String> findAllForKeySortKey() {
+        String keyPropertyName;
+
+        if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
+            keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+            return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(keyPropertyName, 1));
         }
         else {
-            return findAllForProperty(annotationService.getKeyPropertyName(entityClazz));
+            return null;
+        }
+    }
+
+    /**
+     * Lista della sola keyProperty indicata per tutte le entities della collezione <br>
+     * Ordinata secondo la keyProperty <br>
+     * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
+     */
+    public List<String> findAllForKeySortOrdine() {
+        String keyPropertyName;
+
+        if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
+            keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+            if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+                return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(FIELD_NAME_ORDINE, 1));
+            }
+            else {
+                return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(keyPropertyName, 1));
+            }
+        }
+        else {
+            return null;
         }
     }
 
@@ -621,6 +684,7 @@ public abstract class CrudBackend extends AbstractService {
             return findAllForPropertyReverseOrder(annotationService.getKeyPropertyName(entityClazz));
         }
     }
+
 
     public boolean isOrdineEntity() {
         boolean isNome = reflectionService.isEsiste(entityClazz, FIELD_NAME_NOME);

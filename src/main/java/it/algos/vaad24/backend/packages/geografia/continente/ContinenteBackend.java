@@ -40,7 +40,7 @@ public class ContinenteBackend extends CrudBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public Continente newEntity() {
-        return newEntity(0, VUOTA, true, false);
+        return newEntity(0, VUOTA, true);
     }
 
     /**
@@ -52,16 +52,14 @@ public class ContinenteBackend extends CrudBackend {
      * @param ordine  di presentazione nel popup/combobox (obbligatorio, unico)
      * @param nome    (obbligatorio, unico)
      * @param abitato (obbligatorio)
-     * @param reset   (obbligatorio)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public Continente newEntity(final int ordine, final String nome, final boolean abitato, final boolean reset) {
+    public Continente newEntity(final int ordine, final String nome, final boolean abitato) {
         Continente newEntityBean = Continente.builder()
                 .ordine(ordine)
                 .nome(textService.isValid(nome) ? nome : null)
                 .abitato(abitato)
-                .reset(reset)
                 .build();
 
         return (Continente) super.fixKey(newEntityBean);
@@ -137,7 +135,7 @@ public class ContinenteBackend extends CrudBackend {
                         return result;
                     }
 
-                    entityBean = insert(newEntity(ordine, nome, abitato, reset));
+                    entityBean = insert(newEntity(ordine, nome, abitato));
                     if (entityBean != null) {
                         lista.add(entityBean);
                     }
