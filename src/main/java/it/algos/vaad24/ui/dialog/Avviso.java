@@ -1,6 +1,7 @@
 package it.algos.vaad24.ui.dialog;
 
 import com.vaadin.flow.component.notification.*;
+import com.vaadin.flow.server.*;
 import it.algos.vaad24.backend.enumeration.*;
 
 /**
@@ -66,11 +67,13 @@ public class Avviso {
     }
 
     public void open() {
-        if (themeVariant == null) {
-            Notification.show(message, durata(), posizione);
-        }
-        else {
-            Notification.show(message, durata(), posizione).addThemeVariants(themeVariant);
+        if (VaadinSession.getCurrent()!=null) {
+            if (themeVariant == null) {
+                Notification.show(message, durata(), posizione);
+            }
+            else {
+                Notification.show(message, durata(), posizione).addThemeVariants(themeVariant);
+            }
         }
     }
 

@@ -178,6 +178,8 @@ public abstract class AlgosTest {
 
     protected Sort sort;
 
+    protected TypeBackend typeBackend;
+
     @Autowired
     public ApplicationContext appContext;
 
@@ -692,5 +694,238 @@ public abstract class AlgosTest {
         System.out.println(message);
     }
 
+
+    protected void printBackend(final List lista) {
+        if (lista == null) {
+            return;
+        }
+
+        if (lista.size() == 1) {
+            printBackend(lista, 1);
+        }
+        else {
+            printBackend(lista, 10);
+        }
+    }
+
+
+    protected void printBackend(final List lista, int max) {
+        String message = VUOTA;
+        int cont = 1;
+        int tot;
+
+        if (lista != null) {
+            if (lista.size() > 0) {
+                tot = Math.min(lista.size(), max);
+                System.out.println(VUOTA);
+
+                message = String.format("La lista contiene %d elementi.", lista.size());
+                if (lista.size() > tot) {
+                    message += String.format(" Mostro solo i primi %d", tot);
+                }
+                if (max > 1) {
+                    System.out.println(message);
+                    System.out.println(VUOTA);
+                }
+
+                switch (typeBackend) {
+                    case giorno -> printTestaGiorno();
+                    case mese -> {
+                        System.out.print("ordine");
+                        System.out.print(SEP);
+                        System.out.print("breve");
+                        System.out.print(SEP);
+                        System.out.print("nome");
+                        System.out.print(SEP);
+                        System.out.print("giorni");
+                        System.out.print(SEP);
+                        System.out.print("primo");
+                        System.out.print(SEP);
+                        System.out.println("ultimo");
+                    }
+                    case secolo -> {
+                        System.out.print("ordine");
+                        System.out.print(SEP);
+                        System.out.print("nome");
+                        System.out.print(SEP);
+                        System.out.print("inizio");
+                        System.out.print(SEP);
+                        System.out.print("fine");
+                        System.out.print(SEP);
+                        System.out.println("avanti Cristo");
+                    }
+                    case anno -> printTestaAnno();
+                    case nota -> {
+                        System.out.print("type");
+                        System.out.print(SEP);
+                        System.out.print("livello");
+                        System.out.print(SEP);
+                        System.out.print("inizio");
+                        System.out.print(SEP);
+                        System.out.print("descrizione");
+                        System.out.print(SEP);
+                        System.out.print("fatto");
+                        System.out.print(SEP);
+                        System.out.println("fine");
+                    }
+                    default -> printTestaEntityBean();
+                } ;
+
+                for (Object obj : lista.subList(0, tot)) {
+                    System.out.print(cont);
+                    System.out.print(PARENTESI_TONDA_END);
+                    System.out.print(SPAZIO);
+                    switch (typeBackend) {
+                        case giorno -> printGiorno(obj);
+                        case mese -> printMese(obj);
+                        case secolo -> printSecolo(obj);
+                        case anno -> printAnno(obj);
+                        case nota -> printNota(obj);
+                        default -> printEntityBeans(obj);
+                    } ;
+                    cont++;
+                }
+                if (lista.size() > tot) {
+                    System.out.print(cont);
+                    System.out.print(PARENTESI_TONDA_END);
+                    System.out.print(SPAZIO);
+                    System.out.println(TRE_PUNTI);
+                }
+            }
+            else {
+                System.out.println("Non ci sono elementi nella lista");
+            }
+        }
+        else {
+            System.out.println("Manca la lista");
+        }
+    }
+
+    protected void printTestaEntityBean() {
+    }
+
+    protected void printEntityBeans(Object obj) {
+        if (obj instanceof AEntity entityBean) {
+            System.out.print(entityBean.id);
+            System.out.print(SEP);
+            System.out.print(entityBean.toString());
+            System.out.println(SPAZIO);
+        }
+    }
+
+    protected void printMese(Object obj) {
+        if (obj instanceof Mese mese) {
+            System.out.print(mese.breve);
+            System.out.print(SEP);
+            System.out.print(mese.nome);
+            System.out.print(SEP);
+            System.out.print(mese.giorni);
+            System.out.print(SEP);
+            System.out.print(mese.primo);
+            System.out.print(SEP);
+            System.out.print(mese.ultimo);
+            System.out.println(SPAZIO);
+        }
+    }
+
+
+    protected void printSecolo(Object obj) {
+        if (obj instanceof Secolo secolo) {
+            System.out.print(secolo.nome);
+            System.out.print(SEP);
+            System.out.print(secolo.inizio);
+            System.out.print(SEP);
+            System.out.print(secolo.fine);
+            System.out.print(SEP);
+            System.out.print(secolo.anteCristo);
+            System.out.println(SPAZIO);
+        }
+    }
+
+    protected void printTestaGiorno() {
+        System.out.print("ordine");
+        System.out.print(SEP);
+        System.out.print("nome");
+        System.out.print(SEP);
+        System.out.print("Trascorsi");
+        System.out.print(SEP);
+        System.out.print("mancanti");
+        System.out.println(SPAZIO);
+    }
+
+    protected void printGiorno(Object obj) {
+        if (obj instanceof Giorno giorno) {
+            System.out.print(giorno.nome);
+            System.out.print(SEP);
+            System.out.print(giorno.trascorsi);
+            System.out.print(SEP);
+            System.out.print(giorno.mancanti);
+            System.out.println(SPAZIO);
+        }
+    }
+
+
+    protected void printTestaAnno() {
+        System.out.print("ordine");
+        System.out.print(SEP);
+        System.out.print("nome");
+        System.out.print(SEP);
+        System.out.print("secolo");
+        System.out.print(SEP);
+        System.out.print("dopoCristo");
+        System.out.print(SEP);
+        System.out.print("bisestile");
+        System.out.println(SPAZIO);
+    }
+
+    protected void printAnno(Object obj) {
+        if (obj instanceof Anno anno) {
+            System.out.print(anno.nome);
+            System.out.print(SEP);
+            System.out.print(anno.secolo);
+            System.out.print(SEP);
+            System.out.print(anno.dopoCristo);
+            System.out.print(SEP);
+            System.out.print(anno.bisestile);
+            System.out.println(SPAZIO);
+        }
+    }
+
+
+    protected void printNota(Object obj) {
+        if (obj instanceof Nota nota) {
+            System.out.print(nota.type);
+            System.out.print(SPAZIO);
+            System.out.print(nota.livello);
+            System.out.print(SPAZIO);
+            System.out.print(dateService.get(nota.inizio));
+            System.out.print(SPAZIO);
+            System.out.print(nota.descrizione);
+            System.out.print(SPAZIO);
+            System.out.print(nota.livello);
+            System.out.print(SPAZIO);
+            System.out.print(nota.fatto);
+            System.out.print(SPAZIO);
+            System.out.print(dateService.get(nota.fine));
+            System.out.println(SPAZIO);
+        }
+    }
+
+    protected void printNota() {
+        System.out.print("type");
+        System.out.print(SEP);
+        System.out.print("livello");
+        System.out.print(SEP);
+        System.out.print("inizio");
+        System.out.print(SEP);
+        System.out.print("descrizione");
+        System.out.print(SEP);
+        System.out.print("fatto");
+        System.out.print(SEP);
+        System.out.print("fine");
+        System.out.println(SPAZIO);
+    }
+
+    protected enum TypeBackend {nessuno, via, anno, giorno, mese, secolo, continente, nota, versione, logger}
 
 }

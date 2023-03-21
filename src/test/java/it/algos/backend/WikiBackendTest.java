@@ -4,7 +4,6 @@ import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
-import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
@@ -12,10 +11,13 @@ import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
+import it.algos.vaad24.backend.wrapper.*;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
+import java.util.*;
 import java.util.stream.*;
 
 /**
@@ -46,6 +48,17 @@ public class WikiBackendTest extends AlgosTest {
                 Arguments.of(ContinenteBackend.class)
         );
     }
+
+    /**
+     * Qui passa una volta sola <br>
+     */
+    @BeforeAll
+    protected void setUpAll() {
+        super.setUpAll();
+
+        super.typeBackend = TypeBackend.nessuno;
+    }
+
 
     @BeforeEach
     protected void setUpEach() {
@@ -142,32 +155,6 @@ public class WikiBackendTest extends AlgosTest {
     }
 
 
-//    @Test
-//    @Order(11)
-//    @DisplayName("11 - isExistsCollection")
-//    void isExistsCollection() {
-//        System.out.println("11 - isExistsCollection");
-//        System.out.println("Recupera tutte le classi del progetto corrente");
-//        System.out.println(VUOTA);
-//
-//        // recupero i nomi di tutte le classi AEntity dei package
-//        listaBeans = classService.getAllAEntity();
-//
-//        for (AEntity entity : listaBeans) {
-//            ottenutoBooleano = mongoService.isExistsCollection(entity.getClass());
-//            clazzName = entity.getClass().getSimpleName();
-//            collectionName = annotationService.getCollectionName(entity.getClass());
-//            if (ottenutoBooleano) {
-//                message = String.format("Esiste la collection della classe [%s] e si chiama '%s'", clazzName, collectionName);
-//            }
-//            else {
-//                message = String.format("Non esiste la collection '%s' della classe [%s]", collectionName, clazzName);
-//            }
-//            System.out.println(message);
-//        }
-//    }
-
-
     @Test
     @Order(11)
     @DisplayName("11 - isExistsCollection")
@@ -177,12 +164,12 @@ public class WikiBackendTest extends AlgosTest {
         System.out.println(VUOTA);
 
         // recupero i nomi di tutte le classi AEntity dei package
-//        listaClazz = classService.getAllAEntity();
+        listaClazz = classService.allPackagesEntityClazz();
 
-        for (AEntity entity : listaBeans) {
-            ottenutoBooleano = mongoService.isExistsCollection(entity.getClass());
-            clazzName = entity.getClass().getSimpleName();
-            collectionName = annotationService.getCollectionName(entity.getClass());
+        for (Class classe : listaClazz) {
+            ottenutoBooleano = mongoService.isExistsCollection(classe);
+            clazzName = classe.getSimpleName();
+            collectionName = annotationService.getCollectionName(classe);
             if (ottenutoBooleano) {
                 message = String.format("Esiste la collection della classe [%s] e si chiama '%s'", clazzName, collectionName);
             }
@@ -194,7 +181,7 @@ public class WikiBackendTest extends AlgosTest {
     }
 
 
-    //    @Test
+    @Test
     @Order(12)
     @DisplayName("12 - count")
     protected void count() {
@@ -203,15 +190,14 @@ public class WikiBackendTest extends AlgosTest {
         System.out.println(VUOTA);
 
         // recupero i nomi di tutte le classi AEntity dei package
-        listaBackendClazz = classService.getAllBackend();
+        listaClazz = classService.allPackagesEntityClazz();
 
-        for (CrudBackend backend : listaBackendClazz) {
-            ottenutoBooleano = backend.isExistsCollection();
-            entityClazz = classService.getEntityFromBackendClazz(backend.getClass()).getClass();
-            clazzName = entityClazz.getSimpleName();
-            collectionName = annotationService.getCollectionName(entityClazz);
-            if (ottenutoBooleano) {
-                message = String.format("Esiste la collection della classe [%s] e si chiama '%s'", clazzName, collectionName);
+        for (Class classe : listaClazz) {
+            ottenutoIntero = mongoService.count(classe);
+            clazzName = classe.getSimpleName();
+            collectionName = annotationService.getCollectionName(classe);
+            if (ottenutoIntero > 0) {
+                message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
             }
             else {
                 message = String.format("Non esiste la collection '%s' della classe [%s]", collectionName, clazzName);
@@ -223,14 +209,70 @@ public class WikiBackendTest extends AlgosTest {
 
     @Test
     @Order(13)
-    @DisplayName(PUNTO)
+    @DisplayName("13 - resetOnlyEmpty")
     protected void resetOnlyEmpty() {
+        System.out.println("13 - resetOnlyEmpty");
+        System.out.println("Recupera tutte le classi del progetto corrente");
+        System.out.println(VUOTA);
+
+        // recupero i nomi di tutte le classi AEntity dei package
+        listaBackendClazz = classService.getAllBackend();
+
+        for (CrudBackend backend : listaBackendClazz) {
+            ottenutoRisultato = backend.resetOnlyEmpty();
+            assertNotNull(ottenutoRisultato);
+            if (ottenutoRisultato.isValido()) {
+                System.out.println(ottenutoRisultato.getMessage());
+                printRisultato(ottenutoRisultato);
+
+                System.out.println(VUOTA);
+                printBackend(ottenutoRisultato.getLista());
+            }
+            else {
+                logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
+            }
+        }
     }
+
 
     @Test
     @Order(14)
-    @DisplayName(PUNTO)
+    @DisplayName("14 - resetForcing")
     protected void resetForcing() {
+        System.out.println("14 - resetForcing");
+        System.out.println("Recupera tutte le classi del progetto corrente");
+        System.out.println(VUOTA);
+
+        // recupero i nomi di tutte le classi AEntity dei package
+        listaBackendClazz = classService.getAllBackend();
+
+        for (CrudBackend backend : listaBackendClazz) {
+            ottenutoRisultato = backend.resetForcing();
+            assertNotNull(ottenutoRisultato);
+            if (ottenutoRisultato.isValido()) {
+                System.out.println(ottenutoRisultato.getMessage());
+                printRisultato(ottenutoRisultato);
+
+                System.out.println(VUOTA);
+                printBackend(ottenutoRisultato.getLista());
+            }
+            else {
+                logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
+            }
+        }
+    }
+
+    protected void printBackend(final List lista) {
+        if (lista == null) {
+            return;
+        }
+
+        if (lista.size() == 1) {
+            printBackend(lista, 1);
+        }
+        else {
+            printBackend(lista, 10);
+        }
     }
 
 }
