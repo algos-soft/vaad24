@@ -1067,6 +1067,19 @@ public class FileServiceTest extends AlgosTest {
 
     }
 
+    @Test
+    @Order(91)
+    @DisplayName("91 - Tutti i file java del programma")
+    void getAllAEntity() {
+        System.out.println("91 - Tutti i file java del programma del programma nei packages");
+        System.out.println("di tipo Backend, View, Entity, Dialog");
+        System.out.println(VUOTA);
+
+        listaStr = service.getAllSubFilesJava();
+        assertNotNull(listaStr);
+        print(listaStr);
+    }
+
     private void creaCartelle() {
         service.deleteDirectory(PATH_DIRECTORY_UNO);
         service.deleteDirectory(PATH_DIRECTORY_DUE);

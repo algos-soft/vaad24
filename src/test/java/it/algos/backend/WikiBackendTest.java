@@ -150,11 +150,13 @@ public class WikiBackendTest extends AlgosTest {
         System.out.println(VUOTA);
 
         // recupero i nomi di tutte le classi AEntity dei package
-        listaStr = classService.allEntityResetOrderedName();
-        listaBackendClazz = classService.getBackendsFromEntitiesNames(listaStr);
+        listaBackendClazz = classService.getAllBackend();
 
         for (CrudBackend backend : listaBackendClazz) {
             ottenutoBooleano = backend.isExistsCollection();
+            entityClazz = classService.getEntityFromBackendClazz(backend.getClass()).getClass();
+            clazzName = entityClazz.getSimpleName();
+            collectionName = annotationService.getCollectionName(entityClazz);
             if (ottenutoBooleano) {
                 message = String.format("Esiste la collection della classe [%s] e si chiama '%s'", clazzName, collectionName);
             }

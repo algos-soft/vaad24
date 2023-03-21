@@ -1712,7 +1712,7 @@ public class FileService extends AbstractService {
     /**
      * Crea una lista di tutte le Entity esistenti nella directory packages <br>
      */
-    public List<String> getAllSubFilesEntity(String path) throws AlgosException {
+    public List<String> getAllSubFilesEntity(String path)  {
         return getAllSubFilesJava(path)
                 .stream()
                 .filter(n -> !n.endsWith(SUFFIX_BACKEND))
@@ -1720,6 +1720,16 @@ public class FileService extends AbstractService {
                 .filter(n -> !n.endsWith(SUFFIX_VIEW))
                 .filter(n -> !n.endsWith(SUFFIX_DIALOG))
                 .collect(Collectors.toList());
+    }
+
+    public List<String> getAllSubFilesJava() {
+        List<String> allPath = new ArrayList<>();
+        String tagFinale = "/backend/packages";
+
+        allPath.addAll( getAllSubFilesJava( VaadVar.moduloVaadin24 + tagFinale));
+        allPath.addAll( getAllSubFilesJava(  VaadVar.projectNameModulo + tagFinale));
+
+        return allPath;
     }
 
     /**

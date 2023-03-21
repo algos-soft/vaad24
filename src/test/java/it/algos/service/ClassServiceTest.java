@@ -211,13 +211,12 @@ public class ClassServiceTest extends AlgosTest {
         clazz = service.getClazzFromName(sorgente);
         assertNotNull(clazz);
         System.out.println(VUOTA);
-        System.out.println(String.format("Trovata la classe %s, tramite il simpleName %s", clazzFromStream.getSimpleName(),sorgente));
-
+        System.out.println(String.format("Trovata la classe %s, tramite il simpleName %s", clazzFromStream.getSimpleName(), sorgente));
 
         clazz = service.getClazzFromName(sorgente2);
         assertNotNull(clazz);
         System.out.println(VUOTA);
-        System.out.println(String.format("Trovata la classe %s, tramite il canonicalName %s", clazzFromStream.getSimpleName(),sorgente2));
+        System.out.println(String.format("Trovata la classe %s, tramite il canonicalName %s", clazzFromStream.getSimpleName(), sorgente2));
     }
 
     @ParameterizedTest
@@ -664,6 +663,47 @@ public class ClassServiceTest extends AlgosTest {
         }
     }
 
+    @Test
+    @Order(91)
+    @DisplayName("91 - Lista di TUTTE le classi AEntity del programma")
+    void getAllAEntity() {
+        System.out.println("91 - Lista di TUTTE le classi AEntity del programma");
+        System.out.println(VUOTA);
+        List<AEntity> listaAEntity;
+
+        listaAEntity = service.getAllAEntity();
+        assertNotNull(listaAEntity);
+        ottenutoIntero = listaAEntity.size();
+        assertTrue(ottenutoIntero > 0);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Nel progetto ci sono %d classi di tipo AEntity", listaAEntity.size()));
+        System.out.println(VUOTA);
+        for (AEntity entity : listaAEntity) {
+            message = String.format("%s%s%s", entity.getClass().getSimpleName(), FORWARD, entity.getClass().getCanonicalName());
+            System.out.println(message);
+        }
+    }
+
+    @Test
+    @Order(91)
+    @DisplayName("92 - Lista di TUTTE le classi CrudBackend del programma")
+    void getAllBackend() {
+        System.out.println("92 - Lista di TUTTE le classi CrudBackend del programma");
+        System.out.println(VUOTA);
+        List<CrudBackend> listaCrudBackends;
+
+        listaCrudBackends = service.getAllBackend();
+        assertNotNull(listaCrudBackends);
+        ottenutoIntero = listaCrudBackends.size();
+        assertTrue(ottenutoIntero > 0);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Nel progetto ci sono %d classi di tipo Backend", listaCrudBackends.size()));
+        System.out.println(VUOTA);
+        for (CrudBackend backend : listaCrudBackends) {
+            message = String.format("%s%s%s", backend.getClass().getSimpleName(), FORWARD, backend.getClass().getCanonicalName());
+            System.out.println(message);
+        }
+    }
 
     protected void printPackages(List<String> lista) {
         List<String> listaShort = new ArrayList<>();

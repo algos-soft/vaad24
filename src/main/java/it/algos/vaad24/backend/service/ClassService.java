@@ -3,6 +3,7 @@ package it.algos.vaad24.backend.service;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -108,6 +109,7 @@ public class ClassService extends AbstractService {
                 logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
             }
         }
+
         return backend;
     }
 
@@ -799,5 +801,55 @@ public class ClassService extends AbstractService {
 
         return listaCrudBackends;
     }
+
+    public List<AEntity> getAllAEntity() {
+        List<AEntity> listaAEntity = new ArrayList<>();
+        List<String> allPath;
+        Object bean;
+
+        allPath = fileService.getAllSubFilesJava();
+        allPath = allPath.stream()
+                .filter(path -> !path.endsWith(SUFFIX_BACKEND))
+                .filter(path -> !path.endsWith(SUFFIX_REPOSITORY))
+                .filter(path -> !path.endsWith(SUFFIX_VIEW))
+                .filter(path -> !path.endsWith(SUFFIX_DIALOG))
+                .collect(Collectors.toList());
+        for (String path : allPath) {
+            try {
+                bean = appContext.getBean(Class.forName(path));
+                if (bean != null && bean instanceof AEntity entity) {
+                    listaAEntity.add(entity);
+                }
+            } catch (Exception unErrore) {
+                logger.info(new WrapLog().type(AETypeLog.file).message(String.format("Manca il file %s",path)));
+            }
+        }
+
+        return listaAEntity;
+    }
+
+    public List<CrudBackend> getAllBackend() {
+        List<CrudBackend> listaCrudBackends = new ArrayList<>();
+        List<String> allPath;
+        Object bean;
+
+        allPath = fileService.getAllSubFilesJava();
+        allPath = allPath.stream()
+                .filter(path -> path.endsWith(SUFFIX_BACKEND))
+                .collect(Collectors.toList());
+        for (String path : allPath) {
+            try {
+                bean = appContext.getBean(Class.forName(path));
+                if (bean != null && bean instanceof CrudBackend backend) {
+                    listaCrudBackends.add(backend);
+                }
+            } catch (Exception unErrore) {
+                logger.info(new WrapLog().exception(new AlgosException(unErrore)));
+            }
+        }
+
+        return listaCrudBackends;
+    }
+
 
 }
