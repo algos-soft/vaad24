@@ -41,15 +41,16 @@ public class ProvaBackendTest extends AlgosTest {
                 Arguments.of(VUOTA, VUOTA, false, false),
                 Arguments.of("Logic", "it/algos/vaad24/backend/logic/Logic", true, true),
                 Arguments.of("Pippoz", VUOTA, false, false),
+                Arguments.of("View", VUOTA, false, true),
+                Arguments.of("Backend", VUOTA, false, true),
                 Arguments.of("Mese", "it/algos/vaad24/backend/packages/crono/mese/Mese", true, true),
                 Arguments.of("MeseView", "it/algos/vaad24/backend/packages/crono/mese/MeseView", true, true),
                 Arguments.of("MeseBackend", "it/algos/vaad24/backend/packages/crono/mese/MeseBackend", true, true),
                 Arguments.of("MeseDialog", VUOTA, false, false),
-                Arguments.of("Prova", VUOTA, false, false),
+                Arguments.of("Prova", VUOTA, false, true),
                 Arguments.of("test/Prova", "it/algos/vaad24/backend/packages/utility/test/Prova", true, false),
-                Arguments.of("Prova", "it/algos/vaad24simple/backend/packages/prova", true, false),
+                Arguments.of("Prova", VUOTA, false, false),
                 Arguments.of("test.Prova", "it/algos/vaad24/backend/packages/utility/test/Prova", true, false),
-
                 Arguments.of("SimpleCost", "it/algos/vaad24simple/backend/boot/SimpleCost", true, true)
         );
     }

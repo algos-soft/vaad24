@@ -1950,6 +1950,7 @@ public class FileService extends AbstractService {
         String classeFinalePath;
         String message;
         List<String> listaNomiCanonici = new ArrayList<>();
+        List<String> listaDoppi;
 
         if (textService.isEmpty(simpleName)) {
             return canonicalName;
@@ -1985,8 +1986,25 @@ public class FileService extends AbstractService {
         }
         else {
             if (listaNomiCanonici.size() > 1) {
-                message = String.format("Nei package c'è più di una classe con simpleName = %s", simpleName);
-                logger.info(new WrapLog().message(message).type(AETypeLog.file));
+                listaDoppi = new ArrayList<>();
+                if (simpleName.contains(SLASH) || simpleName.contains(PUNTO)) {
+                    if (simpleName.contains(SLASH)) {
+                        simpleName = simpleName.replaceAll(SLASH, PUNTO).toLowerCase();
+                    }
+                    simpleName = simpleName.toLowerCase();
+                    for (String doppio : listaNomiCanonici) {
+                        if (doppio.toLowerCase().endsWith(simpleName)) {
+                            listaDoppi.add(doppio);
+                        }
+                    }
+                }
+                if (listaDoppi.size() == 1) {
+                    return listaDoppi.get(0);
+                }
+                else {
+                    message = String.format("Nei package c'è più di una classe con simpleName = %s", simpleName);
+                    logger.info(new WrapLog().message(message).type(AETypeLog.file));
+                }
             }
             return VUOTA;
         }
