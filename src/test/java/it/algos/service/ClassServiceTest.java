@@ -664,10 +664,70 @@ public class ClassServiceTest extends AlgosTest {
     }
 
     @Test
+    @Order(90)
+    @DisplayName("90 - allPackagesClazz del programma")
+    void allPackagesClazz() {
+        System.out.println("90 - allPackagesClazz del programma");
+        System.out.println(VUOTA);
+
+        listaClazz = service.allPackagesClazz();
+        assertNotNull(listaClazz);
+        ottenutoIntero = listaClazz.size();
+        assertTrue(ottenutoIntero > 0);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Nei packages di progetto ci sono %d classi", listaClazz.size()));
+        System.out.println(VUOTA);
+        for (Class classe : listaClazz) {
+            message = String.format("%s%s%s", classe.getSimpleName(), FORWARD, classe.getCanonicalName());
+            System.out.println(message);
+        }
+    }
+
+
+    @Test
     @Order(91)
-    @DisplayName("91 - Lista di TUTTE le classi AEntity del programma")
+    @DisplayName("91 - allPackagesEntityClazz del programma")
+    void allPackagesEntityClazz() {
+        System.out.println("91 - allPackagesEntityClazz del programma");
+        System.out.println(VUOTA);
+
+        listaClazz = service.allPackagesEntityClazz();
+        ottenutoIntero = listaClazz.size();
+        assertTrue(ottenutoIntero > 0);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Nel progetto ci sono %d classi di tipo AEntity", listaClazz.size()));
+        System.out.println(VUOTA);
+        for (Class classe : listaClazz) {
+            message = String.format("%s%s%s", classe.getSimpleName(), FORWARD, classe.getCanonicalName());
+            System.out.println(message);
+        }
+    }
+    @Test
+    @Order(92)
+    @DisplayName("92 - allPackagesBackendClazz del programma")
+    void allPackagesBackendClazz() {
+        System.out.println("92 - allPackagesBackendClazz del programma");
+        System.out.println(VUOTA);
+
+        listaClazz = service.allPackagesBackendClazz();
+        ottenutoIntero = listaClazz.size();
+        assertTrue(ottenutoIntero > 0);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Nel progetto ci sono %d classi di tipo CrudBackend", listaClazz.size()));
+        System.out.println(VUOTA);
+        for (Class classe : listaClazz) {
+            message = String.format("%s%s%s", classe.getSimpleName(), FORWARD, classe.getCanonicalName());
+            System.out.println(message);
+        }
+    }
+
+
+
+    @Test
+    @Order(95)
+    @DisplayName("95 - Istanze AEntity del programma")
     void getAllAEntity() {
-        System.out.println("91 - Lista di TUTTE le classi AEntity del programma");
+        System.out.println("95 - Istanze AEntity del programma");
         System.out.println(VUOTA);
         List<AEntity> listaAEntity;
 
@@ -685,10 +745,10 @@ public class ClassServiceTest extends AlgosTest {
     }
 
     @Test
-    @Order(91)
-    @DisplayName("92 - Lista di TUTTE le classi CrudBackend del programma")
+    @Order(96)
+    @DisplayName("96 - Istanze CrudBackend del programma")
     void getAllBackend() {
-        System.out.println("92 - Lista di TUTTE le classi CrudBackend del programma");
+        System.out.println("96 - Istanze CrudBackend del programma");
         System.out.println(VUOTA);
         List<CrudBackend> listaCrudBackends;
 

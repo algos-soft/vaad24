@@ -304,6 +304,29 @@ public class ClassService extends AbstractService {
         return getClazzFromSimpleName(clazzName);
     }
 
+    public List<Class> allPackagesClazz() {
+        List<Class> listClazz = new ArrayList<>();
+
+        listClazz.addAll(allModulePackagesClazz(VaadVar.moduloVaadin24));
+        listClazz.addAll(allModulePackagesClazz(VaadVar.projectNameModulo));
+
+        return listClazz;
+    }
+
+    public List<Class> allPackagesEntityClazz() {
+        return allPackagesClazz().stream()
+                .filter(path -> !path.getCanonicalName().endsWith(SUFFIX_BACKEND))
+                .filter(path -> !path.getCanonicalName().endsWith(SUFFIX_REPOSITORY))
+                .filter(path -> !path.getCanonicalName().endsWith(SUFFIX_VIEW))
+                .filter(path -> !path.getCanonicalName().endsWith(SUFFIX_DIALOG))
+                .collect(Collectors.toList());
+    }
+
+    public List<Class> allPackagesBackendClazz() {
+        return allPackagesClazz().stream()
+                .filter(path -> path.getCanonicalName().endsWith(SUFFIX_BACKEND))
+                .collect(Collectors.toList());
+    }
 
     /**
      * Spazzola tutta la directory package del modulo in esame e recupera
@@ -821,7 +844,7 @@ public class ClassService extends AbstractService {
                     listaAEntity.add(entity);
                 }
             } catch (Exception unErrore) {
-                logger.info(new WrapLog().type(AETypeLog.file).message(String.format("Manca il file %s",path)));
+                logger.info(new WrapLog().type(AETypeLog.file).message(String.format("Manca il file %s", path)));
             }
         }
 

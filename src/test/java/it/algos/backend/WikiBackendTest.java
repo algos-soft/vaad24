@@ -4,6 +4,7 @@ import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
@@ -141,11 +142,63 @@ public class WikiBackendTest extends AlgosTest {
     }
 
 
+//    @Test
+//    @Order(11)
+//    @DisplayName("11 - isExistsCollection")
+//    void isExistsCollection() {
+//        System.out.println("11 - isExistsCollection");
+//        System.out.println("Recupera tutte le classi del progetto corrente");
+//        System.out.println(VUOTA);
+//
+//        // recupero i nomi di tutte le classi AEntity dei package
+//        listaBeans = classService.getAllAEntity();
+//
+//        for (AEntity entity : listaBeans) {
+//            ottenutoBooleano = mongoService.isExistsCollection(entity.getClass());
+//            clazzName = entity.getClass().getSimpleName();
+//            collectionName = annotationService.getCollectionName(entity.getClass());
+//            if (ottenutoBooleano) {
+//                message = String.format("Esiste la collection della classe [%s] e si chiama '%s'", clazzName, collectionName);
+//            }
+//            else {
+//                message = String.format("Non esiste la collection '%s' della classe [%s]", collectionName, clazzName);
+//            }
+//            System.out.println(message);
+//        }
+//    }
+
+
     @Test
     @Order(11)
     @DisplayName("11 - isExistsCollection")
     void isExistsCollection() {
         System.out.println("11 - isExistsCollection");
+        System.out.println("Recupera tutte le classi del progetto corrente");
+        System.out.println(VUOTA);
+
+        // recupero i nomi di tutte le classi AEntity dei package
+//        listaClazz = classService.getAllAEntity();
+
+        for (AEntity entity : listaBeans) {
+            ottenutoBooleano = mongoService.isExistsCollection(entity.getClass());
+            clazzName = entity.getClass().getSimpleName();
+            collectionName = annotationService.getCollectionName(entity.getClass());
+            if (ottenutoBooleano) {
+                message = String.format("Esiste la collection della classe [%s] e si chiama '%s'", clazzName, collectionName);
+            }
+            else {
+                message = String.format("Non esiste la collection '%s' della classe [%s]", collectionName, clazzName);
+            }
+            System.out.println(message);
+        }
+    }
+
+
+    //    @Test
+    @Order(12)
+    @DisplayName("12 - count")
+    protected void count() {
+        System.out.println("12 - count");
         System.out.println("Recupera tutte le classi del progetto corrente");
         System.out.println(VUOTA);
 
@@ -167,11 +220,6 @@ public class WikiBackendTest extends AlgosTest {
         }
     }
 
-    @Test
-    @Order(12)
-    @DisplayName(PUNTO)
-    protected void count() {
-    }
 
     @Test
     @Order(13)
