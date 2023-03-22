@@ -32,7 +32,7 @@ import java.util.stream.*;
 @Tag("backend")
 @DisplayName("Wiki Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class WikiBackendTest extends AlgosTest {
+public class AllBackendTest extends AlgosTest {
 
     private String collectionName;
 
