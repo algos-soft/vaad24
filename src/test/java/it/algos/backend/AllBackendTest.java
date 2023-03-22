@@ -77,20 +77,20 @@ public class AllBackendTest extends AlgosTest {
         listaStr = classService.allModuleBackendName(sorgente);
         message = String.format("Nel modulo %s ci sono %d classi di tipo [CrudBackend]", sorgente, listaStr.size());
         System.out.println(message);
-        System.out.println(listaStr);
+        print(listaStr);
         System.out.println(VUOTA);
 
         sorgente = VaadVar.projectNameModulo;
         listaStr = classService.allModuleBackendName(sorgente);
         message = String.format("Nel modulo %s ci sono %d classi di tipo [CrudBackend]", sorgente, listaStr.size());
         System.out.println(message);
-        System.out.println(listaStr);
+        print(listaStr);
         System.out.println(VUOTA);
 
         listaStr = classService.allBackendName();
         message = String.format("Nel progetto corrente ci sono in totale %d classi di tipo [CrudBackend]", listaStr.size());
         System.out.println(message);
-        System.out.println(listaStr);
+        print(listaStr);
         System.out.println(VUOTA);
     }
 
@@ -106,20 +106,20 @@ public class AllBackendTest extends AlgosTest {
         listaStr = classService.allModuleBackendResetOrderedName(sorgente);
         message = String.format("Nel modulo %s ci sono %d classi di tipo [CrudBackend] che implementano il metodo %s", sorgente, listaStr.size(), METHOD_NAME_RESET_ONLY);
         System.out.println(message);
-        System.out.println(listaStr);
+        print(listaStr);
         System.out.println(VUOTA);
 
         sorgente = VaadVar.projectNameModulo;
         listaStr = classService.allModuleBackendResetOrderedName(sorgente);
         message = String.format("Nel modulo %s ci sono %d classi di tipo [CrudBackend] che implementano il metodo %s", sorgente, listaStr.size(), METHOD_NAME_RESET_ONLY);
         System.out.println(message);
-        System.out.println(listaStr);
+        print(listaStr);
         System.out.println(VUOTA);
 
         listaStr = classService.allBackendResetOrderedName();
         message = String.format("Nel progetto corrente ci sono in totale %d classi di tipo [CrudBackend] che implementano il metodo %s", listaStr.size(), METHOD_NAME_RESET_ONLY);
         System.out.println(message);
-        System.out.println(listaStr);
+        print(listaStr);
         System.out.println(VUOTA);
     }
 
@@ -135,20 +135,20 @@ public class AllBackendTest extends AlgosTest {
         listaStr = classService.allModuleEntityResetOrderedName(sorgente);
         message = String.format("Nel modulo %s ci sono %d classi di tipo [AEntity] che implementano il metodo %s (nella corrispondente xxxBackend)", sorgente, listaStr.size(), METHOD_NAME_RESET_ONLY);
         System.out.println(message);
-        System.out.println(listaStr);
+        print(listaStr);
         System.out.println(VUOTA);
 
         sorgente = VaadVar.projectNameModulo;
         listaStr = classService.allModuleEntityResetOrderedName(sorgente);
         message = String.format("Nel modulo %s ci sono %d classi di tipo [AEntity] che implementano il metodo %s (nella corrispondente xxxBackend)", sorgente, listaStr.size(), METHOD_NAME_RESET_ONLY);
         System.out.println(message);
-        System.out.println(listaStr);
+        print(listaStr);
         System.out.println(VUOTA);
 
         listaStr = classService.allEntityResetOrderedName();
         message = String.format("Nel progetto corrente ci sono in totale %d classi di tipo [AEntity] che implementano il metodo %s (nella corrispondente xxxBackend)", listaStr.size(), METHOD_NAME_RESET_ONLY);
         System.out.println(message);
-        System.out.println(listaStr);
+        print(listaStr);
         System.out.println(VUOTA);
 
 
