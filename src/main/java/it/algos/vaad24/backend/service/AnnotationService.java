@@ -220,6 +220,10 @@ public class AnnotationService extends AbstractService {
         return entityClazz.getAnnotation(AIEntity.class);
     }
 
+    public boolean usaAnnotationAIEntity(final Class<? extends AEntity> entityClazz) {
+        return entityClazz.getAnnotation(AIEntity.class) != null;
+    }
+
     /**
      * Get the annotation Algos AIField. <br>
      *
@@ -525,20 +529,18 @@ public class AnnotationService extends AbstractService {
      */
     public String getKeyPropertyName(final Class<? extends AEntity> entityClazz) {
         String keyPropertyName = VUOTA;
+        String defaultValue = FIELD_NAME_NOME;
         AIEntity annotation = this.getAIEntity(entityClazz);
-
-        if (annotation != null && annotation.keyPropertyName().length() > 0) {
-            annotation = getAIEntity(entityClazz);
-        }
 
         if (annotation != null) {
             keyPropertyName = annotation.keyPropertyName();
         }
-        else {
-            keyPropertyName = FIELD_NAME_ID_CON;
+
+        if (textService.isEmpty(keyPropertyName)) {
+            keyPropertyName = defaultValue;
         }
 
-        return keyPropertyName;
+        return reflectionService.isEsiste(entityClazz, keyPropertyName) ? keyPropertyName : VUOTA;
     }
 
     /**
@@ -560,6 +562,7 @@ public class AnnotationService extends AbstractService {
             return false;
         }
     }
+
 
     /**
      * Flag per usare solo le lettere minuscole nel campo chiave keyId. <br>
@@ -605,6 +608,73 @@ public class AnnotationService extends AbstractService {
         }
 
         return usaKeyIdSenzaSpazi;
+    }
+
+
+    /**
+     * Restituisce il nome della property per la ricerca <br>
+     * Controlla che esista l'annotation specifica <br>
+     * Se non la trova, usa il valore di default keyPropertyName <br>
+     * Se non trova neanche keyPropertyName, usa il valore di default FIELD_NAME_NOME <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return the search property name
+     */
+    public String getSearchPropertyName(final Class<? extends AEntity> entityClazz) {
+
+        //        if (annotation != null) {
+        //            keyPropertyName = annotation.keyPropertyName();
+        //        }
+        //
+        //        if (textService.isEmpty(keyPropertyName)) {
+        //            keyPropertyName = defaultValue;
+        //        }
+        //
+        //        return reflectionService.isEsiste(entityClazz, keyPropertyName) ? keyPropertyName : VUOTA;
+
+        String searchPropertyName = VUOTA;
+        String defaultValue = FIELD_NAME_NOME;
+        AIEntity annotation = this.getAIEntity(entityClazz);
+
+        if (annotation != null) {
+            searchPropertyName = annotation.searchPropertyName();
+        }
+
+        if (textService.isEmpty(searchPropertyName)) {
+            searchPropertyName = getKeyPropertyName(entityClazz);
+        }
+
+        if (textService.isEmpty(searchPropertyName)) {
+            searchPropertyName = defaultValue;
+        }
+
+//        searchPropertyName = getKeyPropertyName(entityClazz);
+//        if (textService.isValid(searchPropertyName) || !searchPropertyName.equals(FIELD_NAME_ID_CON)) {
+//            return searchPropertyName;
+//        }
+
+        return   reflectionService.isEsiste(entityClazz, searchPropertyName) ? searchPropertyName : VUOTA;
+    }
+
+    /**
+     * Esiste una property search <br>
+     * Controlla che esista l'annotation specifica <br>
+     * Esclude usa il valore di default '_id' <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return if exists a key property
+     */
+    public boolean usaSearchPropertyName(final Class<? extends AEntity> entityClazz) {
+        String searchPropertyName = getSearchPropertyName(entityClazz);
+
+        if (textService.isValid(searchPropertyName) && !searchPropertyName.equals(FIELD_NAME_ID_CON)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     //==========================================================================

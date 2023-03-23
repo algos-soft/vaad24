@@ -1,6 +1,7 @@
 package it.algos.vaad24.backend.packages.geografia.continente;
 
 import it.algos.vaad24.backend.annotation.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import lombok.*;
@@ -29,7 +30,7 @@ import javax.persistence.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(keyPropertyName = "nome", usaReset = true)
+@AIEntity(keyPropertyName = FIELD_NAME_NOME, searchPropertyName = FIELD_NAME_NOME, usaReset = true)
 public class Continente extends AEntity {
 
     @Indexed(unique = true, direction = IndexDirection.ASCENDING)

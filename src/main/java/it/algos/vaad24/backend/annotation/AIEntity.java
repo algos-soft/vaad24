@@ -33,8 +33,13 @@ public @interface AIEntity {
      * (Optional) key property unica <br>
      * Di default usa la property 'id' della collection mongoDB <br>
      */
-    String keyPropertyName() default FIELD_NAME_ID_CON;
+    String keyPropertyName() default VUOTA;
 
+    /**
+     * (Optional) property search <br>
+     * Di default usa la property 'id' della collection mongoDB <br>
+     */
+    String searchPropertyName() default VUOTA;
 
     /**
      * (Optional) chiave keyId creata tutta minuscola e case-insensitive <br>
