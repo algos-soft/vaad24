@@ -5,6 +5,7 @@ import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
@@ -130,8 +131,8 @@ public class AnnoView extends CrudView {
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
-    protected void sincroFiltri() {
-        List<Anno> items = backend.findAllSort(sortOrder);
+    protected List<AEntity> sincroFiltri() {
+        List<Anno> items = (List)super.sincroFiltri();
 
         if (comboSecolo != null && comboSecolo.getValue() != null) {
             if (comboSecolo.getValue() instanceof Secolo secolo) {
@@ -152,6 +153,8 @@ public class AnnoView extends CrudView {
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }
+
+        return (List)items;
     }
 
 }// end of crud @Route view class

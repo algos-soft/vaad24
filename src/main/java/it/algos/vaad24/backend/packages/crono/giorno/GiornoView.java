@@ -3,6 +3,7 @@ package it.algos.vaad24.backend.packages.crono.giorno;
 import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
@@ -109,8 +110,8 @@ public class GiornoView extends CrudView {
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
-    protected void sincroFiltri() {
-        List<Giorno> items = backend.findAllSort(sortOrder);
+    protected List<AEntity> sincroFiltri() {
+        List<Giorno> items = (List)super.sincroFiltri();
 
         if (comboMese != null && comboMese.getValue() != null) {
             if (comboMese.getValue() instanceof Mese mese) {
@@ -123,6 +124,8 @@ public class GiornoView extends CrudView {
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }
+
+        return (List)items;
     }
 
 }// end of crud @Route view class

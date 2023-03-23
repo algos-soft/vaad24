@@ -5,6 +5,7 @@ import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
@@ -115,13 +116,8 @@ public class NotaView extends CrudView {
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
-    protected void sincroFiltri() {
-        List<Nota> items = backend.findAllSort(sortOrder);
-
-        final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
-        if (textService.isValid(textSearch)) {
-            items = items.stream().filter(nota -> nota.descrizione.matches("^(?i)" + textSearch + ".*$")).toList();
-        }
+    protected List<AEntity> sincroFiltri() {
+        List<Nota> items = (List)super.sincroFiltri();
 
         final AETypeLog type = comboTypeLog != null ? comboTypeLog.getValue() : null;
         if (type != null) {
@@ -142,6 +138,8 @@ public class NotaView extends CrudView {
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }
+
+        return (List)items;
     }
 
     @Override

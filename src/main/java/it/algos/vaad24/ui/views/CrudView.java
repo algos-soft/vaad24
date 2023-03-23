@@ -419,9 +419,10 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
             topPlaceHolder.add(buttonDeleteEntity);
         }
 
-        if (usaBottoneSearch) {
+        if (usaBottoneSearch && annotationService.usaSearchPropertyName(entityClazz)) {
+            searchFieldName = annotationService.getSearchPropertyName(entityClazz);
             searchField = new TextField();
-            searchField.setPlaceholder(TAG_ALTRE_BY);
+            searchField.setPlaceholder(TAG_ALTRE_BY + annotationService.getSearchPropertyName(entityClazz));
             searchField.setWidth(WIDTH_EM);
             searchField.setClearButtonVisible(true);
             searchField.addValueChangeListener(event -> sincroFiltri());
@@ -605,19 +606,6 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     //        }
     //    }
 
-    protected void fixSearch() {
-        if (grid != null) {
-            for (Grid.Column column : grid.getColumns()) {
-                if (annotationService.isSearch(entityClazz, column.getKey())) {
-                    searchFieldName = column.getKey();
-                    if (searchField != null) {
-                        searchField.setPlaceholder(String.format("%s%s", TAG_ALTRE_BY, searchFieldName));
-                    }
-                    break;
-                }
-            }
-        }
-    }
 
     /**
      * Aggiunge alcuni listeners alla Grid <br>
@@ -663,12 +651,12 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         }
     }
 
-    protected void sincroFiltri() {
+    protected List<AEntity> sincroFiltri() {
         List<AEntity> items = crudBackend.findAllSort(sortOrder);
 
         if (usaBottoneSearch && searchField != null) {
             final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
-            if (textService.isValid(textSearch)) {
+            if (textService.isValid(searchFieldName) && textService.isValid(textSearch)) {
                 items = items
                         .stream()
                         .filter(bean -> ((String) reflectionService.getPropertyValue(bean, searchFieldName)).matches("^(?i)" + textSearch + ".*$"))
@@ -679,6 +667,8 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         if (items != null) {
             grid.setItems(items);
         }
+
+        return items;
     }
 
     protected boolean sincroSelection(SelectionEvent event) {

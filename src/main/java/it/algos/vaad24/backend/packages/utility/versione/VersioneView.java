@@ -6,6 +6,7 @@ import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
@@ -118,13 +119,8 @@ public class VersioneView extends CrudView {
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
-    protected void sincroFiltri() {
-        List<Versione> items = backend.findAllSort(sortOrder);
-
-        final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
-        if (textService.isValid(textSearch)) {
-            items = items.stream().filter(vers -> vers.descrizione.matches("^(?i)" + textSearch + ".*$")).toList();
-        }
+    protected List<AEntity> sincroFiltri() {
+        List<Versione> items = (List)super.sincroFiltri();
 
         final AETypeVers level = comboTypeVers != null ? comboTypeVers.getValue() : null;
         if (level != null) {
@@ -138,6 +134,8 @@ public class VersioneView extends CrudView {
         if (items != null) {
             grid.setItems((List) items);
         }
+
+        return (List)items;
     }
 
 

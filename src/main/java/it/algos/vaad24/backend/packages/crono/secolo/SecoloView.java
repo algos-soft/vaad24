@@ -4,6 +4,7 @@ import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import org.springframework.beans.factory.annotation.*;
@@ -101,8 +102,8 @@ public class SecoloView extends CrudView {
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
-    protected void sincroFiltri() {
-        List<Secolo> items = backend.findAllSort(sortOrder);
+    protected List<AEntity> sincroFiltri() {
+        List<Secolo> items = (List)super.sincroFiltri();
 
         if (boxBox != null && !boxBox.isIndeterminate()) {
             items = items.stream().filter(sec -> sec.anteCristo == boxBox.getValue()).toList();
@@ -113,6 +114,8 @@ public class SecoloView extends CrudView {
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }
+
+        return (List)items;
     }
 
 }// end of crud @Route view class

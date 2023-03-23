@@ -186,6 +186,8 @@ public class AnnotationServiceTest extends AlgosTest {
     @DisplayName("5 - usaSearchPropertyName")
     void usaSearchPropertyName() {
         System.out.println("5 - Controlla la presenza della searchPropertyName in tutte le classi AEntity");
+        System.out.println("La presenza della searchPropertyName nella classe AEntity NON implica automaticamente che la View la usi");
+        System.out.println("Nella CrudView e sottoclassi, esiste il flag usaBottoneSearch");
         System.out.println(VUOTA);
         String searchPropertyName;
 

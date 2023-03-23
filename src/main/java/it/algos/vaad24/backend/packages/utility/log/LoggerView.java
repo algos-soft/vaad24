@@ -8,6 +8,7 @@ import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
@@ -159,13 +160,8 @@ public class LoggerView extends CrudView {
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
-    protected void sincroFiltri() {
-        List<Logger> items = backend.findAllSort(sortOrder);
-
-        final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
-        if (textService.isValid(textSearch)) {
-            items = items.stream().filter(log -> log.descrizione.matches("^(?i)" + textSearch + ".*$")).toList();
-        }
+    protected List<AEntity> sincroFiltri() {
+        List<Logger> items = (List)super.sincroFiltri();
 
         final AETypeLog type = comboTypeLog != null ? comboTypeLog.getValue() : null;
         if (type != null) {
@@ -180,6 +176,8 @@ public class LoggerView extends CrudView {
         if (items != null) {
             grid.setItems((List) items);
         }
+
+        return (List)items;
     }
 
 }// end of crud @Route view class
