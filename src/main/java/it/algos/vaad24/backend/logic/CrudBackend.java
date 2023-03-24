@@ -634,36 +634,65 @@ public abstract class CrudBackend extends AbstractService {
 
     /**
      * Lista della sola keyProperty indicata per tutte le entities della collezione <br>
-     * Ordinata secondo la keyProperty <br>
-     * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
+     * Ordinata secondo la keyProperty in ordine ascendente <br>
      */
     public List<String> findAllForKeySortKey() {
+        return findAllForKeySortKeyBase(KEY_ORDINE_ASCENDENTE);
+    }
+
+    /**
+     * Lista della sola keyProperty indicata per tutte le entities della collezione <br>
+     * Ordinata secondo la keyProperty in ordine discendente <br>
+     */
+    public List<String> findAllForKeySortKeyReverse() {
+        return findAllForKeySortKeyBase(KEY_ORDINE_DISCENDENTE);
+    }
+
+    private List<String> findAllForKeySortKeyBase(int ordinamento) {
         String keyPropertyName;
 
         if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
             keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-            return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(keyPropertyName, 1));
+            return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(keyPropertyName, ordinamento));
         }
         else {
             return null;
         }
     }
 
+
+    /**
+     * Lista della sola keyProperty indicata per tutte le entities della collezione <br>
+     * Ordinata secondo la property FIELD_NAME_ORDINE in ordine ascendente <br>
+     */
+    public List<String> findAllForKeySortOrdine() {
+        return findAllForKeySortOrdineBase(KEY_ORDINE_ASCENDENTE);
+    }
+
+    /**
+     * Lista della sola keyProperty indicata per tutte le entities della collezione <br>
+     * Ordinata secondo la property FIELD_NAME_ORDINE in ordine discendente <br>
+     */
+    public List<String> findAllForKeySortOrdineReverse() {
+        return findAllForKeySortOrdineBase(KEY_ORDINE_DISCENDENTE);
+    }
+
+
     /**
      * Lista della sola keyProperty indicata per tutte le entities della collezione <br>
      * Ordinata secondo la keyProperty <br>
      * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
      */
-    public List<String> findAllForKeySortOrdine() {
+    private List<String> findAllForKeySortOrdineBase(int ordinamento) {
         String keyPropertyName;
 
         if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
             keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
             if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
-                return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(FIELD_NAME_ORDINE, 1));
+                return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(FIELD_NAME_ORDINE, ordinamento));
             }
             else {
-                return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(keyPropertyName, 1));
+                return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(keyPropertyName, ordinamento));
             }
         }
         else {
@@ -671,27 +700,26 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
-    /**
-     * Lista della sola keyProperty indicata per tutte le entities della collezione <br>
-     * Ordinata al contrario della keyProperty <br>
-     * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
-     */
-    public List<String> findAllForKeyReverseOrder() {
-        if (isOrdineEntity()) {
-            return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
-        }
-        else {
-            return findAllForPropertyReverseOrder(annotationService.getKeyPropertyName(entityClazz));
-        }
-    }
+    //    /**
+    //     * Lista della sola keyProperty indicata per tutte le entities della collezione <br>
+    //     * Ordinata al contrario della keyProperty <br>
+    //     * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
+    //     */
+    //    public List<String> findAllForKeyReverseOrder() {
+    //        if (isOrdineEntity()) {
+    //            return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
+    //        }
+    //        else {
+    //            return findAllForPropertyReverseOrder(annotationService.getKeyPropertyName(entityClazz));
+    //        }
+    //    }
 
-
-    public boolean isOrdineEntity() {
-        boolean isNome = reflectionService.isEsiste(entityClazz, FIELD_NAME_NOME);
-        boolean isOrdine = reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE);
-
-        return isNome && isOrdine;
-    }
+    //    public boolean isOrdineEntity() {
+    //        boolean isNome = reflectionService.isEsiste(entityClazz, FIELD_NAME_NOME);
+    //        boolean isOrdine = reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE);
+    //
+    //        return isNome && isOrdine;
+    //    }
 
     /**
      * Lista della sola property indicata per tutte le entities della collezione <br>

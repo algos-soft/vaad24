@@ -1,6 +1,5 @@
 package it.algos.vaad24.backend.packages.crono.giorno;
 
-import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -115,10 +114,10 @@ public class GiornoBackend extends CrudBackend {
     }
 
 
-    @Override
-    public List<String> findAllForKeyReverseOrder() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
-    }
+//    @Override
+//    public List<String> findAllForKeyReverseOrder() {
+//        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
+//    }
 
 
 

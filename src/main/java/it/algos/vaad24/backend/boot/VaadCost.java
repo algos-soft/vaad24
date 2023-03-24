@@ -505,6 +505,9 @@ public class VaadCost {
 
     public static final List<String> ESCLUSI_ALL = Arrays.asList(PROPERTY_SERIAL, PROPERTY_NOTE, PROPERTY_CREAZIONE, PROPERTY_MODIFICA);
 
+    public static final int KEY_ORDINE_ASCENDENTE = 1;
+
+    public static final int KEY_ORDINE_DISCENDENTE = -1;
 
     public static final String TAG_EM = "em";
 

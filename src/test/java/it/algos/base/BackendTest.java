@@ -712,15 +712,16 @@ public abstract class BackendTest extends AlgosTest {
     @Order(60)
     @DisplayName("60--------")
     void test60() {
-        System.out.println("61 - findAllForKey (String)");
-        System.out.println("62 - findAllForKeyReverseOrder (String)");
+        System.out.println("61 - findAllForKeySortKey (String)");
+        System.out.println("62 - findAllForKeySortOrdine (String)");
+        System.out.println("63 - findAllForKeyReverseOrder (String)");
     }
 
     @Test
     @Order(61)
-    @DisplayName("61 - findAllForKey (String)")
-    protected void findAllForKey() {
-        System.out.println("61 - findAllForKey (String)");
+    @DisplayName("61 - findAllForKeySortKey (String)")
+    protected void findAllForKeySortKey() {
+        System.out.println("61 - findAllForKeySortKey (String)");
         System.out.println(VUOTA);
 
         if (!annotationService.usaKeyPropertyName(entityClazz)) {
@@ -748,7 +749,9 @@ public abstract class BackendTest extends AlgosTest {
         ottenutoIntero = listaStr.size();
         sorgente = textService.format(ottenutoIntero);
         sorgente2 = keyPropertyName;
-        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities.", collectionName, clazzName, ottenutoIntero);
+        System.out.println(message);
+        message = String.format("Valori (String) del campo chiave '%s' ordinato secondo '%s' ascendente:", keyPropertyName, keyPropertyName);
         System.out.println(message);
 
         printSubLista(listaStr);
@@ -756,9 +759,51 @@ public abstract class BackendTest extends AlgosTest {
 
     @Test
     @Order(62)
-    @DisplayName("62 - findAllForKeyReverseOrder (String)")
+    @DisplayName("62 - findAllForKeySortOrdine (String)")
+    protected void findAllForKeySortOrdine() {
+        System.out.println("62 - findAllForKeySortOrdine (String)");
+        System.out.println(VUOTA);
+
+        if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+            message = String.format("Il metodo usato da questo test presuppone che esista una property %s", FIELD_NAME_ORDINE);
+            System.out.println(message);
+
+            message = String.format("Nella entityClazz [%s] la property %s non è prevista", clazzName, FIELD_NAME_ORDINE);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo la property %s", FIELD_NAME_ORDINE);
+            System.out.println(message);
+            return;
+        }
+
+        if (!crudBackend.isExistsCollection()) {
+            message = String.format("Il metodo usato da questo test presuppone che esista la collection '%s' che invece è assente", collectionName);
+            System.out.println(message);
+            message = String.format("Non esiste la collection '%s' della classe [%s]", collectionName, clazzName);
+            System.out.println(message);
+            return;
+        }
+
+        listaStr = crudBackend.findAllForKeySortOrdine();
+        assertNotNull(listaStr);
+        ottenutoIntero = listaStr.size();
+        sorgente = textService.format(ottenutoIntero);
+        sorgente2 = keyPropertyName;
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities.", collectionName, clazzName, ottenutoIntero);
+        System.out.println(message);
+        message = String.format("Valori (String) del campo chiave '%s' ordinato secondo '%s' ascendente:", keyPropertyName, FIELD_NAME_ORDINE);
+        System.out.println(message);
+
+        printSubLista(listaStr);
+    }
+
+
+    @Test
+    @Order(63)
+    @DisplayName("63 - findAllForKeyReverseOrder (String)")
     protected void findAllForKeyReverseOrder() {
-        System.out.println("62 - findAllForKeyReverseOrder (String)");
+        System.out.println("63 - findAllForKeyReverseOrder (String)");
         System.out.println(VUOTA);
 
         if (!annotationService.usaKeyPropertyName(entityClazz)) {
@@ -781,7 +826,7 @@ public abstract class BackendTest extends AlgosTest {
             return;
         }
 
-        listaStr = crudBackend.findAllForKeyReverseOrder();
+//        listaStr = crudBackend.findAllForKeyReverseOrder();
         assertNotNull(listaStr);
         ottenutoIntero = listaStr.size();
         sorgente = textService.format(ottenutoIntero);
