@@ -726,7 +726,6 @@ public abstract class BackendTest extends AlgosTest {
 
         if (!annotationService.usaKeyPropertyName(entityClazz)) {
             System.out.println("Il metodo usato da questo test presuppone che esista una keyProperty");
-
             message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
             System.out.println(message);
             message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
@@ -757,11 +756,52 @@ public abstract class BackendTest extends AlgosTest {
         printSubLista(listaStr);
     }
 
+
     @Test
     @Order(62)
-    @DisplayName("62 - findAllForKeySortOrdine (String)")
+    @DisplayName("62 - findAllForKeySortKeyReverse (String)")
+    protected void findAllForKeySortKeyReverse() {
+        System.out.println("62 - findAllForKeySortKeyReverse (String)");
+        System.out.println(VUOTA);
+
+        if (!annotationService.usaKeyPropertyName(entityClazz)) {
+            System.out.println("Il metodo usato da questo test presuppone che esista una keyProperty");
+            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
+            System.out.println(message);
+            return;
+        }
+
+        if (!crudBackend.isExistsCollection()) {
+            message = String.format("Il metodo usato da questo test presuppone che esista la collection '%s' che invece è assente", collectionName);
+            System.out.println(message);
+            message = String.format("Non esiste la collection '%s' della classe [%s]", collectionName, clazzName);
+            System.out.println(message);
+            return;
+        }
+
+        listaStr = crudBackend.findAllForKeySortKeyReverse();
+        assertNotNull(listaStr);
+        ottenutoIntero = listaStr.size();
+        sorgente = textService.format(ottenutoIntero);
+        sorgente2 = keyPropertyName;
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities.", collectionName, clazzName, ottenutoIntero);
+        System.out.println(message);
+        message = String.format("Valori (String) del campo chiave '%s' ordinato secondo '%s' discendente:", keyPropertyName, keyPropertyName);
+        System.out.println(message);
+
+        printSubLista(listaStr);
+    }
+
+
+    @Test
+    @Order(63)
+    @DisplayName("63 - findAllForKeySortOrdine (String)")
     protected void findAllForKeySortOrdine() {
-        System.out.println("62 - findAllForKeySortOrdine (String)");
+        System.out.println("63 - findAllForKeySortOrdine (String)");
         System.out.println(VUOTA);
 
         if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
@@ -800,20 +840,21 @@ public abstract class BackendTest extends AlgosTest {
 
 
     @Test
-    @Order(63)
-    @DisplayName("63 - findAllForKeyReverseOrder (String)")
-    protected void findAllForKeyReverseOrder() {
-        System.out.println("63 - findAllForKeyReverseOrder (String)");
+    @Order(64)
+    @DisplayName("64 - findAllForKeySortOrdineReverse (String)")
+    protected void findAllForKeySortOrdineReverse() {
+        System.out.println("64 - findAllForKeySortOrdineReverse (String)");
         System.out.println(VUOTA);
 
-        if (!annotationService.usaKeyPropertyName(entityClazz)) {
-            System.out.println("Il metodo usato da questo test presuppone che esista una keyProperty");
+        if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+            message = String.format("Il metodo usato da questo test presuppone che esista una property %s", FIELD_NAME_ORDINE);
+            System.out.println(message);
 
-            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
+            message = String.format("Nella entityClazz [%s] la property %s non è prevista", clazzName, FIELD_NAME_ORDINE);
             System.out.println(message);
             message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
             System.out.println(message);
-            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
+            message = String.format("Aggiungendo la property %s", FIELD_NAME_ORDINE);
             System.out.println(message);
             return;
         }
@@ -826,20 +867,17 @@ public abstract class BackendTest extends AlgosTest {
             return;
         }
 
-//        listaStr = crudBackend.findAllForKeyReverseOrder();
+        listaStr = crudBackend.findAllForKeySortOrdineReverse();
         assertNotNull(listaStr);
         ottenutoIntero = listaStr.size();
         sorgente = textService.format(ottenutoIntero);
         sorgente2 = keyPropertyName;
-        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s' in ordine inverso:", collectionName, clazzName, sorgente, sorgente2);
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities.", collectionName, clazzName, ottenutoIntero);
+        System.out.println(message);
+        message = String.format("Valori (String) del campo chiave '%s' ordinato secondo '%s' discendente:", keyPropertyName, FIELD_NAME_ORDINE);
         System.out.println(message);
 
         printSubLista(listaStr);
-    }
-
-    //Segnaposto
-    @Order(64)
-    protected void libero64() {
     }
 
     //Segnaposto
