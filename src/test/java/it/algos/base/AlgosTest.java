@@ -617,6 +617,17 @@ public abstract class AlgosTest {
         }
     }
 
+
+    protected void printMappa(Map<String, String> mappa) {
+        System.out.println(VUOTA);
+        System.out.println(String.format("Nella mappa ci sono %d elementi", mappa.size()));
+        System.out.println(VUOTA);
+        for (String key : mappa.keySet()) {
+            message = String.format("%s%s%s", key, FORWARD, mappa.get(key));
+            System.out.println(message);
+        }
+    }
+
     protected void printTag(AIType enumTag) {
         System.out.println(String.format("%s%s%s", enumTag, FORWARD, enumTag.getTag()));
     }
