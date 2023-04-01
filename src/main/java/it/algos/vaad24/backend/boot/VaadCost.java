@@ -122,6 +122,9 @@ public class VaadCost {
 
     public static final String DOPPIO_PIPE_REGEX = PIPE_REGEX + PIPE_REGEX;
 
+
+    public static final String APICETTI = "\"";
+
     public static final String VIRGOLA = ",";
 
     public static final String PUNTO_VIRGOLA = ";";
