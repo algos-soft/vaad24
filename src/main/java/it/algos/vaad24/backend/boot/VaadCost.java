@@ -139,6 +139,10 @@ public class VaadCost {
 
     public static final String SPAZIO = " ";
 
+    public static final String SOMMA = "+";
+
+    public static final String SOMMA_SPAZIO = SPAZIO + SOMMA + SPAZIO;
+
     public static final String SPAZIO_NON_BREAKING = "&nbsp;";
 
     public static final String UNDERSCORE = "_";
