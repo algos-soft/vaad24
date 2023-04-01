@@ -186,3 +186,12 @@ These four operations are fundamental to the management of data in any data stor
         }
 
 * Baeldung [https://www.baeldung.com/java-instanceof]
+
+== Backup  restore locali ==
+mongodump --db wiki24 --out /Users/guidoceresa/Desktop/dump
+mongodump --db wiki24 --out /Users/gac/Desktop/dump
+
+drop
+
+mongorestore -d wiki24 /Users/guidoceresa/Desktop/dump/wiki24
+mongorestore -d wiki24 /Users/gac/Desktop/dump/wiki24

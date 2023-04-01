@@ -274,10 +274,10 @@ public class AnnoBackendTest extends BackendTest {
 
 
     @Test
-    @Order(54)
-    @DisplayName("54 - findAllBySecolo (entity)")
+    @Order(55)
+    @DisplayName("55 - findAllBySecolo (entity)")
     void findAllBySecolo() {
-        System.out.println("54 - findAllBySecolo (entity)");
+        System.out.println("55 - findAllBySecolo (entity)");
 
         for (Secolo sorgente : secoloBackend.findAllSortCorrente()) {
             listaBeans = backend.findAllBySecolo(sorgente);

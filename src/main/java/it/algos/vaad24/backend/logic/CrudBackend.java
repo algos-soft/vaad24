@@ -609,6 +609,20 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
+    public List findAllSortKey() {
+        String keyPropertyName;
+        Sort sort;
+
+        if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
+            keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+            sort = Sort.by(Sort.Direction.ASC, keyPropertyName);
+            return findAllSort(sort);
+        }
+        else {
+            return findAllNoSort();
+        }
+    }
+
 
     public List findAllByProperty(final String propertyName, final Object propertyValue) {
         Query query = new Query();
