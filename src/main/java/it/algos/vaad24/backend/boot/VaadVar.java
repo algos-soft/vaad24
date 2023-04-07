@@ -58,7 +58,7 @@ public class VaadVar {
 
 
     /**
-     * Nome identificativo minuscolo del progetto base vaadin23 <br>
+     * Nome identificativo minuscolo del progetto base vaadin24 <br>
      * Deve essere regolato in backend.boot.VaadBoot.fixVariabili() del progetto base <br>
      */
     public static String frameworkVaadin24;

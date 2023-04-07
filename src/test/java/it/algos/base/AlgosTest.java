@@ -353,6 +353,7 @@ public abstract class AlgosTest {
         MockitoAnnotations.openMocks(this);
 
         slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
+        this.typeBackend = TypeBackend.nessuno;
 
         initMocks();
     }

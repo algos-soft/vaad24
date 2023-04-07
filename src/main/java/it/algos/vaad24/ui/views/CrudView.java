@@ -358,7 +358,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
             topPlaceHolder.add(buttonRefresh);
         }
 
-        if (usaBottoneReset) {
+        if (usaBottoneReset && buttonReset == null) {
             buttonReset = new Button();
             buttonReset.getElement().setAttribute("theme", "error");
             //--ha senso solo per le entity che estendono AREntity con la property 'reset'
@@ -710,7 +710,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         if (result.isValido()) {
             grid.setItems(crudBackend.findAllSort(sortOrder));
             Avviso.message("Eseguito reset completo").success().open();
-            refresh();
+            reload();
         }
         else {
             Avviso.message(result.getErrorMessage()).error().durata(6).open();

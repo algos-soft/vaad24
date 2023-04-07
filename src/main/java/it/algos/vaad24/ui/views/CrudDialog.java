@@ -328,6 +328,7 @@ public abstract class CrudDialog extends Dialog {
                             }
                             yield combo;
                         }
+                        case lista -> null;
                         case localDateTime -> new DateTimePicker(caption);
                         case localDate -> new DatePicker(caption);
                         case localTime -> new TimePicker(caption);
@@ -336,6 +337,9 @@ public abstract class CrudDialog extends Dialog {
                             yield new TextField(key);
                         }
                     };
+                    if (field == null) {
+                        continue;
+                    }
 
                     formLayout.add(field);
                     if (type == AETypeField.lungo) {
@@ -405,6 +409,7 @@ public abstract class CrudDialog extends Dialog {
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(unErrore).usaDb());
         }
+
     }
 
     /**

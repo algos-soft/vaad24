@@ -11,6 +11,7 @@ import org.springframework.stereotype.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.*;
 
 /**
  * Project vaad24
@@ -48,12 +49,14 @@ public class Prova extends AEntity {
     @AIField(type = AETypeField.linkStatico, widthEM = lar, linkClazz = ViaBackend.class)
     public Via viaLinkStatico;
 
+    @AIField(type = AETypeField.lista, widthEM = lar, linkClazz = Via.class)
+    public List<Via> listaVie;
+
     @AIField(type = AETypeField.enumString, widthEM = lar, valoriEnum = "alfa,beta,gamma")
     public String typeString;
 
     @AIField(type = AETypeField.enumType, widthEM = lar, enumClazz = AETypeVers.class)
     public AETypeVers versione;
-
 
     @AIField(type = AETypeField.enumType, widthEM = lar, enumClazz = AESchedule.class)
     public AESchedule schedule;

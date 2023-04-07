@@ -3,6 +3,7 @@ package it.algos.simpleOnly;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24simple.backend.packages.prova.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
@@ -89,6 +90,29 @@ public class ProvaBackendTest extends AlgosTest {
             message = String.format("%s%s%s", sorgente, FORWARD, ottenuto);
             System.out.println(message);
         }
+    }
+
+
+    @Test
+    @Order(2)
+    @DisplayName("2 - resetForcing")
+    protected void resetForcing() {
+        System.out.println("2 - resetForcing");
+        System.out.println(VUOTA);
+
+        ottenutoRisultato = backend.resetForcing();
+        assertNotNull(ottenutoRisultato);
+        if (ottenutoRisultato.isValido()) {
+            System.out.println(ottenutoRisultato.getMessage());
+            printRisultato(ottenutoRisultato);
+
+            System.out.println(VUOTA);
+            printBackend(ottenutoRisultato.getLista());
+        }
+        else {
+            logger.warn(new WrapLog().message(ottenutoRisultato.getErrorMessage()));
+        }
+        assertTrue(ottenutoRisultato.isValido());
     }
 
 }

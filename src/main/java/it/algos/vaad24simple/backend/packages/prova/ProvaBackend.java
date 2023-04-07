@@ -36,7 +36,7 @@ public class ProvaBackend extends CrudBackend {
 
 
     public boolean creaIfNotExist(final String descrizione) {
-        return insert(newEntity(descrizione, null, null, VUOTA, null, null)) != null;
+        return insert(newEntity(descrizione, null, null, null, VUOTA, null, null)) != null;
     }
 
 
@@ -48,7 +48,7 @@ public class ProvaBackend extends CrudBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public Prova newEntity(String descrizione) {
-        return newEntity(descrizione, null, null, VUOTA, null, null);
+        return newEntity(descrizione, null, null, null, VUOTA, null, null);
     }
 
 
@@ -62,11 +62,12 @@ public class ProvaBackend extends CrudBackend {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public Prova newEntity(String descrizione, Continente continenteLinkDinamicoDBRef, Via viaLinkStatico, String typeString, AETypeVers versione, AESchedule schedule) {
+    public Prova newEntity(String descrizione, Continente continenteLinkDinamicoDBRef, Via viaLinkStatico, List listaVie, String typeString, AETypeVers versione, AESchedule schedule) {
         Prova newEntityBean = Prova.builder()
                 .descrizione(textService.isValid(descrizione) ? descrizione : null)
                 .continenteLinkDinamicoDBRef(continenteLinkDinamicoDBRef)
                 .viaLinkStatico(viaLinkStatico)
+                .listaVie(listaVie)
                 .typeString(textService.isValid(typeString) ? typeString : null)
                 .versione(versione)
                 .schedule(schedule)
@@ -100,6 +101,8 @@ public class ProvaBackend extends CrudBackend {
         String descrizione = VUOTA;
         Continente continenteLinkDinamicoDBRef = null;
         Via viaLinkStatico = null;
+        String listaVieText;
+        List<Via> listaVie = null;
         String typeString = VUOTA;
         AETypeVers versione = null;
         AESchedule schedule = null;
@@ -116,15 +119,17 @@ public class ProvaBackend extends CrudBackend {
 
                 for (String key : mappa.keySet()) {
                     riga = mappa.get(key);
-                    if (riga.size() == 6) {
+                    if (riga.size() == 7) {
                         descrizione = riga.get(0);
                         continenteLinkDinamicoDBRef = continenteBackend.findById(riga.get(1));
                         viaLinkStatico = viaBackend.findById(riga.get(2));
-                        typeString = riga.get(3);
-                        versione = AETypeVers.valueOf(riga.get(4));
-                        schedule = AESchedule.valueOf(riga.get(5));
+                        listaVieText = riga.get(3);
+                        listaVie = fixLista(listaVieText);
+                        typeString = riga.get(4);
+                        versione = AETypeVers.valueOf(riga.get(5));
+                        schedule = AESchedule.valueOf(riga.get(6));
                     }
-                    entityBean = insert(newEntity(descrizione, continenteLinkDinamicoDBRef, viaLinkStatico, typeString, versione, schedule));
+                    entityBean = insert(newEntity(descrizione, continenteLinkDinamicoDBRef, viaLinkStatico, listaVie, typeString, versione, schedule));
                     if (entityBean != null) {
                         lista.add(entityBean);
                     }
@@ -141,5 +146,27 @@ public class ProvaBackend extends CrudBackend {
         }
         return result.fine();
     }
+
+    public List<Via> fixLista(String listaVieText) {
+        List<Via> listaVie = null;
+        String sep = TRATTINO;
+        String[] parti;
+        Via via;
+
+        parti = listaVieText.split(sep);
+        if (parti != null) {
+            listaVie = new ArrayList<>();
+
+            for (String nome : parti) {
+                via = viaBackend.findByKey(nome);
+                if (via != null) {
+                    listaVie.add(via);
+                }
+            }
+        }
+
+        return listaVie;
+    }
+
 
 }// end of crud backend class
