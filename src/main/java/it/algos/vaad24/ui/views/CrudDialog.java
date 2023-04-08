@@ -272,7 +272,20 @@ public abstract class CrudDialog extends Dialog {
                 type = annotationService.getFormType(currentItem.getClass(), key);
                 hasFocus = annotationService.hasFocus(currentItem.getClass(), key);
                 caption = annotationService.getCaption(currentItem.getClass(), key); ;
-                nullSelectionAllowed = annotationService.nullSelectionAllowed(currentItem.getClass(), key); ;
+                nullSelectionAllowed = annotationService.nullSelectionAllowed(currentItem.getClass(), key);
+
+                if (type == AETypeField.listaH) {
+                    AListaFieldH cField= new AListaFieldH(caption);
+                    formLayout.add(cField);
+                    binder.forField(cField).bind(key);
+                    continue;
+                }
+                if (type == AETypeField.listaV) {
+                    AListaFieldV cField= new AListaFieldV(caption);
+                    formLayout.add(cField);
+                    binder.forField(cField).bind(key);
+                    continue;
+                }
 
                 if (!type.isCustomField()) {
                     field = switch (type) {
@@ -328,7 +341,7 @@ public abstract class CrudDialog extends Dialog {
                             }
                             yield combo;
                         }
-                        case lista -> null;
+                        case listaH, listaV -> null;
                         case localDateTime -> new DateTimePicker(caption);
                         case localDate -> new DatePicker(caption);
                         case localTime -> new TimePicker(caption);
@@ -386,7 +399,6 @@ public abstract class CrudDialog extends Dialog {
                     binder.forField(aField).bind(key);
                 }
             }
-
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(unErrore).usaDb());
         }

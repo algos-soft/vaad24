@@ -36,7 +36,7 @@ public class ProvaBackend extends CrudBackend {
 
 
     public boolean creaIfNotExist(final String descrizione) {
-        return insert(newEntity(descrizione, null, null, null, VUOTA, null, null)) != null;
+        return insert(newEntity(descrizione, null, null, null,null, VUOTA, null, null)) != null;
     }
 
 
@@ -48,7 +48,7 @@ public class ProvaBackend extends CrudBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public Prova newEntity(String descrizione) {
-        return newEntity(descrizione, null, null, null, VUOTA, null, null);
+        return newEntity(descrizione, null, null, null, null,VUOTA, null, null);
     }
 
 
@@ -62,12 +62,13 @@ public class ProvaBackend extends CrudBackend {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public Prova newEntity(String descrizione, Continente continenteLinkDinamicoDBRef, Via viaLinkStatico, List listaVie, String typeString, AETypeVers versione, AESchedule schedule) {
+    public Prova newEntity(String descrizione, Continente continenteLinkDinamicoDBRef, Via viaLinkStatico, List listaVie, List listaContinenti,String typeString, AETypeVers versione, AESchedule schedule) {
         Prova newEntityBean = Prova.builder()
                 .descrizione(textService.isValid(descrizione) ? descrizione : null)
                 .continenteLinkDinamicoDBRef(continenteLinkDinamicoDBRef)
                 .viaLinkStatico(viaLinkStatico)
                 .listaVie(listaVie)
+                .listaContinenti(listaContinenti)
                 .typeString(textService.isValid(typeString) ? typeString : null)
                 .versione(versione)
                 .schedule(schedule)
@@ -101,8 +102,8 @@ public class ProvaBackend extends CrudBackend {
         String descrizione = VUOTA;
         Continente continenteLinkDinamicoDBRef = null;
         Via viaLinkStatico = null;
-        String listaVieText;
         List<Via> listaVie = null;
+        List<Continente> listaContinenti = null;
         String typeString = VUOTA;
         AETypeVers versione = null;
         AESchedule schedule = null;
@@ -119,17 +120,17 @@ public class ProvaBackend extends CrudBackend {
 
                 for (String key : mappa.keySet()) {
                     riga = mappa.get(key);
-                    if (riga.size() == 7) {
+                    if (riga.size() == 8) {
                         descrizione = riga.get(0);
                         continenteLinkDinamicoDBRef = continenteBackend.findById(riga.get(1));
                         viaLinkStatico = viaBackend.findById(riga.get(2));
-                        listaVieText = riga.get(3);
-                        listaVie = fixLista(listaVieText);
-                        typeString = riga.get(4);
-                        versione = AETypeVers.valueOf(riga.get(5));
-                        schedule = AESchedule.valueOf(riga.get(6));
+                        listaVie = fixVia(riga.get(3));
+                        listaContinenti = fixContinente(riga.get(4));
+                        typeString = riga.get(5);
+                        versione = AETypeVers.valueOf(riga.get(6));
+                        schedule = AESchedule.valueOf(riga.get(7));
                     }
-                    entityBean = insert(newEntity(descrizione, continenteLinkDinamicoDBRef, viaLinkStatico, listaVie, typeString, versione, schedule));
+                    entityBean = insert(newEntity(descrizione, continenteLinkDinamicoDBRef, viaLinkStatico, listaVie, listaContinenti,typeString, versione, schedule));
                     if (entityBean != null) {
                         lista.add(entityBean);
                     }
@@ -147,8 +148,8 @@ public class ProvaBackend extends CrudBackend {
         return result.fine();
     }
 
-    public List<Via> fixLista(String listaVieText) {
-        List<Via> listaVie = null;
+    public List fixVia(String listaVieText) {
+        List listaVie = null;
         String sep = TRATTINO;
         String[] parti;
         Via via;
@@ -161,6 +162,26 @@ public class ProvaBackend extends CrudBackend {
                 via = viaBackend.findByKey(nome);
                 if (via != null) {
                     listaVie.add(via);
+                }
+            }
+        }
+
+        return listaVie;
+    }
+    public List fixContinente(String listaContinenteText) {
+        List listaVie = null;
+        String sep = TRATTINO;
+        String[] parti;
+        Continente continente;
+
+        parti = listaContinenteText.split(sep);
+        if (parti != null) {
+            listaVie = new ArrayList<>();
+
+            for (String nome : parti) {
+                continente = continenteBackend.findById(nome);
+                if (continente != null) {
+                    listaVie.add(continente);
                 }
             }
         }

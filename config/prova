@@ -1,4 +1,4 @@
-descrizione,continenti,via,listaVie,typeString,versioni,schedule
-testo descrittivo della nota,africa,vicolo,piazza-largo-vicolo,beta,company,minuto
-altro,asia,piazza,via-vicolo-corso-porta,alfa,upgrade,dieciMercoledi
-nessuno,europa,via,calle,beta,error,giovedi7
+descrizione,continenti,via,listaVie,listaContinenti,typeString,versioni,schedule
+testo descrittivo della nota,africa,vicolo,piazza-largo-vicolo,asia-africa,beta,company,minuto
+altro,asia,piazza,via-vicolo-corso-porta,europa,alfa,upgrade,dieciMercoledi
+nessuno,europa,via,calle,australia-asia-africa-europa,beta,error,giovedi7

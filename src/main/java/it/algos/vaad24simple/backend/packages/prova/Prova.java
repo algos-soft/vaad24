@@ -49,8 +49,11 @@ public class Prova extends AEntity {
     @AIField(type = AETypeField.linkStatico, widthEM = lar, linkClazz = ViaBackend.class)
     public Via viaLinkStatico;
 
-    @AIField(type = AETypeField.lista, widthEM = lar, linkClazz = Via.class)
+    @AIField(type = AETypeField.listaH, widthEM = lar, linkClazz = Via.class)
     public List<Via> listaVie;
+
+    @AIField(type = AETypeField.listaV, widthEM = lar, linkClazz = Continente.class)
+    public List<Continente> listaContinenti;
 
     @AIField(type = AETypeField.enumString, widthEM = lar, valoriEnum = "alfa,beta,gamma")
     public String typeString;
