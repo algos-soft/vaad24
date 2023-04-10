@@ -81,6 +81,7 @@ public class ColumnService extends AbstractService {
                     grid.addColumn(propertyName).setSortable(true);
             case integer, lungo -> grid.addColumn(propertyName).setSortable(true);
             case booleano -> addBoolean(grid, entityClazz, propertyName);
+            case listaH,listaV -> grid.addColumn(propertyName).setSortable(false);
 
             //            case booleano -> {
             //                yield grid.addColumn(new ComponentRenderer<>(entity -> {

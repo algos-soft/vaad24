@@ -192,6 +192,8 @@ public class VaadCost {
 
     public static final String RETURN = "\n";
 
+    public static final String TAG_RETURN = "return";
+
     public static final String REF = "<ref>";
 
     public static final String HTML = "[html";

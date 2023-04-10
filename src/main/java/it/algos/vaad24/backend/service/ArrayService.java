@@ -332,6 +332,66 @@ public class ArrayService extends AbstractService {
         return mappaOrdinata;
     }
 
+    /**
+     * Ordina la mappa secondo il valore
+     *
+     * @param mappaDisordinata in ingresso
+     *
+     * @return mappa ordinata, null se mappaDisordinata è null
+     */
+    public Map sortValue(final Map mappaDisordinata) {
+        LinkedHashMap mappaOrdinata = new LinkedHashMap();
+        Object[] listaValues;
+        List listaKeys;
+
+        if (!isAllValid(mappaDisordinata)) {
+            return mappaDisordinata;
+        }
+
+        listaValues = mappaDisordinata.values().toArray();
+
+        try {
+            Arrays.sort(listaValues);
+        } catch (Exception unErrore) {
+            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+        }
+
+        for (Object value : listaValues) {
+            listaKeys=getSet(mappaDisordinata, value);
+            for (Object key : listaKeys) {
+                mappaOrdinata.put(key, value);
+            }
+        }
+
+        return mappaOrdinata;
+    }
+
+    public Object getKey(final Map mappa, Object value) {
+        for (Object key : mappa.keySet()) {
+            if (mappa.get(key).equals(value)) {
+                return key;
+            }
+        }
+
+        return null;
+    }
+
+    public List getSet(final Map mappa, Object value) {
+        List sortedList;
+        Set keys = new HashSet<>();
+
+        for (Object key : mappa.keySet()) {
+            if (mappa.get(key).equals(value)) {
+                keys.add(key);
+            }
+        }
+
+        sortedList = new ArrayList<>(keys);
+        Collections.sort(sortedList);
+
+        return sortedList;
+    }
+
 
     /**
      * Ordina la mappa secondo la chiave
@@ -435,7 +495,7 @@ public class ArrayService extends AbstractService {
 
             if (listaOrdinata.contains(ancestor)) {
                 posAncestor = listaOrdinata.indexOf(ancestor);
-                posBase = posAncestor +1;
+                posBase = posAncestor + 1;
                 listaOrdinata.add(posBase, base);
             }
             else {

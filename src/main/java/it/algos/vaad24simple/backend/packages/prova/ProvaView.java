@@ -5,6 +5,8 @@ import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import org.springframework.beans.factory.annotation.*;
 
+import java.util.*;
+
 /**
  * Project vaad24
  * Created by Algos
@@ -49,6 +51,8 @@ public class ProvaView extends CrudView {
     protected void fixPreferenze() {
         super.fixPreferenze();
         usaBottoneReset = true;
+
+        super.gridPropertyNamesList = Arrays.asList("descrizione", "continenteLinkDinamicoDBRef", "viaLinkStatico", "listaVie", "listaContinenti","typeString","versione","schedule");
     }
 
     /**
