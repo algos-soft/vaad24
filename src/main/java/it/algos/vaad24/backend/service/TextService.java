@@ -1377,6 +1377,28 @@ public class TextService extends AbstractService {
 
         return isValid(stringaOut) ? stringaOut.trim() : VUOTA;
     }
+    /**
+     * Aggiunge apicetti in testa e coda alla stringa. <br>
+     * Aggiunge SOLO se gia non esistono <br>
+     * Se arriva una stringa vuota, restituisce una stringa vuota <br>
+     * Elimina spazi vuoti iniziali e finali <br>
+     *
+     * @param stringaIn in ingresso
+     *
+     * @return stringa con parentesi tonde aggiunte
+     */
+    public String setApicetti(String stringaIn) {
+        String stringaOut = stringaIn;
+
+        if (!stringaOut.startsWith(APICETTI)) {
+            stringaOut = APICETTI + stringaOut;
+        }
+        if (!stringaOut.endsWith(APICETTI)) {
+            stringaOut = stringaOut + APICETTI;
+        }
+
+        return isValid(stringaOut) ? stringaOut.trim() : VUOTA;
+    }
 
     /**
      * Aggiunge i tag '<ref></ref>' in testa e coda alla stringa. <br>
