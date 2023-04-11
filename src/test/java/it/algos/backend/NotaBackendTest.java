@@ -19,7 +19,6 @@ import java.util.*;
  */
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
 @Tag("backend")
 @DisplayName("Nota Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -39,6 +38,8 @@ public class NotaBackendTest extends BackendTest {
 
         super.setUpAll();
     }
+
+
 
     @Test
     @Order(41)

@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.*;
  */
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
 @Tag("backend")
 @DisplayName("Versione Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

@@ -6,9 +6,11 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project vaad24
@@ -28,6 +30,43 @@ public class MeseBackendTest extends BackendTest {
 
     protected MeseBackend backend;
 
+    //--nome nella collection
+    //--esiste come ID
+    //--esiste come key
+    protected static Stream<Arguments> MESE() {
+        return Stream.of(
+                Arguments.of(VUOTA, false, false),
+                Arguments.of("aprile", true, true),
+                Arguments.of("termidoro", false, false),
+                Arguments.of("brumaio", false, false),
+                Arguments.of("settembre", true, true)
+        );
+    }
+
+    //--nome della property
+    //--value della property
+    //--esiste entityBean
+    public static Stream<Arguments> PROPERTY() {
+        return Stream.of(
+                Arguments.of(VUOTA, VUOTA, false),
+                Arguments.of("propertyInesistente", "valoreInesistente", false),
+                Arguments.of("breve", "genn", false),
+                Arguments.of("breve", "apr", true)
+        );
+    }
+
+    //--value ordine
+    //--esiste entityBean
+    public static Stream<Arguments> ORDINE() {
+        return Stream.of(
+                Arguments.of(0, false),
+                Arguments.of(847, false),
+                Arguments.of(1, true),
+                Arguments.of(12, true),
+                Arguments.of(-5, false)
+        );
+    }
+
     /**
      * Qui passa una volta sola <br>
      */
@@ -41,161 +80,13 @@ public class MeseBackendTest extends BackendTest {
         super.setUpAll();
     }
 
-    @Test
-    @Order(21)
-    @DisplayName("21 - isExistById")
-    protected void isExistById() {
-        System.out.println("21 - isExistById");
-        System.out.println(VUOTA);
+    @BeforeEach
+    protected void setUpEach() {
+        super.setUpEach();
 
-        sorgente = "sbagliato";
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "ottobre";
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertTrue(ottenutoBooleano);
-    }
-
-
-    @Test
-    @Order(22)
-    @DisplayName("22 - isExistByKey")
-    protected void isExistByKey() {
-        System.out.println("22 - isExistByKey");
-        System.out.println(VUOTA);
-
-        sorgente = "termidoro";
-        ottenutoBooleano = super.isExistByKey(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "ottobre";
-        ottenutoBooleano = super.isExistByKey(sorgente);
-        assertTrue(ottenutoBooleano);
-    }
-
-
-    @Test
-    @Order(23)
-    @DisplayName("23 - isExistByOrder")
-    protected void isExistByOrder() {
-        System.out.println("23 - isExistByOrder");
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 87;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 6;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertTrue(ottenutoBooleano);
-    }
-
-
-    @Test
-    @Order(24)
-    @DisplayName("24 - isExistByProperty")
-    protected void isExistByProperty() {
-        System.out.println("24 - isExistByProperty");
-        System.out.println(VUOTA);
-
-        sorgente = "propertyInesistente";
-        sorgente2 = "termidoro";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "breve";
-        sorgente2 = "termidoro";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "breve";
-        sorgente2 = "apr";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertTrue(ottenutoBooleano);
-    }
-
-    @Test
-    @Order(31)
-    @DisplayName("31 - findById")
-    protected void findById() {
-        System.out.println("31 - findById");
-        System.out.println(VUOTA);
-
-        sorgente = "sbagliato";
-        entityBean = super.findById(sorgente);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "ottobre";
-        entityBean = super.findById(sorgente);
-        assertNotNull(entityBean);
-    }
-
-    @Test
-    @Order(32)
-    @DisplayName("32 - findByKey")
-    protected void findByKey() {
-        System.out.println("32 - findByKey");
-        System.out.println(VUOTA);
-
-        sorgente = "sbagliato";
-        entityBean = super.findByKey(sorgente);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "ottobre";
-        entityBean = super.findByKey(sorgente);
-        assertNotNull(entityBean);
-    }
-
-    @Test
-    @Order(33)
-    @DisplayName("33 - findByOrder")
-    protected void findByOrder() {
-        System.out.println("33 - findByOrder");
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 87;
-        entityBean = super.findByOrder(sorgenteIntero);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 6;
-        entityBean = super.findByOrder(sorgenteIntero);
-        assertNotNull(entityBean);
-    }
-
-
-    @Test
-    @Order(34)
-    @DisplayName("34 - findByProperty")
-    protected void findByProperty() {
-        System.out.println("34 - findByProperty");
-        System.out.println(VUOTA);
-
-        sorgente = "propertyInesistente";
-        sorgente2 = "termidoro";
-        entityBean = super.findByProperty(sorgente, sorgente2);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "breve";
-        sorgente2 = "termidoro";
-        entityBean = super.findByProperty(sorgente, sorgente2);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "breve";
-        sorgente2 = "apr";
-        entityBean = super.findByProperty(sorgente, sorgente2);
-        assertNotNull(entityBean);
-        System.out.println(VUOTA);
+        super.streamCollection = MESE();
+        super.streamProperty = PROPERTY();
+        super.streamOrder = ORDINE();
     }
 
 

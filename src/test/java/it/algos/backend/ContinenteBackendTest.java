@@ -2,9 +2,13 @@ package it.algos.backend;
 
 import it.algos.*;
 import it.algos.base.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
+
+import java.util.stream.*;
 
 /**
  * Project vaad24
@@ -15,13 +19,52 @@ import org.springframework.boot.test.context.*;
  */
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
 @Tag("backend")
 @DisplayName("Continente Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ContinenteBackendTest extends BackendTest {
 
     private ContinenteBackend backend;
+
+
+
+    //--nome nella collection
+    //--esiste come ID
+    //--esiste come key
+    protected static Stream<Arguments> CONTINENTE() {
+        return Stream.of(
+                Arguments.of(VUOTA, false, false),
+                Arguments.of("afrtica", false, false),
+                Arguments.of("africa", true, false),
+                Arguments.of("Africa", false, true),
+                Arguments.of("nordamerica", true, false),
+                Arguments.of("Nordamerica", false, true)
+        );
+    }
+
+
+
+    //--nome della property
+    //--value della property
+    //--esiste entityBean
+    public static Stream<Arguments> PROPERTY() {
+        return Stream.of(
+                Arguments.of(VUOTA, VUOTA, false),
+                Arguments.of("propertyInesistente", "valoreInesistente", false),
+                Arguments.of("ordine", 13, false),
+                Arguments.of("ordine", 2, true)
+        );
+    }
+
+    //--value ordine
+    //--esiste entityBean
+    public static Stream<Arguments> ORDINE() {
+        return Stream.of(
+                Arguments.of(0, false),
+                Arguments.of(13, false),
+                Arguments.of(4, true)
+        );
+    }
 
     /**
      * Qui passa una volta sola <br>
@@ -35,6 +78,13 @@ public class ContinenteBackendTest extends BackendTest {
 
         super.setUpAll();
     }
+    @BeforeEach
+    protected void setUpEach() {
+        super.setUpEach();
 
+        super.streamCollection = CONTINENTE();
+        super.streamProperty = PROPERTY();
+        super.streamOrder = ORDINE();
+    }
 
 }

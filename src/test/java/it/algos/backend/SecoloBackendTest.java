@@ -6,9 +6,11 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project vaad24
@@ -19,13 +21,49 @@ import java.util.*;
  */
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
 @Tag("backend")
 @DisplayName("Secolo Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SecoloBackendTest extends BackendTest {
 
     private SecoloBackend backend;
+
+    //--nome nella collection
+    //--esiste come ID
+    //--esiste come key
+    protected static Stream<Arguments> SECOLO() {
+        return Stream.of(
+                Arguments.of(VUOTA, false, false),
+                Arguments.of("aprile", false, false),
+                Arguments.of("XX secolo", false, true),
+                Arguments.of("xxsecolo", true, false)
+        );
+    }
+
+    //--nome della property
+    //--value della property
+    //--esiste entityBean
+    public static Stream<Arguments> PROPERTY() {
+        return Stream.of(
+                Arguments.of(VUOTA, VUOTA, false),
+                Arguments.of("propertyInesistente", "valoreInesistente", false),
+                Arguments.of("inizio", 374, false),
+                Arguments.of("inizio", 401, true)
+        );
+    }
+
+    //--value ordine
+    //--esiste entityBean
+    public static Stream<Arguments> ORDINE() {
+        return Stream.of(
+                Arguments.of(0, false),
+                Arguments.of(847, false),
+                Arguments.of(4, true),
+                Arguments.of(27, true),
+                Arguments.of(35, false),
+                Arguments.of(-4, false)
+        );
+    }
 
 
     /**
@@ -41,185 +79,14 @@ public class SecoloBackendTest extends BackendTest {
         super.setUpAll();
     }
 
-    @Test
-    @Order(21)
-    @DisplayName("21 - isExistById")
-    protected void isExistById() {
-        System.out.println("21 - isExistById");
-        System.out.println(VUOTA);
 
-        sorgente = "XX secolo";
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
+    @BeforeEach
+    protected void setUpEach() {
+        super.setUpEach();
 
-        sorgente = "xxsecolo";
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertTrue(ottenutoBooleano);
-    }
-
-
-    @Test
-    @Order(22)
-    @DisplayName("22 - isExistByKey")
-    protected void isExistByKey() {
-        System.out.println("22 - isExistByKey");
-        System.out.println(VUOTA);
-
-        sorgente = "xxsecolo";
-        ottenutoBooleano = super.isExistByKey(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "XX secolo";
-        ottenutoBooleano = super.isExistByKey(sorgente);
-        assertTrue(ottenutoBooleano);
-    }
-
-
-    @Test
-    @Order(23)
-    @DisplayName("23 - isExistByOrder")
-    protected void isExistByOrder() {
-        System.out.println("23 - isExistByOrder");
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 857;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-
-        sorgenteIntero = 4;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertTrue(ottenutoBooleano);
-
-        sorgenteIntero = 27;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertTrue(ottenutoBooleano);
-
-        sorgenteIntero = 35;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-
-        sorgenteIntero = -4;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-    }
-
-
-    @Test
-    @Order(24)
-    @DisplayName("24 - isExistByProperty")
-    protected void isExistByProperty() {
-        System.out.println("24 - isExistByProperty");
-        System.out.println(VUOTA);
-
-        sorgente = "propertyInesistente";
-        sorgenteIntero = 401;
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "inizio";
-        sorgenteIntero = 374;
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        assertFalse(ottenutoBooleano);
-        sorgenteIntero = 401;
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
-        assertTrue(ottenutoBooleano);
-    }
-
-
-    @Test
-    @Order(31)
-    @DisplayName("31 - findById")
-    protected void findById() {
-        System.out.println("31 - findById");
-        System.out.println(VUOTA);
-
-        sorgente = "XX secolo";
-        entityBean = super.findById(sorgente);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "xxsecolo";
-        entityBean = super.findById(sorgente);
-        assertNotNull(entityBean);
-    }
-
-    @Test
-    @Order(32)
-    @DisplayName("32 - findByKey")
-    protected void findByKey() {
-        System.out.println("32 - findByKey");
-        System.out.println(VUOTA);
-
-        sorgente = "xxsecolo";
-        entityBean = super.findByKey(sorgente);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "XX secolo";
-        entityBean = super.findByKey(sorgente);
-        assertNotNull(entityBean);
-    }
-
-    @Test
-    @Order(33)
-    @DisplayName("33 - findByOrder")
-    protected void findByOrder() {
-        System.out.println("33 - findByOrder");
-        System.out.println("Secolo ricavato dal numero d'ordine che parte dal X secolo a.C.");
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 857;
-        entityBean = super.findByOrder(sorgenteIntero);
-        assertNull(entityBean);
-
-        sorgenteIntero = 4;
-        entityBean = super.findByOrder(sorgenteIntero);
-        assertNotNull(entityBean);
-
-        sorgenteIntero = 27;
-        entityBean = super.findByOrder(sorgenteIntero);
-        assertNotNull(entityBean);
-
-        sorgenteIntero = 35;
-        entityBean = super.findByOrder(sorgenteIntero);
-        assertNull(entityBean);
-
-        sorgenteIntero = -4;
-        entityBean = super.findByOrder(sorgenteIntero);
-        assertNull(entityBean);
-    }
-
-
-    @Test
-    @Order(34)
-    @DisplayName("34 - findByProperty")
-    protected void findByProperty() {
-        System.out.println("34 - findByProperty");
-        System.out.println(VUOTA);
-
-        sorgente = "propertyInesistente";
-        sorgenteIntero = 401;
-        entityBean = super.findByProperty(sorgente, sorgenteIntero);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "inizio";
-        sorgenteIntero = 374;
-        entityBean = super.findByProperty(sorgente, sorgenteIntero);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "inizio";
-        sorgenteIntero = 401;
-        entityBean = super.findByProperty(sorgente, sorgenteIntero);
-        assertNotNull(entityBean);
-        System.out.println(VUOTA);
+        super.streamCollection = SECOLO();
+        super.streamProperty = PROPERTY();
+        super.streamOrder = ORDINE();
     }
 
 
@@ -341,7 +208,6 @@ public class SecoloBackendTest extends BackendTest {
         System.out.println(message);
         printBackend(List.of(entityBean));
     }
-
 
 
 }

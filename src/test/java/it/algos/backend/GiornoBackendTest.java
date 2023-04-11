@@ -11,6 +11,7 @@ import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project vaad24
@@ -31,6 +32,43 @@ public class GiornoBackendTest extends BackendTest {
 
     private List<Giorno> listaBeans;
 
+    //--nome nella collection
+    //--esiste come ID
+    //--esiste come key
+    protected static Stream<Arguments> GIORNO() {
+        return Stream.of(
+                Arguments.of(VUOTA, false, false),
+                Arguments.of("23 febbraio", false, true),
+                Arguments.of("43 marzo", false, false),
+                Arguments.of("19 dicembra", false, false),
+                Arguments.of("4gennaio", true, false)
+        );
+    }
+
+    //--nome della property
+    //--value della property
+    //--esiste entityBean
+    public static Stream<Arguments> PROPERTY() {
+        return Stream.of(
+                Arguments.of(VUOTA, VUOTA, false),
+                Arguments.of("propertyInesistente", "valoreInesistente", false),
+                Arguments.of("trascorsi", 8527, false),
+                Arguments.of("trascorsi", 233, true)
+        );
+    }
+
+    //--value ordine
+    //--esiste entityBean
+    public static Stream<Arguments> ORDINE() {
+        return Stream.of(
+                Arguments.of(0, false),
+                Arguments.of(847, false),
+                Arguments.of(4, true),
+                Arguments.of(27, true),
+                Arguments.of(235, true),
+                Arguments.of(-4, false)
+        );
+    }
 
     /**
      * Qui passa una volta sola <br>
@@ -45,177 +83,13 @@ public class GiornoBackendTest extends BackendTest {
         super.setUpAll();
     }
 
+    @BeforeEach
+    protected void setUpEach() {
+        super.setUpEach();
 
-    @Test
-    @Order(21)
-    @DisplayName("21 - isExistById")
-    protected void isExistById() {
-        System.out.println("21 - isExistById");
-        System.out.println(VUOTA);
-
-        sorgente = "sbagliato";
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "23maggio";
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertTrue(ottenutoBooleano);
-    }
-
-
-    @Test
-    @Order(22)
-    @DisplayName("22 - isExistByKey")
-    protected void isExistByKey() {
-        System.out.println("22 - isExistByKey");
-        System.out.println(VUOTA);
-        System.out.println("Giorno ricavato dalla keyProperty");
-        System.out.println(VUOTA);
-
-        //--giorno
-        //--esistente
-        System.out.println(VUOTA);
-        GIORNI().forEach(this::isExistKeyBase);
-    }
-
-    //--giorno
-    //--esistente
-    void isExistKeyBase(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[1];
-
-        ottenutoBooleano = backend.isExistByKey(sorgente);
-        assertEquals(previstoBooleano, ottenutoBooleano);
-        if (ottenutoBooleano) {
-            System.out.println(String.format("Il giorno [%s] esiste", sorgente));
-        }
-        else {
-            System.out.println(String.format("Il giorno [%s] non esiste", sorgente));
-        }
-        System.out.println(VUOTA);
-    }
-
-    @Test
-    @Order(23)
-    @DisplayName("23 - isExistByOrder")
-    protected void isExistByOrder() {
-        System.out.println("23 - isExistByOrder");
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 487;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 6;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertTrue(ottenutoBooleano);
-    }
-
-
-    @Test
-    @Order(24)
-    @DisplayName("24 - isExistByProperty")
-    protected void isExistByProperty() {
-        System.out.println("24 - isExistByProperty");
-        System.out.println(VUOTA);
-
-        sorgente = "propertyInesistente";
-        sorgenteIntero = 27;
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "trascorsi";
-        sorgenteIntero = 8527;
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "trascorsi";
-        sorgenteIntero = 233;
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
-        assertTrue(ottenutoBooleano);
-    }
-
-    @Test
-    @Order(31)
-    @DisplayName("31 - findById")
-    protected void findById() {
-        System.out.println("31 - findById");
-        System.out.println(VUOTA);
-
-        sorgente = "sbagliato";
-        entityBean = super.findById(sorgente);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "23maggio";
-        entityBean = super.findById(sorgente);
-        assertNotNull(entityBean);
-    }
-
-    @Test
-    @Order(32)
-    @DisplayName("32 - findByKey")
-    protected void findByKey() {
-        System.out.println("32 - findByKey");
-        System.out.println(VUOTA);
-
-        sorgente = "12 termidoro";
-        entityBean = super.findByKey(sorgente);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "23 maggio";
-        entityBean = super.findByKey(sorgente);
-        assertNotNull(entityBean);
-    }
-
-    @Test
-    @Order(33)
-    @DisplayName("33 - findByOrder")
-    protected void findByOrder() {
-        System.out.println("33 - findByOrder");
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 487;
-        entityBean = super.findByOrder(sorgenteIntero);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 6;
-        entityBean = super.findByOrder(sorgenteIntero);
-        assertNotNull(entityBean);
-    }
-
-
-    @Test
-    @Order(34)
-    @DisplayName("34 - findByProperty")
-    protected void findByProperty() {
-        System.out.println("34 - findByProperty");
-        System.out.println(VUOTA);
-
-        sorgente = "propertyInesistente";
-        sorgenteIntero = 27;
-        entityBean = super.findByProperty(sorgente, sorgenteIntero);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "trascorsi";
-        sorgenteIntero = 8527;
-        entityBean = super.findByProperty(sorgente, sorgenteIntero);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "trascorsi";
-        sorgenteIntero = 233;
-        entityBean = super.findByProperty(sorgente, sorgenteIntero);
-        assertNotNull(entityBean);
-        System.out.println(VUOTA);
+        super.streamCollection = GIORNO();
+        super.streamProperty = PROPERTY();
+        super.streamOrder = ORDINE();
     }
 
 
@@ -272,6 +146,7 @@ public class GiornoBackendTest extends BackendTest {
         System.out.println(message);
         printBackend(List.of(entityBean));
     }
+
     @Test
     @Order(55)
     @DisplayName("55 - findAllByMese (entity)")
@@ -297,15 +172,15 @@ public class GiornoBackendTest extends BackendTest {
         System.out.println("Uguale a 61 - findAllForKey");
         System.out.println(VUOTA);
 
-//        listaStr = backend.findAllForNome();
-//        assertNotNull(listaStr);
-//        ottenutoIntero = listaStr.size();
-//        sorgente = textService.format(ottenutoIntero);
-//        sorgente2 = keyPropertyName;
-//        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
-//        System.out.println(message);
-//
-//        printSubLista(listaStr);
+        //        listaStr = backend.findAllForNome();
+        //        assertNotNull(listaStr);
+        //        ottenutoIntero = listaStr.size();
+        //        sorgente = textService.format(ottenutoIntero);
+        //        sorgente2 = keyPropertyName;
+        //        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
+        //        System.out.println(message);
+        //
+        //        printSubLista(listaStr);
     }
 
 
