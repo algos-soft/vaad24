@@ -271,7 +271,13 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println(VUOTA);
 
         if (annotationService.usaReset(entityClazz)) {
-            streamCollection.forEach(parameters -> this.isExistById(parameters));
+            if (streamCollection != null) {
+                streamCollection.forEach(parameters -> this.isExistById(parameters));
+            }
+            else {
+                message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamCollection");
+                logger.warn(new WrapLog().message(message));
+            }
         }
         else {
             message = String.format("La collection '%s' ha il flag reset=false e non garantisce di avere valori che possano essere usati come test (potrebbe anche essere vuota)", collectionName);
@@ -316,7 +322,13 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println(VUOTA);
 
         if (annotationService.usaReset(entityClazz)) {
-            streamCollection.forEach(parameters -> this.isExistByKey(parameters));
+            if (streamCollection != null) {
+                streamCollection.forEach(parameters -> this.isExistByKey(parameters));
+            }
+            else {
+                message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamCollection");
+                logger.warn(new WrapLog().message(message));
+            }
         }
         else {
             message = String.format("La collection '%s' ha il flag reset=false e non garantisce di avere valori che possano essere usati come test (potrebbe anche essere vuota)", collectionName);
@@ -368,10 +380,16 @@ public abstract class BackendTest extends AlgosTest {
 
         if (annotationService.usaReset(entityClazz)) {
             if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
-                streamProperty.forEach(parameters -> this.isExistByProperty(parameters));
+                if (streamProperty != null) {
+                    streamProperty.forEach(parameters -> this.isExistByProperty(parameters));
+                }
+                else {
+                    message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamProperty");
+                    logger.warn(new WrapLog().message(message));
+                }
             }
             else {
-                message = String.format("Nella collection '%s' non esiste la key property", collectionName);
+                message = String.format("La collection '%s' non prevede una key property", collectionName);
                 System.out.println(message);
             }
         }
@@ -432,14 +450,18 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println(VUOTA);
 
         if (annotationService.usaReset(entityClazz)) {
-            if (streamOrder != null) {
-                streamOrder.forEach(parameters -> this.isExistByOrder(parameters));
+            if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+                if (streamOrder != null) {
+                    streamOrder.forEach(parameters -> this.isExistByOrder(parameters));
+                }
+                else {
+                    message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamOrder");
+                    logger.warn(new WrapLog().message(message));
+                }
             }
             else {
-                if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
-                    message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, FIELD_NAME_ORDINE);
-                    System.out.println(message);
-                }
+                message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, FIELD_NAME_ORDINE);
+                System.out.println(message);
             }
         }
         else {
@@ -495,7 +517,13 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println(VUOTA);
 
         if (annotationService.usaReset(entityClazz)) {
-            streamCollection.forEach(parameters -> this.findById(parameters));
+            if (streamCollection != null) {
+                streamCollection.forEach(parameters -> this.findById(parameters));
+            }
+            else {
+                message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamCollection");
+                logger.warn(new WrapLog().message(message));
+            }
         }
         else {
             message = String.format("La collection '%s' ha il flag reset=false e non garantisce di avere valori che possano essere usati come test (potrebbe anche essere vuota)", collectionName);
@@ -540,7 +568,13 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println(VUOTA);
 
         if (annotationService.usaReset(entityClazz)) {
-            streamCollection.forEach(parameters -> this.findByKey(parameters));
+            if (streamCollection != null) {
+                streamCollection.forEach(parameters -> this.findByKey(parameters));
+            }
+            else {
+                message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamCollection");
+                logger.warn(new WrapLog().message(message));
+            }
         }
         else {
             message = String.format("La collection '%s' ha il flag reset=false e non garantisce di avere valori che possano essere usati come test (potrebbe anche essere vuota)", collectionName);
@@ -592,10 +626,16 @@ public abstract class BackendTest extends AlgosTest {
 
         if (annotationService.usaReset(entityClazz)) {
             if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
-                streamProperty.forEach(parameters -> this.findByProperty(parameters));
+                if (streamProperty != null) {
+                    streamProperty.forEach(parameters -> this.findByProperty(parameters));
+                }
+                else {
+                    message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamProperty");
+                    logger.warn(new WrapLog().message(message));
+                }
             }
             else {
-                message = String.format("Nella collection '%s' non esiste la key property", collectionName);
+                message = String.format("La collection '%s' non prevede una key property", collectionName);
                 System.out.println(message);
             }
         }
@@ -657,14 +697,18 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println(VUOTA);
 
         if (annotationService.usaReset(entityClazz)) {
-            if (streamOrder != null) {
-                streamOrder.forEach(parameters -> this.findByOrder(parameters));
+            if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+                if (streamOrder != null) {
+                    streamOrder.forEach(parameters -> this.findByOrder(parameters));
+                }
+                else {
+                    message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamOrder");
+                    logger.warn(new WrapLog().message(message));
+                }
             }
             else {
-                if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
-                    message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, FIELD_NAME_ORDINE);
-                    System.out.println(message);
-                }
+                message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, FIELD_NAME_ORDINE);
+                System.out.println(message);
             }
         }
         else {
