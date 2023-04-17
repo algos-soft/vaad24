@@ -47,6 +47,7 @@ public class AnnotationService extends AbstractService {
 
     public AnnotationService() {
     }
+
     //==========================================================================
     // Costanti
     //==========================================================================
