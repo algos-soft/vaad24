@@ -843,10 +843,6 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
-    public AResult resetOnlyEmpty(boolean logInfo) {
-        return resetOnlyEmpty();
-    }
-
 
     /**
      * Reset/creazione di alcuni dati <br>
@@ -867,10 +863,6 @@ public abstract class CrudBackend extends AbstractService {
         String message;
 
         if (mongoService.isCollectionNullOrEmpty(entityClazz)) {
-            //            message = String.format("La collection '%s' della classe [%s] era vuota ma non sono riuscito a crearla. Probabilmente manca il metodo [%s].resetOnlyEmpty()", collectionName, clazzName, backendName);
-            //            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", annotationService.getCollectionName(entityClazz));
-            //            logService.debug(new WrapLog().message(message));
-
             result = resetDownload();
             if (!result.isValido()) {
                 return result;
@@ -909,19 +901,6 @@ public abstract class CrudBackend extends AbstractService {
         if (lista.size() > 0) {
             result.setIntValue(lista.size());
             result.setLista(lista);
-
-            //            if (result.isValido()) {
-            //                result.errorMessage(VUOTA).eseguito().typeResult(AETypeResult.collectionCreata);
-            //                result.setValido(true);
-            //                message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. ", collectionName, clazzName);
-            //                message += String.format("Contiene %s elementi. ", textService.format(lista.size()));
-            //                message += result.deltaSec();
-            //                logService.info(new WrapLog().message(message).type(AETypeLog.reset).usaDb());
-            //                return result.validMessage(message);
-            //            }
-            //            else {
-            //                return result.typeResult(AETypeResult.error);
-            //            }
         }
         else {
             result.typeResult(AETypeResult.error);
@@ -931,46 +910,6 @@ public abstract class CrudBackend extends AbstractService {
 
         return result;
     }
-
-    //    public AResult fixResult(AResult result) {
-    //        String elementi = VUOTA;
-    //        String message = VUOTA;
-    //        String clazzName = entityClazz.getSimpleName();
-    //        String collectionName = annotationService.getCollectionName(entityClazz);
-    //
-    //        if (result.isEseguito()) {
-    //            elementi = textService.format(count());
-    //            message = String.format("La collection '%s' della classe [%s] esisteva già, non era vuota e non è stata toccata. Contiene %s elementi.", collectionName, clazzName, elementi);
-    //            result = result.validMessage(message).typeResult(AETypeResult.collectionPiena).intValue(count());
-    //            logService.debug(new WrapLog().message(message));
-    //        }
-    //        else {
-    //            elementi = textService.format(count());
-    //            message = String.format("La collection '%s' della classe [%s] esisteva già, non era vuota e non è stata toccata. Contiene %s elementi.", collectionName, clazzName, elementi);
-    //            result = result.validMessage(message).typeResult(AETypeResult.collectionPiena).intValue(count());
-    //            logService.debug(new WrapLog().message(message));
-    //        }
-    //
-    //        return result;
-    //    }
-
-    //    public AResult fixResult(AResult result, String clazzName, String collectionName, int numeroElementi) {
-    //        String message;
-    //
-    //        if (result.isValido()) {
-    //            result.errorMessage(VUOTA).eseguito().typeResult(AETypeResult.collectionCreata);
-    //            message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. ", collectionName, clazzName);
-    //            message += String.format("Contiene %s elementi.", textService.format(numeroElementi));
-    //            message += result.deltaSec();
-    //            result.validMessage(message);
-    //            logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.reset).usaDb());
-    //        }
-    //        else {
-    //            result.typeResult(AETypeResult.error);
-    //        }
-    //
-    //        return result.fine();
-    //    }
 
 
     /**

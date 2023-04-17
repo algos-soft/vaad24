@@ -93,16 +93,15 @@ public class ProvaBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(logInfo);
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+        String collectionName = annotationService.getCollectionName(entityClazz);
         String clazzName = entityClazz.getSimpleName();
-        String collectionName = result.getTarget();
+        AEntity entityBean;
         String nomeFileConfig = "prova";
         Map<String, List<String>> mappa;
         List<AEntity> lista = null;
         List<String> riga;
-        AEntity entityBean;
-
         String descrizione = VUOTA;
         Continente continenteLinkDinamicoDBRef = null;
         Via viaLinkStatico = null;
