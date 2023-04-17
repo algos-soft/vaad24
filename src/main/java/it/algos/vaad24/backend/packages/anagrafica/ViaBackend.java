@@ -62,55 +62,59 @@ public class ViaBackend extends CrudBackend {
         return (Via) super.save(entity);
     }
 
-
-    @Override
-    public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(logInfo);
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+        String collectionName = annotationService.getCollectionName(entityClazz);
         String clazzName = entityClazz.getSimpleName();
-        String collectionName = result.getTarget();
+        AEntity entityBean;
         String nomeFileCSVSulServerAlgos = "vie";
         Map<String, List<String>> mappa;
         List<String> riga;
         String nome;
-        List<AEntity> lista = null;
-        AEntity entityBean = null;
+        List<AEntity> lista;
         String message;
 
-        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
-            logger.debug(new WrapLog().message(message));
-            mappa = resourceService.leggeMappa(nomeFileCSVSulServerAlgos);
-            if (mappa != null) {
-                result.setValido(true);
-                lista = new ArrayList<>();
+        mappa = resourceService.leggeMappa(nomeFileCSVSulServerAlgos);
+        if (mappa != null) {
+            result.setValido(true);
+            lista = new ArrayList<>();
 
-                for (String key : mappa.keySet()) {
-                    riga = mappa.get(key);
-                    if (riga.size() == 1) {
-                        nome = riga.get(0);
-                    }
-                    else {
-                        return result.errorMessage("I dati non sono congruenti").fine();
-                    }
-
-                    entityBean = insert(newEntity(nome));
-                    if (entityBean != null) {
-                        lista.add(entityBean);
-                    }
-                    else {
-                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
-                        result.setValido(false);
-                    }
+            for (String key : mappa.keySet()) {
+                riga = mappa.get(key);
+                if (riga.size() == 1) {
+                    nome = riga.get(0);
                 }
-                return super.fixResult(result, clazzName, collectionName, lista, logInfo);
+                else {
+                    return result.errorMessage("I dati non sono congruenti").fine();
+                }
+
+                entityBean = insert(newEntity(nome));
+                if (entityBean != null) {
+                    lista.add(entityBean);
+                }
+                else {
+                    logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
+                    result.setValido(false);
+                }
+            }
+
+            if (lista.size() > 0) {
+                result.setIntValue(lista.size());
+                result.setLista(lista);
             }
             else {
-                return result.errorMessage("Non ho trovato il file sul server").fine();
+                result.typeResult(AETypeResult.error);
+                message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetDownload()", collectionName, clazzName);
+                return result.errorMessage(message);
             }
+
+            result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
+            return result;
         }
         else {
-            return result.fine();
+            return result.errorMessage("Non ho trovato il file sul server").fine();
         }
     }
+
 
 }// end of crud backend class

@@ -7,6 +7,7 @@ import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
+import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
@@ -22,6 +23,9 @@ import java.util.*;
  */
 @Service
 public class ProvaBackend extends CrudBackend {
+
+    @Autowired
+    public JarFileService jarFileService;
 
     @Autowired
     public ContinenteBackend continenteBackend;
@@ -112,7 +116,7 @@ public class ProvaBackend extends CrudBackend {
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             result.setValido(true);
             message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
-            logger.debug(new WrapLog().message(message));
+            logService.debug(new WrapLog().message(message));
             mappa = resourceService.leggeMappaConfig(nomeFileConfig);
             if (mappa != null) {
                 result.setValido(true);
@@ -135,11 +139,11 @@ public class ProvaBackend extends CrudBackend {
                         lista.add(entityBean);
                     }
                     else {
-                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", descrizione))).usaDb());
+                        logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", descrizione))).usaDb());
                         result.setValido(false);
                     }
                 }
-                return super.fixResult(result, clazzName, collectionName, lista, logInfo);
+                return super.fixResult(result, lista);
             }
         }
         else {

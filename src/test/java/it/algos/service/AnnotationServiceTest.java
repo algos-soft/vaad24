@@ -216,7 +216,7 @@ public class AnnotationServiceTest extends AlgosTest {
     @Order(51)
     @DisplayName("51 - isTransient")
     void getLabelHost() {
-        clazz = Logger.class;
+        clazz = ALogger.class;
 
         sorgente = "linea";
         ottenutoBooleano = service.isTransient(clazz, sorgente);

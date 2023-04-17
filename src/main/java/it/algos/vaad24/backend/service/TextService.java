@@ -9,6 +9,7 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
 
+import javax.inject.*;
 import java.util.*;
 
 
@@ -31,6 +32,7 @@ import java.util.*;
  */
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Singleton
 public class TextService extends AbstractService {
 
 
@@ -1488,7 +1490,7 @@ public class TextService extends AbstractService {
         }
         else {
             message = String.format("La stringa in ingresso non contiene il punto-virgola");
-            logger.info(new WrapLog().exception(new AlgosException(message)));
+            logService.info(new WrapLog().exception(new AlgosException(message)));
         }
 
         if (isValid(value)) {
@@ -1514,7 +1516,7 @@ public class TextService extends AbstractService {
         }
         else {
             message = String.format("La stringa in ingresso non contiene il punto-virgola");
-            logger.info(new WrapLog().exception(new AlgosException(message)));
+            logService.info(new WrapLog().exception(new AlgosException(message)));
         }
 
         return value != null ? value.trim() : value;
@@ -1537,12 +1539,12 @@ public class TextService extends AbstractService {
             }
             else {
                 message = String.format("La selezione di enumeration non contiene il valore proposto");
-                logger.info(new WrapLog().exception(new AlgosException(message)));
+                logService.info(new WrapLog().exception(new AlgosException(message)));
             }
         }
         else {
             message = String.format("La stringa in ingresso non contiene il punto-virgola");
-            logger.info(new WrapLog().exception(new AlgosException(message)));
+            logService.info(new WrapLog().exception(new AlgosException(message)));
         }
 
         return allEnumSelection;

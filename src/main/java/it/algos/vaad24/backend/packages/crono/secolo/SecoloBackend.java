@@ -147,15 +147,15 @@ public class SecoloBackend extends CrudBackend {
 
 
     @Override
-    public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(logInfo);
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+        String collectionName = annotationService.getCollectionName(entityClazz);
         String clazzName = entityClazz.getSimpleName();
-        String collectionName = result.getTarget();
+        AEntity entityBean;
         String nomeFile = "secoli";
         Map<String, List<String>> mappa;
         List<String> riga;
-        List<AEntity> lista;
-        AEntity entityBean;
+        List<AEntity> lista ;
         int ordine;
         String nome;
         int inizio;
@@ -164,65 +164,69 @@ public class SecoloBackend extends CrudBackend {
         String anteCristoText;
         String message;
 
-        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
-            logger.debug(new WrapLog().message(message));
-            mappa = resourceService.leggeMappa(nomeFile);
+        mappa = resourceService.leggeMappa(nomeFile);
+        if (mappa != null) {
+            result.setValido(true);
+            lista = new ArrayList<>();
 
-            if (mappa != null) {
-                result.setValido(true);
-                lista = new ArrayList<>();
-
-                for (String key : mappa.keySet()) {
-                    riga = mappa.get(key);
-                    if (riga.size() == 5) {
-                        try {
-                            ordine = Integer.decode(riga.get(0));
-                        } catch (Exception unErrore) {
-                            logger.error(new WrapLog().exception(unErrore).usaDb());
-                            ordine = 0;
-                        }
-                        nome = riga.get(1);
-                        try {
-                            inizio = Integer.decode(riga.get(2));
-                        } catch (Exception unErrore) {
-                            logger.error(new WrapLog().exception(unErrore).usaDb());
-                            inizio = 0;
-                        }
-                        try {
-                            fine = Integer.decode(riga.get(3));
-                        } catch (Exception unErrore) {
-                            logger.error(new WrapLog().exception(unErrore).usaDb());
-                            fine = 0;
-                        }
-                        anteCristoText = riga.get(4);
-                        anteCristo = anteCristoText.equals("true") || anteCristoText.equals("vero") || anteCristoText.equals("si");
+            for (String key : mappa.keySet()) {
+                riga = mappa.get(key);
+                if (riga.size() == 5) {
+                    try {
+                        ordine = Integer.decode(riga.get(0));
+                    } catch (Exception unErrore) {
+                        logService.error(new WrapLog().exception(unErrore).usaDb());
+                        ordine = 0;
                     }
-                    else {
-                        logger.error(new WrapLog().exception(new AlgosException("I dati non sono congruenti")).usaDb());
-                        return result;
+                    nome = riga.get(1);
+                    try {
+                        inizio = Integer.decode(riga.get(2));
+                    } catch (Exception unErrore) {
+                        logService.error(new WrapLog().exception(unErrore).usaDb());
+                        inizio = 0;
                     }
-                    nome += anteCristo ? " secolo a.C." : " secolo";
-
-                    entityBean = insert(newEntity(ordine, nome, inizio, fine, anteCristo));
-                    if (entityBean != null) {
-                        lista.add(entityBean);
+                    try {
+                        fine = Integer.decode(riga.get(3));
+                    } catch (Exception unErrore) {
+                        logService.error(new WrapLog().exception(unErrore).usaDb());
+                        fine = 0;
                     }
-                    else {
-                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
-                        result.setValido(false);
-                    }
+                    anteCristoText = riga.get(4);
+                    anteCristo = anteCristoText.equals("true") || anteCristoText.equals("vero") || anteCristoText.equals("si");
                 }
-                return super.fixResult(result, clazzName, collectionName, lista, logInfo);
+                else {
+                    logService.error(new WrapLog().exception(new AlgosException("I dati non sono congruenti")).usaDb());
+                    return result;
+                }
+                nome += anteCristo ? " secolo a.C." : " secolo";
+
+                entityBean = insert(newEntity(ordine, nome, inizio, fine, anteCristo));
+                if (entityBean != null) {
+                    lista.add(entityBean);
+                }
+                else {
+                    logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
+                    result.setValido(false);
+                }
+            }
+            if (lista.size() > 0) {
+                result.setIntValue(lista.size());
+                result.setLista(lista);
             }
             else {
-                logger.error(new WrapLog().exception(new AlgosException("Non ho trovato il file sul server")).usaDb());
-                return result.fine();
+                result.typeResult(AETypeResult.error);
+                message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetDownload()", collectionName, clazzName);
+                return result.errorMessage(message);
             }
         }
         else {
+            logService.error(new WrapLog().exception(new AlgosException("Non ho trovato il file sul server")).usaDb());
             return result.fine();
         }
+
+        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
+        return result;
     }
+
 
 }// end of crud backend class

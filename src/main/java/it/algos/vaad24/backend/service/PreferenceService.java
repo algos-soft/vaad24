@@ -228,7 +228,7 @@ public class PreferenceService extends AbstractService {
     public void log(AETypePref type, String keyCode, String methodName) {
         String message;
         message = String.format("La preferenza %s è di type %s. Non puoi usare il metodo %s", keyCode, type, methodName);
-        logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
+        logService.error(new WrapLog().exception(new AlgosException(message)).usaDb());
     }
 
 

@@ -94,10 +94,11 @@ public class ContinenteBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(logInfo);
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+        String collectionName = annotationService.getCollectionName(entityClazz);
         String clazzName = entityClazz.getSimpleName();
-        String collectionName = result.getTarget();
+        AEntity entityBean;
         String nomeFileConfig = "continenti";
         Map<String, List<String>> mappa;
         List<String> riga;
@@ -106,53 +107,59 @@ public class ContinenteBackend extends CrudBackend {
         boolean abitato;
         boolean reset;
         List<AEntity> lista;
-        AEntity entityBean;
         String message;
 
-        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
-            logger.debug(new WrapLog().message(message));
-            mappa = resourceService.leggeMappa(nomeFileConfig);
-            if (mappa != null) {
-                result.setValido(true);
-                lista = new ArrayList<>();
+        mappa = resourceService.leggeMappa(nomeFileConfig);
+        if (mappa != null) {
+            result.setValido(true);
+            lista = new ArrayList<>();
 
-                for (String key : mappa.keySet()) {
-                    riga = mappa.get(key);
-                    if (riga.size() == 4) {
-                        try {
-                            ordine = Integer.decode(riga.get(0));
-                        } catch (Exception unErrore) {
-                            logger.error(new WrapLog().exception(unErrore).usaDb());
-                            ordine = 0;
-                        }
-                        nome = riga.get(1);
-                        abitato = Boolean.valueOf(riga.get(2));
-                        reset = Boolean.valueOf(riga.get(3));
+            for (String key : mappa.keySet()) {
+                riga = mappa.get(key);
+                if (riga.size() == 4) {
+                    try {
+                        ordine = Integer.decode(riga.get(0));
+                    } catch (Exception unErrore) {
+                        logService.error(new WrapLog().exception(unErrore).usaDb());
+                        ordine = 0;
                     }
-                    else {
-                        logger.error(new WrapLog().exception(new AlgosException("I dati non sono congruenti")).usaDb());
-                        return result;
-                    }
-
-                    entityBean = insert(newEntity(ordine, nome, abitato));
-                    if (entityBean != null) {
-                        lista.add(entityBean);
-                    }
-                    else {
-                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
-                        result.setValido(false);
-                    }
+                    nome = riga.get(1);
+                    abitato = Boolean.valueOf(riga.get(2));
+                    reset = Boolean.valueOf(riga.get(3));
                 }
-                return super.fixResult(result, clazzName, collectionName, lista, logInfo);
+                else {
+                    logService.error(new WrapLog().exception(new AlgosException("I dati non sono congruenti")).usaDb());
+                    return result;
+                }
+
+                entityBean = insert(newEntity(ordine, nome, abitato));
+                if (entityBean != null) {
+                    lista.add(entityBean);
+                }
+                else {
+                    logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
+                    result.setValido(false);
+                }
+            }
+
+            if (lista.size() > 0) {
+                result.setIntValue(lista.size());
+                result.setLista(lista);
             }
             else {
-                return result.fine();
+                result.typeResult(AETypeResult.error);
+                message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetDownload()", collectionName, clazzName);
+                return result.errorMessage(message);
             }
+
+            result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
+            return result;
         }
         else {
-            return result.fine();
+            return result.errorMessage("Non ho trovato il file sul server").fine();
         }
     }
+
+
 
 }// end of crud backend class

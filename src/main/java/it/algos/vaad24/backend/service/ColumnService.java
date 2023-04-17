@@ -166,7 +166,7 @@ public class ColumnService extends AbstractService {
         }
         else {
             messageEsterno = String.format("La colonna del parametro %s non è stata creata", propertyName);
-            logger.error(new WrapLog().exception(new AlgosException(messageEsterno)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(messageEsterno)).usaDb());
         }
 
         //--eventuale aggiunta di una icona e l' header non è una String ma diventa un Component
@@ -318,7 +318,7 @@ public class ColumnService extends AbstractService {
                     icon.setSize("1em");
                     return icon;
                 default:
-                    logger.error(new WrapLog().exception(new AlgosException("Switch - caso non definito")).usaDb());
+                    logService.error(new WrapLog().exception(new AlgosException("Switch - caso non definito")).usaDb());
                     break;
             }
 

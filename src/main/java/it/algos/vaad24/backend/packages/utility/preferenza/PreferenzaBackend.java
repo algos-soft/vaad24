@@ -123,22 +123,22 @@ public class PreferenzaBackend extends CrudBackend {
         }
 
         if (textService.isEmpty(keyCode)) {
-            logger.error(new WrapLog().exception(new AlgosException("Manca il keyCode")).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException("Manca il keyCode")).usaDb());
             return;
         }
         if (type == null) {
             message = String.format("Manca il type nella preferenza %s", keyCode);
-            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(message)).usaDb());
             return;
         }
         if (textService.isEmpty(descrizione)) {
             message = String.format("Manca la descrizione nella preferenza %s", keyCode);
-            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(message)).usaDb());
             return;
         }
         if (defaultValue == null) {
             message = String.format("Il valore della preferenza %s è nullo", keyCode);
-            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(message)).usaDb());
             return;
         }
 
@@ -207,14 +207,14 @@ public class PreferenzaBackend extends CrudBackend {
             if (this.resetStandard(pref)) {
                 keyCode = pref.getKeyCode();
                 message = String.format("Reset preferenza [%s]: %s%s(%s)%s%s", keyCode, oldValue, FORWARD, pref.getType(), FORWARD, pref.getDefaultValue());
-                logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+                logService.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
                 almenoUnaModificata = true;
             }
         }
 
         if (!almenoUnaModificata) {
             message = "Reset preferenze - Tutte le preferenze (escluse quelle dinamiche) avevano già il valore standard";
-            logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+            logService.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
         }
 
         if (refreshHandler != null) {
@@ -230,7 +230,7 @@ public class PreferenzaBackend extends CrudBackend {
         try {
             crudRepository.deleteAll();
         } catch (Exception unErrore) {
-            logger.error(unErrore);
+            logService.error(unErrore);
             return false;
         }
 
@@ -238,7 +238,7 @@ public class PreferenzaBackend extends CrudBackend {
         creaAll();
 
         message = "Ricreate tutte le preferenze";
-        logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+        logService.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
         Avviso.message(message).success().open();
 
         return status;

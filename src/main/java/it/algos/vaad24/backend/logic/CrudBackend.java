@@ -9,7 +9,6 @@ import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.bson.*;
 import org.bson.types.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.*;
 import org.springframework.data.mongodb.core.query.Query;
@@ -54,6 +53,7 @@ import java.util.*;
  */
 public abstract class CrudBackend extends AbstractService {
 
+
     public Sort sortOrder;
 
     /**
@@ -61,30 +61,6 @@ public abstract class CrudBackend extends AbstractService {
      */
     public final Class<? extends AEntity> entityClazz;
 
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
-    public ResourceService resourceService;
-
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
-    public MongoService mongoService;
-
-
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
-    public TextService textService;
 
     public MongoRepository crudRepository;
 
@@ -116,13 +92,18 @@ public abstract class CrudBackend extends AbstractService {
      * <p>
      * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti, <br>
      * ma l'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
-     * Se viene implementata una sottoclasse, passa di qui per ogni sottoclasse oltre che per questa istanza <br>
-     * Se esistono delle sottoclassi, passa di qui per ognuna di esse (oltre a questa classe madre) <br>
+     * Se esistono delle sottoclassi e non viene sovrascritto, passa di qui per ognuna di esse <br>
+     * Se esistono delle sottoclassi e viene sovrascritto, passa di qui per ogni sottoclasse oltre che per questa istanza <br>
      */
     @PostConstruct
     private void postConstruct() {
         //--Preferenze usate da questa 'logic'
         this.fixPreferenze();
+
+        //--Controllo iniziale del database per tutte le classi che hanno il flag usaReset=true
+        if (annotationService.usaReset(entityClazz)) {
+            resetOnlyEmpty();
+        }
     }
 
     /**
@@ -177,7 +158,7 @@ public abstract class CrudBackend extends AbstractService {
         try {
             newEntityBean = entityClazz.getDeclaredConstructor().newInstance();
         } catch (Exception unErrore) {
-            logger.warn(AETypeLog.nuovo, unErrore);
+            logService.warn(AETypeLog.nuovo, unErrore);
         }
 
         return newEntityBean;
@@ -424,7 +405,7 @@ public abstract class CrudBackend extends AbstractService {
                 try {
                     return (AEntity) crudRepository.save(entityBean);
                 } catch (Exception unErrore) {
-                    logger.error(unErrore);
+                    logService.error(unErrore);
                 }
                 return entityBean;
             }
@@ -454,7 +435,7 @@ public abstract class CrudBackend extends AbstractService {
                 try {
                     crudRepository.delete(entityBean);
                 } catch (Exception unErrore) {
-                    logger.error(unErrore);
+                    logService.error(unErrore);
                 }
                 return false;
             }
@@ -589,7 +570,7 @@ public abstract class CrudBackend extends AbstractService {
                 }
                 else {
                     message = String.format("Non esiste la property %s per l'ordinamento della classe %s", property, entityClazz.getSimpleName());
-                    logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+                    logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
                     if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
                         return crudRepository.findAll(sort);
                     }
@@ -775,26 +756,8 @@ public abstract class CrudBackend extends AbstractService {
         try {
             crudRepository.delete(entity);
         } catch (Exception unErrore) {
-            logger.error(unErrore);
+            logService.error(unErrore);
         }
-    }
-
-    public boolean deleteAll() {
-        String collectionName;
-
-        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
-            try {
-                crudRepository.deleteAll();
-            } catch (Exception unErrore) {
-                logger.error(unErrore);
-            }
-        }
-        else {
-            collectionName = annotationService.getCollectionName(entityClazz);
-            mongoService.mongoOp.dropCollection(collectionName);
-        }
-
-        return !isExistsCollection();
     }
 
     public int count() {
@@ -806,6 +769,24 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
+    public boolean deleteAll() {
+        String collectionName;
+
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+            try {
+                crudRepository.deleteAll();
+            } catch (Exception unErrore) {
+                logService.error(unErrore);
+            }
+        }
+        else {
+            collectionName = annotationService.getCollectionName(entityClazz);
+            mongoService.mongoOp.dropCollection(collectionName);
+        }
+
+        return !isExistsCollection();
+    }
+
 
     /**
      * Creazione di alcuni dati <br>
@@ -813,44 +794,57 @@ public abstract class CrudBackend extends AbstractService {
      * Può essere invocato IN PARTICOLARI CONDIZIONI alla creazione del programma <br>
      * La collezione viene svuotata <br>
      * Non deve essere sovrascritto <br>
+     * <p>
+     * Cancella la collection <br>
+     * Invoca il metodo resetOnlyEmpty() <br>
+     * Log a video e nel db del risultato <br>
+     * Fix dei dati e durata dell'operazione <br>
      */
     public AResult resetForcing() {
-        AResult result = AResult.build();
+        AResult result;
         String collectionName = annotationService.getCollectionName(entityClazz);
         String clazzName = entityClazz.getSimpleName();
         String message;
         String elementi;
 
         if (mongoService.isCollectionNullOrEmpty(entityClazz)) {
-            return resetOnlyEmpty(false).method("resetForcing");
+            result = resetDownload();
+            if (result.isValido()) {
+                result.typeResult(AETypeResult.collectionCreata);
+            }
+            result.method("resetForcing");
+            elementi = textService.format(result.getIntValue());
+            message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, elementi);
+            message += result.deltaSec();
+            result.validMessage(message);
+            logService.info(new WrapLog().message(result.getMessage()).type(AETypeLog.resetForcing).usaDb());
+            return result;
         }
         else {
             if (deleteAll()) {
+                result = resetDownload();
+                if (result.isValido()) {
+                    result.typeResult(AETypeResult.collectionCreata);
+                }
                 result.method("resetForcing");
-                result = resetOnlyEmpty(false);
                 elementi = textService.format(result.getIntValue());
                 message = String.format("La collection '%s' della classe [%s] esisteva ma è stata cancellata e i dati sono stati ricreati. ", collectionName, clazzName);
                 message += String.format("Contiene %s elementi. ", elementi);
                 message += result.deltaSec();
-                if (result.isValido()) {
-                    result.validMessage(message);
-                    logger.info(new WrapLog().message(message).type(AETypeLog.reset).usaDb());
-
-                    message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
-                    logger.debug(new WrapLog().message(message));
-
-                }
+                result.validMessage(message);
+                logService.info(new WrapLog().message(result.getMessage()).type(AETypeLog.resetForcing).usaDb());
                 return result;
             }
             else {
                 message = String.format("Non sono riuscito a cancellare la collection '%s' della classe [%s]", collectionName, clazzName);
-                return result.errorMessage(message).fine();
+                logService.info(new WrapLog().message(message).type(AETypeLog.resetForcing).usaDb());
+                return AResult.errato(message).fine();
             }
         }
     }
 
-    public AResult resetOnlyEmpty() {
-        return resetOnlyEmpty(false);
+    public AResult resetOnlyEmpty(boolean logInfo) {
+        return resetOnlyEmpty();
     }
 
 
@@ -864,26 +858,51 @@ public abstract class CrudBackend extends AbstractService {
      * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public AResult resetOnlyEmpty(boolean logInfo) {
+    public AResult resetOnlyEmpty() {
         String collectionName = annotationService.getCollectionName(entityClazz);
-        AResult result = AResult.build().method("resetOnlyEmpty").target(collectionName);
+        AResult result = AResult.build().method("resetOnlyEmpty");
         String clazzName = entityClazz.getSimpleName();
         String backendName = clazzName + SUFFIX_BACKEND;
         String elementi;
         String message;
 
         if (mongoService.isCollectionNullOrEmpty(entityClazz)) {
-            message = String.format("La collection '%s' della classe [%s] era vuota ma non sono riuscito a crearla. Probabilmente manca il metodo [%s].resetOnlyEmpty()", collectionName, clazzName, backendName);
-            return result.errorMessage(message).typeResult(AETypeResult.collectionVuota).typeLog(AETypeLog.reset);
+            //            message = String.format("La collection '%s' della classe [%s] era vuota ma non sono riuscito a crearla. Probabilmente manca il metodo [%s].resetOnlyEmpty()", collectionName, clazzName, backendName);
+            //            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", annotationService.getCollectionName(entityClazz));
+            //            logService.debug(new WrapLog().message(message));
+
+            result = resetDownload();
+            if (!result.isValido()) {
+                return result;
+            }
+
+            if (result.isEseguito()) {
+                result = result.typeResult(AETypeResult.collectionCreata).method("resetOnlyEmpty");
+            }
+            elementi = textService.format(count());
+            message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, elementi);
+            result = result.typeLog(AETypeLog.resetOnlyEmpty).typeResult(AETypeResult.collectionPiena).intValue(count());
+            logService.info(new WrapLog().message(message).type(AETypeLog.resetOnlyEmpty).usaDb());
+            return result;
         }
         else {
             elementi = textService.format(count());
             message = String.format("La collection '%s' della classe [%s] esisteva già, non era vuota e non è stata toccata. Contiene %s elementi.", collectionName, clazzName, elementi);
-            return result.validMessage(message).typeResult(AETypeResult.collectionPiena).intValue(count());
+            result = result.typeLog(AETypeLog.resetOnlyEmpty).typeResult(AETypeResult.collectionPiena).intValue(count());
+            logService.debug(new WrapLog().message(message).type(AETypeLog.resetOnlyEmpty));
+            return result;
         }
     }
 
-    public AResult fixResult(AResult result, String clazzName, String collectionName, List lista, boolean logInfo) {
+    public AResult resetDownload() {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        return AResult.errato().typeLog(AETypeLog.reset).typeResult(AETypeResult.indeterminato).target(collectionName);
+    }
+
+
+    public AResult fixResult(AResult result, List lista) {
+        String clazzName = entityClazz.getSimpleName();
+        String collectionName = annotationService.getCollectionName(entityClazz);
         String message;
 
         result.fine();
@@ -891,21 +910,18 @@ public abstract class CrudBackend extends AbstractService {
             result.setIntValue(lista.size());
             result.setLista(lista);
 
-            if (result.isValido()) {
-                result.errorMessage(VUOTA).eseguito().typeResult(AETypeResult.collectionCreata);
-                result.setValido(true);
-                if (logInfo) {
-                    message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. ", collectionName, clazzName);
-                    message += String.format("Contiene %s elementi. ", textService.format(lista.size()));
-                    message += result.deltaSec();
-                    logger.info(new WrapLog().message(message).type(AETypeLog.reset).usaDb());
-                    return result.validMessage(message);
-                }
-                return result;
-            }
-            else {
-                return result.typeResult(AETypeResult.error);
-            }
+            //            if (result.isValido()) {
+            //                result.errorMessage(VUOTA).eseguito().typeResult(AETypeResult.collectionCreata);
+            //                result.setValido(true);
+            //                message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. ", collectionName, clazzName);
+            //                message += String.format("Contiene %s elementi. ", textService.format(lista.size()));
+            //                message += result.deltaSec();
+            //                logService.info(new WrapLog().message(message).type(AETypeLog.reset).usaDb());
+            //                return result.validMessage(message);
+            //            }
+            //            else {
+            //                return result.typeResult(AETypeResult.error);
+            //            }
         }
         else {
             result.typeResult(AETypeResult.error);
@@ -913,7 +929,30 @@ public abstract class CrudBackend extends AbstractService {
             return result.errorMessage(message);
         }
 
+        return result;
     }
+
+    //    public AResult fixResult(AResult result) {
+    //        String elementi = VUOTA;
+    //        String message = VUOTA;
+    //        String clazzName = entityClazz.getSimpleName();
+    //        String collectionName = annotationService.getCollectionName(entityClazz);
+    //
+    //        if (result.isEseguito()) {
+    //            elementi = textService.format(count());
+    //            message = String.format("La collection '%s' della classe [%s] esisteva già, non era vuota e non è stata toccata. Contiene %s elementi.", collectionName, clazzName, elementi);
+    //            result = result.validMessage(message).typeResult(AETypeResult.collectionPiena).intValue(count());
+    //            logService.debug(new WrapLog().message(message));
+    //        }
+    //        else {
+    //            elementi = textService.format(count());
+    //            message = String.format("La collection '%s' della classe [%s] esisteva già, non era vuota e non è stata toccata. Contiene %s elementi.", collectionName, clazzName, elementi);
+    //            result = result.validMessage(message).typeResult(AETypeResult.collectionPiena).intValue(count());
+    //            logService.debug(new WrapLog().message(message));
+    //        }
+    //
+    //        return result;
+    //    }
 
     //    public AResult fixResult(AResult result, String clazzName, String collectionName, int numeroElementi) {
     //        String message;

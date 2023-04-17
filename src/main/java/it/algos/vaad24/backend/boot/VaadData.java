@@ -84,13 +84,13 @@ public class VaadData extends AbstractService {
 
         boolean isJar = reflectionService.isJarRunning();
         message = String.format("Stiamo girando da %s", isJar ? "JAR" : "IDE");
-        logger.info(new WrapLog().message(message).type(AETypeLog.info));
+        logService.info(new WrapLog().message(message).type(AETypeLog.info));
 
-        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
-        resetData(VaadVar.moduloVaadin24);
-        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
-        resetData(VaadVar.projectNameModulo);
-        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
+        logService.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
+//        resetData(VaadVar.moduloVaadin24);
+        logService.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
+//        resetData(VaadVar.projectNameModulo);
+        logService.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
     }
 
 
@@ -121,11 +121,11 @@ public class VaadData extends AbstractService {
             else {
                 message = String.format("Nel modulo %s sono stati trovati %d packages con classi di tipo 'backend'", moduleName, allBackendClasses.size());
             }
-            logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
+            logService.info(new WrapLog().message(message).type(AETypeLog.checkData));
         }
         else {
             message = String.format("Nel modulo %s non è stato trovato nessun package con classi di tipo 'backend'", moduleName);
-            logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
+            logService.info(new WrapLog().message(message).type(AETypeLog.checkData));
             return;
         }
 
@@ -135,19 +135,19 @@ public class VaadData extends AbstractService {
         if (allResetOrderedClass != null && allResetOrderedClass.size() > 0) {
             if (allResetOrderedClass.size() == 1) {
                 message = String.format("Nel modulo %s è stata trovata solo la classe %s che implementa il metodo %s()", moduleName, allResetOrderedClass.get(0).getSimpleName(),METHOD_NAME_RESET_ONLY);
-                logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
+                logService.info(new WrapLog().message(message).type(AETypeLog.checkData));
             }
             else {
                 message = String.format("Nel modulo %s sono state trovate %d classi di tipo 'backend' che implementano il metodo %s():", moduleName, allResetOrderedClass.size(), METHOD_NAME_RESET_ONLY);
-                logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
+                logService.info(new WrapLog().message(message).type(AETypeLog.checkData));
                 nomi = allResetOrderedClass.stream().map(clazz -> clazz.getSimpleName()).collect(Collectors.toList());
                 message = arrayService.toStringaVirgolaSpazio(nomi);
-                logger.info(new WrapLog().message(message.trim()).type(AETypeLog.checkData));
+                logService.info(new WrapLog().message(message.trim()).type(AETypeLog.checkData));
             }
         }
         else {
             message = String.format("Nel modulo %s non è stata trovata nessuna classe di tipo 'backend' che implementa il metodo %s()", moduleName, METHOD_NAME_RESET_ONLY);
-            logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
+            logService.info(new WrapLog().message(message).type(AETypeLog.checkData));
             return;
         }
 
@@ -182,7 +182,7 @@ public class VaadData extends AbstractService {
         try {
             clazz = Class.forName(clazzName.toString());
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
         if (clazz != null) {
             final Method[] methods = clazz.getDeclaredMethods();
@@ -216,7 +216,7 @@ public class VaadData extends AbstractService {
             final Object istanza = appContext.getBean(clazz);
             eseguito = (Boolean) metodo.invoke(istanza);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
     };
 

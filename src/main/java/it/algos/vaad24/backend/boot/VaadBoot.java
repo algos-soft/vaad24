@@ -18,6 +18,7 @@ import org.springframework.context.*;
 import org.springframework.context.event.EventListener;
 import org.springframework.context.event.*;
 import org.springframework.core.env.*;
+import org.springframework.stereotype.*;
 
 import javax.servlet.*;
 import java.util.*;
@@ -45,6 +46,7 @@ import java.util.*;
  * 7) costruisce una versione demo <br>
  * 8) controlla l' esistenza di utenti abilitati all' accesso <br>
  */
+@Service
 public class VaadBoot implements ServletContextListener {
 
     protected boolean allDebugSetup;
@@ -581,7 +583,7 @@ public class VaadBoot implements ServletContextListener {
         VaadVar.menuRouteListVaadin.add(UtilityView.class);
         VaadVar.menuRouteListVaadin.add(NotaView.class);
         VaadVar.menuRouteListVaadin.add(VersioneView.class);
-        VaadVar.menuRouteListVaadin.add(LoggerView.class);
+        VaadVar.menuRouteListVaadin.add(ALoggerView.class);
         VaadVar.menuRouteListVaadin.add(PreferenzaView.class);
     }
 

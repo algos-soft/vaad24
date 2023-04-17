@@ -113,12 +113,10 @@ public class GiornoBackend extends CrudBackend {
         return super.findAllByProperty(FIELD_NAME_MESE, mese);
     }
 
-
-//    @Override
-//    public List<String> findAllForKeyReverseOrder() {
-//        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
-//    }
-
+    //    @Override
+    //    public List<String> findAllForKeyReverseOrder() {
+    //        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
+    //    }
 
 
     public List<String> findAllForNomeByMese(Mese mese) {
@@ -138,10 +136,12 @@ public class GiornoBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(logInfo);
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+        String collectionName = annotationService.getCollectionName(entityClazz);
         String clazzName = entityClazz.getSimpleName();
-        String collectionName = result.getTarget();
+        AEntity entityBean;
+        List<AEntity> lista = new ArrayList<>();
         int ordine;
         List<HashMap> mappa;
         String nome;
@@ -151,53 +151,54 @@ public class GiornoBackend extends CrudBackend {
         int mancanti;
         int tot = 365;
         String message;
-        AEntity entityBean;
-        List<AEntity> lista;
 
         if (meseBackend.count() < 1) {
-            AResult resultMese = meseBackend.resetOnlyEmpty(logInfo);
+            AResult resultMese = meseBackend.resetOnlyEmpty();
             if (resultMese.isErrato()) {
-                logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Mese'")).usaDb());
+                logService.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Mese'")).usaDb());
                 return result.fine();
             }
         }
 
-        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
-            logger.debug(new WrapLog().message(message));
-            //costruisce i 366 records
-            mappa = dateService.getAllGiorni();
-            result.setValido(true);
-            lista = new ArrayList<>();
+        //costruisce i 366 records
+        mappa = dateService.getAllGiorni();
+        result.setValido(true);
 
-            for (HashMap mappaGiorno : mappa) {
-                nome = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
-                meseTxt = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO);
-                mese = meseBackend.findByKey(meseTxt);
-                if (mese == null) {
-                    message = String.format("Manca il mese di %s", meseTxt);
-                    logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
-                }
-
-                ordine = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_BISESTILE);
-                trascorsi = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_NORMALE);
-                mancanti = tot - trascorsi;
-
-                entityBean = insert(newEntity(ordine, nome, mese, trascorsi, mancanti));
-                if (entityBean != null) {
-                    lista.add(entityBean);
-                }
-                else {
-                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
-                    result.setValido(false);
-                }
+        for (HashMap mappaGiorno : mappa) {
+            nome = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
+            meseTxt = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO);
+            mese = meseBackend.findByKey(meseTxt);
+            if (mese == null) {
+                message = String.format("Manca il mese di %s", meseTxt);
+                logService.error(new WrapLog().exception(new AlgosException(message)).usaDb());
             }
 
-            return super.fixResult(result, clazzName, collectionName, lista, logInfo);
+            ordine = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_BISESTILE);
+            trascorsi = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_NORMALE);
+            mancanti = tot - trascorsi;
+
+            entityBean = insert(newEntity(ordine, nome, mese, trascorsi, mancanti));
+            if (entityBean != null) {
+                lista.add(entityBean);
+            }
+            else {
+                logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
+                result.setValido(false);
+            }
+        }
+
+        if (lista.size() > 0) {
+            result.setIntValue(lista.size());
+            result.setLista(lista);
         }
         else {
-            return result.fine();
+            result.typeResult(AETypeResult.error);
+            message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetDownload()", collectionName, clazzName);
+            return result.errorMessage(message);
         }
+
+        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
+        return result;
     }
 
 }// end of crud backend class

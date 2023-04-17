@@ -42,9 +42,10 @@ import org.springframework.boot.autoconfigure.security.servlet.*;
 @NpmPackage(value = "@vaadin-component-factory/vcf-nav", version = "1.0.6")
 public class Vaad24SimpleApp implements AppShellConfigurator {
 
+
     public static void main(String[] args) {
         SpringApplication.run(Vaad24SimpleApp.class, args);
-//        SimpleBoot.start();
+        //        SimpleBoot.start();
     }
 
 }

@@ -121,6 +121,7 @@ public class AResult {
     }
 
     public AResult valido(boolean valido) {
+        this.errorMessage = VUOTA;
         this.valido = valido;
         return this;
     }
@@ -165,11 +166,15 @@ public class AResult {
 
 
     public static AResult valido(final String validMessage) {
-        return new AResult(true, validMessage);
+        AResult result = new AResult(true, validMessage);
+        result.errorMessage = VUOTA;
+        return result;
     }
 
     public static AResult valido(final String validMessage, final int value) {
-        return new AResult(true, validMessage, value);
+        AResult result = new AResult(true, validMessage, value);
+        result.errorMessage = VUOTA;
+        return result;
     }
 
     public static AResult contenuto(final String text, final String source) {
@@ -532,7 +537,7 @@ public class AResult {
             default -> "secondi";
         };
 
-        return eseguito ? String.format("Eseguito in circa %s %s", sec, text) : "Non eseguito.";
+        return eseguito ? String.format("Eseguito in circa %s %s.", sec, text) : "Non eseguito.";
     }
 
     public void print(final LogService logger, final AETypeLog typeLog) {

@@ -131,57 +131,60 @@ public class AnnoBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(logInfo);
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+        String collectionName = annotationService.getCollectionName(entityClazz);
         String clazzName = entityClazz.getSimpleName();
-        String collectionName = result.getTarget();
         AEntity entityBean;
-        List<AEntity> lista;
+        List<AEntity> lista = new ArrayList<>();;
         String message;
-        int tempo = 3;
 
         if (secoloBackend.count() < 1) {
-            AResult resultMese = secoloBackend.resetOnlyEmpty(logInfo);
+            AResult resultMese = secoloBackend.resetOnlyEmpty();
             if (resultMese.isErrato()) {
-                logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Secolo'")).usaDb());
+                logService.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Secolo'")).usaDb());
                 return result.fine();
             }
         }
 
-        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            result.setValido(true);
-            lista = new ArrayList<>();
-            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: circa %d secondi.", clazzName, tempo);
-            logger.debug(new WrapLog().message(message));
-
-            //--costruisce gli anni prima di cristo partendo da ANTE_CRISTO_MAX che coincide con DELTA_ANNI
-            for (int k = 1; k <= ANTE_CRISTO_MAX; k++) {
-                entityBean = creaPrima(k);
-                if (entityBean != null) {
-                    lista.add(entityBean);
-                }
-                else {
-                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", k))));
-                }
+        result.setValido(true);
+        //--costruisce gli anni prima di cristo partendo da ANTE_CRISTO_MAX che coincide con DELTA_ANNI
+        for (int k = 1; k <= ANTE_CRISTO_MAX; k++) {
+            entityBean = creaPrima(k);
+            if (entityBean != null) {
+                lista.add(entityBean);
             }
-
-            //--costruisce gli anni dopo cristo fino all'anno DOPO_CRISTO_MAX
-            for (int k = 1; k <= DOPO_CRISTO_MAX; k++) {
-                entityBean = creaDopo(k);
-                if (entityBean != null) {
-                    lista.add(entityBean);
-                }
-                else {
-                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", k))));
-                    result.setValido(false);
-                }
+            else {
+                logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", k))));
             }
-            return super.fixResult(result, clazzName, collectionName, lista, logInfo);
+        }
+
+        //--costruisce gli anni dopo cristo fino all'anno DOPO_CRISTO_MAX
+        for (int k = 1; k <= DOPO_CRISTO_MAX; k++) {
+            entityBean = creaDopo(k);
+            if (entityBean != null) {
+                lista.add(entityBean);
+            }
+            else {
+                logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", k))));
+                result.setValido(false);
+            }
+        }
+
+        if (lista.size() > 0) {
+            result.setIntValue(lista.size());
+            result.setLista(lista);
         }
         else {
-            return result.fine();
+            result.typeResult(AETypeResult.error);
+            message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetDownload()", collectionName, clazzName);
+            return result.errorMessage(message);
         }
+
+        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
+        return result;
     }
+
 
     public AEntity creaPrima(int numeroProgressivo) {
         int delta = DELTA_ANNI;

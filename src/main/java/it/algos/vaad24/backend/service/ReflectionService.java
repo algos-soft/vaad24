@@ -51,12 +51,25 @@ public class ReflectionService extends AbstractService {
             propertyName = propertyName.replaceAll(FIELD_NAME_ID_CON, FIELD_NAME_ID_SENZA);
             field = genericClazz.getField(propertyName);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(unErrore).usaDb());
+            logService.error(new WrapLog().exception(unErrore).usaDb());
         }
 
         return field;
     }
 
+    public Field getFieldMinuscolo(final Class<?> genericClazz, final String publicFieldName) {
+        Field field = null;
+        String propertyName = textService.primaMinuscola(publicFieldName);
+
+        try {
+            propertyName = propertyName.replaceAll(FIELD_NAME_ID_CON, FIELD_NAME_ID_SENZA);
+            field = genericClazz.getField(propertyName);
+        } catch (Exception unErrore) {
+            logService.error(new WrapLog().exception(unErrore).usaDb());
+        }
+
+        return field;
+    }
 
     /**
      * Valore della property corrente di una entity. <br>
@@ -85,7 +98,7 @@ public class ReflectionService extends AbstractService {
                 }
             }
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
 
         return value;
@@ -135,11 +148,11 @@ public class ReflectionService extends AbstractService {
         Field fieldId = null;
 
         if (entityClazz == null) {
-            logger.error(new WrapLog().exception(new AlgosException("Manca la entityClazz")).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException("Manca la entityClazz")).usaDb());
         }
 
         if (!AEntity.class.isAssignableFrom(entityClazz)) {
-            logger.error(new WrapLog().exception(new AlgosException(String.format("La classe %s non è una classe di tipo AEntity", entityClazz.getSimpleName()))).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(String.format("La classe %s non è una classe di tipo AEntity", entityClazz.getSimpleName()))).usaDb());
         }
 
         //--recupera tutti i fields della entity e di tutte le superClassi
@@ -189,11 +202,11 @@ public class ReflectionService extends AbstractService {
         Field fieldId = null;
 
         if (entityClazz == null) {
-            logger.error(new WrapLog().exception(new AlgosException("Manca la entityClazz")).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException("Manca la entityClazz")).usaDb());
         }
 
         if (!AEntity.class.isAssignableFrom(entityClazz)) {
-            logger.error(new WrapLog().exception(new AlgosException(String.format("La classe %s non è una classe di tipo AEntity", entityClazz.getSimpleName()))).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(String.format("La classe %s non è una classe di tipo AEntity", entityClazz.getSimpleName()))).usaDb());
         }
 
         //--recupera tutti i fields della entity
@@ -203,7 +216,7 @@ public class ReflectionService extends AbstractService {
         try {
             fieldId = entityClazz.getField(FIELD_NAME_ID_SENZA);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
 
         if (fieldsArray != null) {
@@ -302,7 +315,7 @@ public class ReflectionService extends AbstractService {
 
         if (url == null) {
             message = "Url malformato";
-            logger.info(new WrapLog().message(String.format(message)).usaDb());
+            logService.info(new WrapLog().message(String.format(message)).usaDb());
             return false;
         }
 
@@ -312,7 +325,7 @@ public class ReflectionService extends AbstractService {
         else {
             if (!url.toString().startsWith(REFLECTION_FILE)) {
                 message = String.format("Url errato %s%s", FORWARD, url.getProtocol());
-                logger.info(new WrapLog().message(String.format(message)).usaDb());
+                logService.info(new WrapLog().message(String.format(message)).usaDb());
             }
             return false;
         }
@@ -406,7 +419,7 @@ public class ReflectionService extends AbstractService {
         try {
             clazz = Class.forName(publicClassName.toString());
         } catch (Exception unErrore) {
-            logger.info(new WrapLog().exception(AlgosException.crea(unErrore)));
+            logService.info(new WrapLog().exception(AlgosException.crea(unErrore)));
         }
         if (clazz == null) {
             return false;
@@ -415,7 +428,7 @@ public class ReflectionService extends AbstractService {
         try {
             methods = clazz.getMethods();
         } catch (Exception unErrore) {
-            logger.info(new WrapLog().exception(AlgosException.crea(unErrore)));
+            logService.info(new WrapLog().exception(AlgosException.crea(unErrore)));
         }
 
         nomiMetodi = Arrays.stream(methods).map(method -> method.getName()).collect(Collectors.toList());
@@ -462,7 +475,7 @@ public class ReflectionService extends AbstractService {
      * @param publicFieldName property statica e pubblica
      * @param value           da inserire nella property
      */
-    public boolean setPropertyValue(final AEntity entityBean, final String publicFieldName, final Object value) {
+    public boolean setPropertyValue(final Object entityBean, final String publicFieldName, final Object value) {
         boolean status = false;
         Field field = getField(entityBean.getClass(), publicFieldName);
 
@@ -471,7 +484,7 @@ public class ReflectionService extends AbstractService {
                 field.set(entityBean, value);
                 status = true;
             } catch (Exception unErrore) {
-                logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+                logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
             }
         }
 

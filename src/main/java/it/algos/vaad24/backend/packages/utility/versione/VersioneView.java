@@ -66,9 +66,11 @@ public class VersioneView extends CrudView {
         }
 
         super.sortOrder = Sort.by(Sort.Direction.DESC, "ordine");
+        super.usaBottoneDeleteAll = false;
         super.usaBottoneReset = false;
         super.usaBottoneNew = false;
         super.usaBottoneEdit = false;
+        super.usaBottoneDeleteEntity = false;
     }
 
     /**

@@ -248,7 +248,7 @@ public class MongoService<capture> extends AbstractService {
         int numBytes;
         String value = "";
         String message;
-        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
+        logService.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
 
         numBytes = (int) getParameter("internalQueryExecMaxBlockingSortBytes");
         value = textService.format(numBytes);
@@ -256,21 +256,21 @@ public class MongoService<capture> extends AbstractService {
         if (numBytes == STANDARD_MONGO_MAX_BYTES) {
             message = String.format("Algos - mongoDB. La variabile internalQueryExecMaxBlockingSortBytes è regolata col valore standard iniziale " +
                     "settato da mongoDB: %s", value);
-            logger.info(new WrapLog().message(message).type(AETypeLog.setup));
+            logService.info(new WrapLog().message(message).type(AETypeLog.setup));
         }
         else {
             if (numBytes == EXPECTED_ALGOS_MAX_BYTES) {
                 message = String.format("Algos - mongoDB. La variabile internalQueryExecMaxBlockingSortBytes è regolata col valore " +
                         "richiesto da Algos: %s", value);
-                logger.info(new WrapLog().message(message).type(AETypeLog.setup));
+                logService.info(new WrapLog().message(message).type(AETypeLog.setup));
             }
             else {
                 message = String.format("Algos - mongoDB. La variabile internalQueryExecMaxBlockingSortBytes è regolata a cazzo: ", value);
-                logger.info(new WrapLog().message(message).type(AETypeLog.setup));
+                logService.info(new WrapLog().message(message).type(AETypeLog.setup));
             }
         }
 
-        logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
+        logService.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
         return numBytes;
     }
 
@@ -332,7 +332,7 @@ public class MongoService<capture> extends AbstractService {
      */
     public boolean isExistsCollection(final String collectionName) {
         if (textService.isEmpty(collectionName)) {
-            logger.info(new WrapLog().exception(new AlgosException("Manca il nome della collection")).usaDb());
+            logService.info(new WrapLog().exception(new AlgosException("Manca il nome della collection")).usaDb());
         }
 
         String shortName = fileService.estraeClasseFinale(collectionName);
@@ -410,7 +410,7 @@ public class MongoService<capture> extends AbstractService {
 
         if (entityClazz == null) {
             message = "Manca la entityClazz";
-            logger.info(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.info(new WrapLog().exception(new AlgosException(message)).usaDb());
             return 0;
         }
         if (!isExistsCollection(entityClazz)) {
@@ -497,7 +497,7 @@ public class MongoService<capture> extends AbstractService {
 
         if (collection == null) {
             message = String.format("Non esiste la collection", entityClazz.getSimpleName());
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             return listaProperty;
         }
 
@@ -521,7 +521,7 @@ public class MongoService<capture> extends AbstractService {
 
         if (collection == null) {
             message = String.format("Non esiste la collection", entityClazz.getSimpleName());
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             return listaProperty;
         }
 
@@ -542,7 +542,7 @@ public class MongoService<capture> extends AbstractService {
 
         if (collection == null) {
             message = String.format("Non esiste la collection", entityClazz.getSimpleName());
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             return null;
         }
 
@@ -570,7 +570,7 @@ public class MongoService<capture> extends AbstractService {
 
         if (collection == null) {
             message = String.format("Non esiste la collection", entityClazz.getSimpleName());
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             return null;
         }
 

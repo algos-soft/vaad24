@@ -44,6 +44,8 @@ public enum AETypeLog implements AIType {
     statistiche("statistiche"),
     task("task"),
     reset("reset"),
+    resetOnlyEmpty("resetOnlyEmpty"),
+    resetForcing("resetForcing"),
     utente("utente"),
     password("password"),
     bio("cicloBio"),
@@ -52,6 +54,7 @@ public enum AETypeLog implements AIType {
     schedule("schedule"),
     flow("flow"),
     utility("utility"),
+    ideJar("ideJar"),
     ;
 
     private String tag;

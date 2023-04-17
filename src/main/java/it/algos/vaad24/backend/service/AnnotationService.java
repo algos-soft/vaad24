@@ -9,18 +9,18 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.hibernate.validator.constraints.*;
-import org.springframework.beans.factory.annotation.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
 
+import javax.inject.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.*;
 import java.lang.reflect.Field;
 import java.util.*;
-
 /**
  * Project vaadin23
  * Created by Algos
@@ -41,8 +41,12 @@ import java.util.*;
  */
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Singleton
+//@DependsOn("TextService")
 public class AnnotationService extends AbstractService {
 
+    public AnnotationService() {
+    }
     //==========================================================================
     // Costanti
     //==========================================================================
@@ -268,7 +272,7 @@ public class AnnotationService extends AbstractService {
             annotation = getAIField(reflectionJavaField);
         } catch (Exception unErrore) {
             message = String.format("Manca il field %s", fieldName);
-            logger.error(new WrapLog().exception(new AlgosException(unErrore, message)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore, message)).usaDb());
         }
 
         return annotation;

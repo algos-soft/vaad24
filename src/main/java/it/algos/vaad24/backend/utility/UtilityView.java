@@ -73,7 +73,7 @@ public class UtilityView extends VerticalLayout {
     @Autowired
     public PreferenzaBackend preferenzaBackend;
 
-    protected static String RELEASE = "Da eseguire dopo una nuova release significùativa. Non serve se il database è stato completamente cancellato (drop).";
+    protected static String RELEASE = "Da eseguire dopo una nuova release significativa. Non serve se il database è stato completamente cancellato (drop).";
     protected static String AUTOMATIC = "Viene eseguito AUTOMATICAMENTE se il database è stato completamente cancellato (drop).";
     protected static String DROP = "Da eseguire SEMPRE se il database è stato completamente cancellato (drop).";
 

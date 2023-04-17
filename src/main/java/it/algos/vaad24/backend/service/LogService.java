@@ -63,7 +63,7 @@ public class LogService extends AbstractService {
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
-    public LoggerBackend loggerBackend;
+    public ALoggerBackend aLoggerBackend;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -79,7 +79,8 @@ public class LogService extends AbstractService {
      * Deve essere creato subito dalla factory class LoggerFactory <br>
      * Va selezionato un appender da usare e che sia presente nel file di configurazione <br>
      */
-    public Logger slf4jLogger;
+    public Logger slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
+
 
     /**
      * Controlla che la classe abbia usaBoot=true <br>
@@ -97,7 +98,7 @@ public class LogService extends AbstractService {
      * Se esistono delle sottoclassi, passa di qui per ognuna di esse (oltre a questa classe madre) <br>
      */
     @PostConstruct
-    private void postConstruct() {
+    public void postConstruct() {
         String logbackName;
         String property = "logging.algos.admin";
 
@@ -107,7 +108,7 @@ public class LogService extends AbstractService {
         } catch (Exception unErrore) {
             String message = String.format("Non ho trovato la property %s in application.properties e ho usato un logbackName di default=%s", property, VaadCost.TAG_LOG_ADMIN);
             slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
-            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+            logService.warn(new WrapLog().exception(unErrore).message(message).usaDb());
         }
     }
 
@@ -601,7 +602,7 @@ public class LogService extends AbstractService {
 
         //-- Inserimento opzionale nella collection di mongoDB
         if (flagUsaDB) {
-            loggerBackend.crea(level, wrap);
+            aLoggerBackend.crea(level, wrap);
         }
 
         //-- Invio opzionale di una mail

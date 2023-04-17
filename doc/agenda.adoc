@@ -195,3 +195,47 @@ drop
 
 mongorestore -d wiki24 /Users/guidoceresa/Desktop/dump/wiki24
 mongorestore -d wiki24 /Users/gac/Desktop/dump/wiki24
+
+
+== Terminal ==
+
+ mvn clean package -Pproduction
+
+ mvn clean package -Pproduction -Dmaven.test.skip=true
+
+ java -jar -Dserver.port=8090 vaadin23.jar
+
+ java -jar -Dserver.port=8090 wiki24.jar
+
+== JAR file ==
+To achieve our objective, we need to scan the JAR file from a Java program and get the class names.
+
+* baeldung [https://www.baeldung.com/jar-file-get-class-names]
+
+== Singleton ==
+L'annotation @Service è già Singleton e quindi **non** occorre aggiungere l'annotation @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+
+* baeldung [https://www.baeldung.com/java-ee-singleton-session-bean]
+
+
+== Reset ==
+Nella View 3 possibilità per il bottone rosso a sinistra (il primo):
+
+* Non fare nulla. Bottone assente. Esempio Versioni che vengono create solo dal programma.
+* DeleteAll. -> Backend.deleteAll(). Cancella e lascia vuota la collection.
+* ResetForcing. -> Backend.resetForcing(). Cancella e ricrea da CSV oppure hardcoded oppure (Preferenze) da Enumeration.
+* Preferenze ha un secondo bottone specifico per resettare in maniera parziale solo alcune preferenze.
+
+Nel Backend ci sono 3 metodi:
+
+* ResetForcing -> Backend.deleteAll() e poi Backend.ResetDownload(). Esegue sempre cancellando la collection e poi invocando ResetEmptyOnly
+* ResetEmptyOnly -> Backend.ResetDownload(). Esegue solo se la collection è vuota. Tipicamente chiamato ad ogni avvio del programma.
+* ResetDownload -> esegue effettivamente con 4 modalità possibili:
+** Ricrea hardcoded.
+** Ricrea da Enumeration (Preferenze).
+** Ricrea da CSV.
+** Ricrea in download dal server (Wiki).
+
+== Download ==
+* In wiki24 il bottone si chiama Download e sostituisce DeleteAll e Reset
+* Biografie è l'unica tavola che ha il bottone DeleteAll prima di Download.

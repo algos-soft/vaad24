@@ -1,9 +1,16 @@
 package it.algos.vaad24.backend.service;
 
+import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.packages.utility.log.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
+import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 import org.springframework.core.env.*;
+
+import javax.annotation.*;
+import java.util.*;
 
 /**
  * Project vaadin23
@@ -17,6 +24,8 @@ import org.springframework.core.env.*;
  * I riferimenti sono 'public' (e non protected) per poterli usare con TestUnit <br>
  */
 public abstract class AbstractService {
+
+    protected static List<AbstractService> SERVIZI = new ArrayList<>();
 
     /**
      * Istanza di una interfaccia SpringBoot <br>
@@ -65,7 +74,7 @@ public abstract class AbstractService {
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
-    public LogService logger;
+    public LogService logService;
 
 
     /**
@@ -159,6 +168,13 @@ public abstract class AbstractService {
      */
     @Autowired
     public PreferenzaBackend preferenzaBackend;
+    /**
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata dal framework SpringBoot/Vaadin usando il metodo setter() <br>
+     * al termine del ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    public ALoggerBackend aLoggerBackend;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -191,5 +207,89 @@ public abstract class AbstractService {
      */
     @Autowired
     public BeanService beanService;
+
+
+    /**
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata dal framework SpringBoot/Vaadin usando il metodo setter() <br>
+     * al termine del ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    public JarFileService jarFileService;
+
+    public AbstractService() {
+    }
+
+    @PostConstruct
+    private void postConstruct() {
+        fixAllServices();
+        fixLinkIncrociati();
+        fixLinkPreferenze();
+    }
+
+    private void fixAllServices() {
+        SERVIZI.add(this.annotationService);
+        SERVIZI.add(this.htmlService);
+        SERVIZI.add(this.textService);
+        SERVIZI.add(this.arrayService);
+        SERVIZI.add(this.reflectionService);
+        SERVIZI.add(this.mongoService);
+        SERVIZI.add(this.fileService);
+        SERVIZI.add(this.classService);
+        SERVIZI.add(this.resourceService);
+        SERVIZI.add(this.dateService);
+        SERVIZI.add(this.utilityService);
+        SERVIZI.add(this.beanService);
+        SERVIZI.add(this.preferenceService);
+        SERVIZI.add(this.webService);
+        SERVIZI.add(this.mailService);
+        SERVIZI.add(this.regexService);
+        SERVIZI.add(this.jarFileService);
+        SERVIZI.add(this.preferenzaBackend);
+        SERVIZI.add(this.logService);
+        SERVIZI.add(this.aLoggerBackend);
+    }
+
+    private void fixLinkIncrociati() {
+        String publicFieldName = VUOTA;
+        String message;
+
+        if (logService.slf4jLogger == null) {
+            logService.postConstruct();
+        }
+
+        for (AbstractService servizio : SERVIZI) {
+            for (AbstractService valoreLinkato : SERVIZI) {
+                if (valoreLinkato != servizio) {
+                    try {
+                        publicFieldName = textService.primaMinuscola(valoreLinkato.getClass().getSimpleName());
+                    } catch (Exception unErrore) {
+                        message = String.format("Non sono riuscito ad pippare i link di %s nel service %s", valoreLinkato, valoreLinkato);
+                        System.out.println(message);
+                        logService.error(new WrapLog().message(message));
+                    }
+
+                    try {
+                        reflectionService.setPropertyValue(servizio, publicFieldName, valoreLinkato);
+
+                    } catch (Exception unErrore) {
+                        message = String.format("Non sono riuscito ad incrociare i link di %s nel service %s", publicFieldName, valoreLinkato);
+                        System.out.println(message);
+                        logService.error(new WrapLog().message(message));
+                    }
+
+                }
+            }
+        }
+    }
+
+    public void fixLinkPreferenze() {
+        for (Pref pref : Pref.values()) {
+            pref.setPreferenceService(preferenceService);
+            pref.setLogger(logService);
+            pref.setDate(dateService);
+            pref.setText(textService);
+        }
+    }
 
 }

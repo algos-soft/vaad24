@@ -303,11 +303,11 @@ public class ResourceService extends AbstractService {
             try {
                 bytes = FileUtils.readFileToByteArray(resourceFile);
             } catch (Exception unErrore) {
-                logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb().type(AETypeLog.resources));
+                logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb().type(AETypeLog.resources));
             }
         }
         else {
-            logger.error(new WrapLog().exception(new AlgosException(NON_ESISTE_FILE)).usaDb().type(AETypeLog.resources));
+            logService.error(new WrapLog().exception(new AlgosException(NON_ESISTE_FILE)).usaDb().type(AETypeLog.resources));
             return bytes;
         }
 
@@ -331,7 +331,7 @@ public class ResourceService extends AbstractService {
                 resource = new StreamResource("manca.jpg", () -> new ByteArrayInputStream(bytes));
                 image = new Image(resource, "manca");
             } catch (Exception unErrore) {
-                logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb().type(AETypeLog.resources));
+                logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb().type(AETypeLog.resources));
             }
         }
 

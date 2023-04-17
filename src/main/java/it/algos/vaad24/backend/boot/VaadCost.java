@@ -60,7 +60,7 @@ public class VaadCost {
 
     public static final String PROJECT_VAADIN23 = "vaadin23";
 
-    //    public static final String PROJECT_VAADIN24 = "vaad24";
+        public static final String PROJECT_VAADIN24 = "vaad24";
 
     public static final String TAG_LOG_ADMIN = "vaad24.admin";
 
@@ -429,7 +429,7 @@ public class VaadCost {
 
     public static final String TAG_FLOW_PREFERENCES = "23preferences";
 
-    public static final int PAD_TYPE = 10;
+    public static final int PAD_TYPE = 14;
 
     public static final int PAD_CLASS = 20;
 

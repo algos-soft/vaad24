@@ -143,22 +143,17 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
     protected List<String> formPropertyNamesList;
 
+    //    protected boolean usaBottoneRefresh;
 
-    protected boolean usaBottoneRefresh;
-
-    protected Button buttonRefresh;
-
-    protected boolean usaBottoneReset;
-
-    protected Button buttonReset;
+    //    protected Button buttonRefresh;
 
     protected boolean usaBottoneDeleteAll;
-
     protected Button buttonDeleteAll;
 
-    protected boolean usaBottoneDeleteEntity;
+    protected boolean usaBottoneReset;
+    protected Button buttonReset;
 
-    protected Button buttonDeleteEntity;
+
 
     protected boolean usaBottoneSearch;
 
@@ -177,6 +172,9 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
     protected Button buttonEdit;
 
+    protected boolean usaBottoneDeleteEntity;
+
+    protected Button buttonDeleteEntity;
 
     protected boolean usaBottoneExport;
 
@@ -281,16 +279,19 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         formPropertyNamesList = new ArrayList<>();
         cancellaColonnaKeyId = true;
         autoCreateColumns = true;
-        usaBottoneRefresh = false;
-        usaBottoneReset = false;
+
+        //        usaBottoneRefresh = false;
         usaBottoneDeleteAll = false;
-        usaBottoneDeleteEntity = true;
+        usaBottoneReset = false;
         usaReset = false;
         usaBottoneNew = true;
         usaBottoneEdit = true;
-        usaBottoneExport = false;
         usaBottoneSearch = true;
+        usaBottoneDeleteEntity = true;
+        usaBottoneDeleteEntity = true;
+        usaBottoneExport = false;
         usaComboType = false;
+
         usaBottomTotale = true;
         usaBottomInfo = true;
         usaSingleClick = true;
@@ -349,46 +350,40 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixBottoniTopStandard() {
-        if (usaBottoneRefresh) {
-            buttonRefresh = new Button();
-            buttonRefresh.getElement().setAttribute("theme", "secondary");
-            buttonRefresh.getElement().setProperty("title", "Refresh: ricarica dal database i valori della finestra");
-            buttonRefresh.setIcon(new Icon(VaadinIcon.REFRESH));
-            buttonRefresh.addClickListener(event -> refresh());
-            topPlaceHolder.add(buttonRefresh);
-        }
-
-        if (usaBottoneReset && buttonReset == null) {
-            buttonReset = new Button();
-            buttonReset.getElement().setAttribute("theme", "error");
-            //--ha senso solo per le entity che estendono AREntity con la property 'reset'
-            //            if (ResetEntity.class.isAssignableFrom(entityClazz) || usaReset) {
-            buttonReset.getElement().setProperty("title", "Reset: ripristina nel database i valori di default annullando le " +
-                    "eventuali modifiche apportate successivamente\nShortcut SHIFT+R");
-            buttonReset.addClickListener(event -> AReset.reset(this::reset));
-            buttonReset.addClickShortcut(Key.KEY_R, KeyModifier.SHIFT);
-            //        }
-            //            else {
-            //                buttonDeleteReset.getElement().setProperty("title", "Delete: cancella tutta la collection\nShortcut SHIFT+D");
-            //                buttonDeleteReset.addClickListener(event -> ADelete.deleteAll(this::deleteAll));
-            //                buttonDeleteReset.addClickShortcut(Key.KEY_D, KeyModifier.SHIFT);
-            //            }
-            buttonReset.setIcon(new Icon(VaadinIcon.REFRESH));
-            topPlaceHolder.add(buttonReset);
-        }
+        //        if (usaBottoneRefresh) {
+        //            buttonRefresh = new Button();
+        //            buttonRefresh.getElement().setAttribute("theme", "secondary");
+        //            buttonRefresh.getElement().setProperty("title", "Refresh: ricarica dal database i valori della finestra");
+        //            buttonRefresh.setIcon(new Icon(VaadinIcon.REFRESH));
+        //            buttonRefresh.addClickListener(event -> refresh());
+        //            topPlaceHolder.add(buttonRefresh);
+        //        }
 
         if (usaBottoneDeleteAll) {
             buttonDeleteAll = new Button();
-            buttonDeleteAll.getElement().setAttribute("theme", "error");
+            buttonDeleteAll.getElement().setAttribute("theme", "primary");
+            buttonDeleteAll.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonDeleteAll.getElement().setProperty("title", "Delete: cancella completamente tutta la collezione");
             buttonDeleteAll.setIcon(new Icon(VaadinIcon.TRASH));
             buttonDeleteAll.addClickListener(event -> ADelete.deleteAll(this::deleteAll));
             topPlaceHolder.add(buttonDeleteAll);
         }
 
+        if (usaBottoneReset && buttonReset == null) {
+            buttonReset = new Button();
+            buttonReset.getElement().setAttribute("theme", "primary");
+            buttonReset.getElement().setProperty("title", "Reset: ripristina nel database i valori di default annullando le " +
+                    "eventuali modifiche apportate successivamente\nShortcut SHIFT+R");
+            buttonReset.setIcon(new Icon(VaadinIcon.REFRESH));
+            buttonReset.addClickListener(event -> AReset.reset(this::resetForcing));
+            buttonReset.addClickShortcut(Key.KEY_R, KeyModifier.SHIFT);
+            topPlaceHolder.add(buttonReset);
+        }
+
+
         if (usaBottoneNew) {
             buttonNew = new Button();
-            buttonNew.getElement().setAttribute("theme", "secondary");
+            buttonNew.getElement().setAttribute("theme", "primary");
             buttonNew.getElement().setProperty("title", "Add: aggiunge un elemento alla collezione\nShortcut SHIFT+N");
             buttonNew.setIcon(new Icon(VaadinIcon.PLUS));
             buttonNew.setEnabled(true);
@@ -399,7 +394,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
         if (usaBottoneEdit) {
             buttonEdit = new Button();
-            buttonEdit.getElement().setAttribute("theme", "secondary");
+            buttonEdit.getElement().setAttribute("theme", "primary");
             buttonEdit.getElement().setProperty("title", "Update: modifica l'elemento selezionato\nShortcut SHIFT+E");
             buttonEdit.setIcon(new Icon(VaadinIcon.PENCIL));
             buttonEdit.setEnabled(false);
@@ -410,9 +405,10 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
         if (usaBottoneDeleteEntity) {
             buttonDeleteEntity = new Button();
-            buttonDeleteEntity.getElement().setAttribute("theme", "error");
+            buttonDeleteEntity.getElement().setAttribute("theme", "primary");
+            buttonDeleteEntity.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonDeleteEntity.getElement().setProperty("title", "Delete: cancella l'elemento selezionato\nShortcut SHIFT+D");
-            buttonDeleteEntity.setIcon(new Icon(VaadinIcon.TRASH));
+            buttonDeleteEntity.setIcon(new Icon(VaadinIcon.CLOSE));
             buttonDeleteEntity.setEnabled(false);
             buttonDeleteEntity.addClickListener(event -> deleteItem());
             buttonDeleteEntity.addClickShortcut(Key.KEY_D, KeyModifier.SHIFT);
@@ -592,19 +588,6 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     protected void addColumnsOneByOne() {
         columnService.addColumnsOneByOne(grid, entityClazz, gridPropertyNamesList);
     }
-    //    protected void addColumnsNomeOrdine() {
-    //        if (OrdineEntity.class.isAssignableFrom(entityClazz)) {
-    //            grid.addColumn(new ComponentRenderer<>(entity -> {
-    //                OrdineEntity entityBean = (OrdineEntity) entity;
-    //                return new Span(entityBean.ordine+"");
-    //            })).setHeader(FIELD_NAME_ORDINE).setKey(FIELD_NAME_ORDINE).setFlexGrow(0).setWidth("3em");
-    //
-    //           grid.addColumn(new ComponentRenderer<>(entity -> {
-    //                OrdineEntity entityBean = (OrdineEntity) entity;
-    //                return new Span(entityBean.nome);
-    //            })).setHeader(FIELD_NAME_NOME).setKey(FIELD_NAME_NOME).setFlexGrow(0).setWidth("10em");
-    //        }
-    //    }
 
 
     /**
@@ -676,6 +659,9 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     protected boolean sincroSelection(SelectionEvent event) {
         boolean singoloSelezionato = event.getAllSelectedItems().size() == 1;
 
+        if (buttonDeleteAll != null) {
+            buttonDeleteAll.setEnabled(!singoloSelezionato);
+        }
         if (buttonReset != null) {
             buttonReset.setEnabled(!singoloSelezionato);
         }
@@ -685,8 +671,8 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         if (buttonEdit != null) {
             buttonEdit.setEnabled(singoloSelezionato);
         }
-        if (buttonDeleteAll != null) {
-            buttonDeleteAll.setEnabled(singoloSelezionato);
+        if (buttonDeleteEntity != null) {
+            buttonDeleteEntity.setEnabled(singoloSelezionato);
         }
 
         return singoloSelezionato;
@@ -704,7 +690,24 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     }
 
 
-    protected void reset() {
+    protected void deleteAll() {
+        int totaleEsistente = crudBackend.count();
+        if (totaleEsistente == 0) {
+            Avviso.message("Non ci sono entities da cancellare").primary().open();
+            return;
+        }
+
+        if (crudBackend.deleteAll()) {
+            grid.setItems(crudBackend.findAllSort(sortOrder));
+            Avviso.message("Delete all").success().open();
+        }
+        else {
+            Avviso.message("Non sono riuscito a cancellare la collection").error().durata(6).open();
+        }
+    }
+
+
+    protected void resetForcing() {
         AResult result = crudBackend.resetForcing();
 
         if (result.isValido()) {
@@ -717,17 +720,6 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         }
     }
 
-    protected void deleteAll() {
-        int totaleEsistente = crudBackend.count();
-        if (totaleEsistente == 0) {
-            Avviso.message("Non ci sono entities da cancellare").primary().open();
-            return;
-        }
-
-        crudBackend.deleteAll();
-        grid.setItems(crudBackend.findAllSort(sortOrder));
-        Avviso.message("Delete all").success().open();
-    }
 
     /**
      * Apre un dialogo di creazione <br>

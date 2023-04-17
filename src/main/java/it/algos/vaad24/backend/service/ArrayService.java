@@ -322,7 +322,7 @@ public class ArrayService extends AbstractService {
         try {
             Arrays.sort(listaChiavi);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
 
         for (Object chiave : listaChiavi) {
@@ -353,7 +353,7 @@ public class ArrayService extends AbstractService {
         try {
             Arrays.sort(listaValues);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
 
         for (Object value : listaValues) {
@@ -409,7 +409,7 @@ public class ArrayService extends AbstractService {
         try {
             listaChiaviOrdinata = listaChiaviDisordinata.stream().filter(c -> textService.isValid(c)).sorted().toList();
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
 
         for (Object chiave : listaChiaviOrdinata) {

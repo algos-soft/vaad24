@@ -123,10 +123,11 @@ public class MeseBackend extends CrudBackend {
     }
 
     @Override
-    public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(logInfo);
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+        String collectionName = annotationService.getCollectionName(entityClazz);
         String clazzName = entityClazz.getSimpleName();
-        String collectionName = result.getTarget();
+        AEntity entityBean;
         String nomeFileCSVSulServerAlgos = "mesi";
         Map<String, List<String>> mappa;
         List<String> riga;
@@ -134,69 +135,72 @@ public class MeseBackend extends CrudBackend {
         String breve;
         String nome;
         List<AEntity> lista;
-        AEntity entityBean;
         String message;
         int ordine = 0;
         int primo = 0;
         int ultimo = 0;
 
-        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
-            logger.debug(new WrapLog().message(message));
-            mappa = resourceService.leggeMappa(nomeFileCSVSulServerAlgos);
-            if (mappa != null) {
-                result.setValido(true);
-                lista = new ArrayList<>();
+        mappa = resourceService.leggeMappa(nomeFileCSVSulServerAlgos);
+        if (mappa != null) {
+            result.setValido(true);
+            lista = new ArrayList<>();
 
-                for (String key : mappa.keySet()) {
-                    riga = mappa.get(key);
-                    if (riga.size() >= 3) {
-                        try {
-                            giorni = Integer.decode(riga.get(0));
-                        } catch (Exception unErrore) {
-                            logger.error(new WrapLog().exception(unErrore).usaDb());
-                            giorni = 0;
-                        }
-                        breve = riga.get(1);
-                        nome = riga.get(2);
+            for (String key : mappa.keySet()) {
+                riga = mappa.get(key);
+                if (riga.size() >= 3) {
+                    try {
+                        giorni = Integer.decode(riga.get(0));
+                    } catch (Exception unErrore) {
+                        logService.error(new WrapLog().exception(unErrore).usaDb());
+                        giorni = 0;
                     }
-                    else {
-                        logger.error(new WrapLog().exception(new AlgosException("I dati non sono congruenti")).usaDb());
+                    breve = riga.get(1);
+                    nome = riga.get(2);
+                }
+                else {
+                    logService.error(new WrapLog().exception(new AlgosException("I dati non sono congruenti")).usaDb());
+                    return null;
+                }
+                if (riga.size() >= 4) {
+                    primo = Integer.decode(riga.get(3));
+                }
+                if (riga.size() >= 5) {
+                    ultimo = Integer.decode(riga.get(4));
+                }
+
+                if (giorni > 0 && primo > 0 && ultimo > 0) {
+                    if (giorni != (ultimo - primo + 1)) {
+                        message = String.format("Il numero di 'giorni' da 'primo' a 'ultimo' non coincidono per il mese di %s", nome);
+                        logService.error(new WrapLog().exception(new AlgosException(message)));
                         return null;
                     }
-                    if (riga.size() >= 4) {
-                        primo = Integer.decode(riga.get(3));
-                    }
-                    if (riga.size() >= 5) {
-                        ultimo = Integer.decode(riga.get(4));
-                    }
-
-                    if (giorni > 0 && primo > 0 && ultimo > 0) {
-                        if (giorni != (ultimo - primo + 1)) {
-                            message = String.format("Il numero di 'giorni' da 'primo' a 'ultimo' non coincidono per il mese di %s", nome);
-                            logger.error(new WrapLog().exception(new AlgosException(message)));
-                            return null;
-                        }
-                    }
-
-                    entityBean = insert(newEntity(++ordine, nome, breve, giorni, primo, ultimo));
-                    if (entityBean != null) {
-                        lista.add(entityBean);
-                    }
-                    else {
-                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
-                        result.setValido(false);
-                    }
                 }
-                return super.fixResult(result, clazzName, collectionName, lista, logInfo);
+
+                entityBean = insert(newEntity(++ordine, nome, breve, giorni, primo, ultimo));
+                if (entityBean != null) {
+                    lista.add(entityBean);
+                }
+                else {
+                    logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
+                    result.setValido(false);
+                }
+            }
+            if (lista.size() > 0) {
+                result.setIntValue(lista.size());
+                result.setLista(lista);
             }
             else {
-                return result.errorMessage("Non ho trovato il file sul server").fine();
+                result.typeResult(AETypeResult.error);
+                message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetDownload()", collectionName, clazzName);
+                return result.errorMessage(message);
             }
         }
         else {
-            return result.fine();
+            return result.errorMessage("Non ho trovato il file sul server").fine();
         }
+
+        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
+        return result;
     }
 
 }// end of crud backend class

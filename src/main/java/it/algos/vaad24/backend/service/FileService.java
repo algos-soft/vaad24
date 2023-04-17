@@ -223,7 +223,7 @@ public class FileService extends AbstractService {
         try {
             caseSensitiveUgualeFalse = fileToBeChecked.getCanonicalPath().equals(fileToBeChecked.getAbsolutePath());
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
 
         if (fileToBeChecked.exists() && caseSensitiveUgualeFalse) {
@@ -241,7 +241,7 @@ public class FileService extends AbstractService {
         else {
             if (this.isNotSuffix(fileToBeChecked.getAbsolutePath())) {
                 message = String.format("%s al file %s", PATH_SENZA_SUFFIX, fileToBeChecked.getAbsolutePath());
-                logger.error(new WrapLog().exception(new AlgosException(message)).usaDb().type(AETypeLog.file));
+                logService.error(new WrapLog().exception(new AlgosException(message)).usaDb().type(AETypeLog.file));
                 return result.errorMessage(message);
             }
 
@@ -252,7 +252,7 @@ public class FileService extends AbstractService {
             }
 
             message = String.format("Errore generico nel check del file %s", fileToBeChecked.getAbsolutePath());
-            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb().type(AETypeLog.file));
+            logService.error(new WrapLog().exception(new AlgosException(message)).usaDb().type(AETypeLog.file));
             return result.errorMessage(message);
         }
     }
@@ -280,7 +280,7 @@ public class FileService extends AbstractService {
 
         if (this.isSlashFinale(absolutePathFileWithSuffixToBeChecked)) {
             message = String.format("%s%s%s", DIRECTORY_NOT_FILE, FORWARD, absolutePathFileWithSuffixToBeChecked);
-            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb().type(AETypeLog.file));
+            logService.error(new WrapLog().exception(new AlgosException(message)).usaDb().type(AETypeLog.file));
             return result.errorMessage(message);
         }
 
@@ -411,7 +411,7 @@ public class FileService extends AbstractService {
 
         if (this.isNotSuffix(fileToBeCreated.getAbsolutePath())) {
             message = String.format("%s%s%s", PATH_SENZA_SUFFIX, FORWARD, fileToBeCreated.getAbsolutePath());
-            logger.error(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
+            logService.error(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
             return result.errorMessage(message);
         }
 
@@ -478,14 +478,14 @@ public class FileService extends AbstractService {
                 return result.validMessage(message);
             } catch (Exception unErrore) {
                 message = String.format("Errore nel path per la creazione del file %s", fileToBeCreated.getAbsolutePath());
-                logger.error(new WrapLog().exception(unErrore).message(message).type(AETypeLog.file));
+                logService.error(new WrapLog().exception(unErrore).message(message).type(AETypeLog.file));
                 return result.errorMessage(message);
             }
         }
         else {
             //            message = String.format("%s%s%s", DIRECTORY_MANCANTE, FORWARD, parentDirectoryName + SLASH);
             message = String.format("Non sono riuscito a creare la directory necessaria per il file %s", fileToBeCreated.getAbsolutePath());
-            logger.error(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
+            logService.error(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
             return result.errorMessage(message);
         }
     }
@@ -581,24 +581,24 @@ public class FileService extends AbstractService {
 
         if (this.isNotSuffix(fileToBeDeleted.getAbsolutePath())) {
             message = String.format("%s%s%s", PATH_SENZA_SUFFIX, FORWARD, fileToBeDeleted.getAbsolutePath());
-            logger.error(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
+            logService.error(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
             return result.errorMessage(message);
         }
 
         if (!fileToBeDeleted.exists()) {
             message = String.format("%s%s%s", NON_ESISTE_FILE, FORWARD, fileToBeDeleted.getAbsolutePath());
-            logger.warn(AETypeLog.file, new AlgosException(message));
+            logService.warn(AETypeLog.file, new AlgosException(message));
             return result.errorMessage(message);
         }
 
         if (fileToBeDeleted.delete()) {
             message = String.format("%s%s%s", CANCELLATO_FILE, FORWARD, fileToBeDeleted.getAbsolutePath());
-            logger.info(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
+            logService.info(new WrapLog().exception(new AlgosException(message)).type(AETypeLog.file));
             return result.validMessage(message);
         }
         else {
             message = String.format("%s%s%s", NON_CANCELLATO_FILE, FORWARD, fileToBeDeleted.getAbsolutePath());
-            logger.warn(AETypeLog.file, new AlgosException(message));
+            logService.warn(AETypeLog.file, new AlgosException(message));
             return result.errorMessage(message);
         }
     }
@@ -970,7 +970,7 @@ public class FileService extends AbstractService {
         try {
             FileUtils.copyDirectory(dirSrc, dirDest);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(unErrore).usaDb());
+            logService.error(new WrapLog().exception(unErrore).usaDb());
             return result.setErrorMessage(unErrore.getMessage());
         }
         result.setTagCode(AEKeyDir.creataNuova.name());
@@ -1146,7 +1146,7 @@ public class FileService extends AbstractService {
         try {
             return leggeFile(fileToRead.getCanonicalPath());
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
             return VUOTA;
         }
     }
@@ -1172,7 +1172,7 @@ public class FileService extends AbstractService {
 
             testo = textService.levaCoda(testo, aCapo);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb().type(AETypeLog.file));
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb().type(AETypeLog.file));
         }
 
         return testo;
@@ -1597,13 +1597,13 @@ public class FileService extends AbstractService {
 
         if (textService.isEmpty(pathIn)) {
             message = "Nullo il path in ingresso";
-            logger.warn(AETypeLog.file, new AlgosException(message));
+            logService.warn(AETypeLog.file, new AlgosException(message));
             return pathOut;
         }
 
         if (textService.isEmpty(directoryFindPath)) {
             message = "Nulla la directory in ingresso";
-            logger.warn(AETypeLog.file, new AlgosException(message));
+            logService.warn(AETypeLog.file, new AlgosException(message));
             return pathOut;
         }
 
@@ -1613,7 +1613,7 @@ public class FileService extends AbstractService {
         else {
             pathOut = VUOTA;
             message = "Non esiste la directory indicata nel path indicato";
-            logger.warn(AETypeLog.file, new AlgosException(message));
+            logService.warn(AETypeLog.file, new AlgosException(message));
         }
 
         return pathOut.trim();
@@ -1765,7 +1765,7 @@ public class FileService extends AbstractService {
             jarPath = textService.levaCoda(jarPath, JAR_PATH_SUFFIX);
             jarPath = textService.levaTesta(jarPath, JAR_FILE_PREFIX);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
 
         return fileService.scanJarDir(jarPath, dirPath);
@@ -1851,7 +1851,7 @@ public class FileService extends AbstractService {
         String pathPackage;
 
         if (textService.isEmpty(nomeModulo)) {
-            logger.error(new AlgosException("Manca il nome del modulo"));
+            logService.error(new AlgosException("Manca il nome del modulo"));
             return null;
         }
 
@@ -1866,7 +1866,7 @@ public class FileService extends AbstractService {
         String pathDir = VUOTA;
 
         if (textService.isEmpty(nomeDirectory)) {
-            logger.error(new AlgosException("Manca il nome della directory"));
+            logService.error(new AlgosException("Manca il nome della directory"));
             return null;
         }
 
@@ -1973,7 +1973,7 @@ public class FileService extends AbstractService {
 
         listaPath = getPathBreveAllPackageFiles();
         if (listaPath == null || listaPath.size() < 1) {
-            logger.error(new AlgosException("Non sono riuscito a creare la lista dei files del package"));
+            logService.error(new AlgosException("Non sono riuscito a creare la lista dei files del package"));
         }
 
         classeFinalePrevista = estraeClasseFinale(simpleName);
@@ -1988,7 +1988,7 @@ public class FileService extends AbstractService {
 
         if (textService.isEmpty(canonicalName)) {
             message = String.format("Nel package non esiste la classe %s", simpleName);
-            logger.info(new WrapLog().message(message).type(AETypeLog.file));
+            logService.info(new WrapLog().message(message).type(AETypeLog.file));
         }
 
         if (listaNomiCanonici.size() == 1) {
@@ -2013,7 +2013,7 @@ public class FileService extends AbstractService {
                 }
                 else {
                     message = String.format("Nei package c'è più di una classe con simpleName = %s", simpleName);
-                    logger.info(new WrapLog().message(message).type(AETypeLog.file));
+                    logService.info(new WrapLog().message(message).type(AETypeLog.file));
                 }
             }
             return VUOTA;
@@ -2167,18 +2167,18 @@ public class FileService extends AbstractService {
         String message;
 
         if (fileDirectoryToBeChecked == null) {
-            logger.error(new WrapLog().exception(new AlgosException(PARAMETRO_NULLO)).usaDb().type(AETypeLog.file));
+            logService.error(new WrapLog().exception(new AlgosException(PARAMETRO_NULLO)).usaDb().type(AETypeLog.file));
             return result.errorMessage(PARAMETRO_NULLO);
         }
 
         if (textService.isEmpty(fileDirectoryToBeChecked.getName())) {
-            logger.error(new WrapLog().exception(new AlgosException(PATH_NULLO)).usaDb().type(AETypeLog.file));
+            logService.error(new WrapLog().exception(new AlgosException(PATH_NULLO)).usaDb().type(AETypeLog.file));
             return result.errorMessage(PATH_NULLO);
         }
 
         if (!fileDirectoryToBeChecked.getPath().equals(fileDirectoryToBeChecked.getAbsolutePath())) {
             message = String.format("%s%s%s", PATH_NOT_ABSOLUTE, FORWARD, fileDirectoryToBeChecked.getAbsolutePath());
-            logger.error(new WrapLog().exception(new AlgosException(message)).usaDb().type(AETypeLog.file));
+            logService.error(new WrapLog().exception(new AlgosException(message)).usaDb().type(AETypeLog.file));
             return result.errorMessage(message);
         }
 
@@ -2193,17 +2193,17 @@ public class FileService extends AbstractService {
         //        AResult result = AResult.build().method(methodName).target(absolutePathToBeChecked);
 
         if (absolutePathToBeChecked == null) {
-            logger.error(new WrapLog().exception(new AlgosException(PATH_NULLO)).usaDb().type(AETypeLog.file));
+            logService.error(new WrapLog().exception(new AlgosException(PATH_NULLO)).usaDb().type(AETypeLog.file));
             return result.errorMessage(PATH_NULLO);
         }
 
         if (absolutePathToBeChecked.length() == 0) {
-            logger.error(new WrapLog().exception(new AlgosException(PATH_VUOTO)).usaDb().type(AETypeLog.file));
+            logService.error(new WrapLog().exception(new AlgosException(PATH_VUOTO)).usaDb().type(AETypeLog.file));
             return result.errorMessage(PATH_VUOTO).target("(vuoto)");
         }
 
         if (this.isNotSlashIniziale(absolutePathToBeChecked)) {
-            logger.error(new WrapLog().exception(new AlgosException(PATH_NOT_ABSOLUTE)).usaDb().type(AETypeLog.file));
+            logService.error(new WrapLog().exception(new AlgosException(PATH_NOT_ABSOLUTE)).usaDb().type(AETypeLog.file));
             return result.errorMessage(PATH_NOT_ABSOLUTE);
         }
 
@@ -2251,7 +2251,7 @@ public class FileService extends AbstractService {
                     .map(path -> path.toString())
                     .collect(Collectors.toList());
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
 
         return lista;
@@ -2276,7 +2276,7 @@ public class FileService extends AbstractService {
                     .map(path -> textService.levaTesta(path.toString(), dir))
                     .collect(Collectors.toList());
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
 
         return lista.stream().sorted().collect(Collectors.toList());
@@ -2288,7 +2288,7 @@ public class FileService extends AbstractService {
         try {
             jarFile = new JarFile(jarPath);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
             return null;
         }
 

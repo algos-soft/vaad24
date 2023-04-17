@@ -1,7 +1,6 @@
 package it.algos.vaad24.backend.packages.anagrafica;
 
 import com.vaadin.flow.router.*;
-import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import org.springframework.beans.factory.annotation.*;
@@ -40,14 +39,13 @@ public class ViaView extends CrudView {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
-        logger.info(new WrapLog().message(String.format("")));
         super.gridPropertyNamesList = Arrays.asList("nome");
         super.formPropertyNamesList = Arrays.asList("nome");
 
         super.usaBottoneReset = true;
         super.usaReset = true;
         super.usaBottoneNew = false;
-        super.usaBottoneEdit = true;
+        super.usaBottoneEdit = false;
         super.usaBottoneSearch = false;
     }
 

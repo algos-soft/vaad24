@@ -55,7 +55,7 @@ public class ClassService extends AbstractService {
         try {
             clazz = Class.forName(canonicalName);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)));
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)));
         }
 
         if (clazz != null) {
@@ -106,7 +106,7 @@ public class ClassService extends AbstractService {
             try {
                 backend = (CrudBackend) appContext.getBean(Class.forName(backendClazzCanonicalName));
             } catch (Exception unErrore) {
-                logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+                logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
             }
         }
 
@@ -141,7 +141,7 @@ public class ClassService extends AbstractService {
             try {
                 entity = (AEntity) appContext.getBean(Class.forName(entityClazzCanonicalName));
             } catch (Exception unErrore) {
-                logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+                logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
             }
         }
         return entity;
@@ -253,7 +253,7 @@ public class ClassService extends AbstractService {
         canonicalName = fileService.getCanonicalName(simpleName);
         if (textService.isEmpty(canonicalName)) {
             message = String.format("Non esiste la classe [%s] nella directory package", simpleName);
-            logger.info(new WrapLog().exception(new AlgosException(message)));
+            logService.info(new WrapLog().exception(new AlgosException(message)));
         }
 
         return getClazzFromCanonicalName(canonicalName);
@@ -286,7 +286,7 @@ public class ClassService extends AbstractService {
             clazz = Class.forName(canonicalName);
         } catch (Exception unErrore) {
             message = String.format("Non esiste la classe [%s] nella directory package", canonicalName);
-            logger.info(new WrapLog().exception(new AlgosException(message)));
+            logService.info(new WrapLog().exception(new AlgosException(message)));
         }
 
         return clazz;
@@ -767,7 +767,7 @@ public class ClassService extends AbstractService {
         try {
             clazz = Class.forName(publicClassName.toString());
         } catch (Exception unErrore) {
-            logger.info(new WrapLog().exception(AlgosException.crea(unErrore)));
+            logService.info(new WrapLog().exception(AlgosException.crea(unErrore)));
         }
         if (clazz == null) {
             return result;
@@ -788,7 +788,7 @@ public class ClassService extends AbstractService {
             }
 
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
 
         return result;
@@ -818,7 +818,7 @@ public class ClassService extends AbstractService {
                 listaCrudBackends.add(backend);
             }
             else {
-                logger.warn(new WrapLog().message(String.format("xx")));
+                logService.warn(new WrapLog().message(String.format("xx")));
             }
         }
 
@@ -844,7 +844,7 @@ public class ClassService extends AbstractService {
                     listaAEntity.add(entity);
                 }
             } catch (Exception unErrore) {
-                logger.info(new WrapLog().type(AETypeLog.file).message(String.format("Manca il file %s", path)));
+                logService.info(new WrapLog().type(AETypeLog.file).message(String.format("Manca il file %s", path)));
             }
         }
 
@@ -867,7 +867,7 @@ public class ClassService extends AbstractService {
                     listaCrudBackends.add(backend);
                 }
             } catch (Exception unErrore) {
-                logger.info(new WrapLog().exception(new AlgosException(unErrore)));
+                logService.info(new WrapLog().exception(new AlgosException(unErrore)));
             }
         }
 

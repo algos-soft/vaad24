@@ -20,7 +20,7 @@ import org.springframework.boot.test.context.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LoggerBackendTest extends BackendTest {
 
-    private LoggerBackend backend;
+    private ALoggerBackend backend;
 
     /**
      * Qui passa una volta sola <br>
@@ -28,7 +28,7 @@ public class LoggerBackendTest extends BackendTest {
     @BeforeAll
     protected void setUpAll() {
         this.backend = super.loggerBackend;
-        super.entityClazz = Logger.class;
+        super.entityClazz = ALogger.class;
         super.typeBackend = TypeBackend.logger;
         super.crudBackend = backend;
 

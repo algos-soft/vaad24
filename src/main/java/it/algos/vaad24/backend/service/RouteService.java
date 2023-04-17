@@ -316,7 +316,7 @@ public class RouteService extends AbstractService {
         try {
             text = URLDecoder.decode(textUTF8, CODE);
         } catch (Exception unErrore) {
-            logger.error(unErrore);
+            logService.error(unErrore);
         }
 
         return text;

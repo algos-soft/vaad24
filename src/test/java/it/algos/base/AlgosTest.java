@@ -13,7 +13,7 @@ import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
-import it.algos.vaad24.backend.packages.utility.log.Logger;
+import it.algos.vaad24.backend.packages.utility.log.ALogger;
 import it.algos.vaad24.backend.packages.utility.log.*;
 import it.algos.vaad24.backend.packages.utility.nota.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
@@ -262,13 +262,16 @@ public abstract class AlgosTest {
     protected ContinenteBackend continenteBackend;
 
     @Autowired
-    protected LoggerBackend loggerBackend;
+    protected ALoggerBackend loggerBackend;
 
     @Autowired
     protected VersioneBackend versioneBackend;
 
     @Autowired
     protected PreferenzaBackend preferenzaBackend;
+
+    @Autowired
+    protected JarFileService jarFileService;
 
     //--clazz
     //--simpleName
@@ -279,7 +282,7 @@ public abstract class AlgosTest {
                 Arguments.of(Mese.class, Mese.class.getSimpleName()),
                 Arguments.of(Continente.class, Continente.class.getSimpleName()),
                 Arguments.of(Giorno.class, Giorno.class.getSimpleName()),
-                Arguments.of(Logger.class, Logger.class.getSimpleName()),
+                Arguments.of(ALogger.class, ALogger.class.getSimpleName()),
                 Arguments.of(Via.class, Via.class.getSimpleName()),
                 Arguments.of(ViaView.class, ViaView.class.getSimpleName()),
                 Arguments.of(SecoloView.class, SecoloView.class.getSimpleName())
