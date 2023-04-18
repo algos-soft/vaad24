@@ -772,32 +772,60 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println("45 - toString");
     }
 
+
+    @Test
     @Order(41)
     @DisplayName("41 - creaIfNotExist")
-    protected boolean creaIfNotExist(String keyValue) {
-        String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+    protected void creaIfNotExist() {
+        System.out.println("41 - creaIfNotExist");
+        System.out.println(VUOTA);
 
-        if (textService.isEmpty(keyValue)) {
-            System.out.println("La keyValue è nulla/vuota");
-            return false;
-        }
-        if (textService.isEmpty(keyPropertyName)) {
-            message = String.format("Nella collection '%s' non esiste la keyPropertyName", collectionName);
-            System.out.println(message);
-            return false;
-        }
-
-        ottenutoBooleano = crudBackend.creaIfNotExist(keyValue);
-        if (ottenutoBooleano) {
-            message = String.format("Nella collection '%s' è stata CREATA (true) SOLO IN MEMORIA una entity individuata dal valore '%s' della property [%s]", collectionName, keyValue, keyPropertyName);
+        if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
+            if (streamCollection != null) {
+                streamCollection.forEach(parameters -> this.creaIfNotExist(parameters));
+            }
+            else {
+                message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamProperty");
+                logger.warn(new WrapLog().message(message));
+            }
         }
         else {
-            message = String.format("Nella collection '%s' ESISTEVA già (false) una entity col valore '%s' della property [%s]", collectionName, keyValue, keyPropertyName);
+            message = String.format("La collection '%s' non prevede una key property", collectionName);
+            System.out.println(message);
+        }
+    }
+
+    //--nome nella collection
+    //--esiste come ID
+    //--esiste come key
+    //--crea una nuova
+    protected void creaIfNotExist(Arguments arg) {
+        Object[] mat = arg.get();
+        if (mat != null && mat.length > 0 && mat[0] instanceof String keyValue) {
+            sorgente = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+        if (mat != null && mat.length > 3 && mat[3] instanceof Boolean keyValue) {
+            previstoBooleano = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+
+        entityBean = crudBackend.creaIfNotExist(sorgente);
+        ottenutoBooleano = entityBean != null && entityBean.id != null;
+        if (ottenutoBooleano) {
+            message = String.format("Nella collection '%s' è stata creata (in memoria) una nuova entity con la keyProperty = '%s' vista che ne esisteva nessuna", collectionName, sorgente);
+        }
+        else {
+            message = String.format("Nella collection '%s' non è stata creata nessuna entity perché ne esiste già una con keyProperty = '%s'", collectionName, sorgente);
         }
         System.out.println(message);
-
-        return ottenutoBooleano;
+        assertEquals(previstoBooleano, ottenutoBooleano);
     }
+
 
     @Test
     @Order(42)
@@ -1250,8 +1278,8 @@ public abstract class BackendTest extends AlgosTest {
         message = String.format("1) isExistId -> Nella collection '%s' non esiste (false) la entity [%s]", collectionName, sorgente);
         System.out.println(message);
 
-        ottenutoBooleano = crudBackend.creaIfNotExist(sorgente);
-        assertTrue(ottenutoBooleano);
+        entityBean = crudBackend.creaIfNotExist(sorgente);
+        assertNotNull(entityBean);
         message = String.format("2) creaIfNotExist -> Nella collection '%s' è stata creata (true) la entity [%s].%s che prima non esisteva", collectionName, previsto, sorgente);
         System.out.println(message);
 
@@ -1262,8 +1290,8 @@ public abstract class BackendTest extends AlgosTest {
 
         System.out.println(VUOTA);
 
-        ottenutoBooleano = crudBackend.creaIfNotExist(sorgente);
-        assertFalse(ottenutoBooleano);
+        entityBean = crudBackend.creaIfNotExist(sorgente);
+        assertNotNull(entityBean);
         message = String.format("4) creaIfNotExist -> La entity [%s].%s esisteva già e non è stata creata (false)", previsto, sorgente);
         System.out.println(message);
 

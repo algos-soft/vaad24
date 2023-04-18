@@ -27,21 +27,20 @@ public class ContinenteBackendTest extends BackendTest {
     private ContinenteBackend backend;
 
 
-
     //--nome nella collection
     //--esiste come ID
     //--esiste come key
+    //--crea una nuova entity
     protected static Stream<Arguments> CONTINENTE() {
         return Stream.of(
-                Arguments.of(VUOTA, false, false),
-                Arguments.of("afrtica", false, false),
-                Arguments.of("africa", true, false),
-                Arguments.of("Africa", false, true),
-                Arguments.of("nordamerica", true, false),
-                Arguments.of("Nordamerica", false, true)
+                Arguments.of(VUOTA, false, false, false),
+                Arguments.of("afrtica", false, false, true),
+                Arguments.of("africa", true, false, true),
+                Arguments.of("Africa", false, true, false),
+                Arguments.of("nordamerica", true, false, true),
+                Arguments.of("Nordamerica", false, true, false)
         );
     }
-
 
 
     //--nome della property
@@ -78,6 +77,7 @@ public class ContinenteBackendTest extends BackendTest {
 
         super.setUpAll();
     }
+
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();

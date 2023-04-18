@@ -39,8 +39,8 @@ public class ProvaBackend extends CrudBackend {
     }
 
 
-    public boolean creaIfNotExist(final String descrizione) {
-        return insert(newEntity(descrizione, null, null, null,null, VUOTA, null, null)) != null;
+    public AEntity creaIfNotExist(final String descrizione) {
+        return insert(newEntity(descrizione, null, null, null, null, VUOTA, null, null));
     }
 
 
@@ -52,7 +52,7 @@ public class ProvaBackend extends CrudBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public Prova newEntity(String descrizione) {
-        return newEntity(descrizione, null, null, null, null,VUOTA, null, null);
+        return newEntity(descrizione, null, null, null, null, VUOTA, null, null);
     }
 
 
@@ -66,7 +66,7 @@ public class ProvaBackend extends CrudBackend {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public Prova newEntity(String descrizione, Continente continenteLinkDinamicoDBRef, Via viaLinkStatico, List listaVie, List listaContinenti,String typeString, AETypeVers versione, AESchedule schedule) {
+    public Prova newEntity(String descrizione, Continente continenteLinkDinamicoDBRef, Via viaLinkStatico, List listaVie, List listaContinenti, String typeString, AETypeVers versione, AESchedule schedule) {
         Prova newEntityBean = Prova.builder()
                 .descrizione(textService.isValid(descrizione) ? descrizione : null)
                 .continenteLinkDinamicoDBRef(continenteLinkDinamicoDBRef)
@@ -133,7 +133,7 @@ public class ProvaBackend extends CrudBackend {
                         versione = AETypeVers.valueOf(riga.get(6));
                         schedule = AESchedule.valueOf(riga.get(7));
                     }
-                    entityBean = insert(newEntity(descrizione, continenteLinkDinamicoDBRef, viaLinkStatico, listaVie, listaContinenti,typeString, versione, schedule));
+                    entityBean = insert(newEntity(descrizione, continenteLinkDinamicoDBRef, viaLinkStatico, listaVie, listaContinenti, typeString, versione, schedule));
                     if (entityBean != null) {
                         lista.add(entityBean);
                     }
@@ -171,6 +171,7 @@ public class ProvaBackend extends CrudBackend {
 
         return listaVie;
     }
+
     public List fixContinente(String listaContinenteText) {
         List listaVie = null;
         String sep = TRATTINO;

@@ -33,13 +33,14 @@ public class MeseBackendTest extends BackendTest {
     //--nome nella collection
     //--esiste come ID
     //--esiste come key
+    //--crea una nuova entity
     protected static Stream<Arguments> MESE() {
         return Stream.of(
-                Arguments.of(VUOTA, false, false),
-                Arguments.of("aprile", true, true),
-                Arguments.of("termidoro", false, false),
-                Arguments.of("brumaio", false, false),
-                Arguments.of("settembre", true, true)
+                Arguments.of(VUOTA, false, false, false),
+                Arguments.of("aprile", true, true, false),
+                Arguments.of("termidoro", false, false, true),
+                Arguments.of("brumaio", false, false, true),
+                Arguments.of("settembre", true, true, false)
         );
     }
 
@@ -89,31 +90,6 @@ public class MeseBackendTest extends BackendTest {
         super.streamOrder = ORDINE();
     }
 
-
-    @Test
-    @Order(41)
-    @DisplayName("41 - creaIfNotExist")
-    protected void creaIfNotExist() {
-        System.out.println("41 - creaIfNotExist");
-        System.out.println(VUOTA);
-
-        sorgente = "ottobre";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "termidoro";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertTrue(ottenutoBooleano);
-
-        entityBean = backend.findByKey(sorgente);
-        assertNotNull(entityBean);
-        ottenutoBooleano = backend.delete(entityBean);
-        assertTrue(ottenutoBooleano);
-
-        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
-        assertFalse(ottenutoBooleano);
-    }
 
     @Test
     @Order(42)

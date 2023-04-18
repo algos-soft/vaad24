@@ -31,12 +31,13 @@ public class SecoloBackendTest extends BackendTest {
     //--nome nella collection
     //--esiste come ID
     //--esiste come key
+    //--crea una nuova entity
     protected static Stream<Arguments> SECOLO() {
         return Stream.of(
-                Arguments.of(VUOTA, false, false),
-                Arguments.of("aprile", false, false),
-                Arguments.of("XX secolo", false, true),
-                Arguments.of("xxsecolo", true, false)
+                Arguments.of(VUOTA, false, false, false),
+                Arguments.of("aprile", false, false, true),
+                Arguments.of("XX secolo", false, true, false),
+                Arguments.of("xxsecolo", true, false, true)
         );
     }
 
@@ -153,31 +154,6 @@ public class SecoloBackendTest extends BackendTest {
         printValue(sorgenteIntero, ottenuto);
     }
 
-
-    @Test
-    @Order(41)
-    @DisplayName("41 - creaIfNotExist")
-    protected void creaIfNotExist() {
-        System.out.println("41 - creaIfNotExist");
-        System.out.println(VUOTA);
-
-        sorgente = "XX secolo";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "termidoro";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertTrue(ottenutoBooleano);
-
-        entityBean = backend.findByKey(sorgente);
-        assertNotNull(entityBean);
-        ottenutoBooleano = backend.delete(entityBean);
-        assertTrue(ottenutoBooleano);
-
-        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
-        assertFalse(ottenutoBooleano);
-    }
 
     @Test
     @Order(42)

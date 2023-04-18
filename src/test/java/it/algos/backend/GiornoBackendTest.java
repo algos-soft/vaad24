@@ -35,13 +35,14 @@ public class GiornoBackendTest extends BackendTest {
     //--nome nella collection
     //--esiste come ID
     //--esiste come key
+    //--crea una nuova entity
     protected static Stream<Arguments> GIORNO() {
         return Stream.of(
-                Arguments.of(VUOTA, false, false),
-                Arguments.of("23 febbraio", false, true),
-                Arguments.of("43 marzo", false, false),
-                Arguments.of("19 dicembra", false, false),
-                Arguments.of("4gennaio", true, false)
+                Arguments.of(VUOTA, false, false, false),
+                Arguments.of("23 febbraio", false, true, false),
+                Arguments.of("43 marzo", false, false, true),
+                Arguments.of("19 dicembra", false, false, true),
+                Arguments.of("4gennaio", true, false, true)
         );
     }
 
@@ -92,31 +93,6 @@ public class GiornoBackendTest extends BackendTest {
         super.streamOrder = ORDINE();
     }
 
-
-    @Test
-    @Order(41)
-    @DisplayName("41 - creaIfNotExist")
-    protected void creaIfNotExist() {
-        System.out.println("41 - creaIfNotExist");
-        System.out.println(VUOTA);
-
-        sorgente = "23 maggio";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "12 termidoro";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertTrue(ottenutoBooleano);
-
-        entityBean = backend.findByKey(sorgente);
-        assertNotNull(entityBean);
-        ottenutoBooleano = backend.delete(entityBean);
-        assertTrue(ottenutoBooleano);
-
-        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
-        assertFalse(ottenutoBooleano);
-    }
 
     @Test
     @Order(42)

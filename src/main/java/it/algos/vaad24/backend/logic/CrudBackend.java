@@ -120,16 +120,16 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
-    public boolean creaIfNotExist(final Object keyPropertyValue) {
-        return insert(newEntity(keyPropertyValue)) != null;
+    public AEntity creaIfNotExist(final Object keyPropertyValue) {
+        return insert(newEntity(keyPropertyValue));
     }
 
-    public boolean creaIfNotExist(final String keyPropertyValue) {
-        if (isExistByKey(keyPropertyValue)) {
-            return false;
+    public AEntity creaIfNotExist(final String keyPropertyValue) {
+        if (textService.isEmpty(keyPropertyValue) || isExistByKey(keyPropertyValue)) {
+            return null;
         }
         else {
-            return insert(newEntity(keyPropertyValue)) != null;
+            return insert(newEntity(keyPropertyValue));
         }
     }
 
@@ -597,10 +597,11 @@ public abstract class CrudBackend extends AbstractService {
             return findAllNoSort();
         }
     }
+
     public List findAllSortOrder() {
         Sort sort;
 
-        if (reflectionService.isEsiste(entityClazz,FIELD_NAME_ORDINE)) {
+        if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
             sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
             return findAllSort(sort);
         }

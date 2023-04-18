@@ -36,21 +36,21 @@ public class AnnoBackendTest extends BackendTest {
     //--nome nella collection
     //--esiste come ID
     //--esiste come key
+    //--crea una nuova entity
     protected static Stream<Arguments> ANNO() {
         return Stream.of(
-                Arguments.of(VUOTA, false, false),
-                Arguments.of("0", false, false),
-                Arguments.of("24", true, true),
-                Arguments.of("secolo", false, false),
-                Arguments.of("994a.c.", true, false),
-                Arguments.of("994 a.C.", false, true),
-                Arguments.of("24 A.C.", false, false),
-                Arguments.of("24 a.C.", false, true),
-                Arguments.of("24a.c.", true, false),
-                Arguments.of("3208", false, false)
+                Arguments.of(VUOTA, false, false, false),
+                Arguments.of("0", false, false, true),
+                Arguments.of("24", true, true, false),
+                Arguments.of("secolo", false, false, true),
+                Arguments.of("994a.c.", true, false, true),
+                Arguments.of("994 a.C.", false, false, true),
+                Arguments.of("24 A.C.", false, false, true),
+                Arguments.of("24 a.C.", false, true, false),
+                Arguments.of("24a.c.", true, false, true),
+                Arguments.of("3208", false, false, true)
         );
     }
-
 
 
     //--nome della property
@@ -100,30 +100,6 @@ public class AnnoBackendTest extends BackendTest {
         super.streamOrder = ORDINE();
     }
 
-    @Test
-    @Order(41)
-    @DisplayName("41 - creaIfNotExist")
-    protected void creaIfNotExist() {
-        System.out.println("41 - creaIfNotExist");
-        System.out.println(VUOTA);
-
-        sorgente = "1876";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "3472";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertTrue(ottenutoBooleano);
-
-        entityBean = backend.findByKey(sorgente);
-        assertNotNull(entityBean);
-        ottenutoBooleano = backend.delete(entityBean);
-        assertTrue(ottenutoBooleano);
-
-        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
-        assertFalse(ottenutoBooleano);
-    }
 
     @Test
     @Order(42)
