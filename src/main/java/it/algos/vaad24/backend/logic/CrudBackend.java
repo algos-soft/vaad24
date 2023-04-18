@@ -464,9 +464,7 @@ public abstract class CrudBackend extends AbstractService {
         return mongoService.isExistsCollection(entityClazz);
     }
 
-
-    public List findAllNoSort() {
-        Query query = new Query();
+    private List findQuery(Query query) {
         String collectionName = annotationService.getCollectionName(entityClazz);
 
         if (textService.isValid(collectionName)) {
@@ -477,26 +475,23 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
+    public List findAllNoSort() {
+        return findQuery(new Query());
+    }
+
     public List findAllSortCorrente() {
         Query query = new Query();
-        String collectionName = annotationService.getCollectionName(entityClazz);
 
         if (sortOrder != null) {
             query.with(sortOrder);
         }
 
-        if (textService.isValid(collectionName)) {
-            return mongoService.mongoOp.find(new Query(), entityClazz, collectionName);
-        }
-        else {
-            return mongoService.mongoOp.find(new Query(), entityClazz);
-        }
+        return findQuery(query);
     }
 
 
     public List findAllSortCorrenteReverse() {
         Query query = new Query();
-        String collectionName = annotationService.getCollectionName(entityClazz);
         Sort sort;
         String sortText;
         String[] parti;
@@ -522,21 +517,21 @@ public abstract class CrudBackend extends AbstractService {
                 }
                 sort = Sort.by(direction, field);
                 query.with(sort);
-                return mongoService.mongoOp.find(query, entityClazz, collectionName);
+                return findQuery(query);
             }
             if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
                 sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
                 query.with(sort);
-                return mongoService.mongoOp.find(query, entityClazz, collectionName);
+                return findQuery(query);
             }
             if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
                 keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
                 sort = Sort.by(Sort.Direction.DESC, keyPropertyName);
                 query.with(sort);
-                return mongoService.mongoOp.find(query, entityClazz, collectionName);
+                return findQuery(query);
             }
 
-            return mongoService.mongoOp.find(query, entityClazz, collectionName);
+            return findQuery(query);
         }
     }
 
@@ -546,7 +541,6 @@ public abstract class CrudBackend extends AbstractService {
      * Ma ovviamente il sort non viene effettuato <br>
      */
     public List findAllSort(Sort sort) {
-        String collectionName = annotationService.getCollectionName(entityClazz);
         boolean esiste;
         Sort.Order order;
         String property;
@@ -603,11 +597,21 @@ public abstract class CrudBackend extends AbstractService {
             return findAllNoSort();
         }
     }
+    public List findAllSortOrder() {
+        Sort sort;
+
+        if (reflectionService.isEsiste(entityClazz,FIELD_NAME_ORDINE)) {
+            sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
+            return findAllSort(sort);
+        }
+        else {
+            return findAllNoSort();
+        }
+    }
 
 
     public List findAllByProperty(final String propertyName, final Object propertyValue) {
         Query query = new Query();
-        String collectionName;
 
         if (textService.isEmpty(propertyName)) {
             return null;
@@ -617,14 +621,7 @@ public abstract class CrudBackend extends AbstractService {
         }
 
         query.addCriteria(Criteria.where(propertyName).is(propertyValue));
-
-        collectionName = annotationService.getCollectionName(entityClazz);
-        if (textService.isValid(collectionName)) {
-            return mongoService.mongoOp.find(query, entityClazz, collectionName);
-        }
-        else {
-            return mongoService.mongoOp.find(query, entityClazz);
-        }
+        return findQuery(query);
     }
 
     /**

@@ -286,7 +286,7 @@ public class PreferenzaBackend extends CrudBackend {
             logService.info(new WrapLog().type(AETypeLog.preferenze).message(message).usaDb());
 
             for (Pref pref : listaPrefVaad) {
-                message = String.format("Create la nuova preferenza generale [%s] che mancava.", pref.getKeyCode());
+                message = String.format("Creata la nuova preferenza generale [%s] che mancava.", pref.getKeyCode());
                 logService.info(new WrapLog().type(AETypeLog.preferenze).message(message));
             }
         }
@@ -300,8 +300,8 @@ public class PreferenzaBackend extends CrudBackend {
             logService.info(new WrapLog().type(AETypeLog.preferenze).message(message).usaDb());
 
             for (AIGenPref pref : listaPrefSpecifiche) {
-                message = String.format("Create la nuova preferenza specifica [%s] che mancava.", pref.getKeyCode());
-                logService.info(new WrapLog().type(AETypeLog.preferenze).message(message));
+                message = String.format("Creata la nuova preferenza specifica [%s] che mancava.", pref.getKeyCode());
+                logService.info(new WrapLog().type(AETypeLog.preferenze).message(message).usaDb());
             }
         }
         else {

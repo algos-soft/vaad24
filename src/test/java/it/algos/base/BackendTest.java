@@ -948,6 +948,7 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println("52 - findAllSortCorrente (entityBeans)");
         System.out.println("53 - findAllSortCorrenteReverse (entityBeans)");
         System.out.println("54 - findAllSortKey (entityBeans)");
+        System.out.println("55 - findAllSortOrder (entityBeans)");
     }
 
     @Test
@@ -1011,10 +1012,27 @@ public abstract class BackendTest extends AlgosTest {
         printBackend(listaBeans);
     }
 
-    //Segnaposto
+    @Test
     @Order(55)
-    protected void libero55() {
+    @DisplayName("55 - findAllSortOrder (entityBeans)")
+    protected void findAllSortOrder() {
+        System.out.println("55 - findAllSortOrder (entityBeans)");
+        System.out.println(VUOTA);
+
+        if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+            message = String.format("Non esiste la property '%s' nella classe [%s]", FIELD_NAME_ORDINE, entityClazz.getSimpleName());
+            System.out.println(message);
+            return;
+        }
+
+        listaBeans = crudBackend.findAllSortOrder();
+        assertNotNull(listaBeans);
+        ottenutoIntero = listaBeans.size();
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
+        System.out.println(message);
+        printBackend(listaBeans);
     }
+
 
     @Test
     @Order(60)

@@ -46,12 +46,14 @@ public class ReflectionService extends AbstractService {
     public Field getField(final Class<?> genericClazz, final String publicFieldName) {
         Field field = null;
         String propertyName = publicFieldName;
+        String message;
 
         try {
             propertyName = propertyName.replaceAll(FIELD_NAME_ID_CON, FIELD_NAME_ID_SENZA);
             field = genericClazz.getField(propertyName);
         } catch (Exception unErrore) {
-            logService.error(new WrapLog().exception(unErrore).usaDb());
+            message = String.format("Manca la property %s nella classe % ", propertyName, genericClazz.getSimpleName());
+            logService.error(new WrapLog().exception(unErrore).message(message).usaDb());
         }
 
         return field;
@@ -434,38 +436,6 @@ public class ReflectionService extends AbstractService {
         nomiMetodi = Arrays.stream(methods).map(method -> method.getName()).collect(Collectors.toList());
         return nomiMetodi.contains(publicMethodName);
     }
-
-    //    public boolean esegueMetodo(String publicClassName, String publicMethodName) {
-    //        boolean eseguito = false;
-    //        Class clazz = null;
-    //        Method method;
-    //        Object istanza;
-    //
-    //        if (!isEsisteMetodoAncheSovrascritto(publicClassName, publicMethodName)) {
-    //            return false;
-    //        }
-    //        publicClassName = textService.slashToPoint(publicClassName);
-    //        publicMethodName = textService.primaMinuscola(publicMethodName);
-    //
-    //        try {
-    //            clazz = Class.forName(publicClassName.toString());
-    //        } catch (Exception unErrore) {
-    //            logger.info(new WrapLog().exception(AlgosException.crea(unErrore)));
-    //        }
-    //        if (clazz == null) {
-    //            return false;
-    //        }
-    //
-    //        try {
-    //            method = clazz.getMethod(publicMethodName);
-    //            istanza = appContext.getBean(clazz);
-    //            eseguito = (Boolean) method.invoke(istanza);
-    //        } catch (Exception unErrore) {
-    //            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
-    //        }
-    //
-    //        return eseguito;
-    //    }
 
 
     /**
