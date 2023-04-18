@@ -107,6 +107,10 @@ public class MeseBackend extends CrudBackend {
         return (List<Mese>) super.findAllSortCorrente();
     }
 
+    @Override
+    public List<Mese> findAllSortOrder() {
+        return (List<Mese>) super.findAllSortOrder();
+    }
 
     public List<String> findAllForKey() {
         return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));

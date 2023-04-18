@@ -145,6 +145,9 @@ public class SecoloBackend extends CrudBackend {
         return (List<Secolo>) super.findAllSortCorrente();
     }
 
+    public List<Secolo> findAllSortOrder() {
+        return (List<Secolo>) super.findAllSortOrder();
+    }
 
     @Override
     public AResult resetDownload() {

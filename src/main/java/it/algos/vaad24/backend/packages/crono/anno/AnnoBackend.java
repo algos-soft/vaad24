@@ -113,6 +113,10 @@ public class AnnoBackend extends CrudBackend {
         return findAllByProperty(FIELD_NAME_SECOLO, secolo);
     }
 
+    public List<Anno> findAllSortOrder() {
+        return (List<Anno>) super.findAllSortOrder();
+    }
+
     public List<String> findAllForNomeBySecolo(Secolo secolo) {
         return findAllBySecolo(secolo).stream().map(anno -> anno.nome).collect(Collectors.toList());
     }
@@ -136,7 +140,7 @@ public class AnnoBackend extends CrudBackend {
         String collectionName = annotationService.getCollectionName(entityClazz);
         String clazzName = entityClazz.getSimpleName();
         AEntity entityBean;
-        List<AEntity> lista = new ArrayList<>();;
+        List<AEntity> lista = new ArrayList<>(); ;
         String message;
 
         if (secoloBackend.count() < 1) {
