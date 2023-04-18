@@ -9,6 +9,7 @@ import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.core.annotation.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
@@ -29,6 +30,7 @@ import java.util.*;
  * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
+@Order(2)
 @Qualifier(TAG_PRE)
 public class PreferenzaBackend extends CrudBackend {
 
@@ -50,7 +52,6 @@ public class PreferenzaBackend extends CrudBackend {
         super(crudRepository, Preferenza.class);
         this.repository = (PreferenzaRepository) crudRepository;
     }
-
 
     public boolean existsByKeyCode(final String code) {
         return findByKey(code) != null;
@@ -94,18 +95,18 @@ public class PreferenzaBackend extends CrudBackend {
         return modificato;
     }
 
-    public void creaAll() {
-        for (AIGenPref preferenza : VaadVar.prefList) {
-            preferenzaBackend.crea(preferenza);
-        }
-    }
+    //    public void creaAll() {
+    //        for (AIGenPref preferenza : VaadVar.prefList) {
+    //            preferenzaBackend.crea(preferenza);
+    //        }
+    //    }
 
 
     /**
      * Inserimento di una preferenza del progetto base Vaadin24 <br>
      * Controlla che la entity non esista già <br>
      */
-    public void crea(final AIGenPref pref) {
+    public boolean crea(final AIGenPref pref) {
         String keyCode = pref.getKeyCode();
         AETypePref type = pref.getType();
         Object defaultValue = pref.getDefaultValue();
@@ -119,27 +120,27 @@ public class PreferenzaBackend extends CrudBackend {
         String message;
 
         if (existsByKeyCode(keyCode)) {
-            return;
+            return false;
         }
 
         if (textService.isEmpty(keyCode)) {
             logService.error(new WrapLog().exception(new AlgosException("Manca il keyCode")).usaDb());
-            return;
+            return false;
         }
         if (type == null) {
             message = String.format("Manca il type nella preferenza %s", keyCode);
             logService.error(new WrapLog().exception(new AlgosException(message)).usaDb());
-            return;
+            return false;
         }
         if (textService.isEmpty(descrizione)) {
             message = String.format("Manca la descrizione nella preferenza %s", keyCode);
             logService.error(new WrapLog().exception(new AlgosException(message)).usaDb());
-            return;
+            return false;
         }
         if (defaultValue == null) {
             message = String.format("Il valore della preferenza %s è nullo", keyCode);
             logService.error(new WrapLog().exception(new AlgosException(message)).usaDb());
-            return;
+            return false;
         }
 
         preferenza = new Preferenza();
@@ -155,7 +156,7 @@ public class PreferenzaBackend extends CrudBackend {
         preferenza.descrizioneEstesa = descrizione;
         preferenza.enumClazzName = enumClazz != null ? enumClazz.getSimpleName() : null;
 
-        this.add(preferenza);
+        return add(preferenza) != null;
     }
 
     public boolean resetStandard(final AIGenPref prefEnum) {
@@ -235,13 +236,81 @@ public class PreferenzaBackend extends CrudBackend {
         }
 
         status = crudRepository.count() == 0;
-        creaAll();
+        resetDownload();
 
         message = "Ricreate tutte le preferenze";
         logService.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
         Avviso.message(message).success().open();
 
         return status;
+    }
+
+
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+        String message;
+        int numPreferenzeVaadCreate = 0;
+        int numPreferenzeSpecificheCreate = 0;
+        int numPreferenzeVaadEsistenti = 0;
+        int numPreferenzeSpecificheEsistenti = 0;
+        List<Pref> listaPrefVaad = new ArrayList<>();
+        List<AIGenPref> listaPrefSpecifiche = new ArrayList<>();
+
+        for (AIGenPref preferenza : VaadVar.prefList) {
+            if (preferenza instanceof Pref prefVaad) {
+                if (preferenzaBackend.crea(preferenza)) {
+                    listaPrefVaad.add(prefVaad);
+                    numPreferenzeVaadCreate++;
+                }
+                else {
+                    numPreferenzeVaadEsistenti++;
+                }
+            }
+            else {
+                if (preferenzaBackend.crea(preferenza)) {
+                    listaPrefSpecifiche.add(preferenza);
+                    numPreferenzeSpecificheCreate++;
+                }
+                else {
+                    numPreferenzeSpecificheEsistenti++;
+                }
+            }
+        }
+
+        result.setValido(true);
+        result.setIntValue(VaadVar.prefList.size());
+        result.setLista(VaadVar.prefList);
+
+        if (numPreferenzeVaadCreate > 0) {
+            message = String.format("Sono state create %s nuove preferenze generali che mancavano. In totale ci sono %s preferenze generali.", numPreferenzeVaadCreate, numPreferenzeVaadCreate + numPreferenzeVaadEsistenti);
+            logService.info(new WrapLog().type(AETypeLog.preferenze).message(message).usaDb());
+
+            for (Pref pref : listaPrefVaad) {
+                message = String.format("Create la nuova preferenza generale [%s] che mancava.", pref.getKeyCode());
+                logService.info(new WrapLog().type(AETypeLog.preferenze).message(message));
+            }
+        }
+        else {
+            message = String.format("In totale ci sono %s preferenze generali. Esistevano già tutte e non ne sono state aggiunte.", numPreferenzeVaadEsistenti);
+            logService.info(new WrapLog().type(AETypeLog.preferenze).message(message));
+        }
+
+        if (numPreferenzeSpecificheCreate > 0) {
+            message = String.format("Sono state create %s nuove preferenze specifiche dell'applicazione che mancavano. In totale ci sono %s preferenze specifiche.", numPreferenzeSpecificheCreate, numPreferenzeSpecificheCreate + numPreferenzeSpecificheEsistenti);
+            logService.info(new WrapLog().type(AETypeLog.preferenze).message(message).usaDb());
+
+            for (AIGenPref pref : listaPrefSpecifiche) {
+                message = String.format("Create la nuova preferenza specifica [%s] che mancava.", pref.getKeyCode());
+                logService.info(new WrapLog().type(AETypeLog.preferenze).message(message));
+            }
+        }
+        else {
+            message = String.format("In totale ci sono %s preferenze specifiche dell'applicazione. Esistevano già tutte e non ne sono state aggiunte.", numPreferenzeSpecificheEsistenti);
+            logService.info(new WrapLog().type(AETypeLog.preferenze).message(message));
+        }
+
+        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
+        return result;
     }
 
 }// end of crud backend class

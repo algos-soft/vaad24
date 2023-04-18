@@ -489,7 +489,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         String message;
 
         backend.deleteAll();
-        backend.creaAll();
+        backend.resetDownload();
         grid.setItems(backend.findAllSortCorrente());
 
         Avviso.message("Reset di tutte le preferenze").success().open();

@@ -22,6 +22,7 @@ import javax.validation.constraints.*;
  */
 @Component
 @MappedSuperclass()
+@AIEntity(usaReset = false)
 public class Preferenza extends AEntity {
 
     /**

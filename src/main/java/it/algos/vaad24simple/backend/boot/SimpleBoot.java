@@ -1,6 +1,5 @@
 package it.algos.vaad24simple.backend.boot;
 
-import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
@@ -15,11 +14,10 @@ import it.algos.vaad24simple.backend.enumeration.*;
 import it.algos.vaad24simple.backend.packages.prova.*;
 import it.algos.vaad24simple.backend.schedule.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.beans.factory.config.*;
-import org.springframework.context.annotation.Scope;
+import org.springframework.core.annotation.*;
+import org.springframework.stereotype.*;
 
 import javax.annotation.*;
-import javax.servlet.*;
 
 /**
  * Project vaadin23
@@ -38,9 +36,9 @@ import javax.servlet.*;
  * 7) costruisce una versione demo <br>
  * 8) controlla l' esistenza di utenti abilitati all' accesso <br>
  */
-@SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class SimpleBoot extends VaadBoot implements ServletContextListener {
+@Service
+@Order(1)
+public class SimpleBoot extends VaadBoot  {
 
 
     public static void start() {
