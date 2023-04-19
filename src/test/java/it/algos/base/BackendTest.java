@@ -434,6 +434,7 @@ public abstract class BackendTest extends AlgosTest {
             else {
                 message = String.format("Nella collection '%s' NON esiste nessuna entity col valore '%s' della property [%s]", collectionName, objValue, sorgente);
             }
+            assertEquals(previstoBooleano, ottenutoBooleano);
         }
         else {
             message = String.format("Nella collection '%s' non esiste la property [%s]", collectionName, sorgente);
@@ -551,7 +552,7 @@ public abstract class BackendTest extends AlgosTest {
 
         entityBean = crudBackend.findById(sorgente);
         if (entityBean != null) {
-            message = String.format("Nella collection '%s' ESISTE (true) una entity con l'id = '%s'", collectionName, entityBean.id);
+            message = String.format("Nella collection '%s' ESISTE (true) una entity [%s] con l'id = '%s'", collectionName, entityBean, entityBean.id);
         }
         else {
             message = String.format("Nella collection '%s' NON esiste (false) nessuna entity con id = '%s'", collectionName, sorgente);
@@ -608,7 +609,7 @@ public abstract class BackendTest extends AlgosTest {
 
         entityBean = crudBackend.findByKey(sorgente);
         if (entityBean != null) {
-            message = String.format("Nella collection '%s' ESISTE (true) una entity con l'id = '%s'", collectionName, entityBean.id);
+            message = String.format("Nella collection '%s' ESISTE (true) una entity [%s] con l'id = '%s'", collectionName, entityBean, entityBean.id);
         }
         else {
             message = String.format("Nella collection '%s' NON esiste (false) nessuna entity con id = '%s'", collectionName, sorgente);
@@ -675,7 +676,7 @@ public abstract class BackendTest extends AlgosTest {
         if (reflectionService.isEsiste(entityClazz, sorgente)) {
             entityBean = crudBackend.findByProperty(sorgente, objValue);
             if (entityBean != null) {
-                message = String.format("Nella collection '%s' ESISTE una entity individuata dal valore '%s' della property [%s]", collectionName, objValue, sorgente);
+                message = String.format("Nella collection '%s' ESISTE (true) una entity [%s] individuata dal valore '%s' della property [%s]", collectionName, entityBean, objValue, sorgente);
             }
             else {
                 message = String.format("Nella collection '%s' NON esiste nessuna entity col valore '%s' della property [%s]", collectionName, objValue, sorgente);
@@ -736,7 +737,7 @@ public abstract class BackendTest extends AlgosTest {
 
         entityBean = crudBackend.findByOrder(sorgenteIntero);
         if (entityBean != null) {
-            message = String.format("Nella collection '%s' ESISTE una entity individuata dal valore '%d' della property [%s]", collectionName, sorgenteIntero, FIELD_NAME_ORDINE);
+            message = String.format("Nella collection '%s' ESISTE (true) una entity [%s] individuata dal valore '%d' della property [%s]", collectionName, entityBean,sorgenteIntero, FIELD_NAME_ORDINE);
         }
         else {
             message = String.format("Nella collection '%s' NON esiste nessuna entity col valore '%d' della property [%s]", collectionName, sorgenteIntero, FIELD_NAME_ORDINE);

@@ -22,6 +22,7 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Tag("anno")
 @Tag("backend")
 @DisplayName("Anno Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -37,7 +38,7 @@ public class AnnoBackendTest extends BackendTest {
     //--esiste come ID
     //--esiste come key
     //--crea una nuova entity
-    protected static Stream<Arguments> ANNO() {
+    public static Stream<Arguments> ANNO() {
         return Stream.of(
                 Arguments.of(VUOTA, false, false, false),
                 Arguments.of("0", false, false, true),

@@ -49,7 +49,12 @@ public class SecoloBackendTest extends BackendTest {
                 Arguments.of(VUOTA, VUOTA, false),
                 Arguments.of("propertyInesistente", "valoreInesistente", false),
                 Arguments.of("inizio", 374, false),
-                Arguments.of("inizio", 401, true)
+                Arguments.of("inizio", 399, false),
+                Arguments.of("inizio", 400, true),
+                Arguments.of("inizio", 401, true),
+                Arguments.of("fine", 401, true),
+                Arguments.of("fine", 599, false),
+                Arguments.of("fine", 600, true)
         );
     }
 

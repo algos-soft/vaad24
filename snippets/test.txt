@@ -22,3 +22,25 @@
         System.out.println(VUOTA);
         System.out.println(String.format("%s%s%s", type, FORWARD, type != null ? type.getTag() : "non esiste"));
     }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "CLAZZ_FOR_NAME")
+    @Order(13)
+    @DisplayName("13 - getClazz")
+        //--clazz
+        //--simpleName
+    void getClazz(final Class clazzFromStream, final String simpleName) {
+        System.out.println("13 - getClazz");
+        System.out.println(VUOTA);
+
+        sorgente = simpleName;
+        sorgente2 = clazzFromStream.getCanonicalName();
+        System.out.println(sorgente);
+        System.out.println(VUOTA);
+
+        clazz = service.getClazzFromName(sorgente);
+        assertNotNull(clazz);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la classe %s, tramite il simpleName %s", clazzFromStream.getSimpleName(), sorgente));
+    }

@@ -36,7 +36,7 @@ public class GiornoBackendTest extends BackendTest {
     //--esiste come ID
     //--esiste come key
     //--crea una nuova entity
-    protected static Stream<Arguments> GIORNO() {
+    public static Stream<Arguments> GIORNO() {
         return Stream.of(
                 Arguments.of(VUOTA, false, false, false),
                 Arguments.of("23 febbraio", false, true, false),
