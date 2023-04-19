@@ -268,7 +268,7 @@ public class VaadBoot {
         //        logger.info(new WrapLog().message(message).type(AETypeLog.info));
         //
         //        MongoDatabase db = mongoService.getDataBase();
-        //        MongoDatabase dbAdmin = mongoService.getDBAdmin();
+//                MongoDatabase dbAdmin = mongoService.getDBAdmin();
         //        message = String.format("Database mongo versione: %s", databaseVersion);
         //        logger.info(new WrapLog().message(message).type(AETypeLog.info));
 

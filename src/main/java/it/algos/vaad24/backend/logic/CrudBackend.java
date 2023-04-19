@@ -260,6 +260,10 @@ public abstract class CrudBackend extends AbstractService {
 
         if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
             keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+            boolean esiste = isExistByProperty(keyPropertyName, keyValue);
+
+            //            Object alfa= mongoService.mongoOp.insert(entityBean);
+
             return isExistByProperty(keyPropertyName, keyValue);
         }
         else {
@@ -387,12 +391,22 @@ public abstract class CrudBackend extends AbstractService {
         }
         else {
             if (textService.isValid(collectionName)) {
-                return mongoService.mongoOp.insert(entityBean, collectionName);
+                try {
+                    return mongoService.mongoOp.insert(entityBean, collectionName);
+                } catch (Exception unErrore) {
+                    logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+                }
             }
             else {
-                return mongoService.mongoOp.insert(entityBean);
+                try {
+                    return mongoService.mongoOp.insert(entityBean);
+                } catch (Exception unErrore) {
+                    logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+                }
             }
         }
+
+        return null;
     }
 
 

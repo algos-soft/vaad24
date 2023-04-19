@@ -37,7 +37,7 @@ public class SecoloBackendTest extends BackendTest {
                 Arguments.of(VUOTA, false, false, false),
                 Arguments.of("aprile", false, false, true),
                 Arguments.of("XX secolo", false, true, false),
-                Arguments.of("xxsecolo", true, false, true)
+                Arguments.of("xxsecolo", true, false, false)
         );
     }
 

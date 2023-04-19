@@ -43,6 +43,11 @@ public class ContinenteBackend extends CrudBackend {
         return newEntity(0, VUOTA, true);
     }
 
+    @Override
+    public Continente newEntity(final String keyPropertyValue) {
+        return newEntity(0, keyPropertyValue, true);
+    }
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
@@ -159,7 +164,6 @@ public class ContinenteBackend extends CrudBackend {
             return result.errorMessage("Non ho trovato il file sul server").fine();
         }
     }
-
 
 
 }// end of crud backend class

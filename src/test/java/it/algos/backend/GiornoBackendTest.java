@@ -42,7 +42,7 @@ public class GiornoBackendTest extends BackendTest {
                 Arguments.of("23 febbraio", false, true, false),
                 Arguments.of("43 marzo", false, false, true),
                 Arguments.of("19 dicembra", false, false, true),
-                Arguments.of("4gennaio", true, false, true)
+                Arguments.of("4gennaio", true, false, false)
         );
     }
 

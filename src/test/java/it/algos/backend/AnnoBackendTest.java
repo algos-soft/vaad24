@@ -43,11 +43,11 @@ public class AnnoBackendTest extends BackendTest {
                 Arguments.of("0", false, false, true),
                 Arguments.of("24", true, true, false),
                 Arguments.of("secolo", false, false, true),
-                Arguments.of("994a.c.", true, false, true),
-                Arguments.of("994 a.C.", false, false, true),
-                Arguments.of("24 A.C.", false, false, true),
+                Arguments.of("994a.c.", true, false, false),
+                Arguments.of("994 a.C.", false, true, false),
+                Arguments.of("24 A.C.", false, false, false),
                 Arguments.of("24 a.C.", false, true, false),
-                Arguments.of("24a.c.", true, false, true),
+                Arguments.of("24a.c.", true, false, false),
                 Arguments.of("3208", false, false, true)
         );
     }

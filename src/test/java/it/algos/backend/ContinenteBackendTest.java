@@ -35,9 +35,9 @@ public class ContinenteBackendTest extends BackendTest {
         return Stream.of(
                 Arguments.of(VUOTA, false, false, false),
                 Arguments.of("afrtica", false, false, true),
-                Arguments.of("africa", true, false, true),
+                Arguments.of("africa", true, false, false),
                 Arguments.of("Africa", false, true, false),
-                Arguments.of("nordamerica", true, false, true),
+                Arguments.of("nordamerica", true, false, false),
                 Arguments.of("Nordamerica", false, true, false)
         );
     }

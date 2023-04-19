@@ -778,6 +778,8 @@ public abstract class BackendTest extends AlgosTest {
     @DisplayName("41 - creaIfNotExist")
     protected void creaIfNotExist() {
         System.out.println("41 - creaIfNotExist");
+        message = String.format("Collection '%s' della classe [%s]", collectionName, entityClazz.getSimpleName());
+        System.out.println(message);
         System.out.println(VUOTA);
 
         if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
@@ -817,7 +819,9 @@ public abstract class BackendTest extends AlgosTest {
         entityBean = crudBackend.creaIfNotExist(sorgente);
         ottenutoBooleano = entityBean != null && entityBean.id != null;
         if (ottenutoBooleano) {
-            message = String.format("Nella collection '%s' è stata creata (in memoria) una nuova entity con la keyProperty = '%s' vista che ne esisteva nessuna", collectionName, sorgente);
+            message = String.format("Nella collection '%s' è stata creata (provvisoriamente) una nuova entity con la keyProperty = '%s' vista che non ne esisteva nessuna. Verrà subito cancellata.", collectionName, sorgente);
+            crudBackend.delete(entityBean);
+            assertFalse(crudBackend.isExistByKey(sorgente));
         }
         else {
             message = String.format("Nella collection '%s' non è stata creata nessuna entity perché ne esiste già una con keyProperty = '%s'", collectionName, sorgente);
