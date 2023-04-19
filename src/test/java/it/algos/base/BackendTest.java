@@ -681,12 +681,12 @@ public abstract class BackendTest extends AlgosTest {
             else {
                 message = String.format("Nella collection '%s' NON esiste nessuna entity col valore '%s' della property [%s]", collectionName, objValue, sorgente);
             }
+            assertEquals(previstoBooleano, entityBean != null);
         }
         else {
             message = String.format("Nella collection '%s' non esiste la property [%s]", collectionName, sorgente);
         }
         System.out.println(message);
-        assertEquals(previstoBooleano, entityBean != null);
     }
 
 
