@@ -109,13 +109,14 @@ public class GiornoBackend extends CrudBackend {
         return (List<Giorno>) super.findAllSortCorrente();
     }
 
-    public List<Giorno> findAllByMese(Mese mese) {
-        return super.findAllByProperty(FIELD_NAME_MESE, mese);
-    }
+    @Override
     public List<Giorno> findAllSortOrder() {
         return (List<Giorno>) super.findAllSortOrder();
     }
 
+    public List<Giorno> findAllByMese(Mese mese) {
+        return super.findAllByProperty(FIELD_NAME_MESE, mese);
+    }
 
     public List<String> findAllForNomeByMese(Mese mese) {
         return findAllByMese(mese).stream().map(giorno -> giorno.nome).collect(Collectors.toList());
@@ -124,6 +125,16 @@ public class GiornoBackend extends CrudBackend {
     @Override
     public Giorno save(AEntity entity) {
         return (Giorno) super.save(entity);
+    }
+
+    @Override
+    public Giorno insert(AEntity entity) {
+        return (Giorno) super.insert(entity);
+    }
+
+    @Override
+    public Giorno update(AEntity entity) {
+        return (Giorno) super.update(entity);
     }
 
     /**

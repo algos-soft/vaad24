@@ -66,6 +66,31 @@ public class SecoloBackendTest extends BackendTest {
         );
     }
 
+    //--value anno
+    //--esiste AC
+    //--esiste DC
+    //--anteCristo
+    private static Stream<Arguments> ANNO() {
+        return Stream.of(
+                Arguments.of(0, false, false, true),
+                Arguments.of(0, false, false, false),
+                Arguments.of(847, true, true, true),
+                Arguments.of(847, true, true, false),
+                Arguments.of(1937, false, true, true),
+                Arguments.of(1937, false, true, false),
+                Arguments.of(35, true, true, true),
+                Arguments.of(35, true, true, false),
+                Arguments.of(-4, false, false, true),
+                Arguments.of(-4, false, false, false),
+                Arguments.of(1899, false, true, false),
+                Arguments.of(1900, false, true, false),
+                Arguments.of(1901, false, true, false),
+                Arguments.of(1999, false, true, false),
+                Arguments.of(2000, false, true, false),
+                Arguments.of(2001, false, true, false)
+        );
+    }
+
 
     /**
      * Qui passa una volta sola <br>
@@ -90,68 +115,110 @@ public class SecoloBackendTest extends BackendTest {
         super.streamOrder = ORDINE();
     }
 
-
     @Test
     @Order(35)
     @DisplayName("35 - findByAnnoAC")
-    void findByAnnoAC() {
+    protected void findByAnnoAC() {
         System.out.println("35 - findByAnnoAC");
         System.out.println(VUOTA);
         System.out.println("Secolo ricavato dall'anno a.C. (senza segno meno)");
         System.out.println(VUOTA);
 
-        sorgenteIntero = 4;
-        entityBean = backend.findByAnnoAC(sorgenteIntero);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.toString();
-        printValue(sorgenteIntero, ottenuto);
+        ANNO().forEach(parameters -> this.findByAnnoAC(parameters));
     }
 
+    //--value anno
+    //--esiste AC
+    //--esiste DC
+    //--anteCristo
+    protected void findByAnnoAC(Arguments arg) {
+        Object[] mat = arg.get();
+        boolean anteCristo = false;
+        if (mat != null && mat.length > 0 && mat[0] instanceof Integer keyValue) {
+            sorgenteIntero = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+        if (mat != null && mat.length > 1 && mat[1] instanceof Boolean keyValue) {
+            previstoBooleano = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+        if (mat != null && mat.length > 3 && mat[3] instanceof Boolean keyValue) {
+            anteCristo = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+
+        if (!anteCristo) {
+            return;
+        }
+
+        entityBean = backend.findByAnnoAC(sorgenteIntero);
+        if (entityBean != null) {
+            message = String.format("All'anno '%d' (AC) CORRISPONDE il secolo [%s]", sorgenteIntero, entityBean.toString());
+        }
+        else {
+            message = String.format("All'anno '%d' (AC) NON corrisponde nessun secolo", sorgenteIntero);
+        }
+        System.out.println(message);
+        assertEquals(previstoBooleano, entityBean != null);
+    }
 
     @Test
     @Order(36)
     @DisplayName("36 - findByAnnoDC")
-    void findByAnnoDC() {
+    protected void findByAnnoDC() {
         System.out.println("36 - findByAnnoDC");
         System.out.println(VUOTA);
         System.out.println("Secolo ricavato dall'anno d.C. (senza segno più)");
         System.out.println(VUOTA);
 
-        sorgenteIntero = 4;
-        entityBean = backend.findByAnnoDC(sorgenteIntero);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.toString();
-        printValue(sorgenteIntero, ottenuto);
+        ANNO().forEach(parameters -> this.findByAnnoDC(parameters));
+    }
 
-        sorgenteIntero = 1900;
-        entityBean = backend.findByAnnoDC(sorgenteIntero);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.toString();
-        printValue(sorgenteIntero, ottenuto);
+    //--value anno
+    //--esiste AC
+    //--esiste DC
+    //--anteCristo
+    protected void findByAnnoDC(Arguments arg) {
+        Object[] mat = arg.get();
+        boolean anteCristo = false;
+        if (mat != null && mat.length > 0 && mat[0] instanceof Integer keyValue) {
+            sorgenteIntero = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+        if (mat != null && mat.length > 2 && mat[2] instanceof Boolean keyValue) {
+            previstoBooleano = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+        if (mat != null && mat.length > 3 && mat[3] instanceof Boolean keyValue) {
+            anteCristo = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
 
-        sorgenteIntero = 1901;
-        entityBean = backend.findByAnnoDC(sorgenteIntero);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.toString();
-        printValue(sorgenteIntero, ottenuto);
+        if (anteCristo) {
+            return;
+        }
 
-        sorgenteIntero = 1999;
         entityBean = backend.findByAnnoDC(sorgenteIntero);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.toString();
-        printValue(sorgenteIntero, ottenuto);
-
-        sorgenteIntero = 2000;
-        entityBean = backend.findByAnnoDC(sorgenteIntero);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.toString();
-        printValue(sorgenteIntero, ottenuto);
-
-        sorgenteIntero = 2001;
-        entityBean = backend.findByAnnoDC(sorgenteIntero);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.toString();
-        printValue(sorgenteIntero, ottenuto);
+        if (entityBean != null) {
+            message = String.format("All'anno '%d' (DC) CORRISPONDE il secolo [%s]", sorgenteIntero, entityBean.toString());
+        }
+        else {
+            message = String.format("All'anno '%d' (DC) NON corrisponde nessun secolo", sorgenteIntero);
+        }
+        System.out.println(message);
+        assertEquals(previstoBooleano, entityBean != null);
     }
 
 

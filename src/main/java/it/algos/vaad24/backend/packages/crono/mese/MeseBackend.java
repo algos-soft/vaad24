@@ -1,6 +1,5 @@
 package it.algos.vaad24.backend.packages.crono.mese;
 
-import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -112,18 +111,20 @@ public class MeseBackend extends CrudBackend {
         return (List<Mese>) super.findAllSortOrder();
     }
 
-    public List<String> findAllForKey() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
-    }
-
-
-    public List<String> findAllForKeyReverseOrder() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
-    }
 
     @Override
     public Mese save(AEntity entity) {
         return (Mese) super.save(entity);
+    }
+
+    @Override
+    public Mese insert(AEntity entity) {
+        return (Mese) super.insert(entity);
+    }
+
+    @Override
+    public Mese update(AEntity entity) {
+        return (Mese) super.update(entity);
     }
 
     @Override

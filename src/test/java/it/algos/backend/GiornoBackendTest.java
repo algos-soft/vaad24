@@ -124,10 +124,10 @@ public class GiornoBackendTest extends BackendTest {
     }
 
     @Test
-    @Order(55)
-    @DisplayName("55 - findAllByMese (entity)")
+    @Order(56)
+    @DisplayName("56 - findAllByMese (entity)")
     protected void findAllByMese() {
-        System.out.println("55 - findAllByMese (entity)");
+        System.out.println("56 - findAllByMese (entity)");
         System.out.println("Rimanda a findAllByProperty(FIELD_NAME_MESE, mese)");
 
         for (Mese sorgente : meseBackend.findAllNoSort()) {
@@ -145,18 +145,8 @@ public class GiornoBackendTest extends BackendTest {
     @DisplayName("65 - findAllForNome (String)")
     protected void findAllForNome() {
         System.out.println("65 - findAllForNome (String)");
-        System.out.println("Uguale a 61 - findAllForKey");
+        System.out.println("Uguale a 61 - findAllForKeySortKey");
         System.out.println(VUOTA);
-
-        //        listaStr = backend.findAllForNome();
-        //        assertNotNull(listaStr);
-        //        ottenutoIntero = listaStr.size();
-        //        sorgente = textService.format(ottenutoIntero);
-        //        sorgente2 = keyPropertyName;
-        //        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
-        //        System.out.println(message);
-        //
-        //        printSubLista(listaStr);
     }
 
 

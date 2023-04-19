@@ -141,12 +141,32 @@ public class SecoloBackend extends CrudBackend {
     }
 
     @Override
+    public List<Secolo> findAllNoSort() {
+        return (List<Secolo>) super.findAllNoSort();
+    }
+
+    @Override
     public List<Secolo> findAllSortCorrente() {
         return (List<Secolo>) super.findAllSortCorrente();
     }
 
     public List<Secolo> findAllSortOrder() {
         return (List<Secolo>) super.findAllSortOrder();
+    }
+
+    @Override
+    public Secolo save(AEntity entity) {
+        return (Secolo) super.save(entity);
+    }
+
+    @Override
+    public Secolo insert(AEntity entity) {
+        return (Secolo) super.insert(entity);
+    }
+
+    @Override
+    public Secolo update(AEntity entity) {
+        return (Secolo) super.update(entity);
     }
 
     @Override
@@ -158,7 +178,7 @@ public class SecoloBackend extends CrudBackend {
         String nomeFile = "secoli";
         Map<String, List<String>> mappa;
         List<String> riga;
-        List<AEntity> lista ;
+        List<AEntity> lista;
         int ordine;
         String nome;
         int inizio;
