@@ -125,11 +125,14 @@ public abstract class CrudBackend extends AbstractService {
     }
 
     public AEntity creaIfNotExist(final String keyPropertyValue) {
+        AEntity entityBean;
+
         if (textService.isEmpty(keyPropertyValue) || isExistByKey(keyPropertyValue)) {
             return null;
         }
         else {
-            return insert(newEntity(keyPropertyValue));
+            entityBean = newEntity(keyPropertyValue);
+            return entityBean != null ? insert(entityBean) : null;
         }
     }
 
