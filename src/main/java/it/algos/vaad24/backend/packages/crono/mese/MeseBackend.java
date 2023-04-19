@@ -107,10 +107,24 @@ public class MeseBackend extends CrudBackend {
     }
 
     @Override
+    public List<Mese> findAllSortCorrenteReverse() {
+        return (List<Mese>) super.findAllSortCorrenteReverse();
+    }
+
+    @Override
     public List<Mese> findAllSortOrder() {
         return (List<Mese>) super.findAllSortOrder();
     }
 
+    @Override
+    public List<Mese> findAllSortKey() {
+        return (List<Mese>) super.findAllSortKey();
+    }
+
+    @Override
+    public List<Mese> findAllByProperty(final String propertyName, final Object propertyValue) {
+        return (List<Mese>) super.findAllByProperty(propertyName, propertyValue);
+    }
 
     @Override
     public Mese save(AEntity entity) {

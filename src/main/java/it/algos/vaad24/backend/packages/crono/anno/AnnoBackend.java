@@ -8,6 +8,7 @@ import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -110,8 +111,26 @@ public class AnnoBackend extends CrudBackend {
     }
 
     @Override
+    public List<Anno> findAllSortCorrenteReverse() {
+        return (List<Anno>) super.findAllSortCorrenteReverse();
+    }
+
+    @Override
+    public List<Anno> findAllSort(Sort sort) {
+        return (List<Anno>) super.findAllSort(sort);
+    }
+    @Override
+    public List<Anno> findAllSortKey() {
+        return (List<Anno>) super.findAllSortKey();
+    }
+
+    @Override
     public List<Anno> findAllSortOrder() {
         return (List<Anno>) super.findAllSortOrder();
+    }
+    @Override
+    public List<Anno> findAllByProperty(final String propertyName, final Object propertyValue) {
+        return (List<Anno>) super.findAllByProperty(propertyName, propertyValue);
     }
 
     public List<Anno> findAllBySecolo(Secolo secolo) {

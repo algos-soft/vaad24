@@ -8,6 +8,7 @@ import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -110,8 +111,28 @@ public class GiornoBackend extends CrudBackend {
     }
 
     @Override
+    public List<Giorno> findAllSortCorrenteReverse() {
+        return (List<Giorno>) super.findAllSortCorrenteReverse();
+    }
+
+    @Override
+    public List<Giorno> findAllSort(Sort sort) {
+        return (List<Giorno>) super.findAllSort(sort);
+    }
+
+    @Override
+    public List<Giorno> findAllSortKey() {
+        return (List<Giorno>) super.findAllSortKey();
+    }
+
+    @Override
     public List<Giorno> findAllSortOrder() {
         return (List<Giorno>) super.findAllSortOrder();
+    }
+
+    @Override
+    public List<Giorno> findAllByProperty(final String propertyName, final Object propertyValue) {
+        return (List<Giorno>) super.findAllByProperty(propertyName, propertyValue);
     }
 
     public List<Giorno> findAllByMese(Mese mese) {
