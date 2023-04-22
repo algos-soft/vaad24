@@ -2,9 +2,11 @@ package it.algos.vaad24.backend.logic;
 
 import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.bson.*;
@@ -112,6 +114,13 @@ public abstract class CrudBackend extends AbstractService {
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
+        for (AIGenPref pref : VaadVar.prefList) {
+            pref.setText(textService);
+            pref.setLogger(logService);
+            pref.setDate(dateService);
+            pref.setPreferenceService(preferenceService);
+        }
+
         if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
             this.sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
         }
@@ -488,9 +497,15 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
+
+    public List findAll() {
+        return findAllNoSort();
+    }
+
     public List findAllNoSort() {
         return findQuery(new Query());
     }
+
 
     public List findAllSortCorrente() {
         Query query = new Query();
@@ -912,6 +927,7 @@ public abstract class CrudBackend extends AbstractService {
         if (lista.size() > 0) {
             result.setIntValue(lista.size());
             result.setLista(lista);
+            result.valido(true).eseguito().typeResult(AETypeResult.collectionPiena);
         }
         else {
             result.typeResult(AETypeResult.error);

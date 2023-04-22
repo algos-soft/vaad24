@@ -2,7 +2,6 @@ package it.algos.vaad24.backend.packages.crono.giorno;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
-import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
@@ -99,7 +98,6 @@ public class GiornoBackend extends CrudBackend {
     }
 
 
-
     public List<Giorno> findAllByMese(Mese mese) {
         return super.findAllByProperty(FIELD_NAME_MESE, mese);
     }
@@ -182,18 +180,7 @@ public class GiornoBackend extends CrudBackend {
             }
         }
 
-        if (lista.size() > 0) {
-            result.setIntValue(lista.size());
-            result.setLista(lista);
-        }
-        else {
-            result.typeResult(AETypeResult.error);
-            message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetDownload()", collectionName, clazzName);
-            return result.errorMessage(message);
-        }
-
-        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
-        return result;
+        return super.fixResult(result, lista);
     }
 
 }// end of crud backend class

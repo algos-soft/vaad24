@@ -2,7 +2,6 @@ package it.algos.vaad24.backend.packages.crono.mese;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
-import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -204,22 +203,11 @@ public class MeseBackend extends CrudBackend {
                     result.setValido(false);
                 }
             }
-            if (lista.size() > 0) {
-                result.setIntValue(lista.size());
-                result.setLista(lista);
-            }
-            else {
-                result.typeResult(AETypeResult.error);
-                message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetDownload()", collectionName, clazzName);
-                return result.errorMessage(message);
-            }
+            return super.fixResult(result, lista);
         }
         else {
             return result.errorMessage("Non ho trovato il file sul server").fine();
         }
-
-        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
-        return result;
     }
 
 }// end of crud backend class

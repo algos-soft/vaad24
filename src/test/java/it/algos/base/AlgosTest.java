@@ -116,6 +116,12 @@ public abstract class AlgosTest {
 
     protected AResult ottenutoRisultato;
 
+    protected LocalDateTime dataSorgente;
+
+    protected LocalDateTime dataPrevista;
+
+    protected LocalDateTime dataOttenuta;
+
     protected Span span;
 
     protected Class clazz;
@@ -444,6 +450,9 @@ public abstract class AlgosTest {
         listaClazz = null;
         sort = null;
         listaBackendClazz = null;
+        dataSorgente = ROOT_DATA_TIME;
+        dataPrevista = ROOT_DATA_TIME;
+        dataOttenuta = ROOT_DATA_TIME;
     }
 
 

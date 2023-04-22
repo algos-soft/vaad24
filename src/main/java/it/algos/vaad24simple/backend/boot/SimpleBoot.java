@@ -1,6 +1,7 @@
 package it.algos.vaad24simple.backend.boot;
 
 import it.algos.vaad24.backend.boot.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
@@ -13,8 +14,8 @@ import static it.algos.vaad24simple.backend.boot.SimpleCost.*;
 import it.algos.vaad24simple.backend.enumeration.*;
 import it.algos.vaad24simple.backend.packages.prova.*;
 import it.algos.vaad24simple.backend.schedule.*;
+import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.core.annotation.*;
 import org.springframework.stereotype.*;
 
 import javax.annotation.*;
@@ -37,12 +38,27 @@ import javax.annotation.*;
  * 8) controlla l' esistenza di utenti abilitati all' accesso <br>
  */
 @Service
-@Order(1)
-public class SimpleBoot extends VaadBoot  {
+public class SimpleBoot extends VaadBoot {
 
 
     public static void start() {
-        new SimpleBoot();
+        SimpleBoot.CREA_LISTA_PREFERENZE_SPECIFICHE();
+    }
+
+    /**
+     * Crea le Enumeration in memoria <br>
+     * Aggiunge le singole Enumeration alla lista globale <br>
+     * NON usa la injection di SpringBoot <br>
+     * NON crea le preferenze su mondoDB <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    private static void CREA_LISTA_PREFERENZE_SPECIFICHE() {
+        for (SPref pref : SPref.values()) {
+            VaadVar.prefList.add(pref);
+        }
+
+        Logger slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
+        slf4jLogger.warn("Preferenze - Aggiunge le singole Enumeration specifiche alla lista globale 'VaadVar.prefList' (metodo statico)");
     }
 
     /**
@@ -59,20 +75,6 @@ public class SimpleBoot extends VaadBoot  {
         super.inizia();
     }
 
-    /**
-     * Crea le Enumeration in memoria <br>
-     * Aggiunge le singole Enumeration alla lista globale <br>
-     * NON usa la injection di SpringBoot <br>
-     * NON crea le preferenze su mondoDB <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    public void creaEnumerationPreferenze() {
-        super.creaEnumerationPreferenze();
-
-        for (SPref pref : SPref.values()) {
-            VaadVar.prefList.add(pref);
-        }
-    }
 
     /**
      * Costruisce alcune istanze generali dell'applicazione e ne mantiene i riferimenti nelle apposite variabili <br>
@@ -132,11 +134,11 @@ public class SimpleBoot extends VaadBoot  {
      * Iniettata dal framework SpringBoot/Vaadin al termine del ciclo init() del costruttore di questa classe <br>
      */
 
-//    @Autowired
-//    @Qualifier(QUALIFIER_PREFERENCES_SIMPLE)
-//    public void setPrefInstance(final AIEnumPref prefInstance) {
-//        VaadVar.prefInstance = prefInstance;
-//    }
+    //    @Autowired
+    //    @Qualifier(QUALIFIER_PREFERENCES_SIMPLE)
+    //    public void setPrefInstance(final AIEnumPref prefInstance) {
+    //        VaadVar.prefInstance = prefInstance;
+    //    }
 
 
     /**

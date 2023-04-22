@@ -2,10 +2,13 @@ package it.algos.vaad24.backend.service;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
 
+import java.text.*;
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
@@ -657,6 +660,52 @@ public class DateService extends AbstractService {
      */
     public LocalTime localDateTimeToLocalTime(LocalDateTime localDateTime) {
         return LocalTime.of(localDateTime.getHour(), localDateTime.getMinute(), localDateTime.getSecond());
+    }
+
+
+    /**
+     * Costruisce una data da una stringa in formato ISO 8601
+     *
+     * @param isoStringa da leggere
+     *
+     * @return data costruita
+     */
+    public Date oldDateFromISO(String isoStringa) {
+        Date data = null;
+        DateFormat format = new SimpleDateFormat(AETypeData.iso8601.getPattern());
+
+        try {
+            data = format.parse(isoStringa);
+        } catch (Exception unErrore) {
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+        }
+
+        return data;
+    }
+
+
+    /**
+     * Costruisce una data completa da una stringa in formato ISO 8601
+     *
+     * @param isoStringa da leggere
+     *
+     * @return data costruita
+     */
+    public LocalDateTime dateFromISO(String isoStringa) {
+        Date data = oldDateFromISO(isoStringa);
+        return data != null ? dateToLocalDateTime(data) : null;
+//        ;
+//        //        LocalDateTime format = new LocalDateTimeDeserializer(AETypeData.iso8601.getPattern());
+//        //        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeData.iso8601.getPattern(), LOCALE));
+//
+//        //        try {
+//        //            data = format.parse(isoStringa);
+//        //        } catch (Exception unErrore) {
+//        //            logService.error(unErrore, this.getClass(), "dateFromISO");
+//        //
+//        //        }
+//
+//        return data;
     }
 
 }

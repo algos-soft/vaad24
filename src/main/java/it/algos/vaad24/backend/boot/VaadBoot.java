@@ -13,6 +13,7 @@ import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.utility.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.wizard.*;
+import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 import org.springframework.context.event.EventListener;
@@ -47,6 +48,25 @@ import java.util.*;
  */
 @Service
 public class VaadBoot {
+
+    public static void start() {
+        VaadBoot.CREA_LISTA_PREFERENZE_VAADIN();
+    }
+
+    /**
+     * Crea le Enumeration in memoria <br>
+     * Aggiunge le singole Enumeration alla lista globale <br>
+     * NON usa la injection di SpringBoot <br>
+     * NON crea le preferenze su mondoDB <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    public static void CREA_LISTA_PREFERENZE_VAADIN() {
+        for (Pref pref : Pref.values()) {
+            VaadVar.prefList.add(pref);
+        }
+        Logger slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
+        slf4jLogger.warn("Preferenze - Aggiunge le singole Enumeration generali alla lista globale 'VaadVar.prefList' (metodo statico)");
+    }
 
     protected boolean allDebugSetup;
 
@@ -161,7 +181,6 @@ public class VaadBoot {
      */
     protected void inizia() {
         this.fixVariabili();
-        this.creaEnumerationPreferenze();
         this.fixEnumerationPreferenze();
         this.creaPreferenzeMongoDB();
         logger.setUpIni();
@@ -179,19 +198,6 @@ public class VaadBoot {
         this.fixLogin();
 
         logger.setUpEnd();
-    }
-
-    /**
-     * Crea le Enumeration in memoria <br>
-     * Aggiunge le singole Enumeration alla lista globale <br>
-     * NON usa la injection di SpringBoot <br>
-     * NON crea le preferenze su mondoDB <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    public void creaEnumerationPreferenze() {
-        for (Pref pref : Pref.values()) {
-            VaadVar.prefList.add(pref);
-        }
     }
 
 
@@ -268,7 +274,7 @@ public class VaadBoot {
         //        logger.info(new WrapLog().message(message).type(AETypeLog.info));
         //
         //        MongoDatabase db = mongoService.getDataBase();
-//                MongoDatabase dbAdmin = mongoService.getDBAdmin();
+        //                MongoDatabase dbAdmin = mongoService.getDBAdmin();
         //        message = String.format("Database mongo versione: %s", databaseVersion);
         //        logger.info(new WrapLog().message(message).type(AETypeLog.info));
 
