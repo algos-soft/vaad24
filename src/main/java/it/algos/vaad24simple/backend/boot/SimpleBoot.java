@@ -82,6 +82,11 @@ public class SimpleBoot extends VaadBoot {
      */
     @EventListener(ContextRefreshedEvent.class)
     public void onContextRefreshEvent() {
+        this.allResetOnlyEmpty();
+    }
+
+    public void allResetOnlyEmpty() {
+        super.allResetOnlyEmpty();
     }
 
     /**
