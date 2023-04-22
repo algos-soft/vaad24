@@ -112,43 +112,37 @@ public class ProvaBackend extends CrudBackend {
         AESchedule schedule = null;
         String message;
 
-        if (result.getTypeResult() == AETypeResult.collectionVuota) {
+        mappa = resourceService.leggeMappaConfig(nomeFileConfig);
+        if (mappa != null) {
             result.setValido(true);
-            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
-            logService.debug(new WrapLog().message(message));
-            mappa = resourceService.leggeMappaConfig(nomeFileConfig);
-            if (mappa != null) {
-                result.setValido(true);
-                lista = new ArrayList<>();
+            lista = new ArrayList<>();
 
-                for (String key : mappa.keySet()) {
-                    riga = mappa.get(key);
-                    if (riga.size() == 8) {
-                        descrizione = riga.get(0);
-                        continenteLinkDinamicoDBRef = continenteBackend.findById(riga.get(1));
-                        viaLinkStatico = viaBackend.findById(riga.get(2));
-                        listaVie = fixVia(riga.get(3));
-                        listaContinenti = fixContinente(riga.get(4));
-                        typeString = riga.get(5);
-                        versione = AETypeVers.valueOf(riga.get(6));
-                        schedule = AESchedule.valueOf(riga.get(7));
-                    }
-                    entityBean = insert(newEntity(descrizione, continenteLinkDinamicoDBRef, viaLinkStatico, listaVie, listaContinenti, typeString, versione, schedule));
-                    if (entityBean != null) {
-                        lista.add(entityBean);
-                    }
-                    else {
-                        logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", descrizione))).usaDb());
-                        result.setValido(false);
-                    }
+            for (String key : mappa.keySet()) {
+                riga = mappa.get(key);
+                if (riga.size() == 8) {
+                    descrizione = riga.get(0);
+                    continenteLinkDinamicoDBRef = continenteBackend.findById(riga.get(1));
+                    viaLinkStatico = viaBackend.findById(riga.get(2));
+                    listaVie = fixVia(riga.get(3));
+                    listaContinenti = fixContinente(riga.get(4));
+                    typeString = riga.get(5);
+                    versione = AETypeVers.valueOf(riga.get(6));
+                    schedule = AESchedule.valueOf(riga.get(7));
                 }
-                return super.fixResult(result, lista);
+                entityBean = insert(newEntity(descrizione, continenteLinkDinamicoDBRef, viaLinkStatico, listaVie, listaContinenti, typeString, versione, schedule));
+                if (entityBean != null) {
+                    lista.add(entityBean);
+                }
+                else {
+                    logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", descrizione))).usaDb());
+                    result.setValido(false);
+                }
             }
+            return super.fixResult(result, lista);
         }
         else {
-            return result.fine();
+            return result.errorMessage("Non ho trovato il file sul server").fine();
         }
-        return result.fine();
     }
 
     public List fixVia(String listaVieText) {

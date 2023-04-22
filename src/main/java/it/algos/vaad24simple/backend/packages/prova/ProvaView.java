@@ -1,10 +1,7 @@
 package it.algos.vaad24simple.backend.packages.prova;
 
 import com.vaadin.flow.router.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.service.*;
-import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import org.springframework.beans.factory.annotation.*;
@@ -78,19 +75,20 @@ public class ProvaView extends CrudView {
 
 
     public void testJarService() {
-        List<String> listaStr = jarFileService.getBackendClassNames(JAR_PATH, VaadVar.moduloVaadin24);
-        String sorgente = listaStr.get(0);
-        sorgente = textService.pointToSlash(sorgente);
-        sorgente = JAR_PATH + SLASH + sorgente;
-        sorgente = sorgente + ".class";
-        Class clazz = jarFileService.getClazzFromName(sorgente);
-        if (clazz != null) {
-            System.out.println(clazz.getSimpleName());
-        }
-        else {
-            logger.error(new WrapLog().message(String.format("Non ce l'abbiamo fatta")));
-            System.out.println("Non ce l'abbiamo fatta");
-        }
+//        List<String> listaStr = jarFileService.getBackendClassNames(JAR_PATH, VaadVar.moduloVaadin24);
+//        String sorgente = listaStr.get(0);
+//        sorgente = textService.pointToSlash(sorgente);
+//        sorgente = JAR_PATH + SLASH + sorgente;
+//        sorgente = sorgente + ".class";
+//        Class clazz = jarFileService.getClazzFromName(sorgente);
+//
+//        if (clazz != null) {
+//            System.out.println(clazz.getSimpleName());
+//        }
+//        else {
+//            logger.error(new WrapLog().message(String.format("Non ce l'abbiamo fatta")));
+//            System.out.println("Non ce l'abbiamo fatta");
+//        }
     }
 
 }// end of crud @Route view class

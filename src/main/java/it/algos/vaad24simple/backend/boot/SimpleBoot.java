@@ -16,6 +16,7 @@ import it.algos.vaad24simple.backend.packages.prova.*;
 import it.algos.vaad24simple.backend.schedule.*;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.context.event.*;
 import org.springframework.stereotype.*;
 
 import javax.annotation.*;
@@ -75,6 +76,13 @@ public class SimpleBoot extends VaadBoot {
         super.inizia();
     }
 
+    /**
+     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
+     * event, the application is ready to service Vaadin requests <br>
+     */
+    @EventListener(ContextRefreshedEvent.class)
+    public void onContextRefreshEvent() {
+    }
 
     /**
      * Costruisce alcune istanze generali dell'applicazione e ne mantiene i riferimenti nelle apposite variabili <br>

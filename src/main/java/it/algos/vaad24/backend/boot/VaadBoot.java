@@ -4,6 +4,12 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.interfaces.*;
+import it.algos.vaad24.backend.packages.anagrafica.*;
+import it.algos.vaad24.backend.packages.crono.anno.*;
+import it.algos.vaad24.backend.packages.crono.giorno.*;
+import it.algos.vaad24.backend.packages.crono.mese.*;
+import it.algos.vaad24.backend.packages.crono.secolo.*;
+import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.packages.utility.log.*;
 import it.algos.vaad24.backend.packages.utility.nota.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
@@ -141,6 +147,24 @@ public class VaadBoot {
     @Autowired
     protected PreferenzaBackend preferenzaBackend;
 
+    @Autowired
+    protected ViaBackend viaBackend;
+
+    @Autowired
+    protected ContinenteBackend continenteBackend;
+
+    @Autowired
+    protected GiornoBackend giornoBackend;
+
+    @Autowired
+    protected AnnoBackend annoBackend;
+
+    @Autowired
+    protected SecoloBackend secoloBackend;
+
+    @Autowired
+    protected MeseBackend meseBackend;
+
     /**
      * Constructor with @Autowired on setter. Usato quando ci sono sottoclassi. <br>
      * Per evitare di avere nel costruttore tutte le property che devono essere iniettate e per poterle aumentare <br>
@@ -163,6 +187,7 @@ public class VaadBoot {
      */
     @EventListener(ContextRefreshedEvent.class)
     public void onContextRefreshEvent() {
+        this.allResetOnlyEmpty();
     }
 
     /**
@@ -222,8 +247,18 @@ public class VaadBoot {
      * Non deve essere sovrascritto <br>
      */
     public void creaPreferenzeMongoDB() {
-        preferenzaBackend.resetDownload();
+        preferenzaBackend.resetOnlyEmpty();
     }
+
+    public void allResetOnlyEmpty() {
+        viaBackend.resetOnlyEmpty();
+        continenteBackend.resetOnlyEmpty();
+        giornoBackend.resetOnlyEmpty();
+        annoBackend.resetOnlyEmpty();
+        secoloBackend.resetOnlyEmpty();
+        meseBackend.resetOnlyEmpty();
+    }
+
 
     public void printInfo() {
         printInfo("VaadVar.frameworkVaadin24", VaadVar.frameworkVaadin24);

@@ -61,6 +61,7 @@ public class ViaBackend extends CrudBackend {
         return (Via) super.save(entity);
     }
 
+    @Override
     public AResult resetDownload() {
         AResult result = super.resetDownload();
         String collectionName = annotationService.getCollectionName(entityClazz);
@@ -96,7 +97,6 @@ public class ViaBackend extends CrudBackend {
                     result.setValido(false);
                 }
             }
-
             return super.fixResult(result, lista);
         }
         else {
