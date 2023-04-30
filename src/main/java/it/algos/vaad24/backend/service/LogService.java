@@ -109,7 +109,7 @@ public class LogService extends AbstractService {
         if (VaadCost.DEBUG && message != null && message.length() > 0) {
             if (log.slf4jLogger == null) {
 
-                log.slf4jLogger = LoggerFactory.getLogger(VaadVar.logbackName);
+                log.slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
                 if (log.slf4jLogger != null) {
                     log.textService = new TextService();
                     log.info(new WrapLog().message(message).type(AETypeLog.flow));

@@ -204,11 +204,11 @@ public class VaadVar {
      */
     public static String serverConfig;
 
-    /**
-     * File name per i logger nella directory 'log' <br>
-     * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-     */
-    public static String logbackName;
+//    /**
+//     * File name per i logger nella directory 'log' <br>
+//     * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+//     */
+//    public static String logbackName;
 
     /**
      * Nome del database mongo collegato <br>
