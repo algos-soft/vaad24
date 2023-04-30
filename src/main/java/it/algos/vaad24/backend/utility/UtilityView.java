@@ -92,10 +92,6 @@ public class UtilityView extends VerticalLayout {
     @PostConstruct
     protected void postConstruct() {
         initView();
-        if (VaadVar.projectNameModulo != null) {
-        }
-        else {
-        }
     }
 
     /**

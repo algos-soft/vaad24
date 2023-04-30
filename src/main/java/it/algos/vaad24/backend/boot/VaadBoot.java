@@ -22,8 +22,6 @@ import it.algos.vaad24.wizard.*;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
-import org.springframework.context.event.EventListener;
-import org.springframework.context.event.*;
 import org.springframework.core.env.*;
 import org.springframework.stereotype.*;
 
@@ -70,6 +68,7 @@ public class VaadBoot {
         for (Pref pref : Pref.values()) {
             VaadVar.prefList.add(pref);
         }
+
         Logger slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
         slf4jLogger.warn("Preferenze - Aggiunge le singole Enumeration generali alla lista globale 'VaadVar.prefList' (metodo statico)");
     }
@@ -180,15 +179,6 @@ public class VaadBoot {
         //        this.setDataInstance(dataInstance);
     }// end of constructor with @Autowired on setter
 
-
-    /**
-     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
-     * event, the application is ready to service Vaadin requests <br>
-     */
-    @EventListener(ContextRefreshedEvent.class)
-    public void onContextRefreshEvent() {
-        this.allResetOnlyEmpty();
-    }
 
     /**
      * Primo ingresso nel programma <br>
@@ -564,11 +554,18 @@ public class VaadBoot {
          */
         VaadVar.serverConfig = WebService.URL_BASE_VAADIN24_CONFIG;
 
-        /**
-         * File name per i logger nella directory 'log' <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-         */
-        //        VaadVar.logbackName = "pippo" + "-admin";
+//        /**
+//         * File name per i logger nella directory 'log' <br>
+//         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+//         */
+//        try {
+//            property = "logging.algos.admin";
+//            VaadVar.logbackName = Objects.requireNonNull(environment.getProperty(property));
+//        } catch (Exception unErrore) {
+//            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+//            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+//            VaadVar.logbackName = TAG_LOG_ADMIN;
+//        }
 
         /**
          * Nome del database mongo collegato <br>

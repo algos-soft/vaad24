@@ -8,7 +8,6 @@ import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.packages.utility.log.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
-import org.slf4j.Logger;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
@@ -16,7 +15,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
 
 import javax.annotation.*;
-import java.util.*;
 import java.util.function.*;
 
 
@@ -99,16 +97,10 @@ public class LogService extends AbstractService {
      */
     @PostConstruct
     public void postConstruct() {
-        String logbackName;
-        String property = "logging.algos.admin";
-
         try {
-            logbackName = Objects.requireNonNull(environment.getProperty(property));
-            slf4jLogger = LoggerFactory.getLogger(logbackName);
-        } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato la property %s in application.properties e ho usato un logbackName di default=%s", property, VaadCost.TAG_LOG_ADMIN);
             slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
-            logService.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        } catch (Exception unErrore) {
+            logService.warn(new WrapLog().exception(unErrore).message("Manca il valore di TAG_LOG_ADMIN").usaDb());
         }
     }
 
@@ -117,7 +109,7 @@ public class LogService extends AbstractService {
         if (VaadCost.DEBUG && message != null && message.length() > 0) {
             if (log.slf4jLogger == null) {
 
-                log.slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
+                log.slf4jLogger = LoggerFactory.getLogger(VaadVar.logbackName);
                 if (log.slf4jLogger != null) {
                     log.textService = new TextService();
                     log.info(new WrapLog().message(message).type(AETypeLog.flow));
