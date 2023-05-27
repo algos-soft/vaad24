@@ -148,11 +148,12 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     //    protected Button buttonRefresh;
 
     protected boolean usaBottoneDeleteAll;
+
     protected Button buttonDeleteAll;
 
     protected boolean usaBottoneReset;
-    protected Button buttonReset;
 
+    protected Button buttonReset;
 
 
     protected boolean usaBottoneSearch;
@@ -378,7 +379,6 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
             buttonReset.addClickShortcut(Key.KEY_R, KeyModifier.SHIFT);
             topPlaceHolder.add(buttonReset);
         }
-
 
         if (usaBottoneNew) {
             buttonNew = new Button();
@@ -755,7 +755,12 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         CrudOperation operation;
 
         if (usaBottoneEdit) {
-            operation = CrudOperation.UPDATE;
+            if (usaBottoneDeleteEntity) {
+                operation = CrudOperation.DELETE;
+            }
+            else {
+                operation = CrudOperation.UPDATE;
+            }
         }
         else {
             operation = CrudOperation.READ;

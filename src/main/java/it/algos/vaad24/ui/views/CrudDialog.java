@@ -103,9 +103,9 @@ public abstract class CrudDialog extends Dialog {
 
     protected Button annullaButton = new Button(textAnnullaButton);
 
-    protected Button saveButton = new Button(textSaveButton);
+    protected Button saveButton;
 
-    protected Button deleteButton = new Button(textDeleteButton);
+    protected Button deleteButton;
 
     protected BiConsumer<AEntity, CrudOperation> saveHandler;
 
@@ -228,8 +228,7 @@ public abstract class CrudDialog extends Dialog {
         String tag = switch (operation) {
             case READ -> "Mostra";
             case ADD -> "Nuova";
-            case UPDATE -> "Modifica";
-            case DELETE -> "Cancella";
+            case UPDATE, DELETE -> "Modifica";
         };
 
         message = String.format("%s %s", tag, currentEntityNameForTitle);
@@ -455,32 +454,41 @@ public abstract class CrudDialog extends Dialog {
         bottomPlaceHolder.setMargin(false);
         bottomPlaceHolder.setClassName("confirm-dialog-buttons");
 
+        Div elasticSpace = new Div();
+        elasticSpace.getStyle().set("flex-grow", "1");
+
         Label spazioVuotoEspandibile = new Label("");
 
+        if (operation == CrudOperation.UPDATE || operation == CrudOperation.DELETE) {
+            deleteButton = new Button(textDeleteButton);
+            deleteButton.getElement().setAttribute("theme", "primary");
+            deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+            deleteButton.addClickListener(e -> deleteHandler());
+            deleteButton.setIcon(new Icon(VaadinIcon.TRASH));
+            deleteButton.getStyle().set("margin-left", "auto");
+            deleteButton.getElement().setProperty("title", "Shortcut SHIFT+D");
+            deleteButton.addClickShortcut(Key.KEY_D, KeyModifier.SHIFT);
+            bottomPlaceHolder.add(deleteButton);
+            bottomPlaceHolder.add(elasticSpace);
+        }
+
         annullaButton.setText(textAnnullaButton);
+        annullaButton.getElement().setAttribute("theme", "primary");
+
         //        annullaButton.getElement().setProperty("title", "Shortcut SHIFT");
-        annullaButton.getElement().setAttribute("theme", operation == CrudOperation.ADD ? "secondary" : "primary");
+        //        annullaButton.getElement().setAttribute("theme", operation == CrudOperation.ADD ? "secondary" : "primary");
         annullaButton.addClickListener(e -> annullaHandler());
         annullaButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
         bottomPlaceHolder.add(annullaButton);
 
-        if (operation == CrudOperation.ADD || operation == CrudOperation.UPDATE) {
-            saveButton.setText(textSaveButton);
-            saveButton.getElement().setAttribute("theme", operation == CrudOperation.ADD ? "primary" : "secondary");
+        if (operation != CrudOperation.READ) {
+            saveButton = new Button(textSaveButton);
+            saveButton.getElement().setAttribute("theme", "primary");
+
+            //            saveButton.getElement().setAttribute("theme", operation == CrudOperation.ADD ? "primary" : "secondary");
             saveButton.addClickListener(e -> saveHandler());
             saveButton.setIcon(new Icon(VaadinIcon.CHECK));
             bottomPlaceHolder.add(saveButton);
-        }
-
-        if (operation == CrudOperation.DELETE) {
-            deleteButton.setText(textDeleteButton);
-            deleteButton.getElement().setAttribute("theme", "error");
-            deleteButton.addClickListener(e -> deleteHandler());
-            deleteButton.setIcon(new Icon(VaadinIcon.TRASH));
-            //            deleteButton.getStyle().set("margin-left", "auto");
-            deleteButton.getElement().setProperty("title", "Shortcut SHIFT+D");
-            deleteButton.addClickShortcut(Key.KEY_D, KeyModifier.SHIFT);
-            bottomPlaceHolder.add(deleteButton);
         }
 
         switch (operation) {
@@ -488,14 +496,18 @@ public abstract class CrudDialog extends Dialog {
             case ADD -> {
                 annullaButton.getElement().setProperty("title", "Shortcut SHIFT+freccia sinistra");
                 annullaButton.addClickShortcut(Key.ARROW_LEFT, KeyModifier.SHIFT);
-                saveButton.getElement().setProperty("title", "Shortcut ENTER");
-                saveButton.addClickShortcut(Key.ENTER);
+                if (saveButton != null) {
+                    saveButton.getElement().setProperty("title", "Shortcut ENTER");
+                    saveButton.addClickShortcut(Key.ENTER);
+                }
             }
             case UPDATE -> {
                 annullaButton.getElement().setProperty("title", "Shortcut ENTER");
                 annullaButton.addClickShortcut(Key.ENTER);
-                saveButton.getElement().setProperty("title", "Shortcut SHIFT+ENTER");
-                saveButton.addClickShortcut(Key.ENTER, KeyModifier.SHIFT);
+                if (saveButton != null) {
+                    saveButton.getElement().setProperty("title", "Shortcut SHIFT+ENTER");
+                    saveButton.addClickShortcut(Key.ENTER, KeyModifier.SHIFT);
+                }
             }
             case DELETE -> {
                 annullaButton.getElement().setProperty("title", "Shortcut ENTER");
@@ -506,7 +518,9 @@ public abstract class CrudDialog extends Dialog {
         bottomPlaceHolder.setFlexGrow(1, spazioVuotoEspandibile);
 
         //--Controlla la visibilità dei bottoni
-        saveButton.setVisible(operation == CrudOperation.ADD || operation == CrudOperation.UPDATE);
+        if (saveButton != null) {
+            saveButton.setVisible(operation != CrudOperation.READ);
+        }
 
         this.add(bottomPlaceHolder);
     }
