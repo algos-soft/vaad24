@@ -213,6 +213,11 @@ mongorestore -d wiki24 /Users/guidoceresa/Desktop/dump/wiki24 mongorestore -d wi
 
 * Howtodoinjava [https://howtodoinjava.com/vaadin/vaadin-combobox-examples/]
 
-== Bandiera ==
- deleteButton.getStyle().set("margin-inline-end", "auto");
+== Dialogo ==
+ deleteButton.getElement().setAttribute("theme", "primary");
+ deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+ //deleteButton.getStyle().set("margin-inline-end", "auto");
  deleteButton.getStyle().set("margin-left", "auto");
+ annullaButton.getElement().setAttribute("theme", "secondary");
+ saveButton.getElement().setAttribute("theme", "primary");
+

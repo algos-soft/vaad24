@@ -186,7 +186,7 @@ public abstract class CrudDialog extends Dialog {
         this.fixPreferenze();
 
         //--Titolo placeholder del dialogo
-        this.add(fixHeader());
+        this.fixHeader();
 
         //--Form placeholder standard per i campi
         this.add(getFormLayout());
@@ -222,7 +222,7 @@ public abstract class CrudDialog extends Dialog {
      * Titolo del dialogo <br>
      * Placeholder (eventuale, presente di default) <br>
      */
-    protected Component fixHeader() {
+    protected void fixHeader() {
         String message;
 
         String tag = switch (operation) {
@@ -234,7 +234,8 @@ public abstract class CrudDialog extends Dialog {
         message = String.format("%s %s", tag, currentEntityNameForTitle);
         Label label = new Label(message);
         label.getStyle().set("font-weight", "bold");
-        return (label);
+        label.getStyle().set("font-size", "1.2em");
+        add(label);
     }
 
     /**
@@ -447,17 +448,15 @@ public abstract class CrudDialog extends Dialog {
      * Placeholder (eventuale, presente di default) <br>
      */
     protected void fixBottom() {
-        bottomPlaceHolder = new HorizontalLayout();
-        bottomPlaceHolder.setClassName("buttons");
-        bottomPlaceHolder.setPadding(false);
-        bottomPlaceHolder.setSpacing(true);
-        bottomPlaceHolder.setMargin(false);
-        bottomPlaceHolder.setClassName("confirm-dialog-buttons");
+//        bottomPlaceHolder = new HorizontalLayout();
+//        bottomPlaceHolder.setClassName("buttons");
+//        bottomPlaceHolder.setPadding(false);
+//        bottomPlaceHolder.setSpacing(true);
+//        bottomPlaceHolder.setMargin(false);
+//        bottomPlaceHolder.setClassName("confirm-dialog-buttons");
 
         Div elasticSpace = new Div();
         elasticSpace.getStyle().set("flex-grow", "1");
-
-        Label spazioVuotoEspandibile = new Label("");
 
         if (operation == CrudOperation.UPDATE || operation == CrudOperation.DELETE) {
             deleteButton = new Button(textDeleteButton);
@@ -468,27 +467,23 @@ public abstract class CrudDialog extends Dialog {
             deleteButton.getStyle().set("margin-left", "auto");
             deleteButton.getElement().setProperty("title", "Shortcut SHIFT+D");
             deleteButton.addClickShortcut(Key.KEY_D, KeyModifier.SHIFT);
-            bottomPlaceHolder.add(deleteButton);
-            bottomPlaceHolder.add(elasticSpace);
+            super.getFooter().add(deleteButton);
+            super.getFooter().add(elasticSpace);
         }
 
         annullaButton.setText(textAnnullaButton);
-        annullaButton.getElement().setAttribute("theme", "primary");
-
+        annullaButton.getElement().setAttribute("theme", "secondary");
         //        annullaButton.getElement().setProperty("title", "Shortcut SHIFT");
-        //        annullaButton.getElement().setAttribute("theme", operation == CrudOperation.ADD ? "secondary" : "primary");
         annullaButton.addClickListener(e -> annullaHandler());
         annullaButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
-        bottomPlaceHolder.add(annullaButton);
+        super.getFooter().add(annullaButton);
 
         if (operation != CrudOperation.READ) {
             saveButton = new Button(textSaveButton);
             saveButton.getElement().setAttribute("theme", "primary");
-
-            //            saveButton.getElement().setAttribute("theme", operation == CrudOperation.ADD ? "primary" : "secondary");
             saveButton.addClickListener(e -> saveHandler());
             saveButton.setIcon(new Icon(VaadinIcon.CHECK));
-            bottomPlaceHolder.add(saveButton);
+            super.getFooter().add(saveButton);
         }
 
         switch (operation) {
@@ -515,14 +510,10 @@ public abstract class CrudDialog extends Dialog {
             }
         }
 
-        bottomPlaceHolder.setFlexGrow(1, spazioVuotoEspandibile);
-
         //--Controlla la visibilità dei bottoni
         if (saveButton != null) {
             saveButton.setVisible(operation != CrudOperation.READ);
         }
-
-        this.add(bottomPlaceHolder);
     }
 
     /**
