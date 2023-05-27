@@ -93,6 +93,8 @@ public abstract class CrudDialog extends Dialog {
 
     protected CrudBackend crudBackend;
 
+    protected String currentEntityNameForTitle;
+
     protected String textAnnullaButton = "Annulla";
 
     protected String textSaveButton = "Registra";
@@ -180,6 +182,9 @@ public abstract class CrudDialog extends Dialog {
      */
     @PostConstruct
     private void postConstruct() {
+        //--Preferenze usate da questa 'logica'
+        this.fixPreferenze();
+
         //--Titolo placeholder del dialogo
         this.add(fixHeader());
 
@@ -205,10 +210,21 @@ public abstract class CrudDialog extends Dialog {
     }
 
     /**
+     * Preferenze (eventuali) usate da questo 'dialogo' <br>
+     * Primo metodo chiamato dopo init() (implicito del costruttore) e postConstruct() (facoltativo) <br>
+     * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected void fixPreferenze() {
+        currentEntityNameForTitle = currentItem.getClass().getSimpleName().toLowerCase();
+    }
+
+    /**
      * Titolo del dialogo <br>
      * Placeholder (eventuale, presente di default) <br>
      */
     protected Component fixHeader() {
+        String message;
+
         String tag = switch (operation) {
             case READ -> "Mostra";
             case ADD -> "Nuova";
@@ -216,7 +232,10 @@ public abstract class CrudDialog extends Dialog {
             case DELETE -> "Cancella";
         };
 
-        return new H2(String.format("%s %s", tag, currentItem.getClass().getSimpleName().toLowerCase()));
+        message = String.format("%s %s", tag, currentEntityNameForTitle);
+        Label label = new Label(message);
+        label.getStyle().set("font-weight", "bold");
+        return (label);
     }
 
     /**
@@ -254,7 +273,7 @@ public abstract class CrudDialog extends Dialog {
      */
     protected void fixBody() {
         AETypeField type;
-        AbstractSinglePropertyField field;
+        AbstractField field;
         AComboField aField;
         Class enumClazz;
         Class linkClazz;
@@ -275,13 +294,13 @@ public abstract class CrudDialog extends Dialog {
                 nullSelectionAllowed = annotationService.nullSelectionAllowed(currentItem.getClass(), key);
 
                 if (type == AETypeField.listaH) {
-                    AListaFieldH cField= new AListaFieldH(caption);
+                    AListaFieldH cField = new AListaFieldH(caption);
                     formLayout.add(cField);
                     binder.forField(cField).bind(key);
                     continue;
                 }
                 if (type == AETypeField.listaV) {
-                    AListaFieldV cField= new AListaFieldV(caption);
+                    AListaFieldV cField = new AListaFieldV(caption);
                     formLayout.add(cField);
                     binder.forField(cField).bind(key);
                     continue;
@@ -458,6 +477,7 @@ public abstract class CrudDialog extends Dialog {
             deleteButton.getElement().setAttribute("theme", "error");
             deleteButton.addClickListener(e -> deleteHandler());
             deleteButton.setIcon(new Icon(VaadinIcon.TRASH));
+            //            deleteButton.getStyle().set("margin-left", "auto");
             deleteButton.getElement().setProperty("title", "Shortcut SHIFT+D");
             deleteButton.addClickShortcut(Key.KEY_D, KeyModifier.SHIFT);
             bottomPlaceHolder.add(deleteButton);

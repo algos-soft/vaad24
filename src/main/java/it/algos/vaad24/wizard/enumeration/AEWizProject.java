@@ -15,7 +15,7 @@ import java.util.*;
  * x
  */
 public enum AEWizProject {
-    logback("File logback-spring per i login automatici (vaad24)", true, true, "config/logback-spring.xml", AECopy.fileModifyEver,"vaad24","wiki24"),
+//    logback("File logback-spring per i login automatici (vaad24)", true, true, "config/logback-spring.xml", AECopy.fileModifyEver,"vaad24","wiki24"),
 
     config("Directory CONFIG di risorse on-line esterne al JAR (vaad24)", true, false, "config", AECopy.dirFilesModifica),
 

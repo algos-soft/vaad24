@@ -288,7 +288,6 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         usaBottoneEdit = true;
         usaBottoneSearch = true;
         usaBottoneDeleteEntity = true;
-        usaBottoneDeleteEntity = true;
         usaBottoneExport = false;
         usaComboType = false;
 
