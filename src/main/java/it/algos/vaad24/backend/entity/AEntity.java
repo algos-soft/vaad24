@@ -1,7 +1,9 @@
 package it.algos.vaad24.backend.entity;
 
 
-import com.vaadin.flow.component.template.Id;
+import com.vaadin.flow.component.template.*;
+import it.algos.vaad24.backend.annotation.*;
+import it.algos.vaad24.backend.enumeration.*;
 
 import java.io.*;
 import java.time.*;
@@ -96,6 +98,7 @@ public abstract class AEntity implements Serializable {
      */
     //    @AIField(type = AETypeField.localDateTime, caption = "Creazione della entity")  @todo rimettere
     //    @AIColumn() @todo rimettere
+    @AIField(type = AETypeField.localDateTime)
     public LocalDateTime creazione;
 
 
@@ -107,6 +110,7 @@ public abstract class AEntity implements Serializable {
      */
     //    @AIField(type = AETypeField.localDateTime, caption = "Ultima modifica della entity")  @todo rimettere
     //    @AIColumn() @todo rimettere
+    @AIField(type = AETypeField.localDateTime)
     public LocalDateTime modifica;
 
     public String getId() {
@@ -118,5 +122,3 @@ public abstract class AEntity implements Serializable {
     }
 
 }
-
-

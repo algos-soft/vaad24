@@ -52,7 +52,7 @@ public class ReflectionService extends AbstractService {
             propertyName = propertyName.replaceAll(FIELD_NAME_ID_CON, FIELD_NAME_ID_SENZA);
             field = genericClazz.getField(propertyName);
         } catch (Exception unErrore) {
-            message = String.format("Manca la property %s nella classe % ", propertyName, genericClazz.getSimpleName());
+            message = String.format("Manca la property %s nella classe %s", propertyName, genericClazz.getSimpleName());
             logService.error(new WrapLog().exception(unErrore).message(message).usaDb());
         }
 

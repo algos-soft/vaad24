@@ -364,6 +364,7 @@ public abstract class CrudDialog extends Dialog {
                         case localDateTime -> new DateTimePicker(caption);
                         case localDate -> new DatePicker(caption);
                         case localTime -> new TimePicker(caption);
+                        case textArea -> new TextArea(caption);
                         default -> {
                             logger.error(new WrapLog().exception(new AlgosException("Manca il case dello switch")).usaDb());
                             yield new TextField(key);
@@ -448,12 +449,12 @@ public abstract class CrudDialog extends Dialog {
      * Placeholder (eventuale, presente di default) <br>
      */
     protected void fixBottom() {
-//        bottomPlaceHolder = new HorizontalLayout();
-//        bottomPlaceHolder.setClassName("buttons");
-//        bottomPlaceHolder.setPadding(false);
-//        bottomPlaceHolder.setSpacing(true);
-//        bottomPlaceHolder.setMargin(false);
-//        bottomPlaceHolder.setClassName("confirm-dialog-buttons");
+        //        bottomPlaceHolder = new HorizontalLayout();
+        //        bottomPlaceHolder.setClassName("buttons");
+        //        bottomPlaceHolder.setPadding(false);
+        //        bottomPlaceHolder.setSpacing(true);
+        //        bottomPlaceHolder.setMargin(false);
+        //        bottomPlaceHolder.setClassName("confirm-dialog-buttons");
 
         Div elasticSpace = new Div();
         elasticSpace.getStyle().set("flex-grow", "1");
