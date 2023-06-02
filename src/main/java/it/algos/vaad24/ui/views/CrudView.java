@@ -46,6 +46,15 @@ import java.util.stream.*;
  */
 public abstract class CrudView extends VerticalLayout implements AfterNavigationObserver {
 
+    protected static String TEXT_CSV = "Usati solo in background. File originale (CSV) sul server /www.algos.it/vaadin23/config/";
+
+    protected static String TEXT_BACK = "Usati solo in background. Costruiti hardcoded.";
+
+    protected static String TEXT_HARD = "Solo hard coded. Non creabili e non modificabili.";
+
+    protected static String TEXT_RESET = "Cancellabili (dalla lista per prova). Reset ripristina la collezione.";
+
+
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>

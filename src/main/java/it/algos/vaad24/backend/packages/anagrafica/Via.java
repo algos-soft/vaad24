@@ -2,6 +2,7 @@ package it.algos.vaad24.backend.packages.anagrafica;
 
 import it.algos.vaad24.backend.annotation.*;
 import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.enumeration.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.index.*;
@@ -32,6 +33,9 @@ import javax.validation.constraints.*;
 @AIEntity(usaReset = true)
 public class Via extends AEntity {
 
+    @Indexed(unique = true, direction = IndexDirection.ASCENDING)
+    @AIField(type = AETypeField.integer, header = "#", widthEM = 3, caption = "Ordinamento")
+    public int ordine;
 
     @NotBlank()
     @Indexed(unique = true, direction = IndexDirection.DESCENDING)

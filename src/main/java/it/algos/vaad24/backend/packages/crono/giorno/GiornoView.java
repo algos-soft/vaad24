@@ -84,8 +84,10 @@ public class GiornoView extends CrudView {
     public void fixAlert() {
         super.fixAlert();
 
-        addSpan(ASpan.text("Usati solo in background. Costruiti hardcoded.").verde());
-        addSpan(ASpan.text("Solo hard coded. Non creabili e non modificabili").rosso());
+        addSpan(ASpan.text("Compreso il 29 febbraio").blue().bold());
+        addSpan(ASpan.text(TEXT_BACK).verde());
+        addSpan(ASpan.text(TEXT_HARD).rosso());
+        addSpan(ASpan.text(TEXT_RESET).rosso());
     }
 
     /**

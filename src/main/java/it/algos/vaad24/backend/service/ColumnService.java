@@ -161,6 +161,7 @@ public class ColumnService extends AbstractService {
                 colonna.setFlexGrow(1);
             }
             if (textService.isValid(sortProperty) && type != AETypeField.booleano) {
+                colonna.setSortable(true);
                 colonna.setSortProperty(sortProperty);
             }
         }

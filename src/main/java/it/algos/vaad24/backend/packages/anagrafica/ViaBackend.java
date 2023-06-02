@@ -1,5 +1,6 @@
 package it.algos.vaad24.backend.packages.anagrafica;
 
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
@@ -23,6 +24,25 @@ public class ViaBackend extends CrudBackend {
         super(Via.class);
     }
 
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    @Override
+    public Via newEntity() {
+        return newEntity(0, VUOTA);
+    }
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    @Override
+    public Via newEntity(final String keyPropertyValue) {
+        return newEntity(0, keyPropertyValue);
+    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -31,9 +51,9 @@ public class ViaBackend extends CrudBackend {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    @Override
-    public Via newEntity(final String nome) {
+    public Via newEntity(int ordine, String nome) {
         Via newEntityBean = Via.builder()
+                .ordine(ordine)
                 .nome(textService.isValid(nome) ? nome : null)
                 .build();
 

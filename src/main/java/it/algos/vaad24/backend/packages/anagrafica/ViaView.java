@@ -57,9 +57,9 @@ public class ViaView extends CrudView {
     public void fixAlert() {
         super.fixAlert();
 
-        addSpan(ASpan.text("Usati solo in background. File originale (CSV) sul server /www.algos.it/vaadin23/config").verde());
-        addSpan(ASpan.text("Solo hard coded. Non creabili e non modificabili").rosso());
-        addSpan(ASpan.text("Ordinati di default per 'ordine'. Ordinabili anche per 'nome'.").rosso());
+        addSpan(ASpan.text(String.format("%s%s", TEXT_CSV, "vie")).verde());
+        addSpan(ASpan.text(TEXT_HARD).rosso());
+        addSpan(ASpan.text(TEXT_RESET).rosso());
     }
 
 

@@ -76,8 +76,9 @@ public class SecoloView extends CrudView {
 
         addSpan(ASpan.text("L'anno zero non esiste").blue().bold());
         addSpan(ASpan.text("L'anno 2000 è l'ultimo del XX secolo").blue().bold());
-        addSpan(ASpan.text("Usati solo in background. File originale (CSV) sul server /www.algos.it/vaadin23/config").verde());
-        addSpan(ASpan.text("Solo hard coded. Non creabili e non modificabili").rosso());
+        addSpan(ASpan.text(String.format("%s%s", TEXT_CSV, "secoli")).verde());
+        addSpan(ASpan.text(TEXT_HARD).rosso());
+        addSpan(ASpan.text(TEXT_RESET).rosso());
     }
 
 
