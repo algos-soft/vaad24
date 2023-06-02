@@ -1,6 +1,7 @@
 package it.algos.vaad24.backend.logic;
 
 import com.mongodb.*;
+import com.vaadin.flow.data.provider.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.entity.*;
@@ -719,6 +720,9 @@ public abstract class CrudBackend extends AbstractService {
         else {
             return null;
         }
+    }
+    public DataProvider getProvider() {
+        return null;
     }
 
     //    /**

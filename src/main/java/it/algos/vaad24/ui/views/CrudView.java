@@ -9,6 +9,7 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
+import com.vaadin.flow.data.provider.*;
 import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.data.selection.*;
 import com.vaadin.flow.router.*;
@@ -634,8 +635,10 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     }
 
     protected List<AEntity> sincroFiltri() {
+        DataProvider provider;
         List<AEntity> items = crudBackend.findAllSort(sortOrder);
 
+        //@todo da sistemare
         if (usaBottoneSearch && searchField != null) {
             final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
             if (textService.isValid(searchFieldName) && textService.isValid(textSearch)) {
@@ -647,7 +650,14 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         }
 
         if (items != null) {
-            grid.setItems((List) items);
+            provider = crudBackend.getProvider();
+            if (provider != null) {
+                grid.setDataProvider(provider);
+            }
+            else {
+                grid.setItems((List) items);
+            }
+
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }

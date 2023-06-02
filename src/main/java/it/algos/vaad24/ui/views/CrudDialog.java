@@ -15,6 +15,7 @@ import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.component.timepicker.*;
 import com.vaadin.flow.data.binder.*;
 import com.vaadin.flow.data.converter.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -565,8 +566,8 @@ public abstract class CrudDialog extends Dialog {
         crudBackend.save(currentItem);
         switch (operation) {
             case ADD -> Avviso.message("Aggiunto un elemento").success().open();
-            case UPDATE -> Avviso.message("Registrata la modifica").success().open();
-            default -> Avviso.message("Caso non previsto").error().open();
+            case UPDATE, DELETE -> Avviso.message("Registrata la modifica").success().open();
+            default -> Avviso.message(SWITCH).error().open();
         }
 
         if (saveHandler != null) {
