@@ -776,7 +776,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
             operation = CrudOperation.READ;
         }
         dialog = (CrudDialog) appContext.getBean(dialogClazz, entityBeanDaRegistrare, operation, crudBackend, formPropertyNamesList);
-        dialog.open(this::saveHandler, this::annullaHandler);
+        dialog.open(this::saveHandler, this::deleteHandler, this::annullaHandler);
     }
 
     /**
@@ -800,16 +800,33 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         grid.setItems(crudBackend.findAllSort(sortOrder));
     }
 
+
     public void deleteHandler() {
         Optional<AEntity> entityBean = grid.getSelectedItems().stream().findFirst();
         if (entityBean.isPresent()) {
-            crudBackend.delete(entityBean.get());
-            grid.setItems(crudBackend.findAllSort(sortOrder));
-            Avviso.message(String.format("%s successfully deleted", entityBean.get())).success().open();
+            deleteHandler(entityBean.get());
         }
         else {
             Avviso.message("Nessuna entity selezionata").error().open();
         }
+    }
+
+    /**
+     * Questo handler viene chiamato sia dal bottone della View che come ritorno dal Dialogo <br>
+     * Forza comunque la cancellazione, anche se è stata effettuata dal Dialogo (nel caso di Dialogo) <br>
+     * Esegue comunque sempre il reload della View <br>
+     */
+    protected void deleteHandler(final AEntity entityBean) {
+        boolean cancellato;
+
+        cancellato = crudBackend.delete(entityBean);
+        if (!cancellato) {
+            //Avviso interno -> Già cancellato (probabilmente nel dialogo)
+        }
+
+        Avviso.message(String.format("%s successfully deleted", entityBean)).success().open();
+        //@todo Non riesco a fermare l'esecuzione PRIMA del reload della pagina per poter far vedere l'avviso
+        reload();
     }
 
     public void annullaHandler(final AEntity entityBean) {

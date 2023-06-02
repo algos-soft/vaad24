@@ -54,6 +54,7 @@ public class ContinenteView extends CrudView {
         super.usaRowIndex = false;
         super.usaBottoneReset = true;
         super.usaBottoneNew = false;
+        super.usaBottoneEdit = false;
         super.autoCreateColumns = false;
         super.searchFieldName = "nome";
     }
@@ -66,9 +67,10 @@ public class ContinenteView extends CrudView {
     public void fixAlert() {
         super.fixAlert();
 
-        addSpan(ASpan.text("Usati solo in background. File originale (CSV) sul server /www.algos.it/vaadin23/config").verde());
+        addSpan(ASpan.text("Usati solo in background. File originale (CSV) sul server /www.algos.it/vaadin23/config/continenti").verde());
         addSpan(ASpan.text("Solo hard coded. Non creabili e non modificabili").rosso());
         addSpan(ASpan.text("Ordinati di default per 'ordine'. Ordinabili anche per 'nome'.").rosso());
+        addSpan(ASpan.text("Cancellabili (per prova). Reset ripristina la collezione.").rosso());
     }
 
 }// end of crud @Route view class

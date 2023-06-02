@@ -576,11 +576,22 @@ public abstract class CrudDialog extends Dialog {
         close();
     }
 
+    /**
+     * La cancellazione avviene qui (nel dialogo) <br>
+     * Delega il service di xxxBackend <br>
+     * Poi rimanda al chiamante (se esiste) per eventuali altre incombenze (tipo reload della view) <br>
+     */
     public void deleteHandler() {
         AEntity item = currentItem;
+
+        if (item != null && crudBackend != null) {
+            crudBackend.delete(item);
+        }
+
         if (deleteHandler != null) {
             deleteHandler.accept(item);
         }
+
         close();
     }
 

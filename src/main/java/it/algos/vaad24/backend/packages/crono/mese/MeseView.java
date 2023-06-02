@@ -44,14 +44,13 @@ public class MeseView extends CrudView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("giorni", "breve", "nome", "primo", "ultimo");
-        super.formPropertyNamesList = Arrays.asList("giorni", "breve", "nome", "primo", "ultimo");
+        super.gridPropertyNamesList = Arrays.asList("ordine","giorni", "breve", "nome", "primo", "ultimo");
+        super.formPropertyNamesList = Arrays.asList("ordine","giorni", "breve", "nome", "primo", "ultimo");
 
         super.usaBottoneReset = true;
         super.usaReset = true;
         super.usaBottoneNew = false;
-        super.usaBottoneEdit = false;
-        super.usaBottoneSearch = false;
+//        super.usaBottoneEdit = false;
     }
 
     /**
@@ -62,8 +61,9 @@ public class MeseView extends CrudView {
     public void fixAlert() {
         super.fixAlert();
 
-        addSpan(ASpan.text("Usati solo in background. File originale (CSV) sul server /www.algos.it/vaadin23/config").verde());
+        addSpan(ASpan.text("Usati solo in background. File originale (CSV) sul server /www.algos.it/vaadin23/config/mesi").verde());
         addSpan(ASpan.text("Solo hard coded. Non creabili e non modificabili").rosso());
+        addSpan(ASpan.text("Ordinati di default per 'ordine'. Ordinabili anche per 'nome'.").rosso());
     }
 
 }// end of crud @Route view class
