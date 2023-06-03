@@ -223,7 +223,7 @@ public abstract class AbstractService {
     @PostConstruct
     private void postConstruct() {
         fixAllServices();
-        fixLinkIncrociati();
+//        fixLinkIncrociati();
         fixLinkPreferenze();
     }
 
