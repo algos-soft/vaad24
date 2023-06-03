@@ -39,10 +39,11 @@ public class ViaView extends CrudView {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
-        super.gridPropertyNamesList = Arrays.asList("nome");
+        super.gridPropertyNamesList = Arrays.asList("ordine","nome");
         super.formPropertyNamesList = Arrays.asList("nome");
 
         super.usaBottoneReset = true;
+        super.usaRowIndex = false;
         super.usaReset = true;
         super.usaBottoneNew = false;
         super.usaBottoneEdit = false;

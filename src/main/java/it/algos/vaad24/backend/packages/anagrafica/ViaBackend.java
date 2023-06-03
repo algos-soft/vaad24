@@ -76,6 +76,7 @@ public class ViaBackend extends CrudBackend {
         return (Via) super.findByProperty(propertyName, propertyValue);
     }
 
+
     @Override
     public Via save(AEntity entity) {
         return (Via) super.save(entity);
@@ -93,6 +94,7 @@ public class ViaBackend extends CrudBackend {
         String nome;
         List<AEntity> lista;
         String message;
+        int pos = 0;
 
         mappa = resourceService.leggeMappa(nomeFileCSVSulServerAlgos);
         if (mappa != null) {
@@ -108,7 +110,7 @@ public class ViaBackend extends CrudBackend {
                     return result.errorMessage("I dati non sono congruenti").fine();
                 }
 
-                entityBean = insert(newEntity(nome));
+                entityBean = insert(newEntity(++pos, nome));
                 if (entityBean != null) {
                     lista.add(entityBean);
                 }

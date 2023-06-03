@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.repository.*;
 
 import javax.annotation.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project vaadin23
@@ -721,9 +722,26 @@ public abstract class CrudBackend extends AbstractService {
             return null;
         }
     }
+
     public DataProvider getProvider() {
-        return null;
+        return DataProvider.fromCallbacks(
+                query -> this.fetch(query.getOffset(), query.getLimit()),
+                query -> this.count()
+        );
     }
+
+    public Stream<Object> fetch(final int offset, final int limit) {
+        List lista;
+        Query query = new Query();
+
+        query.skip(offset);
+        query.limit(limit);
+//        query.with(getSortOrder()); @todo Non funziona
+        lista = mongoService.mongoOp.find(query, entityClazz);
+
+        return lista != null ? lista.stream() : null;
+    }
+
 
     //    /**
     //     * Lista della sola keyProperty indicata per tutte le entities della collezione <br>

@@ -114,6 +114,9 @@ public class GiornoView extends CrudView {
      */
     protected List<AEntity> sincroFiltri() {
         List<Giorno> items = (List)super.sincroFiltri();
+        if (items == null) {
+            return null;
+        }
 
         if (comboMese != null && comboMese.getValue() != null) {
             if (comboMese.getValue() instanceof Mese mese) {

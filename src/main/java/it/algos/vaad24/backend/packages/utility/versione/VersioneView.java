@@ -123,6 +123,9 @@ public class VersioneView extends CrudView {
      */
     protected List<AEntity> sincroFiltri() {
         List<Versione> items = (List)super.sincroFiltri();
+        if (items == null) {
+            return null;
+        }
 
         final AETypeVers level = comboTypeVers != null ? comboTypeVers.getValue() : null;
         if (level != null) {

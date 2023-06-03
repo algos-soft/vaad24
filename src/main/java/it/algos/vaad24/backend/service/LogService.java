@@ -5,7 +5,7 @@ import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
-import it.algos.vaad24.backend.packages.utility.log.*;
+import it.algos.vaad24.backend.packages.utility.logger.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import org.slf4j.*;

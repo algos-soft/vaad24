@@ -2,7 +2,7 @@ package it.algos.backend;
 
 import it.algos.*;
 import it.algos.base.*;
-import it.algos.vaad24.backend.packages.utility.log.*;
+import it.algos.vaad24.backend.packages.utility.logger.*;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.*;
 

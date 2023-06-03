@@ -10,7 +10,7 @@ import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
-import it.algos.vaad24.backend.packages.utility.log.*;
+import it.algos.vaad24.backend.packages.utility.logger.*;
 import it.algos.vaad24.backend.packages.utility.nota.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import it.algos.vaad24.backend.packages.utility.versione.*;

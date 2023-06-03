@@ -105,6 +105,9 @@ public class SecoloView extends CrudView {
      */
     protected List<AEntity> sincroFiltri() {
         List<Secolo> items = (List)super.sincroFiltri();
+        if (items == null) {
+            return null;
+        }
 
         if (boxBox != null && !boxBox.isIndeterminate()) {
             items = items.stream().filter(sec -> sec.anteCristo == boxBox.getValue()).toList();

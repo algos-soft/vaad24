@@ -145,6 +145,8 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
     protected boolean autoCreateColumns;
 
+    protected boolean usaDataProvider;
+
     protected boolean usaRowIndex;
 
     protected boolean riordinaColonne;
@@ -285,6 +287,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         sortOrder = crudBackend.getSortOrder();
         sortOrder = sortOrder != null ? sortOrder : Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_SENZA);
         usaRowIndex = true;
+        usaDataProvider = false;
         riordinaColonne = true;
         gridPropertyNamesList = new ArrayList<>();
         formPropertyNamesList = new ArrayList<>();
@@ -530,11 +533,21 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     }
 
     protected void fixItems() {
+        DataProvider provider = null;
         List items;
 
-        items = crudBackend.findAllSort(sortOrder);
-        if (items != null) {
-            grid.setItems(items);
+        if (usaDataProvider) {
+            provider = crudBackend.getProvider();
+            if (provider != null) {
+                grid.setDataProvider(provider);
+            }
+        }
+
+        if (provider == null) {
+            items = crudBackend.findAllSort(sortOrder);
+            if (items != null) {
+                grid.setItems(items);
+            }
         }
     }
 
@@ -645,7 +658,13 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
     protected List<AEntity> sincroFiltri() {
         DataProvider provider;
-        List<AEntity> items = crudBackend.findAllSort(sortOrder);
+        List<AEntity> items;
+
+        if (usaDataProvider) {
+            return null;
+        }
+
+        items = crudBackend.findAllSort(sortOrder);
 
         //@todo da sistemare
         if (usaBottoneSearch && searchField != null) {
@@ -659,14 +678,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         }
 
         if (items != null) {
-            provider = crudBackend.getProvider();
-            if (provider != null) {
-                grid.setDataProvider(provider);
-            }
-            else {
-                grid.setItems((List) items);
-            }
-
+            grid.setItems((List) items);
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }

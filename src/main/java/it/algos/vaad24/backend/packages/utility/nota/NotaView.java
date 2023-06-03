@@ -118,6 +118,9 @@ public class NotaView extends CrudView {
      */
     protected List<AEntity> sincroFiltri() {
         List<Nota> items = (List)super.sincroFiltri();
+        if (items == null) {
+            return null;
+        }
 
         final AETypeLog type = comboTypeLog != null ? comboTypeLog.getValue() : null;
         if (type != null) {

@@ -8,7 +8,7 @@ import it.algos.*;
 import it.algos.base.*;
 import it.algos.vaad24.backend.fields.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
-import it.algos.vaad24.backend.packages.utility.log.*;
+import it.algos.vaad24.backend.packages.utility.logger.*;
 import it.algos.vaad24.backend.packages.utility.nota.*;
 import it.algos.vaad24.backend.service.*;
 import org.junit.jupiter.api.*;

@@ -73,6 +73,7 @@ public class AnnoView extends CrudView {
         super.sortOrder = Sort.by(Sort.Direction.DESC, "ordine");
 
         super.usaRowIndex = false;
+        super.usaDataProvider = true;
         super.usaBottoneReset = true;
         super.usaReset = true;
         super.usaBottoneNew = false;
@@ -133,7 +134,11 @@ public class AnnoView extends CrudView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected List<AEntity> sincroFiltri() {
-        List<Anno> items = (List)super.sincroFiltri();
+        List<Anno> items = (List) super.sincroFiltri();
+
+        if (items == null) {
+            return null;
+        }
 
         if (comboSecolo != null && comboSecolo.getValue() != null) {
             if (comboSecolo.getValue() instanceof Secolo secolo) {
@@ -155,7 +160,7 @@ public class AnnoView extends CrudView {
             sicroBottomLayout();
         }
 
-        return (List)items;
+        return (List) items;
     }
 
 }// end of crud @Route view class

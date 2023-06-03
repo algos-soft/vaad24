@@ -5,7 +5,7 @@ import it.algos.base.*;
 import it.algos.vaad24.backend.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
-import it.algos.vaad24.backend.packages.utility.log.*;
+import it.algos.vaad24.backend.packages.utility.logger.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.ui.views.*;
 import org.junit.jupiter.api.*;
