@@ -499,7 +499,11 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         // layout configuration
         setSizeFull();
         this.add(grid);
-        sincroFiltri();
+
+        if (!usaDataProvider) {
+            sincroFiltri();
+        }
+
     }
 
 
@@ -658,13 +662,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
     protected List<AEntity> sincroFiltri() {
         DataProvider provider;
-        List<AEntity> items;
-
-        if (usaDataProvider) {
-            return null;
-        }
-
-        items = crudBackend.findAllSort(sortOrder);
+        List<AEntity> items = crudBackend.findAllSort(sortOrder);
 
         //@todo da sistemare
         if (usaBottoneSearch && searchField != null) {
