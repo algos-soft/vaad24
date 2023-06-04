@@ -21,6 +21,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.*;
 import java.lang.reflect.Field;
 import java.util.*;
+
 /**
  * Project vaadin23
  * Created by Algos
@@ -654,12 +655,12 @@ public class AnnotationService extends AbstractService {
             searchPropertyName = defaultValue;
         }
 
-//        searchPropertyName = getKeyPropertyName(entityClazz);
-//        if (textService.isValid(searchPropertyName) || !searchPropertyName.equals(FIELD_NAME_ID_CON)) {
-//            return searchPropertyName;
-//        }
+        //        searchPropertyName = getKeyPropertyName(entityClazz);
+        //        if (textService.isValid(searchPropertyName) || !searchPropertyName.equals(FIELD_NAME_ID_CON)) {
+        //            return searchPropertyName;
+        //        }
 
-        return   reflectionService.isEsiste(entityClazz, searchPropertyName) ? searchPropertyName : VUOTA;
+        return reflectionService.isEsiste(entityClazz, searchPropertyName) ? searchPropertyName : VUOTA;
     }
 
     /**
@@ -1041,6 +1042,20 @@ public class AnnotationService extends AbstractService {
 
         if (annotation != null) {
             type = annotation.typeBool();
+        }
+
+        return type;
+    }
+
+    /**
+     * Get the specific annotation of the field. <br>
+     */
+    public AETypeDate getTypeDate(final Class<? extends AEntity> entityClazz, final String publicFieldName) {
+        AETypeDate type = AETypeDate.iso8601;
+        AIField annotation = this.getAIField(entityClazz, publicFieldName);
+
+        if (annotation != null) {
+            type = annotation.typeDate();
         }
 
         return type;

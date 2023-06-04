@@ -409,5 +409,12 @@ public @interface AIField {
      */
     AETypeBoolCol typeBool() default AETypeBoolCol.checkIcon;
 
+    /**
+     * (Required) The type of the date.
+     * Defaults to the text type.
+     *
+     * @return the ae field type
+     */
+    AETypeDate typeDate() default AETypeDate.iso8601;
 
 }

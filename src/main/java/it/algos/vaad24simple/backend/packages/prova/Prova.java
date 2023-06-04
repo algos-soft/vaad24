@@ -11,6 +11,7 @@ import org.springframework.stereotype.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.time.*;
 import java.util.*;
 
 /**
@@ -63,6 +64,9 @@ public class Prova extends AEntity {
 
     @AIField(type = AETypeField.enumType, widthEM = lar, enumClazz = AESchedule.class)
     public AESchedule schedule;
+
+    @AIField(type = AETypeField.localDateTime, typeDate = AETypeDate.iso8601)
+    public LocalDateTime creazione2;
 
 
     @Override

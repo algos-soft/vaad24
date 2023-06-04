@@ -14,6 +14,7 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
 
+import java.time.*;
 import java.time.format.*;
 import java.util.*;
 
@@ -78,10 +79,12 @@ public class ColumnService extends AbstractService {
 
         colonna = switch (type) {
             case text, enumString, enumType, linkDinamico, linkStatico -> grid.addColumn(propertyName).setSortable(true);
-            case  localDateTime, localDate, localTime -> grid.addColumn(propertyName).setSortable(true);
+            case localDateTime -> addDateTime(grid, entityClazz, propertyName).setSortable(true);
+            case localDate, localTime -> grid.addColumn(propertyName).setSortable(true);
+
             case integer, lungo -> grid.addColumn(propertyName).setSortable(true);
             case booleano -> addBoolean(grid, entityClazz, propertyName);
-            case listaH,listaV -> grid.addColumn(propertyName).setSortable(false);
+            case listaH, listaV -> grid.addColumn(propertyName).setSortable(false);
 
             //            case booleano -> {
             //                yield grid.addColumn(new ComponentRenderer<>(entity -> {
@@ -153,13 +156,18 @@ public class ColumnService extends AbstractService {
         //        }));//end of lambda expressions and anonymous inner class
 
         if (colonna != null) {
-            colonna.setWidth(width).setFlexGrow(0).setHeader(textService.primaMaiuscola(header));
+            colonna.setHeader(textService.primaMaiuscola(header));
+            if (textService.isEmpty(colonna.getWidth())) {
+                colonna.setWidth(width).setFlexGrow(0);
+            }
+
             if (textService.isEmpty(colonna.getKey())) {
                 colonna.setKey(propertyName);
             }
             if (flexGrow) {
                 colonna.setFlexGrow(1);
             }
+
             if (textService.isValid(sortProperty) && type != AETypeField.booleano) {
                 colonna.setSortable(true);
                 colonna.setSortProperty(sortProperty);
@@ -191,6 +199,28 @@ public class ColumnService extends AbstractService {
         }
     }
 
+    public Grid.Column<AEntity> addDateTime(final Grid grid, Class<? extends AEntity> entityClazz, final String propertyName) {
+        Grid.Column<AEntity> colonna = null;
+        final AETypeDate typeDate = annotationService.getTypeDate(entityClazz, propertyName);
+
+        colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+            Object value;
+            Label label = new Label();
+
+            try {
+                value = reflectionService.getPropertyValue((AEntity) entity, propertyName);
+                if (value instanceof LocalDateTime dateTime) {
+                    label.setText(dateService.get(dateTime, typeDate));
+                }
+            } catch (Exception unErrore) {
+                //                logger.error(unErrore.toString());
+            }
+
+            return label;
+        }));//end of lambda expressions and anonymous inner class
+
+        return colonna.setWidth(typeDate.getWidthEM());
+    }
 
     public Grid.Column<AEntity> addBoolean(final Grid grid, Class<? extends AEntity> entityClazz, final String propertyName) {
         Grid.Column<AEntity> colonna = null;

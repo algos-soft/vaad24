@@ -113,9 +113,9 @@ public class DateServiceTest extends AlgosTest {
         //--completa short
         //--normale orario short
     void iso8601(LocalDateTime dateTime, String iso8601) {
-        message = String.format("1 - %s%s%s", "Tag", FORWARD, AETypeData.iso8601.getTag());
+        message = String.format("1 - %s%s%s", "Tag", FORWARD, AETypeDate.iso8601.getTag());
         System.out.println(message);
-        message = String.format("1 - %s%s%s", "Pattern", FORWARD, AETypeData.iso8601.getPattern());
+        message = String.format("1 - %s%s%s", "Pattern", FORWARD, AETypeDate.iso8601.getPattern());
         System.out.println(message);
         System.out.println(VUOTA);
 
@@ -143,9 +143,9 @@ public class DateServiceTest extends AlgosTest {
         //--completa short
         //--normale orario short
     void standard(LocalDateTime dateTime, String iso8601, String standard, String corta, String normal, String completa, String completaShort, String normaleOrario) {
-        message = String.format("2 - %s%s%s", "Tag", FORWARD, AETypeData.standard.getTag());
+        message = String.format("2 - %s%s%s", "Tag", FORWARD, AETypeDate.standard.getTag());
         System.out.println(message);
-        message = String.format("2 - %s%s%s", "Pattern", FORWARD, AETypeData.standard.getPattern());
+        message = String.format("2 - %s%s%s", "Pattern", FORWARD, AETypeDate.standard.getPattern());
         System.out.println(message);
         System.out.println(VUOTA);
 
@@ -173,9 +173,9 @@ public class DateServiceTest extends AlgosTest {
         //--completa short
         //--normale orario short
     void dateShort(LocalDateTime dateTime, String iso8601, String standard, String dateShort) {
-        message = String.format("3 - %s%s%s", "Tag", FORWARD, AETypeData.dateShort.getTag());
+        message = String.format("3 - %s%s%s", "Tag", FORWARD, AETypeDate.dateShort.getTag());
         System.out.println(message);
-        message = String.format("3 - %s%s%s", "Pattern", FORWARD, AETypeData.dateShort.getPattern());
+        message = String.format("3 - %s%s%s", "Pattern", FORWARD, AETypeDate.dateShort.getPattern());
         System.out.println(message);
         System.out.println(VUOTA);
 
@@ -203,9 +203,9 @@ public class DateServiceTest extends AlgosTest {
         //--completa short
         //--normale orario short
     void normal(LocalDateTime dateTime, String iso8601, String standard, String dateShort, String normal) {
-        message = String.format("4 - %s%s%s", "Tag", FORWARD, AETypeData.dateNormal.getTag());
+        message = String.format("4 - %s%s%s", "Tag", FORWARD, AETypeDate.dateNormal.getTag());
         System.out.println(message);
-        message = String.format("4 - %s%s%s", "Pattern", FORWARD, AETypeData.dateNormal.getPattern());
+        message = String.format("4 - %s%s%s", "Pattern", FORWARD, AETypeDate.dateNormal.getPattern());
         System.out.println(message);
         System.out.println(VUOTA);
 
@@ -233,9 +233,9 @@ public class DateServiceTest extends AlgosTest {
         //--completa short
         //--normale orario short
     void completa(LocalDateTime dateTime, String iso8601, String standard, String dateShort, String normal, String completa) {
-        message = String.format("5 - %s%s%s", "Tag", FORWARD, AETypeData.dataCompleta.getTag());
+        message = String.format("5 - %s%s%s", "Tag", FORWARD, AETypeDate.dataCompleta.getTag());
         System.out.println(message);
-        message = String.format("5 - %s%s%s", "Pattern", FORWARD, AETypeData.dataCompleta.getPattern());
+        message = String.format("5 - %s%s%s", "Pattern", FORWARD, AETypeDate.dataCompleta.getPattern());
         System.out.println(message);
         System.out.println(VUOTA);
 
@@ -264,9 +264,9 @@ public class DateServiceTest extends AlgosTest {
         //--completa short
         //--normale orario short
     void completaShort(LocalDateTime dateTime, String iso8601, String standard, String dateShort, String normal, String completa, String completaShort) {
-        message = String.format("6 - %s%s%s", "Tag", FORWARD, AETypeData.dataCompletaShort.getTag());
+        message = String.format("6 - %s%s%s", "Tag", FORWARD, AETypeDate.dataCompletaShort.getTag());
         System.out.println(message);
-        message = String.format("6 - %s%s%s", "Pattern", FORWARD, AETypeData.dataCompletaShort.getPattern());
+        message = String.format("6 - %s%s%s", "Pattern", FORWARD, AETypeDate.dataCompletaShort.getPattern());
         System.out.println(message);
         System.out.println(VUOTA);
 
@@ -295,9 +295,9 @@ public class DateServiceTest extends AlgosTest {
         //--completa short
         //--normale orario short
     void normaleOrario(LocalDateTime dateTime, String iso8601, String standard, String dateShort, String normal, String completa, String completaShort, String normaleOrario) {
-        message = String.format("7 - %s%s%s", "Tag", FORWARD, AETypeData.normaleOrario.getTag());
+        message = String.format("7 - %s%s%s", "Tag", FORWARD, AETypeDate.normaleOrario.getTag());
         System.out.println(message);
-        message = String.format("7 - %s%s%s", "Pattern", FORWARD, AETypeData.normaleOrario.getPattern());
+        message = String.format("7 - %s%s%s", "Pattern", FORWARD, AETypeDate.normaleOrario.getPattern());
         System.out.println(message);
         System.out.println(VUOTA);
 
@@ -321,7 +321,7 @@ public class DateServiceTest extends AlgosTest {
         System.out.println(LOCAL_DATE_TIME_DUE);
         System.out.println(VUOTA);
 
-        AETypeData.getAllEnums().forEach(type -> {
+        AETypeDate.getAllEnums().forEach(type -> {
             ottenuto = service.get(LOCAL_DATE_TIME_DUE, type);
             message = String.format("%s%s%s%s%s%s", type.getTag(), " (", type.getPattern(), ")", FORWARD, ottenuto);
             System.out.println(message);

@@ -358,7 +358,7 @@ public class DateService extends AbstractService {
      *
      * @return la data sotto forma di stringa
      */
-    public String get(LocalDateTime localDateTime, AETypeData pattern) {
+    public String get(LocalDateTime localDateTime, AETypeDate pattern) {
         return get(localDateTime, pattern.getPattern());
 //        if (pattern.isSenzaTime()) {
 //            return VUOTA;
@@ -379,7 +379,7 @@ public class DateService extends AbstractService {
      *
      * @return la data sotto forma di stringa
      */
-    public String get(LocalDate localDate, AETypeData pattern) {
+    public String get(LocalDate localDate, AETypeDate pattern) {
         if (pattern.isSenzaTime()) {
             return get(localDate, pattern.getPattern());
         }
@@ -399,7 +399,7 @@ public class DateService extends AbstractService {
      *
      * @return la data sotto forma di stringa
      */
-    public String get(LocalTime localTime, AETypeData pattern) {
+    public String get(LocalTime localTime, AETypeDate pattern) {
         return get(localTime, pattern.getPattern());
     }
 
@@ -475,7 +475,7 @@ public class DateService extends AbstractService {
      * @return testo standard ISO senza OffsetSeconds
      */
     public String getISO(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeData.iso8601.getPattern(), LOCALE));
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.iso8601.getPattern(), LOCALE));
     }
 
     /**
@@ -490,7 +490,7 @@ public class DateService extends AbstractService {
      * @return testo standard ISO senza OffsetSeconds
      */
     public String getStandard(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeData.standard.getPattern(), LOCALE));
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.standard.getPattern(), LOCALE));
     }
 
     /**
@@ -507,7 +507,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getShort(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeData.dateShort.getPattern(), LOCALE));
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.dateShort.getPattern(), LOCALE));
     }
 
 
@@ -523,7 +523,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getNormale(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeData.dateNormal.getPattern(), LOCALE));
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.dateNormal.getPattern(), LOCALE));
     }
 
 
@@ -539,7 +539,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getLunga(LocalDate localDate) {
-        return get(localDate, AETypeData.dateLong);
+        return get(localDate, AETypeDate.dateLong);
     }
 
 
@@ -555,7 +555,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getCompleta(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeData.dataCompleta.getPattern(), LOCALE));
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.dataCompleta.getPattern(), LOCALE));
     }
 
     /**
@@ -570,7 +570,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getCompletaShort(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeData.dataCompletaShort.getPattern(), LOCALE));
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.dataCompletaShort.getPattern(), LOCALE));
     }
 
 
@@ -586,7 +586,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getNormaleOrario(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeData.normaleOrario.getPattern(), LOCALE));
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.normaleOrario.getPattern(), LOCALE));
     }
 
 
@@ -602,7 +602,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getDataOrarioCompleta(LocalDateTime localDateTime) {
-        return get(localDateTime, AETypeData.completaOrario);
+        return get(localDateTime, AETypeDate.completaOrario);
     }
 
 
@@ -618,7 +618,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getDataOrarioBreve(LocalDateTime localDateTime) {
-        return get(localDateTime, AETypeData.breveOrario);
+        return get(localDateTime, AETypeDate.breveOrario);
     }
 
 
@@ -644,7 +644,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getOrario(LocalTime localTime) {
-        return localTime != null ? localTime.format(DateTimeFormatter.ofPattern(AETypeData.orario.getPattern(), LOCALE)) : VUOTA;
+        return localTime != null ? localTime.format(DateTimeFormatter.ofPattern(AETypeDate.orario.getPattern(), LOCALE)) : VUOTA;
     }
 
 
@@ -674,7 +674,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getOrarioCompleto(LocalDateTime localDateTime) {
-        return localDateTimeToLocalTime(localDateTime).format(DateTimeFormatter.ofPattern(AETypeData.orarioLungo.getPattern(), LOCALE));
+        return localDateTimeToLocalTime(localDateTime).format(DateTimeFormatter.ofPattern(AETypeDate.orarioLungo.getPattern(), LOCALE));
     }
 
     /**
@@ -702,7 +702,7 @@ public class DateService extends AbstractService {
      */
     public Date oldDateFromISO(String isoStringa) {
         Date data = null;
-        DateFormat format = new SimpleDateFormat(AETypeData.iso8601.getPattern());
+        DateFormat format = new SimpleDateFormat(AETypeDate.iso8601.getPattern());
 
         try {
             data = format.parse(isoStringa);

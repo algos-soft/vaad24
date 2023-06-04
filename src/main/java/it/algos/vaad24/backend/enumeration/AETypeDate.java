@@ -12,7 +12,7 @@ import java.util.*;
  * Date: gio, 27-set-2018
  * Time: 16:23
  */
-public enum AETypeData {
+public enum AETypeDate {
 
     /**
      * Usata di default <br>
@@ -142,12 +142,12 @@ public enum AETypeData {
     private int width;
 
 
-    AETypeData(String tag, String pattern, String esempio, int width) {
+    AETypeDate(String tag, String pattern, String esempio, int width) {
         this(tag, pattern, esempio, width, true);
     }
 
 
-    AETypeData(String tag, String pattern, String esempio, int width, boolean senzaTime) {
+    AETypeDate(String tag, String pattern, String esempio, int width, boolean senzaTime) {
         this.tag = tag;
         this.pattern = pattern;
         this.esempio = esempio;
@@ -155,7 +155,7 @@ public enum AETypeData {
         this.senzaTime = senzaTime;
     }
 
-    public static List<AETypeData> getAllEnums() {
+    public static List<AETypeDate> getAllEnums() {
         return Arrays.stream(values()).toList();
     }
 
