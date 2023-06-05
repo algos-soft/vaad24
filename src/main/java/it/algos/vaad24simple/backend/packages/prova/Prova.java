@@ -68,7 +68,6 @@ public class Prova extends AEntity {
     @AIField(type = AETypeField.localDateTime, typeDate = AETypeDate.iso8601)
     public LocalDateTime creazione2;
 
-
     @Override
     public String toString() {
         return descrizione;
