@@ -5,7 +5,10 @@ import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
+
+import java.util.*;
 
 /**
  * Project vaadin23
@@ -97,5 +100,15 @@ public class UtilityService extends AbstractService {
         return String.format("%s%s%s%s%s", companySigla, SPAZIO, userName, SPAZIO, addressIP);
     }
 
+    public String getFirstSortProperty(final Sort sort) {
+        String property = VUOTA;
+        List obj = sort != null ? sort.stream().toList() : null;
+
+        if (obj != null && obj.size() > 0 && obj.get(0) instanceof Sort.Order sortOrder) {
+            property = sortOrder.getProperty();
+        }
+
+        return property;
+    }
 
 }

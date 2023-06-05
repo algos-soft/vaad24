@@ -2,11 +2,13 @@ package it.algos.utility;
 
 import it.algos.*;
 import it.algos.base.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
+import it.algos.vaad24.backend.service.*;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
-import org.springframework.test.context.junit.jupiter.*;
+import org.springframework.data.domain.*;
 
 import java.util.*;
 
@@ -21,7 +23,7 @@ import java.util.*;
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
  * Nella superclasse AlgosTest vengono regolati tutti i link incrociati tra le varie classi singleton di service <br>
  */
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
@@ -29,6 +31,8 @@ import java.util.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UtilityTest extends AlgosTest {
 
+    @Autowired
+    public UtilityService utilityService;
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -98,6 +102,17 @@ public class UtilityTest extends AlgosTest {
         System.out.println(ottenutoArray);
     }
 
+    @Test
+    @Order(2)
+    @DisplayName("2 - getSortProperty")
+    void getSortProperty() {
+        Sort sort = Sort.by(FIELD_NAME_ORDINE);
+
+        ottenuto = utilityService.getFirstSortProperty(sort);
+        //        org.junit.jupiter.api.Assertions.assertNotNull();
+        org.junit.jupiter.api.Assertions.assertTrue(textService.isValid(ottenuto));
+        org.junit.jupiter.api.Assertions.assertEquals(FIELD_NAME_ORDINE, ottenuto);
+    }
 
     /**
      * Qui passa al termine di ogni singolo test <br>

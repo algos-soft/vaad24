@@ -360,12 +360,12 @@ public class DateService extends AbstractService {
      */
     public String get(LocalDateTime localDateTime, AETypeDate pattern) {
         return get(localDateTime, pattern.getPattern());
-//        if (pattern.isSenzaTime()) {
-//            return VUOTA;
-//        }
-//        else {
-//            return get(localDateTime, pattern.getPattern());
-//        }
+        //        if (pattern.isSenzaTime()) {
+        //            return VUOTA;
+        //        }
+        //        else {
+        //            return get(localDateTime, pattern.getPattern());
+        //        }
     }
 
 
@@ -713,6 +713,18 @@ public class DateService extends AbstractService {
         return data;
     }
 
+    /**
+     * Costruisce una data da una stringa in formato ISO 8601
+     *
+     * @param isoStringa da leggere
+     *
+     * @return data costruita
+     */
+    public LocalDateTime dateTimeFromISO(String isoStringa) {
+        Date data = oldDateFromISO(isoStringa);
+        return dateToLocalDateTime(data);
+    }
+
 
     /**
      * Costruisce una data completa da una stringa in formato ISO 8601
@@ -724,18 +736,18 @@ public class DateService extends AbstractService {
     public LocalDateTime dateFromISO(String isoStringa) {
         Date data = oldDateFromISO(isoStringa);
         return data != null ? dateToLocalDateTime(data) : null;
-//        ;
-//        //        LocalDateTime format = new LocalDateTimeDeserializer(AETypeData.iso8601.getPattern());
-//        //        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeData.iso8601.getPattern(), LOCALE));
-//
-//        //        try {
-//        //            data = format.parse(isoStringa);
-//        //        } catch (Exception unErrore) {
-//        //            logService.error(unErrore, this.getClass(), "dateFromISO");
-//        //
-//        //        }
-//
-//        return data;
+        //        ;
+        //        //        LocalDateTime format = new LocalDateTimeDeserializer(AETypeData.iso8601.getPattern());
+        //        //        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeData.iso8601.getPattern(), LOCALE));
+        //
+        //        //        try {
+        //        //            data = format.parse(isoStringa);
+        //        //        } catch (Exception unErrore) {
+        //        //            logService.error(unErrore, this.getClass(), "dateFromISO");
+        //        //
+        //        //        }
+        //
+        //        return data;
     }
 
 }

@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.*;
 import org.springframework.test.context.junit.jupiter.*;
 
 import java.time.*;
+import java.util.*;
 import java.util.stream.*;
 
 /**
@@ -328,6 +329,28 @@ public class DateServiceTest extends AlgosTest {
             System.out.println(VUOTA);
         });
     }
+
+    @Test
+    @Order(9)
+    @DisplayName("9 - oldDateFromISO")
+    void oldDateFromISO() {
+        System.out.println("9 - Recupera la data dal timestamp del server");
+        System.out.println(VUOTA);
+        System.out.println(LOCAL_DATE_TIME_DUE);
+        System.out.println(VUOTA);
+
+        sorgente = "2023-06-01T14:44:58Z";
+        Date oldData = service.oldDateFromISO(sorgente);
+        ottenuto = service.getNormaleOrario(service.dateToLocalDateTime(oldData));
+        message = String.format("%s%s%s", "Risultato", FORWARD, ottenuto);
+        System.out.println(message);
+
+        LocalDateTime newData = service.dateTimeFromISO(sorgente);
+        ottenuto = service.getNormaleOrario(newData);
+        message = String.format("%s%s%s", "Risultato", FORWARD, ottenuto);
+        System.out.println(message);
+    }
+
 
     /**
      * Qui passa al termine di ogni singolo test <br>
