@@ -219,7 +219,7 @@ public class ColumnService extends AbstractService {
             return label;
         }));//end of lambda expressions and anonymous inner class
 
-        return colonna.setWidth(typeDate.getWidthEM());
+        return colonna.setWidth(typeDate.getWidthEM()).setFlexGrow(0);
     }
 
     public Grid.Column<AEntity> addBoolean(final Grid grid, Class<? extends AEntity> entityClazz, final String propertyName) {

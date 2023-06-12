@@ -736,7 +736,7 @@ public abstract class CrudBackend extends AbstractService {
 
         query.skip(offset);
         query.limit(limit);
-//        query.with(getSortOrder()); @todo Non funziona
+        query.with(getSortOrder());
         lista = mongoService.mongoOp.find(query, entityClazz);
 
         return lista != null ? lista.stream() : null;

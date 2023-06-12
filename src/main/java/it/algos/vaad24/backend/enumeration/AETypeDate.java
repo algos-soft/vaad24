@@ -109,7 +109,7 @@ public enum AETypeDate {
      * Pattern: d-MMM-yy H:mm <br>
      * Esempio: 18-nov-17 13:45 <br>
      */
-    normaleOrario("data e orario", "d-MMM-yy H:mm", "18-nov-17 13:45", 10, false),
+    normaleOrario("data e orario", "d-MMM-yy H:mm", "18-nov-17 13:45", 11, false),
 
     /**
      * ISO8601: yyyy-MM-dd'T'HH:mm:ss.SSSXXX <br>

@@ -204,6 +204,9 @@ mongorestore -d wiki24 /Users/guidoceresa/Desktop/dump/wiki24 mongorestore -d wi
  sudo mongodump --db wiki24 --out /Users/gac/Desktop/dump
  mongorestore -d wiki24 /Users/gac/Desktop/dump/wiki24
  mongorestore -d wiki24 /Users/gac/dump/wiki24
+cd Desktop
+cd wiki
+java -jar -Dserver.port=8090 wiki24-1.0.jar
 
 == Criteria ==
 
@@ -220,4 +223,3 @@ mongorestore -d wiki24 /Users/guidoceresa/Desktop/dump/wiki24 mongorestore -d wi
  deleteButton.getStyle().set("margin-left", "auto");
  annullaButton.getElement().setAttribute("theme", "secondary");
  saveButton.getElement().setAttribute("theme", "primary");
-
