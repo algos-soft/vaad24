@@ -338,7 +338,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
 
         grid.addColumns("descrizione");
 
-        String larCode = "12em";
+        String larCode = "14em";
         String larType = "9em";
         String larValue = "10em";
         String larDesc = "30em";
