@@ -659,7 +659,6 @@ public abstract class AlgosTest {
         lista = lista != null && lista.size() > 20 ? lista.subList(0, 10) : lista;
         Map<String, Object> mappa = result.getMappa();
 
-        System.out.println(VUOTA);
         System.out.println("Risultato");
         System.out.println(String.format("Valido: %s", result.isValido() ? "true" : "false"));
         System.out.println(String.format("Eseguito: %s", result.isEseguito() ? "true" : "false"));

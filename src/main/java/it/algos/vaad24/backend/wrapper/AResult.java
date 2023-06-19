@@ -85,7 +85,7 @@ public class AResult {
     }
 
     public static AResult build() {
-        return new AResult().inizio().nonEseguito().typeResult(AETypeResult.indeterminato);
+        return new AResult().inizio().nonEseguito().typeResult(AETypeResult.indeterminato).nonValido();
     }
 
     public static AResult valido() {

@@ -906,7 +906,6 @@ public abstract class CrudBackend extends AbstractService {
         String collectionName = annotationService.getCollectionName(entityClazz);
         AResult result = AResult.build().method("resetOnlyEmpty");
         String clazzName = entityClazz.getSimpleName();
-        String backendName = clazzName + SUFFIX_BACKEND;
         String elementi;
         String message;
 
@@ -928,7 +927,7 @@ public abstract class CrudBackend extends AbstractService {
         else {
             elementi = textService.format(count());
             message = String.format("La collection '%s' della classe [%s] esisteva già, non era vuota e non è stata toccata. Contiene %s elementi.", collectionName, clazzName, elementi);
-            result = result.typeLog(AETypeLog.resetOnlyEmpty).typeResult(AETypeResult.collectionPiena).intValue(count());
+            result = result.valido(true).typeLog(AETypeLog.resetOnlyEmpty).typeResult(AETypeResult.collectionPiena).intValue(count());
             logService.debug(new WrapLog().message(message).type(AETypeLog.resetOnlyEmpty));
             return result;
         }
