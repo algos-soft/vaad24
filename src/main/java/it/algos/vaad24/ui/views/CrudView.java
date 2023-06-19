@@ -324,6 +324,18 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         this.add(alertPlaceHolder);
     }
 
+    public Button fixButton(Button button) {
+        button.getStyle().set("color", "blue");
+        button.getStyle().set("font-weight", "bold");
+        button.getStyle().set("margin-left", "0");
+        button.getStyle().set("margin-top", "0");
+        button.getStyle().set("margin-bottom", "0");
+        button.getStyle().set("background-color", "transparent");
+        button.setHeight("1.5rem");
+
+        return button;
+    }
+
     /**
      * Costruisce un layout per i componenti al Top della view <br>
      * I componenti possono essere (nell'ordine):

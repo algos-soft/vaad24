@@ -237,7 +237,7 @@ public class VaadBoot {
      * Non deve essere sovrascritto <br>
      */
     public void creaPreferenzeMongoDB() {
-        preferenzaBackend.resetOnlyEmpty();
+        preferenzaBackend.resetDownload();
     }
 
     public void allResetOnlyEmpty() {

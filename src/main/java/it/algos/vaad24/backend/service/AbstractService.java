@@ -10,6 +10,7 @@ import org.springframework.context.*;
 import org.springframework.core.env.*;
 
 import javax.annotation.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -168,6 +169,7 @@ public abstract class AbstractService {
      */
     @Autowired
     public PreferenzaBackend preferenzaBackend;
+
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata dal framework SpringBoot/Vaadin usando il metodo setter() <br>
@@ -223,7 +225,7 @@ public abstract class AbstractService {
     @PostConstruct
     private void postConstruct() {
         fixAllServices();
-//        fixLinkIncrociati();
+        fixLinkIncrociati();
         fixLinkPreferenze();
     }
 
@@ -253,7 +255,8 @@ public abstract class AbstractService {
     protected void fixLinkIncrociati() {
         String publicFieldName = VUOTA;
         String message;
-        String clazzName;
+        String clazzName = VUOTA;
+        Field field;
 
         if (logService.slf4jLogger == null) {
             logService.postConstruct();
@@ -263,7 +266,8 @@ public abstract class AbstractService {
             for (AbstractService valoreLinkato : SERVIZI) {
                 if (valoreLinkato != servizio) {
                     try {
-                        publicFieldName = textService.primaMinuscola(valoreLinkato.getClass().getSimpleName());
+                        clazzName = valoreLinkato.getClass().getSimpleName();
+                        publicFieldName = textService.primaMinuscola(clazzName);
                     } catch (Exception unErrore) {
                         message = String.format("Non sono riuscito a trovare il field %s nel service %s", valoreLinkato, valoreLinkato);
                         System.out.println(message);
@@ -271,8 +275,9 @@ public abstract class AbstractService {
                     }
 
                     try {
-                        reflectionService.setPropertyValue(servizio, publicFieldName, valoreLinkato);
-
+                        publicFieldName = publicFieldName.replaceAll(FIELD_NAME_ID_CON, FIELD_NAME_ID_SENZA);
+                        field = valoreLinkato.getClass().getField(publicFieldName);
+                        field.set(servizio, valoreLinkato);
                     } catch (Exception unErrore) {
 
                         clazzName = valoreLinkato.getClass().getSimpleName();

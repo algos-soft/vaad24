@@ -40,8 +40,35 @@ public class Prova extends AEntity {
     private static final double lar = 14;
 
     @NotEmpty
-    @AIField(type = AETypeField.text, widthEM = 30, focus = true, search = true)
+    @AIField(type = AETypeField.text, widthEM = 20, focus = true, search = true)
     public String descrizione;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.boolGrezzo)
+    public boolean boolGrezzo;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkBox)
+    public boolean checkBox;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkIcon)
+    public boolean checkIcon;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkIconReverse)
+    public boolean checkIconReverse;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo)
+    public boolean yesNo;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNoReverse)
+    public boolean yesNoReverse;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNoBold)
+    public boolean yesNoBold;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.thumb)
+    public boolean thumb;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.thumbReverse)
+    public boolean thumbReverse;
 
     @DBRef
     @AIField(type = AETypeField.linkDinamico, widthEM = lar, linkClazz = ContinenteBackend.class)

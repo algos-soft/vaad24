@@ -58,7 +58,7 @@ public class ProvaView extends CrudView {
         super.fixPreferenze();
         usaBottoneReset = true;
 
-        super.gridPropertyNamesList = Arrays.asList("descrizione", "continenteLinkDinamicoDBRef", "viaLinkStatico", "creazione2","listaVie", "listaContinenti", "typeString", "versione", "schedule");
+        super.gridPropertyNamesList = Arrays.asList("descrizione", "boolGrezzo","checkBox","checkIcon","checkIconReverse","yesNo","yesNoReverse","yesNoBold","thumb","thumbReverse","continenteLinkDinamicoDBRef", "viaLinkStatico", "creazione2","listaVie", "listaContinenti", "typeString", "versione", "schedule");
     }
 
     /**
