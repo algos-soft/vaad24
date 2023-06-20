@@ -60,7 +60,7 @@ public class VaadCost {
 
     public static final String PROJECT_VAADIN23 = "vaadin23";
 
-        public static final String PROJECT_VAADIN24 = "vaad24";
+    public static final String PROJECT_VAADIN24 = "vaad24";
 
     public static final String TAG_LOG_ADMIN = "vaad24.admin";
 
@@ -79,12 +79,12 @@ public class VaadCost {
     public static final String TAG_HTML_LINE_HEIGHT = "line-height";
 
     public static final String TAG_HTML_FONT_STYLE = "font-style";
+    public static final String VUOTA = "";
 
-    public static final String TAG_ROUTE_ALIAS_PARTE_PER_PRIMA = "";
+    public static final String TAG_ROUTE_ALIAS_PARTE_PER_PRIMA = VUOTA;
 
     public static final String TAG_UTILITY = "utility";
 
-    public static final String VUOTA = "";
 
     public static final String CAPO = "\n";
 
@@ -93,6 +93,7 @@ public class VaadCost {
     public static final String TAB = "\t";
 
     public static final String ASTERISCO = "*";
+    public static final String ASTERISCO_REGEX = "\\*";
 
     public static final String CAPO_ASTERISCO = "\n*";
 
