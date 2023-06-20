@@ -1057,6 +1057,19 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println(VUOTA);
 
         if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+            message = String.format("Il metodo usato da questo test presuppone che esista una property %s", FIELD_NAME_ORDINE);
+            System.out.println(message);
+
+            message = String.format("Nella entityClazz [%s] la property %s non è prevista", clazzName, FIELD_NAME_ORDINE);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo la property %s", FIELD_NAME_ORDINE);
+            System.out.println(message);
+            return;
+        }
+
+        if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
             message = String.format("Non esiste la property '%s' nella classe [%s]", FIELD_NAME_ORDINE, entityClazz.getSimpleName());
             System.out.println(message);
             return;
