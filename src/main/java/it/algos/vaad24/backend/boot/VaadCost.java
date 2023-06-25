@@ -79,6 +79,7 @@ public class VaadCost {
     public static final String TAG_HTML_LINE_HEIGHT = "line-height";
 
     public static final String TAG_HTML_FONT_STYLE = "font-style";
+
     public static final String VUOTA = "";
 
     public static final String TAG_ROUTE_ALIAS_PARTE_PER_PRIMA = VUOTA;
@@ -93,6 +94,7 @@ public class VaadCost {
     public static final String TAB = "\t";
 
     public static final String ASTERISCO = "*";
+
     public static final String ASTERISCO_REGEX = "\\*";
 
     public static final String CAPO_ASTERISCO = "\n*";

@@ -13,7 +13,7 @@ import it.algos.vaad24.backend.enumeration.*;
  */
 public class Avviso {
 
-    public static final int DURATA = 2000;
+    public static final int DURATA = 3000;
 
     public static final Notification.Position POSIZIONE = Notification.Position.BOTTOM_START;
 

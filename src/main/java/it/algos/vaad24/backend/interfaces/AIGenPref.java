@@ -16,6 +16,8 @@ public interface AIGenPref {
 
     void setPreferenceService(PreferenceService preferenceService);
 
+    PreferenceService getPreferenceService();
+
     void setLogger(LogService logger);
 
     Object get();
@@ -27,6 +29,7 @@ public interface AIGenPref {
     boolean is();
 
     public int getInt();
+
     public BigDecimal getDecimal();
 
     public String getEnumAll();

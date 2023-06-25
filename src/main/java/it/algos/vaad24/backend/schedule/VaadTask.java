@@ -1,6 +1,7 @@
 package it.algos.vaad24.backend.schedule;
 
 import com.vaadin.flow.spring.annotation.*;
+import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.interfaces.*;
@@ -13,6 +14,7 @@ import org.springframework.context.*;
 import org.springframework.context.annotation.Scope;
 
 import java.time.*;
+import java.util.*;
 
 /**
  * Project vaad24
@@ -130,5 +132,48 @@ public class VaadTask extends Task {
         logger.info(new WrapLog().type(AETypeLog.task).message(message));
     }
 
-}
 
+    public String info() {
+        String message;
+        String flagText = TASK_NO_FLAG + TASK_FLAG_SEMPRE_ATTIVA;
+        String clazzName = this.getClass().getSimpleName();
+        String desc = this.getDescrizioneTask();
+        AESchedule type = this.getTypeSchedule();
+        String pattern = type.getPattern();
+        String nota = type.getNota();
+        int nextDays = this.getTypeSchedule().getGiorniNext();
+        AIGenPref flagTask = this.getFlagAttivazione();
+        if (flagTask != null && flagTask.getPreferenceService() != null) {
+            if (flagTask.is()) {
+                flagText = flagTask.getKeyCode() + TASK_FLAG_ATTIVA;
+            }
+            else {
+                flagText = flagTask.getKeyCode() + TASK_FLAG_DISATTIVA;
+            }
+        }
+
+        message = String.format("%s [%s] %s (+%s)%s Eseguita %s %s", clazzName, pattern, flagText, nextDays, FORWARD, nota, desc);
+        return message;
+    }
+
+    public static String info(Class taskNonIstanziata) {
+        VaadTask task = getTask(taskNonIstanziata);
+        return task != null ? task.info() : VUOTA;
+    }
+
+
+    public static VaadTask getTask(Class taskNonIstanziata) {
+        List<VaadTask> listaTasks = VaadVar.taskList;
+
+        if (listaTasks != null) {
+            for (VaadTask task : listaTasks) {
+                if (task.getClass().getSimpleName().equals(taskNonIstanziata.getSimpleName())) {
+                    return task;
+                }
+            }
+        }
+
+        return null;
+    }
+
+}

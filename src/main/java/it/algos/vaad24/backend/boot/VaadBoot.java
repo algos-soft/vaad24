@@ -554,18 +554,18 @@ public class VaadBoot {
          */
         VaadVar.serverConfig = WebService.URL_BASE_VAADIN24_CONFIG;
 
-//        /**
-//         * File name per i logger nella directory 'log' <br>
-//         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-//         */
-//        try {
-//            property = "logging.algos.admin";
-//            VaadVar.logbackName = Objects.requireNonNull(environment.getProperty(property));
-//        } catch (Exception unErrore) {
-//            String message = String.format("Non ho trovato la property %s nelle risorse", property);
-//            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-//            VaadVar.logbackName = TAG_LOG_ADMIN;
-//        }
+        //        /**
+        //         * File name per i logger nella directory 'log' <br>
+        //         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+        //         */
+        //        try {
+        //            property = "logging.algos.admin";
+        //            VaadVar.logbackName = Objects.requireNonNull(environment.getProperty(property));
+        //        } catch (Exception unErrore) {
+        //            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+        //            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        //            VaadVar.logbackName = TAG_LOG_ADMIN;
+        //        }
 
         /**
          * Nome del database mongo collegato <br>
@@ -705,37 +705,10 @@ public class VaadBoot {
      */
     public void fixSchedule() {
         String message;
-        String clazzName;
-        AESchedule type;
-        String desc;
-        String pattern;
-        String nota;
-        String flagText;
-        AIGenPref flagTask;
-        int nextDays = 0;
 
         if (VaadVar.taskList != null && VaadVar.taskList.size() > 0) {
             for (VaadTask task : VaadVar.taskList) {
-                clazzName = task.getClass().getSimpleName();
-                desc = task.getDescrizioneTask();
-                type = task.getTypeSchedule();
-                pattern = type.getPattern();
-                nota = type.getNota();
-                nextDays = task.getTypeSchedule().getGiorniNext();
-                flagTask = task.getFlagAttivazione();
-                if (flagTask == null) {
-                    flagText = TASK_NO_FLAG + TASK_FLAG_SEMPRE_ATTIVA;
-                }
-                else {
-                    flagTask.setPreferenceService(preferenceService);
-                    if (flagTask.is()) {
-                        flagText = flagTask.getKeyCode() + TASK_FLAG_ATTIVA;
-                    }
-                    else {
-                        flagText = flagTask.getKeyCode() + TASK_FLAG_DISATTIVA;
-                    }
-                }
-                message = String.format("%s [%s] %s (+%s)%s%s; eseguita %s", clazzName, pattern, flagText, nextDays, FORWARD, desc, nota);
+                message = task.info();
                 logger.info(new WrapLog().message(message).type(AETypeLog.schedule));
             }
         }
