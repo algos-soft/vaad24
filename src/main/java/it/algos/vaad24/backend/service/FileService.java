@@ -2163,7 +2163,7 @@ public class FileService extends AbstractService {
     }
 
     public AResult checkFileDirectory(final String methodName, final File fileDirectoryToBeChecked) {
-        AResult result = AResult.build().method(methodName).target(fileDirectoryToBeChecked.getAbsolutePath());
+        AResult result = AResult.build().method(methodName).valido(true).target(fileDirectoryToBeChecked.getAbsolutePath());
         String message;
 
         if (fileDirectoryToBeChecked == null) {
