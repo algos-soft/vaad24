@@ -1,0 +1,6 @@
+    /**
+     * flag @VALIDONAME@ (facoltativo, di default false) <br>
+     */
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolField.checkBox, caption = "@VALIDONAME@")
+    @AIColumn(typeBool = AETypeBoolCol.checkIcon, header = "OK", widthEM = WIDTH)
+    public boolean @VALIDONAME@;

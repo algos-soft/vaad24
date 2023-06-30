@@ -1,0 +1,15 @@
+    /**
+     * Crea e registra una entityBean solo se non esisteva <br>
+     * Deve esistere la keyPropertyName della collezione, in modo da poter creare una nuova entityBean <br>
+     * solo col valore di un parametro da usare anche come keyID <br>
+     * Controlla che non esista già una entityBean con lo stesso keyID <br>
+     * Deve esistere il metodo newEntity(keyPropertyValue) con un solo parametro <br>
+     *
+     * @param keyPropertyValue obbligatorio
+     *
+     * @return la nuova entityBean appena creata e salvata
+     */
+    @Override
+    public @ENTITYUPPER@ creaIfNotExist(final String keyPropertyValue) {
+        return (@ENTITYUPPER@) checkAndSave(newEntity(keyPropertyValue));
+    }

@@ -1,0 +1,9 @@
+
+    /**
+     * @DESCRIZIONENAME@ (facoltativo, non unico) <br>
+     */
+    @Indexed(unique = false, direction = IndexDirection.DESCENDING)
+    @Size(min = 2, max = 50)
+    @AIField(type = AETypeField.text, firstCapital = true, caption = "@DESCRIZIONENAME@", widthEM = 24)
+    @AIColumn(header = "@DESCRIZIONENAME@", flexGrow = true)
+    public String @DESCRIZIONENAME@;

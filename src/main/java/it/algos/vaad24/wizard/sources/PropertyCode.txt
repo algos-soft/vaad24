@@ -1,0 +1,9 @@
+    /**
+     * @CODENAME@ di riferimento (obbligatorio, unico) <br>
+     */
+    @NotBlank(message = "Il @CODENAME@ è obbligatorio")
+    @Indexed(unique = true, direction = IndexDirection.DESCENDING)
+    @Size(min = 2, max = 50)
+    @AIField(type = AETypeField.text, required = true, focus = true, caption = "@CODENAME@", widthEM = 8)
+    @AIColumn(header = "@CODENAME@", widthEM = 8)
+    public String @CODENAME@;

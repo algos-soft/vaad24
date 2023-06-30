@@ -1,0 +1,7 @@
+   /**
+     * @ORDINENAME@ (obbligatorio, unico) <br>
+     */
+    @Indexed(unique = true, direction = IndexDirection.DESCENDING)
+    @AIField(type = AETypeField.integer, caption = "@ORDINENAME@", typeNum = AETypeNum.positiviOnly, widthEM = 3)
+    @AIColumn(header = "#", widthEM = 2)
+    public int @ORDINENAME@;
