@@ -2186,7 +2186,7 @@ public class FileService extends AbstractService {
     }
 
     public AResult checkPath(final String methodName, final String absolutePathToBeChecked) {
-        return checkPath(AResult.build().method(methodName), absolutePathToBeChecked);
+        return checkPath(AResult.build().valido(true).method(methodName), absolutePathToBeChecked);
     }
 
     public AResult checkPath(final AResult result, final String absolutePathToBeChecked) {
