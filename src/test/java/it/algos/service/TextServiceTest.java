@@ -78,7 +78,6 @@ public class TextServiceTest extends AlgosTest {
     }
 
 
-
     //--src
     //--risultato
     //--length
@@ -123,7 +122,6 @@ public class TextServiceTest extends AlgosTest {
                 Arguments.of(" alfetta ", "...", 3)
         );
     }
-
 
 
     /**
@@ -208,6 +206,26 @@ public class TextServiceTest extends AlgosTest {
         System.out.println(message);
         assertEquals(previsto, ottenuto);
     }
+
+
+    @Test
+    @Order(5)
+    @DisplayName("5 - copia")
+    void getLabelHost() {
+        System.out.println("1 - copia");
+        System.out.println(VUOTA);
+
+        sorgente3 = "nome";
+
+        sorgente = "asia";
+        continente = service.levaPunti(sorgente);
+        assertNotNull(continente);
+
+        sorgente2 = "piazza";
+        via = viaBackend.findById(sorgente2);
+        assertNotNull(via);
+    }
+
 
     /**
      * Qui passa al termine di ogni singolo test <br>

@@ -119,6 +119,10 @@ public enum SPref implements AIGenPref {
     public void setPreferenceService(PreferenceService preferenceService) {
         this.preferenceService = preferenceService;
     }
+    @Override
+    public PreferenceService getPreferenceService() {
+        return preferenceService ;
+    }
 
     @Override
     public void setLogger(LogService logger) {

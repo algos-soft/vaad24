@@ -9,9 +9,9 @@ package it.algos.vaad24.backend.wrapper;
  */
 public class WrapDueStringhe {
 
-    private String prima;
+    public String prima;
 
-    private String seconda;
+    public String seconda;
 
 
     public WrapDueStringhe(String prima, String seconda) {
@@ -19,24 +19,5 @@ public class WrapDueStringhe {
         this.seconda = seconda;
     }// end of constructor
 
-
-    public String getPrima() {
-        return prima;
-    }// end of method
-
-
-    public void setPrima(String prima) {
-        this.prima = prima;
-    }// end of method
-
-
-    public String getSeconda() {
-        return seconda;
-    }// end of method
-
-
-    public void setSeconda(String seconda) {
-        this.seconda = seconda;
-    }// end of method
 
 }// end of class
