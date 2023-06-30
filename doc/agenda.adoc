@@ -223,3 +223,30 @@ java -jar -Dserver.port=8090 wiki24-1.0.jar
  deleteButton.getStyle().set("margin-left", "auto");
  annullaButton.getElement().setAttribute("theme", "secondary");
  saveButton.getElement().setAttribute("theme", "primary");
+
+
+== AnchorTarget ==
+ public enum AnchorTarget {
+ /**
+ * Remove the target value. This has the same effect as <code>SELF</code>.
+ */
+ DEFAULT(""),
+ /**
+ * Open a link in the current context.
+ */
+ SELF("_self"),
+ /**
+ * Open a link in a new unnamed context.
+ */
+ BLANK("_blank"),
+ /**
+ * Open a link in the parent context, or the current context if there is no
+ * parent context.
+ */
+ PARENT("_parent"),
+ /**
+ * Open a link in the top most grandparent
+ * context, or the current context if there is no parent context.
+ */
+ TOP("_top");
+
