@@ -1,4 +1,4 @@
-    /**
+/**
      * Creazione iniziale (business logic) della view DOPO costruttore, init(), postConstruct() e setParameter() <br>
      * <p>
      * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia BeforeEnterObserver implementata in AViewList <br>

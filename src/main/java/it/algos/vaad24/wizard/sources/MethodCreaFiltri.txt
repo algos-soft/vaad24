@@ -1,4 +1,4 @@
-    /**
+/**
      * Crea la lista dei SOLI filtri necessari alla Grid per la prima visualizzazione della view <br>
      * I filtri normali vanno in updateFiltri() <br>
      * <p>

@@ -1,4 +1,4 @@
-   /**
+/**
      * @ORDINENAME@ (obbligatorio, unico) <br>
      */
     @Indexed(unique = true, direction = IndexDirection.DESCENDING)

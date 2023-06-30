@@ -1,4 +1,4 @@
-    /**
+/**
      * Property unica (se esiste) <br>
      */
     @Override

@@ -1,4 +1,4 @@
-    /**
+/**
      * Eventuali messaggi di avviso specifici di questa view ed inseriti in 'alertPlacehorder' <br>
      * <p>
      * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>

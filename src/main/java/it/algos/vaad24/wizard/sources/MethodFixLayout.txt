@@ -1,4 +1,4 @@
-    /**
+/**
      * Costruisce gli oggetti base (placeholder) di questa view <br>
      * <p>
      * Li aggiunge alla view stessa <br>

@@ -1,4 +1,4 @@
-    /**
+/**
      * Barra dei bottoni SOPRA la Grid inseriti in 'topPlaceholder' <br>
      * <p>
      * In fixPreferenze() si regola quali bottoni mostrare. Nell'ordine: <br>

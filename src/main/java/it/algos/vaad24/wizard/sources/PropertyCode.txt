@@ -1,4 +1,4 @@
-    /**
+/**
      * @CODENAME@ di riferimento (obbligatorio, unico) <br>
      */
     @NotBlank(message = "Il @CODENAME@ è obbligatorio")

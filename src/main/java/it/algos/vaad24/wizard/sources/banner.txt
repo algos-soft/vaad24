@@ -8,4 +8,3 @@ VaadFlow ver: ${AnsiColor.GREEN}${algos.vaadflow.version}${AnsiColor.RED} di ${A
 @MODULEUPPER@ ver: ${AnsiColor.GREEN}${algos.@PROJECTLOWER@.version}${AnsiColor.RED} di ${AnsiColor.GREEN}${algos.@PROJECTLOWER@.version.date}${AnsiColor.RED}
 Tomcat port: ${AnsiColor.GREEN}${server.port}${AnsiColor.RED}
 ${AnsiColor.DEFAULT}
-

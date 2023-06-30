@@ -1,4 +1,4 @@
-    /**
+/**
      * Regola i parametri del browser per una view costruita da @Route <br>
      * <p>
      * Chiamato da com.vaadin.flow.router.Router tramite l'interfaccia HasUrlParameter implementata in AViewList <br>

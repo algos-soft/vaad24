@@ -1,4 +1,4 @@
-    /**
+/**
      * Regola in lettura l'eeventuale field company (un combo)
      * Dal DB alla UI
      * Sovrascritto

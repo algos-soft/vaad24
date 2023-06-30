@@ -1,5 +1,4 @@
-
-    /**
+/**
      * @DESCRIZIONENAME@ (facoltativo, non unico) <br>
      */
     @Indexed(unique = false, direction = IndexDirection.DESCENDING)

@@ -1,4 +1,4 @@
-    /**
+/**
      * Preferenze specifiche di questa view <br>
      * <p>
      * Chiamato da AViewList.initView() e sviluppato nella sottoclasse APrefViewList <br>

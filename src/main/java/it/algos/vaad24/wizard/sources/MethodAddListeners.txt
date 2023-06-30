@@ -1,4 +1,4 @@
-    /**
+/**
      * Aggiunge tutti i listeners ai bottoni di 'topPlaceholder' che sono stati creati SENZA listeners <br>
      * <p>
      * Chiamato da AViewList.initView() e sviluppato nella sottoclasse ALayoutViewList <br>

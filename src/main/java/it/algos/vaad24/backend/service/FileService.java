@@ -654,7 +654,7 @@ public class FileService extends AbstractService {
      * @return wrapper di informazioni risultanti
      */
     public AResult copyFile(final AECopy typeCopy, String srcPathDir, String destPathDir, final String nomeFile, String srcToken, String destToken) {
-        AResult result = AResult.build().method("copyFile").target(nomeFile);
+        AResult result = AResult.build().valido(true).method("copyFile").target(nomeFile);
         String message;
         String srcPath;
         String destPath;
@@ -2163,7 +2163,7 @@ public class FileService extends AbstractService {
     }
 
     public AResult checkFileDirectory(final String methodName, final File fileDirectoryToBeChecked) {
-        AResult result = AResult.build().method(methodName).valido(true).target(fileDirectoryToBeChecked.getAbsolutePath());
+        AResult result = AResult.build().valido(true).method(methodName).target(fileDirectoryToBeChecked.getAbsolutePath());
         String message;
 
         if (fileDirectoryToBeChecked == null) {

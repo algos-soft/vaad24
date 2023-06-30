@@ -1,4 +1,4 @@
-    /**
+/**
      * Creazione in memoria di una nuova entityBean che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
      * Eventuali regolazioni iniziali delle property <br>

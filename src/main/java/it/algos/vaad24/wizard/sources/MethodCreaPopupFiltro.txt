@@ -1,4 +1,4 @@
-    /**
+/**
      * Crea un (eventuale) Popup di selezione, filtro e ordinamento <br>
      * DEVE essere sovrascritto, per regolare il contenuto (items) <br>
      * Invocare PRIMA il metodo della superclasse <br>

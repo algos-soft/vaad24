@@ -82,4 +82,3 @@ public class @ENTITYUPPER@LogicForm extends LogicForm{
     }
 
 }
-

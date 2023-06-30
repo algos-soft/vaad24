@@ -1,4 +1,4 @@
-    /**
+/**
      * flag @VALIDONAME@ (facoltativo, di default false) <br>
      */
     @AIField(type = AETypeField.booleano, typeBool = AETypeBoolField.checkBox, caption = "@VALIDONAME@")

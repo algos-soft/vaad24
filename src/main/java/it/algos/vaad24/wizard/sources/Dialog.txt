@@ -66,4 +66,3 @@ public class @ENTITYUPPER@Dialog extends AViewDialog<@ENTITY@> {
 
     @READCOMPANY@
 }// end of class
-

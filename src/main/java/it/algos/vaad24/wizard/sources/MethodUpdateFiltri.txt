@@ -1,4 +1,4 @@
-    /**
+/**
      * Aggiorna la lista dei filtri della Grid. Modificati per: popup, newEntity, deleteEntity, ecc... <br>
      * Normalmente tutti i filtri  vanno qui <br>
      * <p>
