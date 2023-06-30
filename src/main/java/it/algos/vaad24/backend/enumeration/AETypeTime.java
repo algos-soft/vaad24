@@ -16,6 +16,7 @@ import java.util.*;
  * Time: 21:27
  */
 public enum AETypeTime implements AIType {
+    nonUsata("nonUsata", 1),
     millisecondi("millisecondi", 1),
     secondi("secondi", 1000),
     minuti("minuti", 1000 * 60),

@@ -81,7 +81,7 @@ public class ColumnService extends AbstractService {
             case text, enumString, enumType, linkDinamico, linkStatico -> grid.addColumn(propertyName).setSortable(true);
             case localDateTime -> addDateTime(grid, entityClazz, propertyName).setSortable(true);
             case localDate, localTime -> grid.addColumn(propertyName).setSortable(true);
-
+            case anchor -> addAnchor(grid, propertyName);
             case integer, lungo -> grid.addColumn(propertyName).setSortable(true);
             case booleano -> addBoolean(grid, entityClazz, propertyName);
             case listaH, listaV -> grid.addColumn(propertyName).setSortable(false);
@@ -200,7 +200,7 @@ public class ColumnService extends AbstractService {
     }
 
     public Grid.Column<AEntity> addDateTime(final Grid grid, Class<? extends AEntity> entityClazz, final String propertyName) {
-        Grid.Column<AEntity> colonna = null;
+        Grid.Column<AEntity> colonna;
         final AETypeDate typeDate = annotationService.getTypeDate(entityClazz, propertyName);
 
         colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
@@ -222,16 +222,34 @@ public class ColumnService extends AbstractService {
         return colonna.setWidth(typeDate.getWidthEM()).setFlexGrow(0);
     }
 
+    public Grid.Column<AEntity> addAnchor(final Grid grid, final String propertyName) {
+        Grid.Column<AEntity> colonna;
+
+        colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
+            Object obj = reflectionService.getPropertyValue((AEntity) entity, propertyName);
+            if (obj instanceof String value) {
+                Anchor anchor = new Anchor(PATH_WIKI + value, value);
+                anchor.getElement().getStyle().set("color", "blue");
+                anchor.setTarget(AnchorTarget.BLANK);
+                return new Span(anchor);
+            }
+            else {
+                return new Span();
+            }
+        }));//end of lambda expressions and anonymous inner class
+
+        return colonna.setHeader(propertyName).setKey(propertyName).setFlexGrow(0).setWidth("18em");
+    }
+
     public Grid.Column<AEntity> addBoolean(final Grid grid, Class<? extends AEntity> entityClazz, final String propertyName) {
-        Grid.Column<AEntity> colonna = null;
+        Grid.Column<AEntity> colonna;
 
         colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
             final AETypeBoolCol typeBool = annotationService.getTypeBoolCol(entityClazz, propertyName);
-            //            final List<String> valori = annotation.getBoolEnumCol(field);
             Object value;
             boolean status = false;
             Icon icon;
-            String testo = VUOTA;
+            String testo;
             Label label = new Label();
 
             try {

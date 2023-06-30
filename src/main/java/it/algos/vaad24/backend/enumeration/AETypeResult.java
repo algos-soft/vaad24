@@ -50,7 +50,10 @@ public enum AETypeResult implements AIType {
     uploadValido("Upload effettuato"),
     error("Errore"),
     mancaResult("Manca il Result"),
-    mancaTypeLog("Manca il typeLog");
+    mancaTypeLog("Manca il typeLog"),
+    queryWriteCreata("Pagina wiki creata"),
+    queryWriteEsistente("Pagina wiki esistente"),
+    queryWriteModificata("Pagina wiki modificata");
 
     private String tag;
 

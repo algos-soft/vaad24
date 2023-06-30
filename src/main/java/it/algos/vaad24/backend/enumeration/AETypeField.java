@@ -64,6 +64,7 @@ public enum AETypeField {
     //    json,
 
     ugualeAlForm(0, 0),
+    anchor(10, 10),
 
     //    noone,
     //    color,
