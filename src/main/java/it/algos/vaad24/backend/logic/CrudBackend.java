@@ -742,7 +742,6 @@ public abstract class CrudBackend extends AbstractService {
         return lista != null ? lista.stream() : null;
     }
 
-
     //    /**
     //     * Lista della sola keyProperty indicata per tutte le entities della collezione <br>
     //     * Ordinata al contrario della keyProperty <br>
@@ -945,7 +944,7 @@ public abstract class CrudBackend extends AbstractService {
         String message;
 
         result.fine();
-        if (lista.size() > 0) {
+        if (lista != null && lista.size() > 0) {
             result.setIntValue(lista.size());
             result.setLista(lista);
             result.valido(true).eseguito().typeResult(AETypeResult.collectionPiena);
