@@ -250,3 +250,13 @@ java -jar -Dserver.port=8090 wiki24-1.0.jar
  */
  TOP("_top");
 
+== Istanza ==
+* Usare sempre **appContext.getBean(Xxx.class)** per costruire l'istanza
+* Se possibile non usare parametri nel costruttore
+* Usare @Autowired per tutte le property che servono
+* Se si usa @Autowired, aggiungere un metodo @PostConstruct(), con eventuali rimandi al metodo @PostConstruct() della superclasse, se esiste
+* In @PostConstruct(), SpringBoot rende disponibili le property @Autowired
+* In @PostConstruct() della superclasse, invocare fixPreferenze(), eventualmente sovrascritto, dove regolare/usare le property @Autowired
+
+
+

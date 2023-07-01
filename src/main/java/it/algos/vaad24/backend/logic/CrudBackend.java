@@ -938,6 +938,29 @@ public abstract class CrudBackend extends AbstractService {
     }
 
 
+    public AResult fixResult(AResult result) {
+        String clazzName = entityClazz.getSimpleName();
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String message;
+        List lista = result.getLista();
+
+        result.fine();
+        if (lista != null && lista.size() > 0) {
+            result.setIntValue(lista.size());
+            result.setLista(lista);
+            result.valido(true).eseguito().typeResult(AETypeResult.collectionPiena);
+        }
+        else {
+            result.typeResult(AETypeResult.error);
+            message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetOnlyEmpty()", collectionName, clazzName);
+            return result.errorMessage(message);
+        }
+
+        return result;
+    }
+
+
+    @Deprecated
     public AResult fixResult(AResult result, List lista) {
         String clazzName = entityClazz.getSimpleName();
         String collectionName = annotationService.getCollectionName(entityClazz);

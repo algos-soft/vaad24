@@ -592,6 +592,17 @@ public abstract class AlgosTest {
         }
     }
 
+    protected void printLong(List<Long> lista) {
+        int k = 1;
+        if (arrayService.isAllValid(lista)) {
+            for (Long stringa : lista) {
+                System.out.print(k++);
+                System.out.print(PARENTESI_TONDA_END);
+                System.out.print(SPAZIO);
+                System.out.println(stringa);
+            }
+        }
+    }
     protected void print(List<String> lista) {
         int k = 1;
         if (arrayService.isAllValid(lista)) {
@@ -682,7 +693,12 @@ public abstract class AlgosTest {
         System.out.println("Map value: ");
         if (mappa != null) {
             for (String key : mappa.keySet()) {
-                System.out.println(String.format("%s%s (%d): %s", TAB, key, ((List<String>) mappa.get(key)).size(), mappa.get(key)));
+                if (( mappa.get(key))!=null) {
+                    System.out.println(String.format("%s%s (null)", TAB, key));
+                }
+                else {
+                    System.out.println(String.format("%s%s (%d): %s", TAB, key, ((List<String>) mappa.get(key)).size(), mappa.get(key)));
+                }
             }
         }
         System.out.println(String.format("Tempo: %s", result.deltaSec()));
