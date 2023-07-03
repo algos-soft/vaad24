@@ -108,7 +108,7 @@ public class DateService extends AbstractService {
      *
      * @return durata (arrotondata e semplificata) in forma leggibile
      */
-    public String toText(final long durata) {
+    public static String toText(final long durata) {
         String tempo = "null";
         long div;
         long mod;

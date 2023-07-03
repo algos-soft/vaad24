@@ -473,6 +473,10 @@ public class LogService extends AbstractService {
         return logBase(AELogLevel.error, wrap);
     }
 
+    public String debugOnly(final WrapLog wrap) {
+        return Pref.debug.is() ? logBase(AELogLevel.debug, wrap) : VUOTA;
+    }
+
     public String debug(final WrapLog wrap) {
         return logBase(AELogLevel.debug, wrap);
     }

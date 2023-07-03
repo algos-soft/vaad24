@@ -310,6 +310,7 @@ public class AResult {
     public AETypeResult getTypeResult() {
         return typeResult;
     }
+
     //    public String getWebTitle() {
     //        return webTitle;
     //    }
@@ -538,6 +539,15 @@ public class AResult {
         };
 
         return eseguito ? String.format("Eseguito in circa %s %s.", sec, text) : "Non eseguito.";
+    }
+
+    public String elementi() {
+        String elementi = TextService.formatNum(this.getIntValue());
+        return String.format("Contiene %s elementi. ", elementi);
+    }
+
+    public String delta() {
+        return fine > 0 ? "Eseguito in " + DateService.toText(fine - inizio) : VUOTA;
     }
 
     public void print(final LogService logger, final AETypeLog typeLog) {

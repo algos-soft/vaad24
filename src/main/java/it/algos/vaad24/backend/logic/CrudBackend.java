@@ -874,12 +874,11 @@ public abstract class CrudBackend extends AbstractService {
                     result.typeResult(AETypeResult.collectionCreata);
                 }
                 result.method("resetForcing");
-                elementi = textService.format(result.getIntValue());
                 message = String.format("La collection '%s' della classe [%s] esisteva ma è stata cancellata e i dati sono stati ricreati. ", collectionName, clazzName);
-                message += String.format("Contiene %s elementi. ", elementi);
-                message += result.deltaSec();
+                message += result.elementi();
+                message += result.delta();
                 result.validMessage(message);
-                logService.info(new WrapLog().message(result.getMessage()).type(AETypeLog.resetForcing).usaDb());
+                logService.debugOnly(new WrapLog().message(result.getMessage()).type(AETypeLog.resetForcing).usaDb());
                 return result;
             }
             else {
@@ -918,9 +917,9 @@ public abstract class CrudBackend extends AbstractService {
                 result = result.typeResult(AETypeResult.collectionCreata).method("resetOnlyEmpty");
             }
             elementi = textService.format(count());
-            message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi.", collectionName, clazzName, elementi);
+            message = String.format("La collection '%s' della classe [%s] era vuota ed è stata creata. Contiene %s elementi. %s", collectionName, clazzName, elementi, result.deltaSec());
             result = result.typeLog(AETypeLog.resetOnlyEmpty).typeResult(AETypeResult.collectionPiena).intValue(count());
-            logService.info(new WrapLog().message(message).type(AETypeLog.resetOnlyEmpty).usaDb());
+            logService.debugOnly(new WrapLog().message(message).type(AETypeLog.resetOnlyEmpty).usaDb());
             return result;
         }
         else {

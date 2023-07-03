@@ -259,4 +259,6 @@ java -jar -Dserver.port=8090 wiki24-1.0.jar
 * In @PostConstruct() della superclasse, invocare fixPreferenze(), eventualmente sovrascritto, dove regolare/usare le property @Autowired
 
 
+== Html ==
+<span style="color:red">rosso</span>
 

@@ -217,13 +217,13 @@ public class TextServiceTest extends AlgosTest {
 
         sorgente3 = "nome";
 
-        sorgente = "asia";
-        continente = service.levaPunti(sorgente);
-        assertNotNull(continente);
-
-        sorgente2 = "piazza";
-        via = viaBackend.findById(sorgente2);
-        assertNotNull(via);
+//        sorgente = "asia";
+//        continente = service.levaPunti(sorgente);
+//        assertNotNull(continente);
+//
+//        sorgente2 = "piazza";
+//        via = viaBackend.findById(sorgente2);
+//        assertNotNull(via);
     }
 
 

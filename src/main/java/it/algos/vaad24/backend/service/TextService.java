@@ -1565,4 +1565,103 @@ public class TextService extends AbstractService {
         return allEnumSelection;
     }
 
+
+    public static String formatNum(final Object numObj) {
+        String formattato;
+        String numText = VUOTA;
+        String sep = PUNTO;
+        int len;
+        String num3;
+        String num6;
+        String num9;
+        String num12;
+
+        if (numObj instanceof String || numObj instanceof Integer || numObj instanceof Long || numObj instanceof Double || numObj instanceof List || numObj instanceof Object[]) {
+            if (numObj instanceof String) {
+                numText = (String) numObj;
+                numText = levaVirgoleStatico(numText);
+                numText = levaPuntiStatico(numText);
+                try {
+                    Integer.decode(numText);
+                } catch (Exception unErrore) {
+                    return (String) numObj;
+                }
+            }
+            else {
+                if (numObj instanceof Integer) {
+                    numText = Integer.toString((int) numObj);
+                }
+                if (numObj instanceof Long) {
+                    numText = Long.toString((long) numObj);
+                }
+                if (numObj instanceof Double) {
+                    numText = Double.toString((double) numObj);
+                }
+                if (numObj instanceof List) {
+                    numText = Integer.toString((int) ((List) numObj).size());
+                }
+                if (numObj instanceof Object[]) {
+                    numText = Integer.toString(((Object[]) numObj).length);
+                }
+            }
+        }
+        else {
+            return null;
+        }
+
+        formattato = numText;
+        len = numText.length();
+        if (len > 3) {
+            num3 = numText.substring(0, len - 3);
+            num3 += sep;
+            num3 += numText.substring(len - 3);
+            formattato = num3;
+            if (len > 6) {
+                num6 = num3.substring(0, len - 6);
+                num6 += sep;
+                num6 += num3.substring(len - 6);
+                formattato = num6;
+                if (len > 9) {
+                    num9 = num6.substring(0, len - 9);
+                    num9 += sep;
+                    num9 += num6.substring(len - 9);
+                    formattato = num9;
+                    if (len > 12) {
+                        num12 = num9.substring(0, len - 12);
+                        num12 += sep;
+                        num12 += num9.substring(len - 12);
+                        formattato = num12;
+                    }
+                }
+            }
+        }
+
+        //--valore di ritorno
+        return formattato;
+    }
+    public static String levaVirgoleStatico(final String testoIn) {
+        String testoOut = testoIn;
+
+        if (testoIn != null ) {
+            testoOut = testoIn.trim();
+            if (testoOut.contains(VIRGOLA)) {
+                testoOut = testoOut.replaceAll(VIRGOLA,VUOTA);
+            }
+        }
+
+        return testoOut;
+    }
+    public static String levaPuntiStatico(final String testoIn) {
+        String testoOut = testoIn;
+
+        if (testoIn != null ) {
+            testoOut = testoIn.trim();
+            if (testoOut.contains(PUNTO)) {
+                testoOut = testoOut.replaceAll(PUNTO,VUOTA);
+            }
+        }
+
+        return testoOut;
+    }
+
 }
