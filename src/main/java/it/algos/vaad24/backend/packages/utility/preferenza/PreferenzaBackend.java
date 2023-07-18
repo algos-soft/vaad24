@@ -59,7 +59,12 @@ public class PreferenzaBackend extends CrudBackend {
 
 
     public Preferenza findByKey(final String keyCode) {
-        return repository.findFirstByCode(keyCode);
+        if (repository != null) {
+            return repository.findFirstByCode(keyCode);
+        }
+        else {
+            return null;
+        }
     }
 
 

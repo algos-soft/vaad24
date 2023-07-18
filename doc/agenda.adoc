@@ -252,12 +252,15 @@ java -jar -Dserver.port=8090 wiki24-1.0.jar
 
 == Istanza ==
 * Usare sempre **appContext.getBean(Xxx.class)** per costruire l'istanza
-* Se possibile non usare parametri nel costruttore
+* Se possibile non usare parametri nel costruttore. Se necessario solo il **nome** (da passare alla superclasse)
 * Usare @Autowired per tutte le property che servono
 * Se si usa @Autowired, aggiungere un metodo @PostConstruct(), con eventuali rimandi al metodo @PostConstruct() della superclasse, se esiste
 * In @PostConstruct(), SpringBoot rende disponibili le property @Autowired
 * In @PostConstruct() della superclasse, invocare fixPreferenze(), eventualmente sovrascritto, dove regolare/usare le property @Autowired
-
+* Se necessario inserire subito dopo fixPreferenze() dei metodi  **a catena** tipo -> public UploadNomi noToc(), che regolano alcune
+proprietà e restituiscono **sempre** return this;
+* Se si usano o sono comunque previsti dei metodi  **a catena**, è indispensabile invocare un metodo tipo -> esegue() al termine delle
+regolazioni per iniziare a far funzionare l'istanza
 
 == Html ==
 <span style="color:red">rosso</span>

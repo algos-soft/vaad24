@@ -682,7 +682,15 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
             if (textService.isValid(searchFieldName) && textService.isValid(textSearch)) {
                 items = items
                         .stream()
-                        .filter(bean -> ((String) reflectionService.getPropertyValue(bean, searchFieldName)).matches("^(?i)" + textSearch + ".*$"))
+                        .filter(bean -> {
+                            Object obj = reflectionService.getPropertyValue(bean, searchFieldName);
+                            if (obj != null && obj instanceof String value) {
+                                return value.matches("^(?i)" + textSearch + ".*$");
+                            }
+                            else {
+                                return false;
+                            }
+                        })
                         .toList();
             }
         }

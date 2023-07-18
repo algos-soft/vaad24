@@ -603,6 +603,7 @@ public abstract class AlgosTest {
             }
         }
     }
+
     protected void print(List<String> lista) {
         int k = 1;
         if (arrayService.isAllValid(lista)) {
@@ -612,6 +613,14 @@ public abstract class AlgosTest {
                 System.out.print(SPAZIO);
                 System.out.println(stringa);
             }
+        }
+    }
+
+    protected void print(Map<String, Integer> mappa) {
+        for (String key : mappa.keySet()) {
+            System.out.print(key);
+            System.out.print(FORWARD);
+            System.out.println(textService.format(mappa.get(key)));
         }
     }
 
@@ -693,7 +702,7 @@ public abstract class AlgosTest {
         System.out.println("Map value: ");
         if (mappa != null) {
             for (String key : mappa.keySet()) {
-                if (( mappa.get(key))!=null) {
+                if ((mappa.get(key)) != null) {
                     System.out.println(String.format("%s%s (null)", TAB, key));
                 }
                 else {

@@ -116,6 +116,10 @@ public abstract class CrudBackend extends AbstractService {
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
+        if (VaadVar.prefList == null || VaadVar.prefList.size() < Pref.values().length) {
+            VaadBoot.start();
+        }
+
         for (AIGenPref pref : VaadVar.prefList) {
             pref.setText(textService);
             pref.setLogger(logService);

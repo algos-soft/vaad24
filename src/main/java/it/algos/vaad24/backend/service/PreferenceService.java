@@ -249,7 +249,7 @@ public class PreferenceService extends AbstractService {
         boolean valoreCorrenteStandard = false;
         Object valoreCorrenteDataBase = preferenzaBackend.findByKey(keyCode).getValore();
         AIGenPref prefEnum = preferenceService.getPref(keyCode);
-        Object valoreDefaultEnumeration = prefEnum.getDefaultValue();
+        Object valoreDefaultEnumeration = prefEnum != null ? prefEnum.getDefaultValue() : null;
 
         if (valoreCorrenteDataBase != null && valoreDefaultEnumeration != null) {
             valoreCorrenteStandard = valoreCorrenteDataBase.equals(valoreDefaultEnumeration);

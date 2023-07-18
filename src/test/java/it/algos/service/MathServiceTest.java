@@ -18,7 +18,7 @@ import org.springframework.test.context.junit.jupiter.*;
  * Time: 11:19
  */
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {Vaad24SimpleApp.class})
+@SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("service")
 @DisplayName("Math Service")
@@ -172,6 +172,16 @@ public class MathServiceTest extends AlgosTest {
         dividendoInt = 8;
         divisoreInt = 19000;
         previsto = "0,04%";
+        ottenuto = service.percentualeTxt(dividendoInt, divisoreInt);
+        assertNotNull(ottenuto);
+        assertEquals(previsto, ottenuto);
+        printPer(dividendoInt, divisoreInt, ottenuto);
+
+
+        System.out.println(VUOTA);
+        dividendoInt = 1476;
+        divisoreInt = 464908;
+        previsto = "0,32%";
         ottenuto = service.percentualeTxt(dividendoInt, divisoreInt);
         assertNotNull(ottenuto);
         assertEquals(previsto, ottenuto);

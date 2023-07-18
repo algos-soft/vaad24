@@ -492,6 +492,7 @@ public class MongoService<capture> extends AbstractService {
     public List<String> projectionString(Class<? extends AEntity> entityClazz, String property, BasicDBObject sort) {
         List<String> listaProperty = new ArrayList();
         String collectionName = annotationService.getCollectionName(entityClazz);
+        FindIterable<Document> documents = null;
         String message;
         collection = getCollection(textService.primaMinuscola(collectionName));
 
@@ -502,7 +503,12 @@ public class MongoService<capture> extends AbstractService {
         }
 
         Bson projection = Projections.fields(Projections.include(property), Projections.excludeId());
-        FindIterable<Document> documents = collection.find().projection(projection).sort(sort);
+        if (sort != null) {
+            documents = collection.find().projection(projection).sort(sort);
+        }
+        else {
+            documents = collection.find().projection(projection);
+        }
 
         for (var singolo : documents) {
             Object obj = singolo.get(property);
