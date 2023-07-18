@@ -1,5 +1,7 @@
 package it.algos.vaad24.backend.packages.utility.preferenza;
 
+import com.mongodb.*;
+import com.mongodb.client.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -8,6 +10,7 @@ import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
+import org.bson.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.core.annotation.*;
 import org.springframework.data.mongodb.repository.*;
@@ -63,7 +66,8 @@ public class PreferenzaBackend extends CrudBackend {
             return repository.findFirstByCode(keyCode);
         }
         else {
-            return null;
+            return creaPreferenza(keyCode);
+            //        return null;
         }
     }
 
@@ -164,6 +168,29 @@ public class PreferenzaBackend extends CrudBackend {
         return add(preferenza) != null;
     }
 
+
+    public Preferenza newEntity(final Document doc) {
+        Preferenza preferenza = new Preferenza();
+
+        AETypePref typePref = AETypePref.getType(doc.getString("type"));
+        byte[] bytes = typePref.objectToBytes(doc.get("value"));
+
+        preferenza.code = doc.getString("code");
+        preferenza.type = typePref;
+        preferenza.value = bytes;
+        preferenza.vaad23 = doc.getBoolean("vaad23");
+        preferenza.usaCompany = doc.getBoolean("usaCompany");
+        preferenza.needRiavvio = doc.getBoolean("needRiavvio");
+        preferenza.visibileAdmin = doc.getBoolean("visibileAdmin");
+        preferenza.dinamica = doc.getBoolean("dinamica");
+        preferenza.descrizione = doc.getString("descrizione");
+        preferenza.descrizioneEstesa = doc.getString("descrizioneEstesa");
+        preferenza.enumClazzName = doc.getString("enumClazzName");
+
+        return preferenza;
+    }
+
+
     public boolean resetStandard(final AIGenPref prefEnum) {
         boolean modificato = false;
         String keyCode;
@@ -194,7 +221,6 @@ public class PreferenzaBackend extends CrudBackend {
 
         return modificato;
     }
-
 
     public void refreshDialog(Runnable refreshHandler) {
         this.refreshHandler = refreshHandler;
@@ -316,6 +342,22 @@ public class PreferenzaBackend extends CrudBackend {
 
         result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
         return result;
+    }
+
+    protected Preferenza creaPreferenza(String keyCode) {
+        Preferenza beanPreferenza = null;
+        MongoCollection<Document> collection;
+        MongoDatabase client = mongoService.getDB("wiki24");
+        collection = client.getCollection("preferenza");
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put(FIELD_NAME_CODE, keyCode);
+        Document doc = collection.find(whereQuery).first();
+
+        if (doc != null) {
+            beanPreferenza = this.newEntity(doc);
+        }
+
+        return beanPreferenza;
     }
 
 }// end of crud backend class

@@ -4,6 +4,7 @@ package it.algos.vaad24.backend.enumeration;
 import com.google.common.primitives.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.interfaces.*;
+import org.bson.types.*;
 
 import java.math.*;
 import java.nio.*;
@@ -23,6 +24,10 @@ public enum AETypePref implements AITypePref {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
+            if (obj instanceof Binary binary) {
+                bytes = binary.getData();
+            }
+
             if (obj instanceof String stringa) {
                 bytes = stringa.getBytes(Charset.forName("UTF-8"));
             }
@@ -48,6 +53,9 @@ public enum AETypePref implements AITypePref {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
+            if (obj instanceof Binary binary) {
+                bytes = binary.getData();
+            }
             if (obj instanceof Boolean bool) {
                 bytes = new byte[]{(byte) (bool ? 1 : 0)};
             }
@@ -161,29 +169,29 @@ public enum AETypePref implements AITypePref {
     },// end of single enumeration
 
     //    doppio("double", "black") {
-//        @Override
-//        public byte[] objectToBytes(Object obj) {
-//            byte[] bytes = new byte[0];
-//            if (obj instanceof Double doppio) {
-//                bytes = longToByteArray(doppio);
-//            }
-//            if (obj instanceof String) {
-//                bytes = longToByteArray(Long.valueOf((String) obj));
-//            }
-//
-//            return bytes;
-//        }
-//
-//        @Override
-//        public Double bytesToObject(byte[] bytes) {
-//            return byteArrayToD(bytes);
-//        }
-//
-//        @Override
-//        public String bytesToString(byte[] bytes) {
-//            return bytesToObject(bytes) + VUOTA;
-//        }
-//    },// end of single enumeration
+    //        @Override
+    //        public byte[] objectToBytes(Object obj) {
+    //            byte[] bytes = new byte[0];
+    //            if (obj instanceof Double doppio) {
+    //                bytes = longToByteArray(doppio);
+    //            }
+    //            if (obj instanceof String) {
+    //                bytes = longToByteArray(Long.valueOf((String) obj));
+    //            }
+    //
+    //            return bytes;
+    //        }
+    //
+    //        @Override
+    //        public Double bytesToObject(byte[] bytes) {
+    //            return byteArrayToD(bytes);
+    //        }
+    //
+    //        @Override
+    //        public String bytesToString(byte[] bytes) {
+    //            return bytesToObject(bytes) + VUOTA;
+    //        }
+    //    },// end of single enumeration
 
     decimal("decimale", "Green") {
         @Override
@@ -456,7 +464,6 @@ public enum AETypePref implements AITypePref {
     //        }// end of method
     //    },// end of single enumeration
 
-
     //    bytes("blog", EAFieldType.json);
 
     //    private static ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
@@ -635,7 +642,15 @@ public enum AETypePref implements AITypePref {
     }
 
     @Override
-    public AITypePref get(String nome) {
+    public AETypePref get(String nome) {
+        return getAllEnums()
+                .stream()
+                .filter(type -> type.name().equals(nome))
+                .findAny()
+                .orElse(null);
+    }
+
+    public static AETypePref getType(String nome) {
         return getAllEnums()
                 .stream()
                 .filter(type -> type.name().equals(nome))
