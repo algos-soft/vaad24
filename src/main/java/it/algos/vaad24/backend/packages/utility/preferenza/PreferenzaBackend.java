@@ -67,7 +67,6 @@ public class PreferenzaBackend extends CrudBackend {
         }
         else {
             return creaPreferenza(keyCode);
-            //        return null;
         }
     }
 

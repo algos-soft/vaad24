@@ -94,6 +94,8 @@ public abstract class AlgosTest {
 
     protected String ottenuto3;
 
+    protected String ottenuto4;
+
     protected int sorgenteIntero;
 
     protected int previstoIntero;
