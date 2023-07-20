@@ -5,6 +5,7 @@ import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
+import org.bson.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -44,6 +45,19 @@ public class MeseBackend extends CrudBackend {
     @Override
     public Mese newEntity(final String keyPropertyValue) {
         return newEntity(0, keyPropertyValue, VUOTA, 0, 0, 0);
+    }
+
+    public Mese newEntity(final Document doc) {
+        Mese mese = new Mese();
+
+        mese.ordine = doc.getInteger("ordine");
+        mese.nome = doc.getString("nome");
+        mese.breve = doc.getString("breve");
+        mese.giorni = doc.getInteger("giorni");
+        mese.primo = doc.getInteger("primo");
+        mese.ultimo = doc.getInteger("ultimo");
+
+        return mese;
     }
 
     /**
@@ -208,6 +222,29 @@ public class MeseBackend extends CrudBackend {
         else {
             return result.errorMessage("Non ho trovato il file sul server").fine();
         }
+    }
+
+
+    public Mese findDocumentById(String keyCode) {
+        Mese beanMese = null;
+        Document doc = super.getDocumentById(keyCode);
+
+        if (doc != null) {
+            beanMese = this.newEntity(doc);
+        }
+
+        return beanMese;
+    }
+
+    public Mese findDocumentByKey(String keyCode) {
+        Mese beanMese = null;
+        Document doc = super.getDocumentByKey(keyCode);
+
+        if (doc != null) {
+            beanMese = this.newEntity(doc);
+        }
+
+        return beanMese;
     }
 
 }// end of crud backend class
