@@ -257,5 +257,29 @@ public class SecoloBackendTest extends BackendTest {
         printBackend(List.of(entityBean));
     }
 
+    @Test
+    @Order(81)
+    @DisplayName("81 - Secolo ricavato da findDocumentById")
+    protected void findDocumentById() {
+        System.out.println("81 - Secolo ricavato da findDocumentById");
+        System.out.println(VUOTA);
+
+        sorgente = "ixsecoloa.c.";
+        entityBean = backend.findDocumentById(sorgente);
+        assertNotNull(entityBean);
+        assertTrue(entityBean instanceof Secolo);
+    }
+    @Test
+    @Order(82)
+    @DisplayName("82 - Secolo ricavato da findDocumentByKey")
+    protected void findDocumentByKey() {
+        System.out.println("82 - Secolo ricavato da findDocumentByKey");
+        System.out.println(VUOTA);
+
+        sorgente = "V secolo";
+        entityBean = backend.findDocumentByKey(sorgente);
+        assertNotNull(entityBean);
+        assertTrue(entityBean instanceof Secolo);
+    }
 
 }

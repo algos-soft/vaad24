@@ -5,6 +5,7 @@ import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
+import org.bson.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
@@ -40,6 +41,19 @@ public class SecoloBackend extends CrudBackend {
     @Override
     public Secolo newEntity(String nome) {
         return newEntity(0, nome, 0, 0, false);
+    }
+
+
+    public Secolo newEntity(final Document doc) {
+        Secolo secolo = new Secolo();
+
+        secolo.ordine = doc.getInteger("ordine");
+        secolo.nome = doc.getString("nome");
+        secolo.inizio = doc.getInteger("inizio");
+        secolo.fine = doc.getInteger("fine");
+        secolo.anteCristo = doc.getBoolean("anteCristo");
+
+        return secolo;
     }
 
     /**
@@ -258,6 +272,29 @@ public class SecoloBackend extends CrudBackend {
             logService.error(new WrapLog().exception(new AlgosException("Non ho trovato il file sul server")).usaDb());
             return result.fine();
         }
+    }
+
+
+    public Secolo findDocumentById(String keyCode) {
+        Secolo beanSecolo = null;
+        Document doc = super.getDocumentById(keyCode);
+
+        if (doc != null) {
+            beanSecolo = this.newEntity(doc);
+        }
+
+        return beanSecolo;
+    }
+
+    public Secolo findDocumentByKey(String keyCode) {
+        Secolo beanSecolo = null;
+        Document doc = super.getDocumentByKey(keyCode);
+
+        if (doc != null) {
+            beanSecolo = this.newEntity(doc);
+        }
+
+        return beanSecolo;
     }
 
 

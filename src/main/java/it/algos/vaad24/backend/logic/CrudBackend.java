@@ -1,9 +1,10 @@
 package it.algos.vaad24.backend.logic;
 
 import com.mongodb.*;
+import com.mongodb.client.*;
 import com.vaadin.flow.data.provider.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -1017,6 +1018,35 @@ public abstract class CrudBackend extends AbstractService {
             return Sort.by(Sort.Direction.ASC, property);
         }
         return sortOrder;
+    }
+
+
+    public Document getDocumentById(String keyCode) {
+        Document doc;
+        MongoCollection<Document> collection;
+        BasicDBObject whereQuery;
+        MongoDatabase client = mongoService.getDB(VaadVar.mongoDatabaseName);
+        collection = client.getCollection("secolo");
+        whereQuery = new BasicDBObject();
+        whereQuery.put(FIELD_NAME_ID_CON, keyCode);
+        doc = collection.find(whereQuery).first();
+
+        return doc;
+    }
+
+    public Document getDocumentByKey(String keyCode) {
+        Document doc;
+        MongoCollection<Document> collection;
+        BasicDBObject whereQuery;
+        MongoDatabase client = mongoService.getDB(VaadVar.mongoDatabaseName);
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String keyProperty = annotationService.getKeyPropertyName(entityClazz);
+        collection = client.getCollection(collectionName);
+        whereQuery = new BasicDBObject();
+        whereQuery.put(keyProperty, keyCode);
+        doc = collection.find(whereQuery).first();
+
+        return doc;
     }
 
 }
