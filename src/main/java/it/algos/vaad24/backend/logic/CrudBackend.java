@@ -1026,7 +1026,8 @@ public abstract class CrudBackend extends AbstractService {
         MongoCollection<Document> collection;
         BasicDBObject whereQuery;
         MongoDatabase client = mongoService.getDB(VaadVar.mongoDatabaseName);
-        collection = client.getCollection("secolo");
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        collection = client.getCollection(collectionName);
         whereQuery = new BasicDBObject();
         whereQuery.put(FIELD_NAME_ID_CON, keyCode);
         doc = collection.find(whereQuery).first();
