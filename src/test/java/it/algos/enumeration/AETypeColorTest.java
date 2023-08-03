@@ -24,7 +24,7 @@ import java.util.*;
 @Tag("enums")
 @DisplayName("Enumeration AETypeColor")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AETypeColorTest extends AlgosTest {
+public class AETypeColorTest extends QuicklyTest {
 
 
     private AETypeColor type;

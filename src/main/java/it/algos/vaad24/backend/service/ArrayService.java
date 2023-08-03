@@ -309,12 +309,12 @@ public class ArrayService extends AbstractService {
      *
      * @return mappa ordinata, null se mappaDisordinata è null
      */
-    public Map sort(final Map mappaDisordinata) {
+    public LinkedHashMap sort(final Map mappaDisordinata) {
         LinkedHashMap mappaOrdinata = new LinkedHashMap();
         Object[] listaChiavi;
 
         if (!isAllValid(mappaDisordinata)) {
-            return mappaDisordinata;
+            return (LinkedHashMap) mappaDisordinata;
         }
 
         listaChiavi = mappaDisordinata.keySet().toArray();
@@ -357,7 +357,7 @@ public class ArrayService extends AbstractService {
         }
 
         for (Object value : listaValues) {
-            listaKeys=getSet(mappaDisordinata, value);
+            listaKeys = getSet(mappaDisordinata, value);
             for (Object key : listaKeys) {
                 mappaOrdinata.put(key, value);
             }
@@ -435,17 +435,6 @@ public class ArrayService extends AbstractService {
         return arrayA.stream().filter(a -> !arrayB.contains(a)).toList();
     }
 
-    /**
-     * Differenza di due array <br>
-     *
-     * @param arrayA lista di valori A
-     * @param arrayB lista di valori B
-     *
-     * @return lista dei valori mancanti
-     */
-    public List<Long> differenzaLong(final List<Long> arrayA, final List<Long> arrayB) {
-        return arrayA.stream().filter(a -> !arrayB.contains(a)).toList();
-    }
 
     public List<String> getList(String testo) {
         List<String> lista = null;
@@ -504,6 +493,44 @@ public class ArrayService extends AbstractService {
         }
 
         return listaOrdinata;
+    }
+
+    /**
+     * Differenza di due array tramite stream <br>
+     *
+     * @param arrayA lista di valori A
+     * @param arrayB lista di valori B
+     *
+     * @return lista dei valori di A che mancano in B
+     */
+    public List<Long> deltaLongStream(final List<Long> arrayA, final List<Long> arrayB) {
+        return arrayA.stream().filter(a -> !arrayB.contains(a)).toList();
+    }
+
+
+    /**
+     * Differenza di due array tramite Collections.binarySearch <br>
+     * Gli array devono essere ordinati <br>
+     *
+     * @param arrayA lista di valori A
+     * @param arrayB lista di valori B
+     *
+     * @return lista dei valori di A che non sono presenti in B
+     */
+    public List deltaBinary(final List arrayA, final List arrayB) {
+        List listaMancanti = new ArrayList<>();
+        Object longMaggiore;
+        int pos;
+
+        for (int k = 0; k < arrayA.size(); k++) {
+            longMaggiore = arrayA.get(k);
+            pos = Collections.binarySearch(arrayB, arrayA.get(k));
+
+            if (pos < 0) {
+                listaMancanti.add(longMaggiore);
+            }
+        }
+        return listaMancanti;
     }
 
 }

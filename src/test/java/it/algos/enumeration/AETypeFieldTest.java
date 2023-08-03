@@ -24,7 +24,7 @@ import java.util.*;
 @Tag("enums")
 @DisplayName("Enumeration AETypeField")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AETypeFieldTest extends AlgosTest {
+public class AETypeFieldTest extends QuicklyTest {
 
 
     private AETypeField type;

@@ -265,3 +265,8 @@ regolazioni per iniziare a far funzionare l'istanza
 == Html ==
 <span style="color:red">rosso</span>
 
+
+== Naming ==
+* Oreilly [https://www.oreilly.com/library/view/java-8-pocket/9781491901083/ch01.html]
+* Stackoverflow [https://stackoverflow.com/questions/2814805/java-interfaces-implementation-naming-convention]
+

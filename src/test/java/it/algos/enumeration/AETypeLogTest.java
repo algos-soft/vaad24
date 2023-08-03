@@ -24,7 +24,7 @@ import java.util.*;
 @Tag("enums")
 @DisplayName("Enumeration AETypeLog")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AETypeLogTest extends AlgosTest {
+public class AETypeLogTest extends QuicklyTest {
 
 
     private AETypeLog type;

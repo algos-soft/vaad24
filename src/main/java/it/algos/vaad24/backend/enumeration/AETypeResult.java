@@ -48,6 +48,15 @@ public enum AETypeResult implements AIType {
     downloadValido("Download effettuato"),
     elaborazioneValida("Elaborazione effettuata"),
     uploadValido("Upload effettuato"),
+
+
+    uploadNuova("Upload con pagina creata"),
+    uploadUguale("Upload con pagina uguale"),
+    uploadSostanzialmenteUguale("Upload con pagina diversa solo per la data"),
+    uploadModificata("Upload con pagina modificata"),
+    uploadErrato("Upload non riuscito"),
+
+
     error("Errore"),
     mancaResult("Manca il Result"),
     mancaTypeLog("Manca il typeLog"),

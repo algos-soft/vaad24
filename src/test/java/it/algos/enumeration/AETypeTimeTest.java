@@ -25,7 +25,7 @@ import java.util.concurrent.*;
 @Tag("enums")
 @DisplayName("Enumeration AETypeTime")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AETypeTimeTest extends AlgosTest {
+public class AETypeTimeTest extends QuicklyTest {
 
 
     private AETypeTime type;

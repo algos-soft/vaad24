@@ -22,10 +22,11 @@ import java.util.*;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Vaad24SimpleApp.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Tag("quickly")
 @Tag("service")
 @DisplayName("Array Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ArrayServiceTest extends AlgosTest {
+public class ArrayServiceTest extends QuicklyTest {
 
     /**
      * Classe principale di riferimento <br>

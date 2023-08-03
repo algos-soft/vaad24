@@ -24,7 +24,7 @@ import java.util.*;
 @Tag("enums")
 @DisplayName("Enumeration AELineHeight")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AELineHeightTest extends AlgosTest {
+public class AELineHeightTest extends QuicklyTest {
 
 
     private AELineHeight type;

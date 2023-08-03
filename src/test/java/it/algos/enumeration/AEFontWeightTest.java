@@ -24,7 +24,7 @@ import java.util.*;
 @Tag("enums")
 @DisplayName("Enumeration AEFontWeight")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AEFontWeightTest extends AlgosTest {
+public class AEFontWeightTest extends QuicklyTest {
 
 
     private AEFontWeight type;

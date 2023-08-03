@@ -699,7 +699,7 @@ public abstract class AlgosTest {
         System.out.println(String.format("Error code: %s", result.getErrorCode()));
         System.out.println(String.format("Error message: %s", result.getErrorMessage()));
         System.out.println(String.format("Valid message: %s", result.getValidMessage()));
-        System.out.println(String.format("Numeric value: %s", textService.format(result.getIntValue())));
+        System.out.println(String.format("Numeric value: %s", result.getIntValue()>0?textService.format(result.getIntValue()):VUOTA));
         System.out.println(String.format("List value: %s", lista));
         System.out.println("Map value: ");
         if (mappa != null) {

@@ -541,6 +541,7 @@ public class MongoService<capture> extends AbstractService {
         return listaProperty;
     }
 
+
     public List<Long> projectionLong(Class<? extends AEntity> entityClazz, String property) {
         List<Long> listaProperty = new ArrayList();
         String message;
@@ -552,8 +553,9 @@ public class MongoService<capture> extends AbstractService {
             return null;
         }
 
+        Bson bSort= Sorts.ascending(property).toBsonDocument();
         Bson projection = Projections.fields(Projections.include(property), Projections.excludeId());
-        FindIterable<Document> documents = collection.find().projection(projection);
+        FindIterable<Document> documents = collection.find().projection(projection).sort(bSort);
 
         for (var singolo : documents) {
             listaProperty.add(singolo.get(property, Long.class));

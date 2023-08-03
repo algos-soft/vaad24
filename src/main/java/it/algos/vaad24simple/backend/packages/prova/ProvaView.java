@@ -58,7 +58,7 @@ public class ProvaView extends CrudView {
         super.fixPreferenze();
         usaBottoneReset = true;
 
-        super.gridPropertyNamesList = Arrays.asList("descrizione", "boolGrezzo","checkBox","checkIcon","checkIconReverse","yesNo","yesNoReverse","yesNoBold","thumb","thumbReverse","continenteLinkDinamicoDBRef", "viaLinkStatico", "creazione2","listaVie", "listaContinenti", "typeString", "versione", "schedule");
+        super.gridPropertyNamesList = Arrays.asList("descrizione", "boolGrezzo", "checkBox", "checkIcon", "checkIconReverse", "yesNo", "yesNoReverse", "yesNoBold", "thumb", "thumbReverse", "continenteLinkDinamicoDBRef", "viaLinkStatico", "creazione2", "listaVie", "listaContinenti", "typeString", "versione", "schedule");
     }
 
     /**
@@ -71,24 +71,32 @@ public class ProvaView extends CrudView {
         addSpan(ASpan.text("Prova di enumType").verde());
 
         testJarService();
+        testBuilderPattern();
     }
 
 
     public void testJarService() {
-//        List<String> listaStr = jarFileService.getBackendClassNames(JAR_PATH, VaadVar.moduloVaadin24);
-//        String sorgente = listaStr.get(0);
-//        sorgente = textService.pointToSlash(sorgente);
-//        sorgente = JAR_PATH + SLASH + sorgente;
-//        sorgente = sorgente + ".class";
-//        Class clazz = jarFileService.getClazzFromName(sorgente);
-//
-//        if (clazz != null) {
-//            System.out.println(clazz.getSimpleName());
-//        }
-//        else {
-//            logger.error(new WrapLog().message(String.format("Non ce l'abbiamo fatta")));
-//            System.out.println("Non ce l'abbiamo fatta");
-//        }
+        //        List<String> listaStr = jarFileService.getBackendClassNames(JAR_PATH, VaadVar.moduloVaadin24);
+        //        String sorgente = listaStr.get(0);
+        //        sorgente = textService.pointToSlash(sorgente);
+        //        sorgente = JAR_PATH + SLASH + sorgente;
+        //        sorgente = sorgente + ".class";
+        //        Class clazz = jarFileService.getClazzFromName(sorgente);
+        //
+        //        if (clazz != null) {
+        //            System.out.println(clazz.getSimpleName());
+        //        }
+        //        else {
+        //            logger.error(new WrapLog().message(String.format("Non ce l'abbiamo fatta")));
+        //            System.out.println("Non ce l'abbiamo fatta");
+        //        }
+    }
+
+    public void testBuilderPattern() {
+        ProvaBuilder istanza = appContext.getBean(ProvaBuilder.class);
+
+        System.out.println(istanza.isCostruttoreValido());
+        System.out.println(istanza.isPatternCompleto());
     }
 
 }// end of crud @Route view class
