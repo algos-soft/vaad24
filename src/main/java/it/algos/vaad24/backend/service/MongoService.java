@@ -461,6 +461,18 @@ public class MongoService<capture> extends AbstractService {
         this.dataBase = dataBase;
     }
 
+
+    public Document findDocSingleByKey(final String collectionName, final String propertyName, final Object propertyValue) {
+        Document doc;
+
+        collection = this.getCollection(collectionName); ;
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put(propertyName, propertyValue);
+        doc = (Document) collection.find(whereQuery).first();
+
+        return doc;
+    }
+
     public List<AEntity> query(Class<? extends AEntity> entityClazz) {
         List<AEntity> listaEntities;
         Query query = new Query();
