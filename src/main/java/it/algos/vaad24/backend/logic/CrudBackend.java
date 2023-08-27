@@ -647,6 +647,10 @@ public abstract class CrudBackend extends AbstractService {
 
 
     public List findAllByProperty(final String propertyName, final Object propertyValue) {
+        return findAllByProperty(propertyName, propertyValue, null);
+    }
+
+    public List findAllByProperty(final String propertyName, final Object propertyValue, Sort sort) {
         Query query = new Query();
 
         if (textService.isEmpty(propertyName)) {
@@ -657,6 +661,10 @@ public abstract class CrudBackend extends AbstractService {
         }
 
         query.addCriteria(Criteria.where(propertyName).is(propertyValue));
+        if (sort != null) {
+            query.with(sort);
+        }
+
         return findQuery(query);
     }
 

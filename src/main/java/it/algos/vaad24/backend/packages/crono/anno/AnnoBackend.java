@@ -118,6 +118,7 @@ public class AnnoBackend extends CrudBackend {
     public List<Anno> findAllSort(Sort sort) {
         return (List<Anno>) super.findAllSort(sort);
     }
+
     @Override
     public List<Anno> findAllSortKey() {
         return (List<Anno>) super.findAllSortKey();
@@ -127,18 +128,23 @@ public class AnnoBackend extends CrudBackend {
     public List<Anno> findAllSortOrder() {
         return (List<Anno>) super.findAllSortOrder();
     }
+
     @Override
     public List<Anno> findAllByProperty(final String propertyName, final Object propertyValue) {
         return (List<Anno>) super.findAllByProperty(propertyName, propertyValue);
     }
 
     public List<Anno> findAllBySecolo(Secolo secolo) {
-        return findAllByProperty(FIELD_NAME_SECOLO, secolo);
+        Sort sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
+        return findAllByProperty(FIELD_NAME_SECOLO, secolo, sort);
     }
 
 
     public List<String> findAllForNomeBySecolo(Secolo secolo) {
-        return findAllBySecolo(secolo).stream().map(anno -> anno.nome).collect(Collectors.toList());
+        return findAllBySecolo(secolo)
+                .stream()
+                .map(anno -> anno.nome)
+                .collect(Collectors.toList());
     }
 
 
@@ -231,7 +237,6 @@ public class AnnoBackend extends CrudBackend {
 
         return insert(newEntity(ordine, nomeVisibile, secolo, true, bisestile));
     }
-
 
 
 }// end of crud backend class

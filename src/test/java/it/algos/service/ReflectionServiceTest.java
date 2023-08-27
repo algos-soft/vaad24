@@ -42,7 +42,7 @@ public class ReflectionServiceTest extends AlgosTest {
 
     /**
      * Classe principale di riferimento <br>
-     * Gia 'costruita' nella superclasse <br>
+     * Gia 'iniettata' nella superclasse <br>
      */
     private ReflectionService service;
 
