@@ -8,6 +8,7 @@ import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
 
 import java.util.*;
 
@@ -67,7 +68,9 @@ public class GiornoView extends CrudView {
 
         super.gridPropertyNamesList = Arrays.asList("ordine", "nome", "trascorsi", "mancanti", "mese");
         super.formPropertyNamesList = Arrays.asList("ordine", "nome", "trascorsi", "mancanti", "mese");
+        super.sortOrder = sortOrder != null ? sortOrder : Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
 
+        super.usaDataProvider = true;
         super.usaRowIndex = false;
         super.usaBottoneReset = true;
         super.usaReset = true;

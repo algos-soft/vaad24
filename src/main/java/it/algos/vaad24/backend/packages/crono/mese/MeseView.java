@@ -47,6 +47,7 @@ public class MeseView extends CrudView {
         super.gridPropertyNamesList = Arrays.asList("ordine","giorni", "breve", "nome", "primo", "ultimo");
         super.formPropertyNamesList = Arrays.asList("ordine","giorni", "breve", "nome", "primo", "ultimo");
 
+        super.usaDataProvider = true;
         super.usaBottoneReset = true;
         super.usaReset = true;
         super.usaBottoneNew = false;

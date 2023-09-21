@@ -218,7 +218,7 @@ public class DateService extends AbstractService {
      * numeroMese <br>
      * #progressivoNormale <br>
      * #progressivoBisestile <br>
-     * nome  (numero per il primo del mese) <br>
+     * nome (numero per il primo del mese) <br>
      * titolo (1° per il primo del mese) <br>
      */
     public List<HashMap> getAllGiorni() {

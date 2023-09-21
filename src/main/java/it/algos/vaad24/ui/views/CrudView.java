@@ -17,7 +17,9 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.layer.*;
 import it.algos.vaad24.backend.logic.*;
+import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
@@ -127,6 +129,9 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     @Autowired
     public ColumnService columnService;
 
+    @Autowired
+    MeseBackend meseBackend;
+
     protected CrudBackend crudBackend;
 
     protected CrudDialog crudDialog;
@@ -226,6 +231,8 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
     protected Runnable confermaHandler;
 
+    protected Filtro filtroCorrente;
+
     public CrudView(final CrudBackend crudBackend, final Class entityClazz) {
         this.crudBackend = crudBackend;
         this.entityClazz = entityClazz;
@@ -287,7 +294,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         sortOrder = crudBackend.getSortOrder();
         sortOrder = sortOrder != null ? sortOrder : Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_SENZA);
         usaRowIndex = true;
-        usaDataProvider = false;
+        usaDataProvider = true;
         riordinaColonne = true;
         gridPropertyNamesList = new ArrayList<>();
         formPropertyNamesList = new ArrayList<>();
@@ -492,6 +499,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
             this.addColumnsOneByOne();
         }
         //        this.fixSearch();
+        filtroCorrente = appContext.getBean(Filtro.class, entityClazz);
 
         // Pass all objects to a grid from a Spring Data repository object
         this.fixItems();
@@ -553,7 +561,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         List items;
 
         if (usaDataProvider) {
-            provider = crudBackend.getProvider();
+            provider = crudBackend.getProvider(filtroCorrente);
             if (provider != null) {
                 grid.setDataProvider(provider);
             }

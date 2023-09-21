@@ -57,7 +57,7 @@ public enum AEMese {
 
 
     /**
-     * Costruttore interno dell'Enumeration <br>
+     * Costruttore interno della Enumeration <br>
      */
     AEMese(final String nome, final int giorni, final int giorniBisestili, final String sigla, final String siglaEn) {
         this.nome = nome;

@@ -74,7 +74,9 @@ public class UtilityView extends VerticalLayout {
     public PreferenzaBackend preferenzaBackend;
 
     protected static String RELEASE = "Da eseguire dopo una nuova release significativa. Non serve se il database è stato completamente cancellato (drop).";
+
     protected static String AUTOMATIC = "Viene eseguito AUTOMATICAMENTE se il database è stato completamente cancellato (drop).";
+
     protected static String DROP = "Da eseguire SEMPRE se il database è stato completamente cancellato (drop).";
 
     protected static String FLAG_DEBUG = "Mette temporaneamente a TRUE il flag 'debug' delle preferenze e poi ripristina il valore originale.";
@@ -116,8 +118,21 @@ public class UtilityView extends VerticalLayout {
     }
 
     public void body() {
+        this.paragrafoFlag();
         this.paragrafoPreferenze();
         this.paragrafoReset();
+    }
+
+    public void paragrafoFlag() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setPadding(false);
+        layout.setSpacing(false);
+        H3 paragrafo = new H3("Flag critical");
+        paragrafo.getElement().getStyle().set("color", "blue");
+
+        this.add(paragrafo);
+        this.add(layout);
     }
 
 

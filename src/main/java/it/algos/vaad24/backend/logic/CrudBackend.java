@@ -9,6 +9,7 @@ import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.interfaces.*;
+import it.algos.vaad24.backend.layer.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.bson.*;
@@ -736,23 +737,56 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
+
     public DataProvider getProvider() {
         return DataProvider.fromCallbacks(
                 query -> this.fetch(query.getOffset(), query.getLimit()),
-                query -> this.count()
+                query -> this.countProvider()
+        );
+    }
+
+    public DataProvider getProvider(Filtro filtroCorrente) {
+        return DataProvider.fromCallbacks(
+                query -> this.fetch(query.getOffset(), query.getLimit(), filtroCorrente),
+                query -> this.count(filtroCorrente)
         );
     }
 
     public Stream<Object> fetch(final int offset, final int limit) {
         List lista;
+        String collectionName = annotationService.getCollectionName(entityClazz);
         Query query = new Query();
 
         query.skip(offset);
         query.limit(limit);
         query.with(getSortOrder());
-        lista = mongoService.mongoOp.find(query, entityClazz);
+
+        lista = mongoService.mongoOp.find(query, entityClazz, collectionName);
 
         return lista != null ? lista.stream() : null;
+    }
+
+    public Stream<Object> fetch(final int offset, final int limit, Filtro filtroCorrente) {
+        List lista;
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Query query = filtroCorrente != null ? filtroCorrente.getQuery() : new Query();
+        query.skip(offset);
+        query.limit(limit);
+        query.with(getSortOrder());
+
+        lista = mongoService.mongoOp.find(query, entityClazz, collectionName);
+
+        return lista != null ? lista.stream() : null;
+    }
+
+
+    public int countProvider() {
+        return mongoService.count(entityClazz);
+    }
+
+    public int count(Filtro filtroCorrente) {
+        Query query = filtroCorrente != null ? filtroCorrente.getQuery() : new Query();
+        return ((Long) mongoService.mongoOp.count(query, entityClazz)).intValue();
     }
 
     //    /**
