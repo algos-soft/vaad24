@@ -118,17 +118,30 @@ public class UtilityView extends VerticalLayout {
     }
 
     public void body() {
-        this.paragrafoFlag();
+        this.paragrafoCriticalFlag();
+        this.paragrafoAllFlag();
         this.paragrafoPreferenze();
         this.paragrafoReset();
     }
 
-    public void paragrafoFlag() {
+    public void paragrafoCriticalFlag() {
         VerticalLayout layout = new VerticalLayout();
         layout.setMargin(false);
         layout.setPadding(false);
         layout.setSpacing(false);
-        H3 paragrafo = new H3("Flag critical");
+        H3 paragrafo = new H3("Critical flag");
+        paragrafo.getElement().getStyle().set("color", "blue");
+
+        this.add(paragrafo);
+        this.add(layout);
+    }
+
+    public void paragrafoAllFlag() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setPadding(false);
+        layout.setSpacing(false);
+        H3 paragrafo = new H3("All flag");
         paragrafo.getElement().getStyle().set("color", "blue");
 
         this.add(paragrafo);
