@@ -49,6 +49,11 @@ public enum AESchedule {
     minuto("* * * * *", "ogni minuto."),
 
     /**
+     * Descrizione: ogni giorno alle sei
+     */
+    alba("* 6 * * *", "ogni giorno alle sei."),
+
+    /**
      * Pattern: 0 0 * * mon
      * Descrizione: ogni settimana ai cinque dopo mezzanotte tra domenica e lunedì
      */
@@ -295,4 +300,3 @@ public enum AESchedule {
         return giorniNext;
     }
 }// end of enum
-
